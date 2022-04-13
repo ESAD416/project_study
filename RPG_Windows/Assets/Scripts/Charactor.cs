@@ -81,9 +81,10 @@ public abstract class Charactor : MonoBehaviour
 
     private void FixedUpdate() {
         if(isAttacking) {
-            // Debug.Log("attacking");
+            //Debug.Log("attacking");
             if(isMoving) {
                 movementAfterAttack = movement;
+                //Debug.Log("movementAfterAttack: "+movementAfterAttack);
             }
             movement = Vector2.zero;
         } 
@@ -145,6 +146,7 @@ public abstract class Charactor : MonoBehaviour
         m_Animator.SetBool("attack", isAttacking);
 
         movement = movementAfterAttack;
-        // Debug.Log("attack end");
+        movementAfterAttack = Vector2.zero;
+        //Debug.Log("attack end");
     }
 }

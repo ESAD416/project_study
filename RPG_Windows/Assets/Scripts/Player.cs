@@ -96,7 +96,7 @@ public class Player : Charactor
     }
 
     private IEnumerator Attack() {
-        // Debug.Log("attack start");
+        //Debug.Log("attack start");
         isAttacking = true;
         m_Animator.SetBool("attack", isAttacking);
         yield return new WaitForSeconds(attackClipTime);  // hardcasted casted time for debugged
