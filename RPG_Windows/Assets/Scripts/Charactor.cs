@@ -67,7 +67,7 @@ public abstract class Charactor : MonoBehaviour
     // Start is called before the first frame update
     protected virtual void Start()
     {
-        m_Animator = GetComponent<Animator>();
+        m_Animator = GetComponentInChildren<Animator>();
         m_Rigidbody = GetComponent<Rigidbody2D>();
         SetAnimateAttackClipTime();
     }
