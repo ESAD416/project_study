@@ -83,7 +83,7 @@ public class Player : Charactor
             facingDir = movement;
         }
 
-        movement = inputVecter2;
+        movement = new Vector3(inputVecter2.x, inputVecter2.y);
     }
 
     public void OnAttack(InputAction.CallbackContext value) {

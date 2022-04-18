@@ -26,7 +26,7 @@ public abstract class Charactor : MonoBehaviour
     /// <summary>
     /// 角色移動向量
     /// </summary>
-    protected Vector2 movement;
+    protected Vector3 movement;
     /// <summary>
     /// 角色面向方向
     /// </summary>
@@ -54,7 +54,7 @@ public abstract class Charactor : MonoBehaviour
     /// <summary>
     /// 記錄攻擊動作完成後的角色移動向量
     /// </summary>
-    protected Vector2 movementAfterAttack;
+    protected Vector3 movementAfterAttack;
     /// <summary>
     /// 一次攻擊動畫所需的時間
     /// </summary>
@@ -86,7 +86,7 @@ public abstract class Charactor : MonoBehaviour
                 movementAfterAttack = movement;
                 //Debug.Log("movementAfterAttack: "+movementAfterAttack);
             }
-            movement = Vector2.zero;
+            movement = Vector3.zero;
         } 
         
         Move();
@@ -117,7 +117,7 @@ public abstract class Charactor : MonoBehaviour
         m_Animator.SetLayerWeight(m_Animator.GetLayerIndex(layerName), 1);
     }
 
-    public void SetAnimateMovementPara(Vector2 movement, Vector2 facingDir) {
+    public void SetAnimateMovementPara(Vector3 movement, Vector2 facingDir) {
         // Debug.Log("movement.x: "+movement.x + "movement.y: "+movement.y);
         // Debug.Log("facingDir.x: "+facingDir.x + "facingDir.y: "+facingDir.y);
         m_Animator.SetFloat("movementX", movement.x);
@@ -146,7 +146,7 @@ public abstract class Charactor : MonoBehaviour
         m_Animator.SetBool("attack", isAttacking);
 
         movement = movementAfterAttack;
-        movementAfterAttack = Vector2.zero;
+        movementAfterAttack = Vector3.zero;
         //Debug.Log("attack end");
     }
 }
