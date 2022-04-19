@@ -4,23 +4,26 @@ using UnityEngine;
 
 public class Stairs : LevelTrigger
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    Vector2 stairDir;
 
     protected override void OnTriggerEnter2D(Collider2D otherCollider) {
-        base.OnTriggerEnter2D(otherCollider);
+        if(otherCollider.gameObject.tag == "Player") {
+            Debug.Log("player name: "+player.gameObject.name);
+            Debug.Log("player layer: "+player.gameObject.layer);
+            Debug.Log("player x: "+player.gameObject.transform.position.x);
+            Debug.Log("player y: "+player.gameObject.transform.position.y);
+            Debug.Log("player z: "+player.gameObject.transform.position.z);
+            float ms = player.GetMoveSpeed();
+            stairDir = player.GetFacingDir();
+            player.inLevelTrigger = true;
+            player.altitudeIncrease = 1f;
+
+        }
+        //base.OnTriggerEnter2D(otherCollider);
     }
 
     protected override void OnTriggerExit2D(Collider2D otherCollider) {
-        base.OnTriggerExit2D(otherCollider);
+        Debug.Log("OnTriggerExit");
+        //base.OnTriggerExit2D(otherCollider);
     }
 }

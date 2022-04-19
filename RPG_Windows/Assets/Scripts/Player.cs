@@ -4,76 +4,21 @@ using UnityEngine.InputSystem;
 
 public class Player : Charactor
 {
-    private KeyCode lastKeyDown;
-    private KeyCode lastKeyUp;
-
     [Header("Input Settings")]
     public PlayerInput playerInput;
 
-    // private void OnGUI() {
-    //     Event e = Event.current;
-    //     if (e.isKey)
-    //     {
-    //         if(e.type == EventType.KeyUp) {
-    //             //Debug.Log("Detected key code up: " + e.keyCode);
-    //             lastKeyUp = e.keyCode;
-    //         } 
-    //         else if(e.type == EventType.KeyDown && e.keyCode != KeyCode.None){
-    //             //Debug.Log("Detected key code down: " + e.keyCode);
-    //             lastKeyDown = e.keyCode;
-    //         }
-            
-    //     }
-    // }
+    public float altitudeIncrease = 0;
+
+    public bool inLevelTrigger = false;
 
     protected override void Update()
-    {
-        //SetMovementByKeyInput();
-        //SetFacingDirByLastKeyInput();
+    {   
+        // if(altitudeIncrease != 0) {
+        //     Vector3 currentMov = movement;
+        //     movement = new Vector3(currentMov.x, currentMov.y, altitudeIncrease);
+        // }
         base.Update();
     }
-
-    // private void SetFacingDirByLastKeyInput() {
-    //     if(!isMoving && lastKeyDown != lastKeyUp) {
-    //         lastKeyDown = lastKeyUp;
-    //     }
-
-    //     if(lastKeyDown == KeyCode.W) {
-    //         facingDir = Vector2.up;
-    //     }
-    //     else if(lastKeyDown == KeyCode.A) {
-    //         facingDir = Vector2.left;
-    //     }
-    //     else if(lastKeyDown == KeyCode.S) {
-    //         facingDir = Vector2.down;
-    //     }
-    //     else if(lastKeyDown == KeyCode.D) {
-    //         facingDir = Vector2.right;
-    //     }
-    // }
-
-    // private void SetMovementByKeyInput() {
-    //     movement = Vector2.zero;
-
-    //     if(Input.GetKey(KeyCode.W)) {
-    //         movement += Vector2.up;
-    //     } 
-    //     if(Input.GetKey(KeyCode.A)) {
-    //         movement += Vector2.left;
-    //     } 
-    //     if(Input.GetKey(KeyCode.S)) {
-    //         movement += Vector2.down;
-    //     } 
-    //     if(Input.GetKey(KeyCode.D)) {
-    //         movement += Vector2.right;
-    //     }
-
-    //     if(Input.GetKeyDown(KeyCode.Space)) {
-    //         attackRoutine = StartCoroutine(Attack());
-    //     }
-
-    //     // Debug.Log("x: "+movement.x+", y: "+movement.y);
-    // }
 
     public void OnMovement(InputAction.CallbackContext value)
     {
@@ -83,7 +28,7 @@ public class Player : Charactor
             facingDir = movement;
         }
 
-        movement = new Vector3(inputVecter2.x, inputVecter2.y);
+        movement = new Vector3(inputVecter2.x, inputVecter2.y, 2);
     }
 
     public void OnAttack(InputAction.CallbackContext value) {

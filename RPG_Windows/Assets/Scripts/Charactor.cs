@@ -149,4 +149,12 @@ public abstract class Charactor : MonoBehaviour
         movementAfterAttack = Vector3.zero;
         //Debug.Log("attack end");
     }
+
+    public float GetMoveSpeed() {
+        return moveSpeed;
+    }
+
+    public Vector2 GetFacingDir() {
+        return facingDir;
+    }
 }

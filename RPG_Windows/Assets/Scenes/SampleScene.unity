@@ -2647,7 +2647,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0619e997670c0aa46b87010765324966, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
 --- !u!1 &1218450810
 GameObject:
   m_ObjectHideFlags: 0
@@ -2854,7 +2853,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1544957867}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1328524831}
@@ -8327,7 +8326,7 @@ GameObject:
   - component: {fileID: 1858961904}
   m_Layer: 6
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8361,6 +8360,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 2
   playerInput: {fileID: 1858961904}
+  altitudeIncrease: 0
+  inLevelTrigger: 0
 --- !u!50 &1858961903
 Rigidbody2D:
   serializedVersion: 4
