@@ -7,16 +7,15 @@ public class Player : Charactor
     [Header("Input Settings")]
     public PlayerInput playerInput;
 
-    public float altitudeIncrease = 0;
+    public float altitude = 0;
 
     public bool inLevelTrigger = false;
 
     protected override void Update()
-    {   
-        // if(altitudeIncrease != 0) {
-        //     Vector3 currentMov = movement;
-        //     movement = new Vector3(currentMov.x, currentMov.y, altitudeIncrease);
-        // }
+    { 
+        // if(altitudeIncrease != 0 && isMoving) {
+        //     altitude += altitudeIncrease;
+        // }  
         base.Update();
     }
 
@@ -28,7 +27,11 @@ public class Player : Charactor
             facingDir = movement;
         }
 
-        movement = new Vector3(inputVecter2.x, inputVecter2.y, 2);
+        movement = new Vector3(inputVecter2.x, inputVecter2.y);
+        // Debug.Log("movement x: "+movement.x);
+        // Debug.Log("movement y: "+movement.y);
+        // Debug.Log("movement normalized x: "+movement.normalized.x);
+        // Debug.Log("movement normalized y: "+movement.normalized.y); 
     }
 
     public void OnAttack(InputAction.CallbackContext value) {
