@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Stairs
+  - Stair_Top
+  - Stair_Down
   layers:
   - Default
   - TransparentFX

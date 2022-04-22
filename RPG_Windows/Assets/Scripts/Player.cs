@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,6 +11,10 @@ public class Player : Charactor
     public float altitude = 0;
 
     public bool inLevelTrigger = false;
+    public string stair_start = "Untagged";
+    public string stair_end = "Untagged";
+
+    
 
     protected override void Update()
     { 

@@ -869,8 +869,8 @@ GameObject:
   - component: {fileID: 133208037}
   - component: {fileID: 133208038}
   m_Layer: 7
-  m_Name: StairTopColider
-  m_TagString: Untagged
+  m_Name: TopColider
+  m_TagString: Stair_Top
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2875,8 +2875,8 @@ GameObject:
   - component: {fileID: 1437174316}
   - component: {fileID: 1437174317}
   m_Layer: 7
-  m_Name: StairDownColider
-  m_TagString: Untagged
+  m_Name: DownColider
+  m_TagString: Stair_Down
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8497,6 +8497,8 @@ MonoBehaviour:
   playerInput: {fileID: 1858961904}
   altitude: 0
   inLevelTrigger: 0
+  stair_start: 
+  stair_end: 
 --- !u!50 &1858961903
 Rigidbody2D:
   serializedVersion: 4

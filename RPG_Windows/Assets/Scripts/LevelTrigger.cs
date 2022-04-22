@@ -16,12 +16,12 @@ public abstract class LevelTrigger : MonoBehaviour
     protected virtual void OnTriggerEnter2D(Collider2D otherCollider) {
  
             // Physics2D.IgnoreLayerCollision(6, 7);
-            // Debug.Log("Enter Stairs 2");
+            Debug.Log("LevelTrigger Enter");
 
     }
 
     protected virtual void OnTriggerExit2D(Collider2D otherCollider) {
-            Debug.Log("Exit Stairs");
+            Debug.Log("LevelTrigger Exit");
             // Physics2D.IgnoreLayerCollision(6, 7);
             // Debug.Log("Enter Stairs 2");
     }

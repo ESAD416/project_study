@@ -1,30 +1,56 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class StairsGateway : LevelTrigger
+public class StairsGateway : MonoBehaviour
 {
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    protected Player player;
+
+    void Start() {
+        player = GameObject.FindObjectOfType(typeof(Player)) as Player;
+    }    
+
+    protected void OnTriggerEnter2D(Collider2D otherCollider) {
+        if(otherCollider.gameObject.tag == "Player") {
+            if(!player.inLevelTrigger) {
+                switch(gameObject.tag) 
+                {  
+                    case "Stair_Top":
+                        player.stair_start = "Stair_Top";
+                        break;
+                    case "Stair_Down":
+                        player.stair_start = "Stair_Down";
+                        break;
+                    default:
+                        player.stair_start = "Untagged"; 
+                        break;
+
+                }
+            }
+            else {
+                switch(gameObject.tag) 
+                {  
+                    case "Stair_Top":
+                        player.stair_end = "Stair_Top";
+                        break;
+                    case "Stair_Down":
+                        player.stair_end = "Stair_Down";
+                        break;
+                    default:
+                        player.stair_end = "Untagged"; 
+                        break;
+
+                }
+            }
+
+        }
+        Debug.Log("stair_start: "+player.stair_start);
+        Debug.Log("stair_end: "+player.stair_end);
+        //base.OnTriggerEnter2D(otherCollider);
     }
 
-    protected override void OnTriggerEnter2D(Collider2D otherCollider) {
-        if(otherCollider.gameObject.tag == "Player") {
-            if(gameObject.name == "StairTopColider") {
-                Debug.Log("StairTopColider");
-            }
-            if(gameObject.name == "StairDownColider") {
-                Debug.Log("StairDownColider");
-            }
-        }
-        base.OnTriggerEnter2D(otherCollider);
+    protected void OnTriggerExit2D(Collider2D otherCollider) {
+
     }
 
-    protected override void OnTriggerExit2D(Collider2D otherCollider) {
-        if(otherCollider.gameObject.tag == "Player") {
-        }
-    }
 }
