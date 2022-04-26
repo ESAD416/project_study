@@ -30,7 +30,7 @@ public abstract class Charactor : MonoBehaviour
     /// <summary>
     /// 角色面向方向
     /// </summary>
-    protected Vector2 facingDir;
+    protected Vector2 facingDir = Vector2.down;
     /// <summary>
     /// 角色目前是否為移動中
     /// </summary>
