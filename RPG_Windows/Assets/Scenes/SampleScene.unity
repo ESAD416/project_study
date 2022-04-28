@@ -137,7 +137,8 @@ GameObject:
   - component: {fileID: 120102870}
   - component: {fileID: 120102872}
   - component: {fileID: 120102871}
-  m_Layer: 8
+  - component: {fileID: 120102873}
+  m_Layer: 7
   m_Name: GroundCollision
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -857,6 +858,19 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &120102873
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120102866}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8aa088bce1b315429a9ac532c0e136b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  altitude: 0
 --- !u!1 &133208035
 GameObject:
   m_ObjectHideFlags: 0
@@ -868,7 +882,7 @@ GameObject:
   - component: {fileID: 133208036}
   - component: {fileID: 133208037}
   - component: {fileID: 133208038}
-  m_Layer: 7
+  m_Layer: 8
   m_Name: TopColider
   m_TagString: Stair_Top
   m_Icon: {fileID: 0}
@@ -1407,7 +1421,7 @@ GameObject:
   - component: {fileID: 874528838}
   - component: {fileID: 874528840}
   - component: {fileID: 874528839}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cliff_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1954,7 +1968,7 @@ GameObject:
   - component: {fileID: 889358261}
   - component: {fileID: 889358260}
   - component: {fileID: 889358259}
-  m_Layer: 8
+  m_Layer: 7
   m_Name: Edge_Level_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2309,7 +2323,7 @@ GameObject:
   - component: {fileID: 947722201}
   - component: {fileID: 947722203}
   - component: {fileID: 947722202}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Stairs
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2587,7 +2601,7 @@ GameObject:
   - component: {fileID: 974907360}
   - component: {fileID: 974907359}
   - component: {fileID: 974907364}
-  m_Layer: 7
+  m_Layer: 8
   m_Name: StairsTriggerCollosion
   m_TagString: Stairs
   m_Icon: {fileID: 0}
@@ -3054,7 +3068,7 @@ GameObject:
   - component: {fileID: 1437174315}
   - component: {fileID: 1437174316}
   - component: {fileID: 1437174317}
-  m_Layer: 7
+  m_Layer: 8
   m_Name: DownColider
   m_TagString: Stair_Down
   m_Icon: {fileID: 0}
@@ -3153,7 +3167,8 @@ GameObject:
   - component: {fileID: 1544957873}
   - component: {fileID: 1544957872}
   - component: {fileID: 1544957871}
-  m_Layer: 9
+  - component: {fileID: 1544957874}
+  m_Layer: 8
   m_Name: Level1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3891,6 +3906,19 @@ TilemapCollider2D:
   m_Offset: {x: 0, y: 0}
   m_MaximumTileChangeCount: 1000
   m_ExtrusionFactor: 0.00001
+--- !u!114 &1544957874
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1544957867}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8aa088bce1b315429a9ac532c0e136b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  altitude: 1
 --- !u!1 &1646743699
 GameObject:
   m_ObjectHideFlags: 0
@@ -4111,7 +4139,7 @@ GameObject:
   - component: {fileID: 1769827429}
   - component: {fileID: 1769827431}
   - component: {fileID: 1769827430}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: GroundLevel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8743,6 +8771,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 2
   playerInput: {fileID: 1858961904}
+  radius: 1.26
   raycastPoint: {fileID: 1646743700}
   altitude: 0
   inLevelTrigger: 0

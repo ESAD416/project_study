@@ -1,20 +1,17 @@
 using System;
 using UnityEngine;
 
-public abstract class LevelTrigger : MonoBehaviour
+public class Level : MonoBehaviour
 {
+    public float altitude = 0;
     private int levelLayer;
-
-    protected Player player;
 
     protected virtual void Start() {
         levelLayer = gameObject.layer;
-
-        player = GameObject.FindObjectOfType(typeof(Player)) as Player;
     }    
 
     protected virtual void OnTriggerEnter2D(Collider2D otherCollider) {
- 
+
             // Physics2D.IgnoreLayerCollision(6, 7);
             Debug.Log("LevelTrigger Enter");
 

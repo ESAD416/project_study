@@ -8,15 +8,22 @@ public class Player : Charactor
     [Header("Input Settings")]
     public PlayerInput playerInput;
 
+    /// <summary>
+    /// 角色中心
+    /// </summary>
+    protected Vector3 m_center;
+    public float radius = 2f;
     [SerializeField] private Transform raycastPoint;
 
     public float altitude = 0;
-
     public bool inLevelTrigger = false;
     public string stair_start = "Untagged";
     public string stair_end = "Untagged";
 
     
+    protected override void Start() {
+        base.Start();
+    }
 
     protected override void Update()
     { 
@@ -25,6 +32,11 @@ public class Player : Charactor
         // }  
         DetectedColiderToJump();
         base.Update();
+    }
+
+    private void OnDrawGizmos() {
+        m_center = new Vector3(transform.position.x, transform.position.y - 0.25f);
+        Gizmos.DrawWireSphere(m_center, radius);
     }
 
     public void OnMovement(InputAction.CallbackContext value)
@@ -52,71 +64,64 @@ public class Player : Charactor
     }
 
     private void DetectedColiderToJump() {
-        Debug.Log("facingDir: "+facingDir);
-        Debug.Log("movement: "+movement);
+        // Debug.Log("facingDir: "+facingDir);
+        // Debug.Log("movement: "+movement);
         Vector2 casrEndPos;
         if(isMoving) {
-            if(movement == new Vector3(0, 1f, 0)) {
+            if(movement.x == 0 && movement.y > 0) {
                 // Up
-                Debug.Log("CastPoint Up");
                 raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_Up");
-            } else if(movement == new Vector3(0, -1f)) {
+            } else if(movement.x == 0 && movement.y < 0) {
                 // Down
-                Debug.Log("CastPoint Down");
                 raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_Down");
-            } else if(movement == new Vector3(-1f, 0)) {
+            } else if(movement.x < 0 && movement.y == 0) {
                 // Left
-                Debug.Log("CastPoint Left");
                 raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_Left");
-            } else if(movement == new Vector3(1f, 0)) {
+            } else if(movement.x > 0 && movement.y == 0) {
                 // Right
-                Debug.Log("CastPoint Right");
                 raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_Right");
-            } else if(movement == new Vector3(0.7f, 0.7f)) {
+            } else if(movement.x > 0 && movement.y > 0) {
                 // UpRight
-                Debug.Log("CastPoint UpRight");
                 raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_UpRight");
-            } else if(movement == new Vector3(-0.7f, 0.7f)) {
+            } else if(movement.x < 0 && movement.y > 0) {
                 // UpLeft
-                Debug.Log("CastPoint UpLeft");
                 raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_UpLeft");
-            } else if(movement == new Vector3(0.7f, -0.7f)) {
+            } else if(movement.x > 0 && movement.y < 0) {
                 // DownRight
-                Debug.Log("CastPoint DownRight");
                 raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_DownRight");
-            } else if(movement == new Vector3(-0.7f, -0.7f)) {
+            } else if(movement.x < 0 && movement.y < 0) {
                 // DownLeft
-                Debug.Log("CastPoint DownLeft");
                 raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_DownLeft");
             }
 
             casrEndPos = new Vector2(raycastPoint.position.x, raycastPoint.position.y) + new Vector2(movement.x, movement.y) * 2f;
-        } else {
-            if(facingDir == new Vector2(0, 1f)) {
-                // Up
-                raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_Up");
-            } else if(facingDir == new Vector2(0, -1f)) {
-                // Down
-                raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_Down");
-            } else if(facingDir == new Vector2(-1f, 0)) {
-                // Left
-                raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_Left");
-            } else if(facingDir == new Vector2(1f, 0)) {
-                // Right
-                raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_Right");
-            }
 
-            casrEndPos = new Vector2(raycastPoint.position.x, raycastPoint.position.y) + facingDir * 2f;
-        }
-        
-        Debug.Log("endPos: "+casrEndPos);
-        Debug.DrawLine(raycastPoint.position, casrEndPos, Color.blue);
-        RaycastHit2D hit = Physics2D.Linecast(raycastPoint.position, casrEndPos);
-        if(hit.collider == null) {
-            Debug.Log("Not hit"); 
-        } else {
-            Debug.Log("Hitted"); 
-        }
+            // Debug.Log("endPos: "+casrEndPos);
+            Debug.DrawLine(raycastPoint.position, casrEndPos, Color.blue);
+            Collider2D[] hit = Physics2D.OverlapCircleAll(m_center, radius, 1 << LayerMask.NameToLayer("Trigger"));
+
+            if(hit.Length > 0) {
+                foreach (var hitCollider in hit)
+                {
+                    Debug.Log("hitted: "+hitCollider.gameObject.name);
+                    Level level = hitCollider.GetComponent(typeof(Level)) as Level;
+                    if(level != null) {
+                        Debug.Log("level altitude: "+level.altitude);
+                        
+                        if(level.altitude == 1f || level.altitude < 0) {
+
+                        }
+
+                    }
+                }
+            }
+            // RaycastHit2D hit = Physics2D.Linecast(raycastPoint.position, casrEndPos, 1 << LayerMask.NameToLayer("Trigger"));
+            // if(hit == null) {
+            //     Debug.Log("Not hit"); 
+            // } else {
+            //     Debug.Log("Hitted: "+hit.name); 
+            // }
+        } 
     }
 
     private IEnumerator Attack() {

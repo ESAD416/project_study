@@ -23,7 +23,7 @@ public class StairsTrigger : MonoBehaviour
                 Debug.Log("startPos: "+startPos);
             }
 
-            Physics2D.IgnoreLayerCollision(6, 8);
+            Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Blocks"));
         }
     }
 
