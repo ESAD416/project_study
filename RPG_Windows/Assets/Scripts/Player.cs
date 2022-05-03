@@ -11,12 +11,13 @@ public class Player : Charactor
     /// <summary>
     /// 角色中心
     /// </summary>
-    protected Vector3 m_center;
+    public Vector3 m_center;
+    public Vector2 capsuleSize = new Vector2(1.5f, 2f);
     public float radius = 2f;
     [SerializeField] private Transform raycastPoint;
 
     public float altitude = 0;
-    public bool inLevelTrigger = false;
+    public bool onStairs = false;
     public string stair_start = "Untagged";
     public string stair_end = "Untagged";
 
@@ -29,14 +30,22 @@ public class Player : Charactor
     { 
         // if(altitudeIncrease != 0 && isMoving) {
         //     altitude += altitudeIncrease;
-        // }  
+        // }
         DetectedColiderToJump();
         base.Update();
     }
 
     private void OnDrawGizmos() {
-        m_center = new Vector3(transform.position.x, transform.position.y - 0.25f);
-        Gizmos.DrawWireSphere(m_center, radius);
+        m_center = new Vector3(transform.position.x, transform.position.y - 0.5f);
+        //Gizmos.DrawWireSphere(m_center, radius);
+        DrawCapsule(m_center, capsuleSize);
+    }
+
+    private void DrawCapsule(Vector3 orgin, Vector2 size) {
+        Vector3 up = transform.up * (size.y - size.x) / 2f;
+        UnityEditor.Handles.color = Color.yellow;
+        UnityEditor.Handles.DrawWireArc(orgin + up, Vector3.forward, transform.right, 180f, size.x / 2.3f, 2);
+        UnityEditor.Handles.DrawWireArc(orgin - up, Vector3.forward, -transform.right, 180f, size.x / 2.3f, 2);
     }
 
     public void OnMovement(InputAction.CallbackContext value)
@@ -95,16 +104,42 @@ public class Player : Charactor
             }
 
             casrEndPos = new Vector2(raycastPoint.position.x, raycastPoint.position.y) + new Vector2(movement.x, movement.y) * 2f;
+            
 
             // Debug.Log("endPos: "+casrEndPos);
             Debug.DrawLine(raycastPoint.position, casrEndPos, Color.blue);
-            Collider2D[] hit = Physics2D.OverlapCircleAll(m_center, radius, 1 << LayerMask.NameToLayer("Trigger"));
+            // Linecast
+            // RaycastHit2D hit = Physics2D.Linecast(raycastPoint.position, casrEndPos, 1 << LayerMask.NameToLayer("Trigger"));
+            // if(hit == null) {
+            //     Debug.Log("Not hit"); 
+            // } else {
+            //     Debug.Log("Hitted: "+hit.name); 
+            // }
 
+            // OverlapCircle
+            // Collider2D[] hit = Physics2D.OverlapCircleAll(m_center, radius, 1 << LayerMask.NameToLayer("Trigger"));
+            // if(hit.Length > 0) {
+            //     foreach (var hitCollider in hit)
+            //     {
+            //         Debug.Log("hitted: "+hitCollider.gameObject.name);
+            //         Level level = hitCollider.GetComponent(typeof(Level)) as Level;
+            //         if(level != null) {
+            //             Debug.Log("level altitude: "+level.altitude);
+                        
+            //             if(level.altitude == 1f || level.altitude < 0) {
+
+            //             }
+
+            //         }
+            //     }
+            // }
+            //verlapCapsule
+            Collider2D[] hit = Physics2D.OverlapCapsuleAll(m_center, capsuleSize, CapsuleDirection2D.Vertical, 180f, 1 << LayerMask.NameToLayer("Trigger"));
             if(hit.Length > 0) {
                 foreach (var hitCollider in hit)
                 {
-                    Debug.Log("hitted: "+hitCollider.gameObject.name);
-                    Level level = hitCollider.GetComponent(typeof(Level)) as Level;
+                    Debug.Log("hitted Capsule: "+hitCollider.gameObject.name);
+                    LevelCollision level = hitCollider.GetComponent(typeof(LevelCollision)) as LevelCollision;
                     if(level != null) {
                         Debug.Log("level altitude: "+level.altitude);
                         
@@ -115,12 +150,6 @@ public class Player : Charactor
                     }
                 }
             }
-            // RaycastHit2D hit = Physics2D.Linecast(raycastPoint.position, casrEndPos, 1 << LayerMask.NameToLayer("Trigger"));
-            // if(hit == null) {
-            //     Debug.Log("Not hit"); 
-            // } else {
-            //     Debug.Log("Hitted: "+hit.name); 
-            // }
         } 
     }
 

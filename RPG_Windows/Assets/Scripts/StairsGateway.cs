@@ -12,7 +12,7 @@ public class StairsGateway : MonoBehaviour
 
     protected void OnTriggerEnter2D(Collider2D otherCollider) {
         if(otherCollider.gameObject.tag == "Player") {
-            if(!player.inLevelTrigger) {
+            if(!player.onStairs) {
                 switch(gameObject.tag) 
                 {  
                     case "Stair_Top":

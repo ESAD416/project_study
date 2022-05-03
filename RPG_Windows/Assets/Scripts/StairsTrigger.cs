@@ -11,27 +11,32 @@ public class StairsTrigger : MonoBehaviour
     Vector2 startPos;
     Vector2 endPos;
 
-    void Start() {
+    Collider2D[] collider2Ds;
+
+    protected void Start() {
         player = GameObject.FindObjectOfType(typeof(Player)) as Player;
+        var grid = GameObject.FindObjectOfType(typeof(Grid)) as Grid;
+        collider2Ds = grid.GetComponentsInChildren<Collider2D>();
     }    
 
     protected void OnTriggerEnter2D(Collider2D otherCollider) {
         if(otherCollider.gameObject.tag == "Player") {
-            if(!player.inLevelTrigger) {
+            if(!player.onStairs) {
                 Debug.Log("player not inLevelTrigger");
                 startPos = new Vector2(player.gameObject.transform.position.x, player.gameObject.transform.position.y);
                 Debug.Log("startPos: "+startPos);
             }
 
-            Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Blocks"));
+            FocusOnStairsColliders();
+            //Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Blocks"));
         }
     }
 
     protected void OnTriggerExit2D(Collider2D otherCollider) {
         if(otherCollider.gameObject.tag == "Player") {
-            if(!player.inLevelTrigger) {
+            if(!player.onStairs) {
                 Debug.Log("player enter in LevelTrigger");
-                player.inLevelTrigger = true;
+                player.onStairs = true;
             } else {
                 Debug.Log("player prepare to leave LevelTrigger");
                 endPos = new Vector2(player.gameObject.transform.position.x, player.gameObject.transform.position.y);
@@ -54,14 +59,26 @@ public class StairsTrigger : MonoBehaviour
                 }
 
                 // Physics2D.IgnoreLayerCollision(6, 8, false);
-                player.inLevelTrigger = false;
+                player.onStairs = false;
                 player.stair_start = "Untagged";
                 player.stair_end = "Untagged";
             }
         }
     }
 
-    private void OnCollisionStay2D(Collision2D other) {
+    protected void OnCollisionStay2D(Collision2D other) {
         Debug.Log("OnCollisionStay2D");
+    }
+
+    private void FocusOnStairsColliders() {
+        foreach(var collider2D in collider2Ds) {
+            // Debug.Log("collider2D name: "+collider2D.name);
+            if(!collider2D.isTrigger) {
+                // Debug.Log("collider2D tag: "+collider2D.tag);
+                if(collider2D.tag != "Stairs") {
+                    collider2D.enabled = false;
+                }
+            }
+        }
     }
 }
