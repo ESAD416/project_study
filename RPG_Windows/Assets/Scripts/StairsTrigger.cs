@@ -46,11 +46,11 @@ public class StairsTrigger : MonoBehaviour
                 //計算player高度
                 if(player.stair_start == "Stair_Top" && player.stair_end == "Stair_Down") {
                     // 下樓梯
-                    player.altitude -= altitudeVariation;
+                    player.height -= altitudeVariation;
                 }
                 else if(player.stair_start == "Stair_Down" && player.stair_end == "Stair_Top") {
                     // 上樓梯
-                    player.altitude += altitudeVariation;
+                    player.height += altitudeVariation;
                 }
                 else {
                     // TODO 途中離開樓梯

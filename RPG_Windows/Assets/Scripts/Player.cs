@@ -18,7 +18,7 @@ public class Player : Charactor
     public float radius = 2f;
     [SerializeField] private Transform raycastPoint;
 
-    public float altitude = 0;
+    public float height = 0;
     public bool onStairs = false;
     public string stair_start = "Untagged";
     public string stair_end = "Untagged";
@@ -104,17 +104,8 @@ public class Player : Charactor
             }
 
             castEndPos = new Vector2(raycastPoint.position.x, raycastPoint.position.y) + new Vector2(movement.x, movement.y) * 0.5f;
-            
 
-            // Debug.Log("endPos: "+casrEndPos);
             Debug.DrawLine(raycastPoint.position, castEndPos, Color.blue);
-            //Linecast
-            // RaycastHit2D hit = Physics2D.Linecast(raycastPoint.position, casrEndPos, 1 << LayerMask.NameToLayer("Trigger"));
-            // if(hit.collider == null) {
-            //     Debug.Log("Not hit");
-            // } else {
-            //     Debug.Log("Hitted: "+hit.collider.name);
-            // }
             RaycastHit2D[] hits = Physics2D.LinecastAll(raycastPoint.position, castEndPos, 1 << LayerMask.NameToLayer("Trigger"));
             if(hits.Length > 0) {
                 float altitudeVariation = 0;
@@ -123,14 +114,14 @@ public class Player : Charactor
 
                 if(hits.Length == 1) {
                     var first = hits.First();
-                    var lev = first.collider.GetComponent(typeof(LevelCollision)) as LevelCollision;
+                    var lev = first.collider.GetComponent(typeof(LevelTile)) as LevelTile;
                     if(lev != null) {
                         float levAltitude = lev.altitude;
-                        altitudeVariation = Math.Abs(altitude - levAltitude) ;
-                        if(altitude < levAltitude && altitudeVariation > 0 && altitudeVariation <= 1) {
+                        altitudeVariation = Math.Abs(height - levAltitude) ;
+                        if(height < levAltitude && altitudeVariation > 0 && altitudeVariation <= 1) {
                             // jumpUp
                             jumpUp = true;
-                        } else if(altitude == levAltitude) {
+                        } else if(height == levAltitude) {
                             // jumpDown
                             jumpDown = true;
                         }
@@ -138,11 +129,11 @@ public class Player : Charactor
                 }
                 else if(hits.Length > 1) {
                     foreach(RaycastHit2D hit in hits) {
-                        var lev = hit.collider.GetComponent(typeof(LevelCollision)) as LevelCollision;
+                        var lev = hit.collider.GetComponent(typeof(LevelTile)) as LevelTile;
                         if(lev != null) {
                             float levAltitude = lev.altitude;
                             // jumpUp check only
-                            if(altitude < levAltitude && altitudeVariation > 0 && altitudeVariation <= 1) {
+                            if(height < levAltitude && altitudeVariation > 0 && altitudeVariation <= 1) {
                                 jumpUp = true;
                             } else {
                                 jumpUp = false;
@@ -157,9 +148,7 @@ public class Player : Charactor
                 } else if(jumpDown){
                     Debug.Log("jumpDown");
                 }
-
             }
-            
         } 
     }
 

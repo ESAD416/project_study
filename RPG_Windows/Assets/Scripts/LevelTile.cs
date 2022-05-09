@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class LevelCollision : MonoBehaviour
+public class LevelTile : MonoBehaviour
 {
     public float altitude = 0;
     private int levelLayer;
