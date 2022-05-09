@@ -20,6 +20,14 @@ public class LevelCollision : MonoBehaviour
 
     protected virtual void OnTriggerExit2D(Collider2D otherCollider) {
         Debug.Log("LevelTrigger Exit");
+        if(otherCollider.gameObject.tag == "Player") {
+            if(!playerOnLevel) {
+                playerOnLevel = true;
+            } else {
+                playerOnLevel = false;
+            }
+
+        }
         // Physics2D.IgnoreLayerCollision(6, 7);
         // Debug.Log("Enter Stairs 2");
     }

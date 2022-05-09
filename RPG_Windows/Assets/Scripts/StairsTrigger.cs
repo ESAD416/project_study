@@ -72,9 +72,9 @@ public class StairsTrigger : MonoBehaviour
 
     private void FocusOnStairsColliders() {
         foreach(var collider2D in collider2Ds) {
-            // Debug.Log("collider2D name: "+collider2D.name);
-            if(!collider2D.isTrigger) {
-                // Debug.Log("collider2D tag: "+collider2D.tag);
+            Debug.Log("collider2D name: "+collider2D.name);
+            if(collider2D.gameObject.layer != LayerMask.NameToLayer("Trigger")) {
+                //Debug.Log("collider2D tag: "+collider2D.tag);
                 if(collider2D.tag != "Stairs") {
                     collider2D.enabled = false;
                 }

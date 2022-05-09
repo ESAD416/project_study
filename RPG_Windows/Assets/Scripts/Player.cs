@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -71,11 +73,9 @@ public class Player : Charactor
             attackRoutine = StartCoroutine(Attack());
         }
     }
-
+ 
     private void DetectedColiderToJump() {
-        // Debug.Log("facingDir: "+facingDir);
-        // Debug.Log("movement: "+movement);
-        Vector2 casrEndPos;
+        Vector2 castEndPos;
         if(isMoving) {
             if(movement.x == 0 && movement.y > 0) {
                 // Up
@@ -103,53 +103,63 @@ public class Player : Charactor
                 raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_DownLeft");
             }
 
-            casrEndPos = new Vector2(raycastPoint.position.x, raycastPoint.position.y) + new Vector2(movement.x, movement.y) * 2f;
+            castEndPos = new Vector2(raycastPoint.position.x, raycastPoint.position.y) + new Vector2(movement.x, movement.y) * 0.5f;
             
 
             // Debug.Log("endPos: "+casrEndPos);
-            Debug.DrawLine(raycastPoint.position, casrEndPos, Color.blue);
-            // Linecast
+            Debug.DrawLine(raycastPoint.position, castEndPos, Color.blue);
+            //Linecast
             // RaycastHit2D hit = Physics2D.Linecast(raycastPoint.position, casrEndPos, 1 << LayerMask.NameToLayer("Trigger"));
-            // if(hit == null) {
-            //     Debug.Log("Not hit"); 
+            // if(hit.collider == null) {
+            //     Debug.Log("Not hit");
             // } else {
-            //     Debug.Log("Hitted: "+hit.name); 
+            //     Debug.Log("Hitted: "+hit.collider.name);
             // }
+            RaycastHit2D[] hits = Physics2D.LinecastAll(raycastPoint.position, castEndPos, 1 << LayerMask.NameToLayer("Trigger"));
+            if(hits.Length > 0) {
+                float altitudeVariation = 0;
+                bool jumpUp = false;
+                bool jumpDown = false;
 
-            // OverlapCircle
-            // Collider2D[] hit = Physics2D.OverlapCircleAll(m_center, radius, 1 << LayerMask.NameToLayer("Trigger"));
-            // if(hit.Length > 0) {
-            //     foreach (var hitCollider in hit)
-            //     {
-            //         Debug.Log("hitted: "+hitCollider.gameObject.name);
-            //         Level level = hitCollider.GetComponent(typeof(Level)) as Level;
-            //         if(level != null) {
-            //             Debug.Log("level altitude: "+level.altitude);
-                        
-            //             if(level.altitude == 1f || level.altitude < 0) {
-
-            //             }
-
-            //         }
-            //     }
-            // }
-            //verlapCapsule
-            Collider2D[] hit = Physics2D.OverlapCapsuleAll(m_center, capsuleSize, CapsuleDirection2D.Vertical, 180f, 1 << LayerMask.NameToLayer("Trigger"));
-            if(hit.Length > 0) {
-                foreach (var hitCollider in hit)
-                {
-                    Debug.Log("hitted Capsule: "+hitCollider.gameObject.name);
-                    LevelCollision level = hitCollider.GetComponent(typeof(LevelCollision)) as LevelCollision;
-                    if(level != null) {
-                        Debug.Log("level altitude: "+level.altitude);
-                        
-                        if(level.altitude == 1f || level.altitude < 0) {
-
+                if(hits.Length == 1) {
+                    var first = hits.First();
+                    var lev = first.collider.GetComponent(typeof(LevelCollision)) as LevelCollision;
+                    if(lev != null) {
+                        float levAltitude = lev.altitude;
+                        altitudeVariation = Math.Abs(altitude - levAltitude) ;
+                        if(altitude < levAltitude && altitudeVariation > 0 && altitudeVariation <= 1) {
+                            // jumpUp
+                            jumpUp = true;
+                        } else if(altitude == levAltitude) {
+                            // jumpDown
+                            jumpDown = true;
                         }
-
                     }
                 }
+                else if(hits.Length > 1) {
+                    foreach(RaycastHit2D hit in hits) {
+                        var lev = hit.collider.GetComponent(typeof(LevelCollision)) as LevelCollision;
+                        if(lev != null) {
+                            float levAltitude = lev.altitude;
+                            // jumpUp check only
+                            if(altitude < levAltitude && altitudeVariation > 0 && altitudeVariation <= 1) {
+                                jumpUp = true;
+                            } else {
+                                jumpUp = false;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                if(jumpUp) {
+                    Debug.Log("jumpUp");
+                } else if(jumpDown){
+                    Debug.Log("jumpDown");
+                }
+
             }
+            
         } 
     }
 
