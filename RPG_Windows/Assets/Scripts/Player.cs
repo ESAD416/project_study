@@ -104,6 +104,7 @@ public class Player : Charactor
             }
 
             castEndPos = new Vector2(raycastPoint.position.x, raycastPoint.position.y) + new Vector2(movement.x, movement.y) * 0.5f;
+            Debug.Log("castEndPos: "+castEndPos);
 
             Debug.DrawLine(raycastPoint.position, castEndPos, Color.blue);
             RaycastHit2D[] hits = Physics2D.LinecastAll(raycastPoint.position, castEndPos, 1 << LayerMask.NameToLayer("Trigger"));
