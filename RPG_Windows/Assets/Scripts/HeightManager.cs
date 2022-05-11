@@ -6,18 +6,24 @@ using UnityEngine.InputSystem;
 
 public class HeightManager : MonoBehaviour
 {
-    [Header("Input Test")]
-    public PlayerInput playerInput;
-
+    [SerializeField]
+    private List<TileData> defaultTileDatas;
     private Tilemap[] maps;
-
+    private Dictionary<TileBase, TileData> dataFromTiles;
     Vector2 mousePosition;
-
-
 
     void Start()
     {
         maps = transform.GetComponentsInChildren<Tilemap>();
+    }
+
+    private void Awake() {
+        dataFromTiles = new Dictionary<TileBase, TileData>();
+        foreach(TileData data in defaultTileDatas) {
+            foreach(TileBase tile in data.tiles) {
+                dataFromTiles.Add(tile, data);
+            }
+        }
     }
 
     void Update()
@@ -29,34 +35,29 @@ public class HeightManager : MonoBehaviour
     public void OnTestClick(InputAction.CallbackContext value) {
         if(value.started) {
             mousePosition = new Vector2(0, 0);
-            Debug.Log("HeightManager click, mousePosition: "+mousePosition);
-            foreach(var map in maps) {
-                Vector3Int gridPos = map.WorldToCell(mousePosition);
-                TileBase clickedTile = map.GetTile(gridPos);
 
-                Debug.Log("At position "+gridPos+" there is a "+clickedTile+" in map "+map.name);
-            }
+            GetHeightFromTile(mousePosition);
 
             mousePosition = new Vector2(-2.8f, 1.3f);
-            Debug.Log("HeightManager click, mousePosition: "+mousePosition);
-            foreach(var map in maps) {
-                Vector3Int gridPos = map.WorldToCell(mousePosition);
-                TileBase clickedTile = map.GetTile(gridPos);
 
-                Debug.Log("At position "+gridPos+" there is a "+clickedTile+" in map "+map.name);
+            GetHeightFromTile(mousePosition);
+            
+        }
+    }
+
+    public List<float> GetHeightFromTile(Vector2 worldPosition) {
+        List<float> result = new List<float>();
+        foreach(var map in maps) {
+            Vector3Int gridPos = map.WorldToCell(worldPosition);
+            if(map.HasTile(gridPos)) {
+                TileBase resultTile = map.GetTile(gridPos);
+                //Debug.Log("At grid position "+gridPos+" there is a "+resultTile+" in map "+map.name);
+
+                result.Add(dataFromTiles[resultTile].height);
             }
             
         }
-        
-    }
 
-    public void OnPos(InputAction.CallbackContext context)
-    {
-        mousePosition = context.ReadValue<Vector2>();
-        
+        return result;
     }
-
-    // public float GetHeightFromTile(Vector2 worldPosition) {
-    //     Vector3Int gridPos = 
-    // }
 }

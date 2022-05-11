@@ -1980,6 +1980,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerInput: {fileID: 0}
+  defaultTileDatas:
+  - {fileID: 11400000, guid: 54fce9b01a71a224b993cb708ec3a003, type: 2}
+  - {fileID: 11400000, guid: 0e5a298555073254ea83406a64c59635, type: 2}
 --- !u!114 &889338785
 MonoBehaviour:
   m_ObjectHideFlags: 0

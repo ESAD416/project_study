@@ -17,6 +17,7 @@ public class Player : Charactor
     public Vector2 capsuleSize = new Vector2(1.5f, 2f);
     public float radius = 2f;
     [SerializeField] private Transform raycastPoint;
+    public Vector2 rayCastEndPos;
 
     public float height = 0;
     public bool onStairs = false;
@@ -25,6 +26,7 @@ public class Player : Charactor
 
     
     protected override void Start() {
+        rayCastEndPos = new Vector2(raycastPoint.position.x, raycastPoint.position.y) + new Vector2(0, -1) * 0.5f;   // 預設射線終點
         base.Start();
     }
 
@@ -33,7 +35,7 @@ public class Player : Charactor
         // if(altitudeIncrease != 0 && isMoving) {
         //     altitude += altitudeIncrease;
         // }
-        DetectedColiderToJump();
+        DetectedToJump();
         base.Update();
     }
 
@@ -74,8 +76,7 @@ public class Player : Charactor
         }
     }
  
-    private void DetectedColiderToJump() {
-        Vector2 castEndPos;
+    private void DetectedToJump() {
         if(isMoving) {
             if(movement.x == 0 && movement.y > 0) {
                 // Up
@@ -103,53 +104,78 @@ public class Player : Charactor
                 raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_DownLeft");
             }
 
-            castEndPos = new Vector2(raycastPoint.position.x, raycastPoint.position.y) + new Vector2(movement.x, movement.y) * 0.5f;
-            Debug.Log("castEndPos: "+castEndPos);
+            Vector2 distance = new Vector2(movement.x, movement.y) * 0.5f;
+            rayCastEndPos = new Vector2(raycastPoint.position.x, raycastPoint.position.y) + distance;
+            //Debug.Log("castEndPos: "+rayCastEndPos);
+            Debug.DrawLine(raycastPoint.position, rayCastEndPos, Color.blue);
 
-            Debug.DrawLine(raycastPoint.position, castEndPos, Color.blue);
-            RaycastHit2D[] hits = Physics2D.LinecastAll(raycastPoint.position, castEndPos, 1 << LayerMask.NameToLayer("Trigger"));
-            if(hits.Length > 0) {
-                float altitudeVariation = 0;
-                bool jumpUp = false;
-                bool jumpDown = false;
-
-                if(hits.Length == 1) {
-                    var first = hits.First();
-                    var lev = first.collider.GetComponent(typeof(LevelTile)) as LevelTile;
-                    if(lev != null) {
-                        float levAltitude = lev.altitude;
-                        altitudeVariation = Math.Abs(height - levAltitude) ;
-                        if(height < levAltitude && altitudeVariation > 0 && altitudeVariation <= 1) {
-                            // jumpUp
-                            jumpUp = true;
-                        } else if(height == levAltitude) {
-                            // jumpDown
-                            jumpDown = true;
-                        }
+            // 偵測跳躍 ver2
+            float heightVariation = 0;
+            var heightManager = GameObject.FindObjectOfType(typeof(HeightManager)) as HeightManager; 
+            List<float> heightsOfRayCastEndTile = heightManager.GetHeightFromTile(rayCastEndPos);
+            float endTileHeight = height;
+            if(heightsOfRayCastEndTile.Count == 1) {
+                endTileHeight = heightsOfRayCastEndTile.First();
+            } else if(heightsOfRayCastEndTile.Count > 1) {
+                foreach(float h in heightsOfRayCastEndTile) {
+                    if(endTileHeight != h) {
+                        endTileHeight = h;
                     }
-                }
-                else if(hits.Length > 1) {
-                    foreach(RaycastHit2D hit in hits) {
-                        var lev = hit.collider.GetComponent(typeof(LevelTile)) as LevelTile;
-                        if(lev != null) {
-                            float levAltitude = lev.altitude;
-                            // jumpUp check only
-                            if(height < levAltitude && altitudeVariation > 0 && altitudeVariation <= 1) {
-                                jumpUp = true;
-                            } else {
-                                jumpUp = false;
-                                break;
-                            }
-                        }
-                    }
-                }
-
-                if(jumpUp) {
-                    Debug.Log("jumpUp");
-                } else if(jumpDown){
-                    Debug.Log("jumpDown");
                 }
             }
+
+            heightVariation = height - endTileHeight;
+            if(heightVariation > 0) {
+                Debug.Log("jumpDown");
+            } else if(heightVariation < 0){
+                Debug.Log("jumpUp");
+            }
+
+
+            // 偵測跳躍Edge ver1
+            // RaycastHit2D[] hits = Physics2D.LinecastAll(raycastPoint.position, castEndPos, 1 << LayerMask.NameToLayer("Trigger"));
+            // if(hits.Length > 0) {
+            //     float altitudeVariation = 0;
+            //     bool jumpUp = false;
+            //     bool jumpDown = false;
+
+            //     if(hits.Length == 1) {
+            //         var first = hits.First();
+            //         var lev = first.collider.GetComponent(typeof(LevelTile)) as LevelTile;
+            //         if(lev != null) {
+            //             float levAltitude = lev.altitude;
+            //             altitudeVariation = Math.Abs(height - levAltitude) ;
+            //             if(height < levAltitude && altitudeVariation > 0 && altitudeVariation <= 1) {
+            //                 // jumpUp
+            //                 jumpUp = true;
+            //             } else if(height == levAltitude) {
+            //                 // jumpDown
+            //                 jumpDown = true;
+            //             }
+            //         }
+            //     }
+            //     else if(hits.Length > 1) {
+            //         foreach(RaycastHit2D hit in hits) {
+            //             var lev = hit.collider.GetComponent(typeof(LevelTile)) as LevelTile;
+            //             if(lev != null) {
+            //                 float levAltitude = lev.altitude;
+            //                 // jumpUp check only
+            //                 if(height < levAltitude && altitudeVariation > 0 && altitudeVariation <= 1) {
+            //                     jumpUp = true;
+            //                 } else {
+            //                     jumpUp = false;
+            //                     break;
+            //                 }
+            //             }
+            //         }
+            //     }
+
+            //     if(jumpUp) {
+            //         Debug.Log("jumpUp");
+            //     } else if(jumpDown){
+            //         Debug.Log("jumpDown");
+            //     }
+            // }
         } 
     }
 
