@@ -1943,7 +1943,6 @@ GameObject:
   m_Component:
   - component: {fileID: 889338783}
   - component: {fileID: 889338784}
-  - component: {fileID: 889338785}
   m_Layer: 0
   m_Name: HeightManager
   m_TagString: Untagged
@@ -1979,60 +1978,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3c38202c95e29c43a394269b65093e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerInput: {fileID: 0}
   defaultTileDatas:
   - {fileID: 11400000, guid: 54fce9b01a71a224b993cb708ec3a003, type: 2}
   - {fileID: 11400000, guid: 0e5a298555073254ea83406a64c59635, type: 2}
---- !u!114 &889338785
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 889338782}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Actions: {fileID: -944628639613478452, guid: d14e7aff7eccf2249af1a8f46a1bc0fa, type: 3}
-  m_NotificationBehavior: 2
-  m_UIInputModule: {fileID: 0}
-  m_DeviceLostEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_DeviceRegainedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ControlsChangedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ActionEvents:
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 889338784}
-        m_TargetAssemblyTypeName: HeightManager, Assembly-CSharp
-        m_MethodName: OnTestClick
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: 80c0fce6-a6ac-438b-8977-b54b2761edad
-    m_ActionName: Test/Click[/Mouse/leftButton]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: c771affe-3acd-4711-9b9b-2d6f4b6314c0
-    m_ActionName: Test/MousePosition [/Mouse/position]
-  m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
-  m_DefaultActionMap: Test
-  m_SplitScreenIndex: -1
-  m_Camera: {fileID: 0}
 --- !u!1 &889358257
 GameObject:
   m_ObjectHideFlags: 0
@@ -8767,6 +8715,7 @@ MonoBehaviour:
   capsuleSize: {x: 1, y: 1.39}
   radius: 1.05
   raycastPoint: {fileID: 1646743700}
+  rayCastEndPos: {x: 0, y: 0}
   height: 0
   onStairs: 0
   stair_start: 
