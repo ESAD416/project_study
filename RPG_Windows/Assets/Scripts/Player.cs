@@ -20,9 +20,9 @@ public class Player : Charactor
     public Vector2 rayCastEndPos;
 
     public float height = 0;
-    public bool onStairs = false;
-    public string stair_start = "Untagged";
-    public string stair_end = "Untagged";
+    public string onStairs;
+    public string stair_start;
+    public string stair_end ;
 
     
     protected override void Start() {
@@ -32,25 +32,25 @@ public class Player : Charactor
 
     protected override void Update()
     { 
-        // if(altitudeIncrease != 0 && isMoving) {
-        //     altitude += altitudeIncrease;
-        // }
+        if(!string.IsNullOrEmpty(onStairs)) {
+            HeightSettleOnStair(onStairs);
+        }
         DetectedToJump();
         base.Update();
     }
 
-    private void OnDrawGizmos() {
-        m_center = new Vector3(transform.position.x, transform.position.y - 0.5f);
-        //Gizmos.DrawWireSphere(m_center, radius);
-        DrawCapsule(m_center, capsuleSize);
-    }
+    // private void OnDrawGizmos() {
+    //     m_center = new Vector3(transform.position.x, transform.position.y - 0.5f);
+    //     //Gizmos.DrawWireSphere(m_center, radius);
+    //     DrawCapsule(m_center, capsuleSize);
+    // }
 
-    private void DrawCapsule(Vector3 orgin, Vector2 size) {
-        Vector3 up = transform.up * (size.y - size.x) / 2f;
-        UnityEditor.Handles.color = Color.yellow;
-        UnityEditor.Handles.DrawWireArc(orgin + up, Vector3.forward, transform.right, 180f, size.x / 2.3f, 2);
-        UnityEditor.Handles.DrawWireArc(orgin - up, Vector3.forward, -transform.right, 180f, size.x / 2.3f, 2);
-    }
+    // private void DrawCapsule(Vector3 orgin, Vector2 size) {
+    //     Vector3 up = transform.up * (size.y - size.x) / 2f;
+    //     UnityEditor.Handles.color = Color.yellow;
+    //     UnityEditor.Handles.DrawWireArc(orgin + up, Vector3.forward, transform.right, 180f, size.x / 2.3f, 2);
+    //     UnityEditor.Handles.DrawWireArc(orgin - up, Vector3.forward, -transform.right, 180f, size.x / 2.3f, 2);
+    // }
 
     public void OnMovement(InputAction.CallbackContext value)
     {
@@ -177,6 +177,23 @@ public class Player : Charactor
             //     }
             // }
         } 
+    }
+
+    private void HeightSettleOnStair(string stairName) {
+        var stairTriggers = GameObject.FindObjectsOfType(typeof(StairsTrigger)) as StairsTrigger[];
+        StairsTrigger currStair = null;
+        foreach(StairsTrigger stair in stairTriggers) {
+            if(stair.gameObject.name == onStairs) {
+                currStair = stair;
+                break;
+            }
+        }
+
+        if(currStair != null) {
+            height = currStair.SetPlayerHeightOnStair();
+            Debug.Log("SetPlayerHeightOnStair player height: "+height);
+        }
+
     }
 
     private IEnumerator Attack() {

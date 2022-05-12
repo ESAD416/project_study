@@ -12,7 +12,7 @@ public class StairsGateway : MonoBehaviour
 
     protected void OnTriggerEnter2D(Collider2D otherCollider) {
         if(otherCollider.gameObject.tag == "Player") {
-            if(!player.onStairs) {
+            if(!string.IsNullOrEmpty(player.onStairs)) {
                 switch(gameObject.tag) 
                 {  
                     case "Stair_Top":
@@ -44,9 +44,9 @@ public class StairsGateway : MonoBehaviour
             }
 
         }
-        Debug.Log("stair_start: "+player.stair_start);
-        Debug.Log("stair_end: "+player.stair_end);
-        //base.OnTriggerEnter2D(otherCollider);
+        // Debug.Log("stair_start: "+player.stair_start);
+        // Debug.Log("stair_end: "+player.stair_end);
+        // base.OnTriggerEnter2D(otherCollider);
     }
 
     protected void OnTriggerExit2D(Collider2D otherCollider) {
