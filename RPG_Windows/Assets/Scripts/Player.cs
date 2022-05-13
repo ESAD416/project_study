@@ -32,18 +32,18 @@ public class Player : Charactor
 
     protected override void Update()
     { 
-        if(!string.IsNullOrEmpty(onStairs)) {
-            HeightSettleOnStair(onStairs);
-        }
-        DetectedToJump();
+        m_center = new Vector3(transform.position.x, transform.position.y - 0.5f);
+        // if(!string.IsNullOrEmpty(onStairs)) {
+        //     HeightSettleOnStair(onStairs);
+        // }
+        //DetectedToJump();
         base.Update();
     }
 
-    // private void OnDrawGizmos() {
-    //     m_center = new Vector3(transform.position.x, transform.position.y - 0.5f);
-    //     //Gizmos.DrawWireSphere(m_center, radius);
-    //     DrawCapsule(m_center, capsuleSize);
-    // }
+    private void OnDrawGizmos() {
+        //Gizmos.DrawWireSphere(m_center, radius);
+        //DrawCapsule(m_center, capsuleSize);
+    }
 
     // private void DrawCapsule(Vector3 orgin, Vector2 size) {
     //     Vector3 up = transform.up * (size.y - size.x) / 2f;
@@ -126,9 +126,9 @@ public class Player : Charactor
 
             heightVariation = height - endTileHeight;
             if(heightVariation > 0) {
-                Debug.Log("jumpDown");
+                //Debug.Log("jumpDown");
             } else if(heightVariation < 0){
-                Debug.Log("jumpUp");
+                //Debug.Log("jumpUp");
             }
 
 

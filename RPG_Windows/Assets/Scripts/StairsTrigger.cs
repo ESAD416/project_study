@@ -11,6 +11,7 @@ public class StairsTrigger : MonoBehaviour
     public float stairDistance;
 
     protected Player player;
+    protected float playerStartHeight;
     protected Coroutine heightSettleRoutine;
     protected Vector2 gateWayPos_top;
     protected Vector2 gateWayPos_down;
@@ -21,6 +22,8 @@ public class StairsTrigger : MonoBehaviour
         player = GameObject.FindObjectOfType(typeof(Player)) as Player;
         var grid = GameObject.FindObjectOfType(typeof(Grid)) as Grid;
         collider2Ds = grid.GetComponentsInChildren<Collider2D>();
+
+        InitStairsStatus();
 
         var top = GetComponentsInChildren<EdgeCollider2D>().Where(collider => collider.tag == "Stair_Top").FirstOrDefault();
         gateWayPos_top = top.gameObject.transform.position;
@@ -39,10 +42,11 @@ public class StairsTrigger : MonoBehaviour
     }    
 
     protected void OnTriggerEnter2D(Collider2D otherCollider) {
+        Debug.Log("Enter otherCollider name: "+otherCollider.gameObject.name);
         if(otherCollider.gameObject.tag == "Player") {
             if(string.IsNullOrEmpty(player.onStairs)) {
-                Debug.Log("player not in StairsTrigger");
-                // startPos = new Vector2(player.gameObject.transform.position.x, player.gameObject.transform.position.y);
+                Debug.Log("player not in StairsTrigger yet");
+                playerStartHeight = player.height;
                 // Debug.Log("startPos: "+startPos);
             }
 
@@ -52,16 +56,18 @@ public class StairsTrigger : MonoBehaviour
     }
 
     protected void OnTriggerExit2D(Collider2D otherCollider) {
+        Debug.Log("Exit otherCollider name: "+otherCollider.gameObject.name);
         if(otherCollider.gameObject.tag == "Player") {
             if(string.IsNullOrEmpty(player.onStairs)) {
                 Debug.Log("player enter in StairsTrigger");
                 player.onStairs = gameObject.name;
+                
             } else {
                 Debug.Log("player prepare to leave StairsTrigger");
                 // endPos = new Vector2(player.gameObject.transform.position.x, player.gameObject.transform.position.y);
                 // Debug.Log("endPos: "+endPos);
                 //heightSettleRoutine = StartCoroutine(HeightSettleDown());
-                //InitStairsStatus();
+                InitStairsStatus();
             }
         }
     }
@@ -108,29 +114,35 @@ public class StairsTrigger : MonoBehaviour
     }
 
     public float SetPlayerHeightOnStair() {
-        float result = player.height;
+        Debug.Log("playerc curr height: "+playerStartHeight);
+        float result = playerStartHeight;
 
-        Vector2 startPos = new Vector2();
-        float dir = 1f;
-        if(player.stair_start == "Stair_Top") {
-            // 下樓梯(起點高處)
-            startPos = gateWayPos_top;
-            dir = -1f;
-        }
-        else if(player.stair_start == "Stair_Down") {
-            // 上樓梯(起點低處)
-            startPos = gateWayPos_down;
-            dir = 1f;
-        }
+        // Vector2 startPos = new Vector2();
+        // float dir = 1f;
+        // if(player.stair_start == "Stair_Top") {
+        //     // 下樓梯(起點高處)
+        //     startPos = gateWayPos_top;
+        //     dir = -1f;
+        // }
+        // else if(player.stair_start == "Stair_Down") {
+        //     // 上樓梯(起點低處)
+        //     startPos = gateWayPos_down;
+        //     dir = 1f;
+        // }
+        // Debug.Log("height var dir: "+dir);
+        // Debug.Log("stair startPos: "+startPos);
+        // Debug.Log("player curr centerPos: "+player.m_center);
 
-        float playerMoveDist;
-        if(isVertical) {
-            playerMoveDist = Math.Abs(startPos.y - player.m_center.y);
-        } else {
-            playerMoveDist = Math.Abs(startPos.x - player.m_center.x);
-        }
+        // float playerMoveDist;
+        // if(isVertical) {
+        //     playerMoveDist = Math.Abs(startPos.y - player.m_center.y);
+        // } else {
+        //     playerMoveDist = Math.Abs(startPos.x - player.m_center.x);
+        // }
+        // Debug.Log("playerMoveDist: "+playerMoveDist);
+        // Debug.Log("( playerMoveDist / stairDistance ) : "+( playerMoveDist / stairDistance ));
 
-        result += ( playerMoveDist / stairDistance ) * altitudeVariation * dir;
+        // result += ( playerMoveDist / stairDistance ) * altitudeVariation * dir;
         return result;
     }
 
@@ -146,7 +158,7 @@ public class StairsTrigger : MonoBehaviour
 
     private void FocusOnStairsColliders() {
         foreach(var collider2D in collider2Ds) {
-            Debug.Log("collider2D name: "+collider2D.name);
+            //Debug.Log("collider2D name: "+collider2D.name);
             if(collider2D.gameObject.layer != LayerMask.NameToLayer("Trigger")) {
                 //Debug.Log("collider2D tag: "+collider2D.tag);
                 if(collider2D.tag != "Stairs") {

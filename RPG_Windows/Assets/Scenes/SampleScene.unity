@@ -3040,6 +3040,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   altitudeVariation: 1
+  isVertical: 1
+  stairDistance: 0
 --- !u!1 &1218450810
 GameObject:
   m_ObjectHideFlags: 0
@@ -8801,7 +8803,7 @@ MonoBehaviour:
   raycastPoint: {fileID: 1646743700}
   rayCastEndPos: {x: 0, y: 0}
   height: 0
-  onStairs: 0
+  onStairs: 
   stair_start: 
   stair_end: 
 --- !u!50 &1858961903
