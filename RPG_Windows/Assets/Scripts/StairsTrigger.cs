@@ -23,11 +23,12 @@ public class StairsTrigger : MonoBehaviour
         var grid = GameObject.FindObjectOfType(typeof(Grid)) as Grid;
         collider2Ds = grid.GetComponentsInChildren<Collider2D>();
 
-        InitStairsStatus();
+        // InitStairsStatus();
 
-        var top = GetComponentsInChildren<EdgeCollider2D>().Where(collider => collider.tag == "Stair_Top").FirstOrDefault();
+        var parent = gameObject.transform.parent.gameObject;
+        var top = parent.GetComponentsInChildren<EdgeCollider2D>().Where(collider => collider.tag == "Stair_Top").FirstOrDefault();
         gateWayPos_top = top.gameObject.transform.position;
-        var down = GetComponentsInChildren<EdgeCollider2D>().Where(collider => collider.tag == "Stair_Down").FirstOrDefault();
+        var down = parent.GetComponentsInChildren<EdgeCollider2D>().Where(collider => collider.tag == "Stair_Down").FirstOrDefault();
         gateWayPos_down = down.gameObject.transform.position;
         if(isVertical) {
             stairDistance = Math.Abs(gateWayPos_top.y - gateWayPos_down.y) ;
@@ -36,9 +37,9 @@ public class StairsTrigger : MonoBehaviour
         }
 
 
-        Debug.Log("Stairs gateWayPos_0: "+gateWayPos_top);
-        Debug.Log("Stairs gateWayPos_1: "+gateWayPos_down);
-        Debug.Log("Stairs Distance: "+stairDistance);
+        // Debug.Log("Stairs gateWayPos_0: "+gateWayPos_top);
+        // Debug.Log("Stairs gateWayPos_1: "+gateWayPos_down);
+        // Debug.Log("Stairs Distance: "+stairDistance);
     }    
 
     protected void OnTriggerEnter2D(Collider2D otherCollider) {
@@ -117,32 +118,32 @@ public class StairsTrigger : MonoBehaviour
         Debug.Log("playerc curr height: "+playerStartHeight);
         float result = playerStartHeight;
 
-        // Vector2 startPos = new Vector2();
-        // float dir = 1f;
-        // if(player.stair_start == "Stair_Top") {
-        //     // 下樓梯(起點高處)
-        //     startPos = gateWayPos_top;
-        //     dir = -1f;
-        // }
-        // else if(player.stair_start == "Stair_Down") {
-        //     // 上樓梯(起點低處)
-        //     startPos = gateWayPos_down;
-        //     dir = 1f;
-        // }
-        // Debug.Log("height var dir: "+dir);
-        // Debug.Log("stair startPos: "+startPos);
-        // Debug.Log("player curr centerPos: "+player.m_center);
+        Vector2 startPos = new Vector2();
+        float dir = 1f;
+        if(player.stair_start == "Stair_Top") {
+            // 下樓梯(起點高處)
+            startPos = gateWayPos_top;
+            dir = -1f;
+        }
+        else if(player.stair_start == "Stair_Down") {
+            // 上樓梯(起點低處)
+            startPos = gateWayPos_down;
+            dir = 1f;
+        }
+        Debug.Log("height var dir: "+dir);
+        Debug.Log("stair startPos: "+startPos);
+        Debug.Log("player curr centerPos: "+player.m_center);
 
-        // float playerMoveDist;
-        // if(isVertical) {
-        //     playerMoveDist = Math.Abs(startPos.y - player.m_center.y);
-        // } else {
-        //     playerMoveDist = Math.Abs(startPos.x - player.m_center.x);
-        // }
-        // Debug.Log("playerMoveDist: "+playerMoveDist);
-        // Debug.Log("( playerMoveDist / stairDistance ) : "+( playerMoveDist / stairDistance ));
+        float playerMoveDist;
+        if(isVertical) {
+            playerMoveDist = Math.Abs(startPos.y - player.m_center.y);
+        } else {
+            playerMoveDist = Math.Abs(startPos.x - player.m_center.x);
+        }
+        Debug.Log("playerMoveDist: "+playerMoveDist);
+        Debug.Log("( playerMoveDist / stairDistance ) : "+( playerMoveDist / stairDistance ));
 
-        // result += ( playerMoveDist / stairDistance ) * altitudeVariation * dir;
+        result += ( playerMoveDist / stairDistance ) * altitudeVariation * dir;
         return result;
     }
 

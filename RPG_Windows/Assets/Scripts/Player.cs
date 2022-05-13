@@ -33,9 +33,9 @@ public class Player : Charactor
     protected override void Update()
     { 
         m_center = new Vector3(transform.position.x, transform.position.y - 0.5f);
-        // if(!string.IsNullOrEmpty(onStairs)) {
-        //     HeightSettleOnStair(onStairs);
-        // }
+        if(!string.IsNullOrEmpty(onStairs)) {
+            HeightSettleOnStair(onStairs);
+        }
         //DetectedToJump();
         base.Update();
     }
