@@ -36,7 +36,7 @@ public class Player : Charactor
         if(!string.IsNullOrEmpty(onStairs)) {
             HeightSettleOnStair(onStairs);
         }
-        //DetectedToJump();
+        DetectedToJump();
         base.Update();
     }
 
@@ -73,6 +73,13 @@ public class Player : Charactor
                 facingDir = movement;
             }
             attackRoutine = StartCoroutine(Attack());
+        }
+    }
+
+    public void OnJump(InputAction.CallbackContext value) {
+        if(value.started) {
+            Debug.Log("Junp click");
+            jumpRoutine = StartCoroutine(Jump());
         }
     }
  
@@ -126,9 +133,9 @@ public class Player : Charactor
 
             heightVariation = height - endTileHeight;
             if(heightVariation > 0) {
-                //Debug.Log("jumpDown");
+                Debug.Log("jumpDown");
             } else if(heightVariation < 0){
-                //Debug.Log("jumpUp");
+                Debug.Log("jumpUp");
             }
 
 
@@ -201,8 +208,14 @@ public class Player : Charactor
         isAttacking = true;
         m_Animator.SetBool("attack", isAttacking);
         yield return new WaitForSeconds(attackClipTime);  // hardcasted casted time for debugged
-
         StopAttack();
+    }
+
+    private IEnumerator Jump() {
+        isJumping = true;
+        //m_Rigidbody.velocity += Vector2.up * 10;
+        yield return new WaitForSeconds(jumpClipTime);  // hardcasted casted time for debugged
+        StopJump();
     }
 
 }

@@ -13,12 +13,12 @@ public abstract class Charactor : MonoBehaviour
     /// <summary>
     /// 角色物理物件
     /// </summary>
-    private Rigidbody2D m_Rigidbody;
+    protected Rigidbody2D m_Rigidbody;
     #endregion
 
-    #region 角色動作與動畫參數
+    #region 角色相關參數
 
-    #region 移動動作
+    #region 移動
     /// <summary>
     /// 角色移速
     /// </summary>
@@ -41,16 +41,24 @@ public abstract class Charactor : MonoBehaviour
     }
     #endregion
 
-    #region 攻擊動作
-    /// <summary>
-    /// 角色正在攻擊
-    /// </summary>
-    protected bool isAttacking;
+    #region 跳躍
 
+    protected Coroutine jumpRoutine;
+    [SerializeField] private float jumpForce = 10f;
+    protected bool isJumping;
+    protected float jumpClipTime = 0.5f;
+
+    #endregion
+
+    #region 攻擊
     /// <summary>
     /// 角色攻擊動作為即時觸發，故宣告一協程進行處理獨立的動作
     /// </summary>
     protected Coroutine attackRoutine;
+    /// <summary>
+    /// 角色正在攻擊
+    /// </summary>
+    protected bool isAttacking;
     /// <summary>
     /// 記錄攻擊動作完成後的角色移動向量
     /// </summary>
@@ -87,13 +95,18 @@ public abstract class Charactor : MonoBehaviour
                 //Debug.Log("movementAfterAttack: "+movementAfterAttack);
             }
             movement = Vector3.zero;
-        } 
+        }
         
+        if(isJumping) {
+            m_Rigidbody.velocity += Vector2.up * 10;
+            Debug.Log("isJumping velocity: "+m_Rigidbody.velocity);
+        }
         Move();
     }
 
     public void Move() {
         m_Rigidbody.velocity = movement.normalized * moveSpeed;
+        Debug.Log("Move velocity: "+m_Rigidbody.velocity);
         // transform.Translate(movement*moveSpeed*Time.deltaTime);
     }
 
@@ -149,6 +162,16 @@ public abstract class Charactor : MonoBehaviour
         movementAfterAttack = Vector3.zero;
         //Debug.Log("attack end");
     }
+
+    public void StopJump() {
+        if(jumpRoutine != null) {
+            StopCoroutine(jumpRoutine);
+        }
+
+        isJumping = false;
+        //Debug.Log("attack end");
+    }
+
 
     public float GetMoveSpeed() {
         return moveSpeed;

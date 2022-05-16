@@ -8,7 +8,7 @@ public class StairsGateway : MonoBehaviour
 
     void Start() {
         player = GameObject.FindObjectOfType(typeof(Player)) as Player;
-    }    
+    }
 
     protected void OnTriggerEnter2D(Collider2D otherCollider) {
         if(otherCollider.gameObject.tag == "Player") {

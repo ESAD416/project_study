@@ -11,7 +11,7 @@ public class StairsTrigger : MonoBehaviour
     public float stairDistance;
 
     protected Player player;
-    protected float playerStartHeight;
+    protected float playerOrginHeight;
     protected Coroutine heightSettleRoutine;
     protected Vector2 gateWayPos_top;
     protected Vector2 gateWayPos_down;
@@ -43,13 +43,16 @@ public class StairsTrigger : MonoBehaviour
     }    
 
     protected void OnTriggerEnter2D(Collider2D otherCollider) {
-        Debug.Log("Enter otherCollider name: "+otherCollider.gameObject.name);
+        //Debug.Log("Enter otherCollider name: "+otherCollider.gameObject.name);
         if(otherCollider.gameObject.tag == "Player") {
-            if(string.IsNullOrEmpty(player.onStairs)) {
-                Debug.Log("player not in StairsTrigger yet");
-                playerStartHeight = player.height;
-                // Debug.Log("startPos: "+startPos);
-            }
+            Debug.Log("player enter in StairsTrigger");
+            player.onStairs = gameObject.name;
+            playerOrginHeight = player.height;
+            // if(string.IsNullOrEmpty(player.onStairs)) {
+            //     Debug.Log("player not in StairsTrigger yet");
+            //     playerStartHeight = player.height;
+            //     // Debug.Log("startPos: "+startPos);
+            // }
 
             FocusOnStairsColliders();
             //Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Blocks"));
@@ -57,19 +60,20 @@ public class StairsTrigger : MonoBehaviour
     }
 
     protected void OnTriggerExit2D(Collider2D otherCollider) {
-        Debug.Log("Exit otherCollider name: "+otherCollider.gameObject.name);
+        //Debug.Log("Exit otherCollider name: "+otherCollider.gameObject.name);
         if(otherCollider.gameObject.tag == "Player") {
-            if(string.IsNullOrEmpty(player.onStairs)) {
-                Debug.Log("player enter in StairsTrigger");
-                player.onStairs = gameObject.name;
+            Debug.Log("player leave StairsTrigger");
+            InitStairsStatus();
+            // if(string.IsNullOrEmpty(player.onStairs)) {
+            //     Debug.Log("player enter in StairsTrigger");
+            //     player.onStairs = gameObject.name;
                 
-            } else {
-                Debug.Log("player prepare to leave StairsTrigger");
-                // endPos = new Vector2(player.gameObject.transform.position.x, player.gameObject.transform.position.y);
-                // Debug.Log("endPos: "+endPos);
-                //heightSettleRoutine = StartCoroutine(HeightSettleDown());
-                InitStairsStatus();
-            }
+            // } else {
+            //     Debug.Log("player prepare to leave StairsTrigger");
+            //     // endPos = new Vector2(player.gameObject.transform.position.x, player.gameObject.transform.position.y);
+            //     // Debug.Log("endPos: "+endPos);
+            //     //heightSettleRoutine = StartCoroutine(HeightSettleDown());
+            // }
         }
     }
 
@@ -115,9 +119,9 @@ public class StairsTrigger : MonoBehaviour
     }
 
     public float SetPlayerHeightOnStair() {
-        Debug.Log("playerc curr height: "+playerStartHeight);
-        float result = playerStartHeight;
-
+        Debug.Log("playerc orgin height: "+playerOrginHeight);
+        float result = playerOrginHeight;
+        
         Vector2 startPos = new Vector2();
         float dir = 1f;
         if(player.stair_start == "Stair_Top") {
@@ -130,9 +134,11 @@ public class StairsTrigger : MonoBehaviour
             startPos = gateWayPos_down;
             dir = 1f;
         }
+        float limitedHeight = playerOrginHeight + altitudeVariation * dir;
         Debug.Log("height var dir: "+dir);
         Debug.Log("stair startPos: "+startPos);
         Debug.Log("player curr centerPos: "+player.m_center);
+        Debug.Log("limitedHeight: "+limitedHeight);
 
         float playerMoveDist;
         if(isVertical) {
@@ -144,6 +150,13 @@ public class StairsTrigger : MonoBehaviour
         Debug.Log("( playerMoveDist / stairDistance ) : "+( playerMoveDist / stairDistance ));
 
         result += ( playerMoveDist / stairDistance ) * altitudeVariation * dir;
+        bool overflowHeight = (dir == 1f && result > limitedHeight) || (dir == -1f && result < limitedHeight);
+        if(player.stair_start == player.stair_end) {
+            result = playerOrginHeight;
+        } else if(overflowHeight) {
+            result = limitedHeight;
+        } 
+
         return result;
     }
 
