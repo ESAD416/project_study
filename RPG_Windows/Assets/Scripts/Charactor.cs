@@ -99,14 +99,14 @@ public abstract class Charactor : MonoBehaviour
         
         if(isJumping) {
             m_Rigidbody.velocity += Vector2.up * 10;
-            Debug.Log("isJumping velocity: "+m_Rigidbody.velocity);
+            //ebug.Log("isJumping velocity: "+m_Rigidbody.velocity);
         }
         Move();
     }
 
     public void Move() {
         m_Rigidbody.velocity = movement.normalized * moveSpeed;
-        Debug.Log("Move velocity: "+m_Rigidbody.velocity);
+        //Debug.Log("Move velocity: "+m_Rigidbody.velocity);
         // transform.Translate(movement*moveSpeed*Time.deltaTime);
     }
 

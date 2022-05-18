@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.InputSystem;
@@ -36,12 +37,13 @@ public class HeightManager : MonoBehaviour
         if(value.started) {
             mousePosition = new Vector2(0, 0);
 
-            GetHeightFromTile(mousePosition);
+            //GetHeightFromTile(mousePosition);
+            GetCoordinate(mousePosition);
 
-            mousePosition = new Vector2(-2.8f, 1.3f);
+            mousePosition = new Vector2(-3.2f, -2.7f);
 
-            GetHeightFromTile(mousePosition);
-            
+            //GetHeightFromTile(mousePosition);
+            GetCoordinate(mousePosition);
         }
     }
 
@@ -58,6 +60,22 @@ public class HeightManager : MonoBehaviour
             
         }
 
+        return result;
+    }
+
+    public Vector3 GetCoordinate(Vector2 worldPosition) {
+        Vector3 result = new Vector3();
+        List<float> height = GetHeightFromTile(worldPosition);
+        if(height.Count == 1) {
+            Debug.Log("height.Count == 1");
+            result.x = worldPosition.x;
+            result.z = height.First();
+            result.y =  worldPosition.y - result.z;
+        } else if(height.Count > 1){
+            // TODO
+            Debug.Log("height.Count > 1");
+        }
+        Debug.Log("At world pos "+worldPosition+" to Coordinate "+result);
         return result;
     }
 }

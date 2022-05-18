@@ -113,7 +113,7 @@ public class Player : Charactor
 
             Vector2 distance = new Vector2(movement.x, movement.y) * 0.5f;
             rayCastEndPos = new Vector2(raycastPoint.position.x, raycastPoint.position.y) + distance;
-            //Debug.Log("castEndPos: "+rayCastEndPos);
+            Debug.Log("castEndPos: "+rayCastEndPos);
             Debug.DrawLine(raycastPoint.position, rayCastEndPos, Color.blue);
 
             // 偵測跳躍 ver2
