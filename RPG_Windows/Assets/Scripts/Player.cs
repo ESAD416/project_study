@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 using UnityEngine.InputSystem;
 
 public class Player : Charactor
@@ -19,7 +20,10 @@ public class Player : Charactor
     [SerializeField] private Transform raycastPoint;
     public Vector2 rayCastEndPos;
 
+    public Vector2 coordinate;
     public float height = 0;
+
+
     public string onStairs;
     public string stair_start;
     public string stair_end ;
@@ -113,76 +117,88 @@ public class Player : Charactor
 
             Vector2 distance = new Vector2(movement.x, movement.y) * 0.5f;
             rayCastEndPos = new Vector2(raycastPoint.position.x, raycastPoint.position.y) + distance;
-            Debug.Log("castEndPos: "+rayCastEndPos);
+            //Debug.Log("castEndPos: "+rayCastEndPos);
             Debug.DrawLine(raycastPoint.position, rayCastEndPos, Color.blue);
 
             // 偵測跳躍 ver2
-            float heightVariation = 0;
-            var heightManager = GameObject.FindObjectOfType(typeof(HeightManager)) as HeightManager; 
-            List<float> heightsOfRayCastEndTile = heightManager.GetHeightFromTile(rayCastEndPos);
-            float endTileHeight = height;
-            if(heightsOfRayCastEndTile.Count == 1) {
-                endTileHeight = heightsOfRayCastEndTile.First();
-            } else if(heightsOfRayCastEndTile.Count > 1) {
-                foreach(float h in heightsOfRayCastEndTile) {
-                    if(endTileHeight != h) {
-                        endTileHeight = h;
-                    }
-                }
-            }
-
-            heightVariation = height - endTileHeight;
-            if(heightVariation > 0) {
-                Debug.Log("jumpDown");
-            } else if(heightVariation < 0){
-                Debug.Log("jumpUp");
-            }
-
-
-            // 偵測跳躍Edge ver1
-            // RaycastHit2D[] hits = Physics2D.LinecastAll(raycastPoint.position, castEndPos, 1 << LayerMask.NameToLayer("Trigger"));
-            // if(hits.Length > 0) {
-            //     float altitudeVariation = 0;
-            //     bool jumpUp = false;
-            //     bool jumpDown = false;
-
-            //     if(hits.Length == 1) {
-            //         var first = hits.First();
-            //         var lev = first.collider.GetComponent(typeof(LevelTile)) as LevelTile;
-            //         if(lev != null) {
-            //             float levAltitude = lev.altitude;
-            //             altitudeVariation = Math.Abs(height - levAltitude) ;
-            //             if(height < levAltitude && altitudeVariation > 0 && altitudeVariation <= 1) {
-            //                 // jumpUp
-            //                 jumpUp = true;
-            //             } else if(height == levAltitude) {
-            //                 // jumpDown
-            //                 jumpDown = true;
-            //             }
+            // float heightVariation = 0;
+            // var heightManager = GameObject.FindObjectOfType(typeof(HeightManager)) as HeightManager; 
+            // List<float> heightsOfRayCastEndTile = heightManager.GetHeightFromTile(rayCastEndPos);
+            // float endTileHeight = height;
+            // if(heightsOfRayCastEndTile.Count == 1) {
+            //     endTileHeight = heightsOfRayCastEndTile.First();
+            // } else if(heightsOfRayCastEndTile.Count > 1) {
+            //     foreach(float h in heightsOfRayCastEndTile) {
+            //         if(endTileHeight != h) {
+            //             endTileHeight = h;
             //         }
-            //     }
-            //     else if(hits.Length > 1) {
-            //         foreach(RaycastHit2D hit in hits) {
-            //             var lev = hit.collider.GetComponent(typeof(LevelTile)) as LevelTile;
-            //             if(lev != null) {
-            //                 float levAltitude = lev.altitude;
-            //                 // jumpUp check only
-            //                 if(height < levAltitude && altitudeVariation > 0 && altitudeVariation <= 1) {
-            //                     jumpUp = true;
-            //                 } else {
-            //                     jumpUp = false;
-            //                     break;
-            //                 }
-            //             }
-            //         }
-            //     }
-
-            //     if(jumpUp) {
-            //         Debug.Log("jumpUp");
-            //     } else if(jumpDown){
-            //         Debug.Log("jumpDown");
             //     }
             // }
+
+            // heightVariation = height - endTileHeight;
+            // if(heightVariation > 0) {
+            //     Debug.Log("jumpDown");
+            // } else if(heightVariation < 0){
+            //     Debug.Log("jumpUp");
+            // }
+
+
+            // 偵測跳躍Edge ver1.2
+            RaycastHit2D[] hits = Physics2D.LinecastAll(raycastPoint.position, rayCastEndPos, 1 << LayerMask.NameToLayer("Trigger"));
+            if(hits.Length > 0) {
+                var heightManager = GameObject.FindObjectOfType(typeof(HeightManager)) as HeightManager; 
+                float altitudeVariation = 0f;
+                bool jumpUp = false;
+                bool jumpDown = false;
+
+                if(hits.Length == 1) {
+                    var first = hits.First();
+                    Debug.Log("hits.Length == 1");
+                    Debug.Log("hits collider name: "+first.collider.name);
+                    var map = first.collider.gameObject.transform.parent.GetComponent<Tilemap>();
+                    Debug.Log("hitted map name: "+map.name);
+                    if(map != null) {
+                        Vector3Int gridPos = map.WorldToCell(rayCastEndPos);
+                        if(map.HasTile(gridPos)) {
+                            TileBase resultTile = map.GetTile(gridPos);
+                            Debug.Log("At grid position "+gridPos+" there is a "+resultTile+" in map "+map.name);
+                            float levAltitude = heightManager.GetHeightByTileBase(resultTile);
+                            altitudeVariation = Math.Abs(height - levAltitude) ;
+                            if(height < levAltitude && altitudeVariation > 0 && altitudeVariation <= 2) {
+                                // jumpUp
+                                jumpUp = true;
+                            } else if(height == levAltitude) {
+                                // jumpDown
+                                jumpDown = true;
+                            }
+                        }
+                    }
+                }
+                else if(hits.Length > 1) {
+                    Debug.Log("hits.Length > 1");
+                    foreach(RaycastHit2D hit in hits) {
+                        Debug.Log("hits collider name: "+hit.collider.name);
+                        var map = hit.collider.gameObject.transform.parent.GetComponent<Tilemap>();
+                        Debug.Log("hitted map name: "+map.name);
+                        if(map != null) {
+                            // float levAltitude = lev.altitude;
+                            // // jumpUp check only
+                            // if(height < levAltitude && altitudeVariation > 0 && altitudeVariation <= 1) {
+                            //     jumpUp = true;
+                            // } else {
+                            //     jumpUp = false;
+                            //     break;
+                            // }
+                        }
+                    }
+                }
+
+                if(jumpUp) {
+                    Debug.Log("jumpUp");
+                } else if(jumpDown){
+                    Debug.Log("jumpDown");
+                }
+            }
         } 
     }
 

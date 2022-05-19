@@ -38,16 +38,20 @@ public class HeightManager : MonoBehaviour
             mousePosition = new Vector2(0, 0);
 
             //GetHeightFromTile(mousePosition);
-            GetCoordinate(mousePosition);
+            //GetCoordinate(mousePosition);
 
             mousePosition = new Vector2(-3.2f, -2.7f);
 
             //GetHeightFromTile(mousePosition);
-            GetCoordinate(mousePosition);
+            //GetCoordinate(mousePosition);
         }
     }
 
-    public List<float> GetHeightFromTile(Vector2 worldPosition) {
+    public float GetHeightByTileBase(TileBase tileBase) {
+        return dataFromTiles[tileBase].height;
+    }
+
+    public List<float> GetHeightsFromTileMapsByWorldPos(Vector2 worldPosition) {
         List<float> result = new List<float>();
         foreach(var map in maps) {
             Vector3Int gridPos = map.WorldToCell(worldPosition);
@@ -65,7 +69,7 @@ public class HeightManager : MonoBehaviour
 
     public Vector3 GetCoordinate(Vector2 worldPosition) {
         Vector3 result = new Vector3();
-        List<float> height = GetHeightFromTile(worldPosition);
+        List<float> height = GetHeightsFromTileMapsByWorldPos(worldPosition);
         if(height.Count == 1) {
             Debug.Log("height.Count == 1");
             result.x = worldPosition.x;

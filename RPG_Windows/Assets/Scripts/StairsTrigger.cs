@@ -80,7 +80,7 @@ public class StairsTrigger : MonoBehaviour
     private IEnumerator HeightSettleDown() {
         //計算player高度 ver 2
         var heightManager = GameObject.FindObjectOfType(typeof(HeightManager)) as HeightManager; 
-        List<float> heightsOfTile = heightManager.GetHeightFromTile(player.m_center);
+        List<float> heightsOfTile = heightManager.GetHeightsFromTileMapsByWorldPos(player.m_center);
         if(heightsOfTile.Count > 0) {
             if(heightsOfTile.Count == 1) {
                 float first = heightsOfTile.First();
