@@ -20,9 +20,6 @@ public class Player : Charactor
     [SerializeField] private Transform raycastPoint;
     public Vector2 rayCastEndPos;
 
-    public Vector2 coordinate;
-    public float height = 0;
-
 
     public string onStairs;
     public string stair_start;
@@ -41,6 +38,7 @@ public class Player : Charactor
             HeightSettleOnStair(onStairs);
         }
         DetectedToJump();
+        Debug.Log("GetCoordinate: "+GetCoordinate());
         base.Update();
     }
 
@@ -85,6 +83,15 @@ public class Player : Charactor
             Debug.Log("Junp click");
             jumpRoutine = StartCoroutine(Jump());
         }
+    }
+
+    public Vector3 GetCoordinate() {
+        Vector3 result = new Vector3();
+        result.x = m_center.x;
+        result.z = height;
+        result.y =  m_center.y - result.z;
+
+        return result;
     }
  
     private void DetectedToJump() {
@@ -143,7 +150,7 @@ public class Player : Charactor
             // }
 
 
-            // 偵測跳躍Edge ver1.2
+            // 偵測跳躍Edge ver.3
             RaycastHit2D[] hits = Physics2D.LinecastAll(raycastPoint.position, rayCastEndPos, 1 << LayerMask.NameToLayer("Trigger"));
             if(hits.Length > 0) {
                 var heightManager = GameObject.FindObjectOfType(typeof(HeightManager)) as HeightManager; 
@@ -151,50 +158,56 @@ public class Player : Charactor
                 bool jumpUp = false;
                 bool jumpDown = false;
 
-                if(hits.Length == 1) {
-                    var first = hits.First();
-                    Debug.Log("hits.Length == 1");
-                    Debug.Log("hits collider name: "+first.collider.name);
-                    var map = first.collider.gameObject.transform.parent.GetComponent<Tilemap>();
-                    Debug.Log("hitted map name: "+map.name);
-                    if(map != null) {
-                        Vector3Int gridPos = map.WorldToCell(rayCastEndPos);
-                        if(map.HasTile(gridPos)) {
-                            TileBase resultTile = map.GetTile(gridPos);
-                            Debug.Log("At grid position "+gridPos+" there is a "+resultTile+" in map "+map.name);
-                            float levAltitude = heightManager.GetHeightByTileBase(resultTile);
-                            altitudeVariation = Math.Abs(height - levAltitude) ;
-                            if(height < levAltitude && altitudeVariation > 0 && altitudeVariation <= 2) {
-                                // jumpUp
-                                jumpUp = true;
-                            } else if(height == levAltitude) {
-                                // jumpDown
-                                jumpDown = true;
-                            }
-                        }
-                    }
-                }
-                else if(hits.Length > 1) {
+                if(hits.Length >= 1) {
                     Debug.Log("hits.Length > 1");
                     foreach(RaycastHit2D hit in hits) {
                         Debug.Log("hits collider name: "+hit.collider.name);
-                        var map = hit.collider.gameObject.transform.parent.GetComponent<Tilemap>();
-                        Debug.Log("hitted map name: "+map.name);
-                        if(map != null) {
-                            // float levAltitude = lev.altitude;
-                            // // jumpUp check only
-                            // if(height < levAltitude && altitudeVariation > 0 && altitudeVariation <= 1) {
-                            //     jumpUp = true;
-                            // } else {
-                            //     jumpUp = false;
-                            //     break;
-                            // }
+                        if(hit.collider.tag == "Jump") {
+                            var trigger = hit.collider.GetComponent<HeightOfObject>() as HeightOfObject;
+                            if(trigger != null) {
+                                float correspondHeight = trigger.GetCorrespondHeight();
+                                altitudeVariation = Math.Abs(height - correspondHeight) ;
+                                if(height < correspondHeight && altitudeVariation > 0 && altitudeVariation <= 2) {
+                                    // jumpUp
+                                    jumpUp = true;
+                                } else if(height >= correspondHeight) {
+                                    // jumpDown
+                                    jumpDown = true;
+                                }
+                            }
+                            // var map = hit.collider.gameObject.transform.parent.GetComponent<Tilemap>();
+                            // Debug.Log("hitted map name: "+map.name);
+                            // if(map != null) {
+                            //     Vector3Int gridPos = map.WorldToCell(rayCastEndPos);
+                            //     if(map.HasTile(gridPos)) {
+                            //         TileBase resultTile = map.GetTile(gridPos);
+                            //         Debug.Log("At grid position "+gridPos+" there is a "+resultTile+" in map "+map.name);
+                            //         float mapAltitude = heightManager.GetHeightByTileBase(resultTile);
+                            //         altitudeVariation = Math.Abs(height - mapAltitude) ;
+                            //         if(height < mapAltitude && altitudeVariation > 0 && altitudeVariation <= 2) {
+                            //             // jumpUp
+                            //             jumpUp = true;
+                            //         } else if(height >= mapAltitude) {
+                            //             // jumpDown
+                            //             jumpDown = true;
+                            //         }
+                            //     }
+                            // } 
                         }
                     }
                 }
 
+
+                if(jumpUp && jumpDown) {
+                    //TODO
+                }
+
                 if(jumpUp) {
                     Debug.Log("jumpUp");
+                    if(!isJumping) {
+                        Debug.Log("Start jumpUp");
+                        jumpRoutine = StartCoroutine(Jump());
+                    }
                 } else if(jumpDown){
                     Debug.Log("jumpDown");
                 }
@@ -229,7 +242,7 @@ public class Player : Charactor
 
     private IEnumerator Jump() {
         isJumping = true;
-        //m_Rigidbody.velocity += Vector2.up * 10;
+        m_Rigidbody.AddForce(new Vector2(0, maxJumpHeight), ForceMode2D.Impulse);
         yield return new WaitForSeconds(jumpClipTime);  // hardcasted casted time for debugged
         StopJump();
     }

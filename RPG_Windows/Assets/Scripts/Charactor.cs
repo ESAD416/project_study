@@ -22,7 +22,7 @@ public abstract class Charactor : MonoBehaviour
     /// <summary>
     /// 角色移速
     /// </summary>
-    [SerializeField] private float moveSpeed = 2f;
+    [SerializeField] private float moveSpeed = 5f;
     /// <summary>
     /// 角色移動向量
     /// </summary>
@@ -43,10 +43,11 @@ public abstract class Charactor : MonoBehaviour
 
     #region 跳躍
 
+    public float height = 0;
+    [SerializeField] protected float maxJumpHeight = 1.5f;
     protected Coroutine jumpRoutine;
-    [SerializeField] private float jumpForce = 10f;
     protected bool isJumping;
-    protected float jumpClipTime = 0.5f;
+    protected float jumpClipTime = 0.2f;
 
     #endregion
 
@@ -85,6 +86,7 @@ public abstract class Charactor : MonoBehaviour
     {
         HandleAnimatorLayers();
         SetAnimateMovementPara(movement, facingDir);
+        FocusCollidersWithHeight();
     }
 
     private void FixedUpdate() {
@@ -97,11 +99,11 @@ public abstract class Charactor : MonoBehaviour
             movement = Vector3.zero;
         }
         
-        if(isJumping) {
-            m_Rigidbody.velocity += Vector2.up * 10;
-            //ebug.Log("isJumping velocity: "+m_Rigidbody.velocity);
+        if(!isJumping) {
+            Move();
+        } else {
+
         }
-        Move();
     }
 
     public void Move() {
@@ -170,6 +172,26 @@ public abstract class Charactor : MonoBehaviour
 
         isJumping = false;
         //Debug.Log("attack end");
+    }
+
+    private void FocusCollidersWithHeight() {
+        var grid = GameObject.FindObjectOfType(typeof(Grid)) as Grid;
+        Collider2D[] collider2Ds = grid.GetComponentsInChildren<Collider2D>();
+        foreach(var collider2D in collider2Ds) {
+            if(collider2D.gameObject.layer != LayerMask.NameToLayer("Trigger")) {
+                //Debug.Log("collider2D tag: "+collider2D.tag);
+                var block = collider2D.GetComponent<HeightOfObject>() as HeightOfObject;
+                if(block != null) {
+                    Debug.Log("collider2D name: "+collider2D.name);
+                    if(height > block.GetCorrespondHeight()) {
+                        collider2D.enabled = false;
+                    } else {
+                        collider2D.enabled = true;
+                    }
+                }
+
+            }
+        }
     }
 
 

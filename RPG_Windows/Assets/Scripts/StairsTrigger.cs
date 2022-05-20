@@ -168,6 +168,7 @@ public class StairsTrigger : MonoBehaviour
         player.onStairs = string.Empty;
         player.stair_start = string.Empty;
         player.stair_end = string.Empty;
+        RevertFocusOnStairsColliders();
     }
 
     private void FocusOnStairsColliders() {
@@ -177,6 +178,18 @@ public class StairsTrigger : MonoBehaviour
                 //Debug.Log("collider2D tag: "+collider2D.tag);
                 if(collider2D.tag != "Stairs") {
                     collider2D.enabled = false;
+                }
+            }
+        }
+    }
+    
+    private void RevertFocusOnStairsColliders() {
+        foreach(var collider2D in collider2Ds) {
+            //Debug.Log("collider2D name: "+collider2D.name);
+            if(collider2D.gameObject.layer != LayerMask.NameToLayer("Trigger")) {
+                //Debug.Log("collider2D tag: "+collider2D.tag);
+                if(collider2D.tag != "Stairs") {
+                    collider2D.enabled = true;
                 }
             }
         }
