@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,11 +10,14 @@ public abstract class Charactor : MonoBehaviour
     /// 角色動畫控制器
     /// </summary>
     protected Animator m_Animator;
-
     /// <summary>
     /// 角色物理物件
     /// </summary>
     protected Rigidbody2D m_Rigidbody;
+    /// <summary>
+    /// 角色中心
+    /// </summary>
+    public Vector3 m_center;
     #endregion
 
     #region 角色相關參數
@@ -45,6 +49,8 @@ public abstract class Charactor : MonoBehaviour
 
     public float height = 0;
     [SerializeField] protected float maxJumpHeight = 1.5f;
+    protected float jumpOffset = 1f;
+    protected float g = -0.5f;
     protected Coroutine jumpRoutine;
     protected bool isJumping;
     protected float jumpClipTime = 0.2f;
@@ -100,9 +106,26 @@ public abstract class Charactor : MonoBehaviour
         }
         
         if(!isJumping) {
+            //jumpOffset = 1f;
             Move();
         } else {
-
+            // height += jumpOffset;
+            // if(jumpOffset >= 0) {
+            //     jumpOffset += (g / 2); 
+            // } else {
+            //     var hm = GameObject.FindObjectOfType(typeof(HeightManager)) as HeightManager;
+            //     float groundCheckHeight = Mathf.Round(height);
+            //     if(hm.GroundableChecked(m_center, groundCheckHeight)) {
+            //         if(height <= groundCheckHeight) {
+            //             height = groundCheckHeight;
+            //             isJumping = false;
+            //         } else {
+            //             jumpOffset += g; 
+            //         }
+            //     } else {
+            //         jumpOffset += g; 
+            //     }
+            // }
         }
     }
 

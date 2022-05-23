@@ -67,6 +67,21 @@ public class HeightManager : MonoBehaviour
         return result;
     }
 
+    public bool GroundableChecked(Vector2 worldPos, float height) {
+        foreach(var map in maps) {
+            Vector3Int gridPos = map.WorldToCell(worldPos);
+            if(map.HasTile(gridPos)) {
+                TileBase resultTile = map.GetTile(gridPos);
+                //Debug.Log("At grid position "+gridPos+" there is a "+resultTile+" in map "+map.name);
+                if(dataFromTiles[resultTile].height == height) {
+                    // TODO Get Sptite to get color 
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public Vector3 GetCoordinate(Vector2 worldPosition) {
         Vector3 result = new Vector3();
         List<float> height = GetHeightsFromTileMapsByWorldPos(worldPosition);
@@ -80,6 +95,13 @@ public class HeightManager : MonoBehaviour
             Debug.Log("height.Count > 1");
         }
         Debug.Log("At world pos "+worldPosition+" to Coordinate "+result);
+        return result;
+    }
+
+    public Vector2 GetWorldPosFromCoordinate(Vector3 coordinate) {
+        Vector2 result = new Vector2();
+        result.x = coordinate.x;
+        result.y = coordinate.x + coordinate.z;
         return result;
     }
 }

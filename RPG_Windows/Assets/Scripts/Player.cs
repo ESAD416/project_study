@@ -11,10 +11,6 @@ public class Player : Charactor
     [Header("Input Settings")]
     public PlayerInput playerInput;
 
-    /// <summary>
-    /// 角色中心
-    /// </summary>
-    public Vector3 m_center;
     public Vector2 capsuleSize = new Vector2(1.5f, 2f);
     public float radius = 2f;
     [SerializeField] private Transform raycastPoint;
@@ -81,7 +77,7 @@ public class Player : Charactor
     public void OnJump(InputAction.CallbackContext value) {
         if(value.started) {
             Debug.Log("Junp click");
-            jumpRoutine = StartCoroutine(Jump());
+            //jumpRoutine = StartCoroutine(Jump());
         }
     }
 
@@ -198,19 +194,21 @@ public class Player : Charactor
                 }
 
 
-                if(jumpUp && jumpDown) {
-                    //TODO
+                if(jumpUp || jumpDown) {
+                    if(!isJumping) {
+                        //jumpRoutine = StartCoroutine(Jump());
+                    }
                 }
 
-                if(jumpUp) {
-                    Debug.Log("jumpUp");
-                    if(!isJumping) {
-                        Debug.Log("Start jumpUp");
-                        jumpRoutine = StartCoroutine(Jump());
-                    }
-                } else if(jumpDown){
-                    Debug.Log("jumpDown");
-                }
+                // if(jumpUp) {
+                //     Debug.Log("jumpUp");
+                //     if(!isJumping) {
+                //         Debug.Log("Start jumpUp");
+                //         jumpRoutine = StartCoroutine(Jump());
+                //     }
+                // } else if(jumpDown){
+                //     Debug.Log("jumpDown");
+                // }
             }
         } 
     }
@@ -242,7 +240,6 @@ public class Player : Charactor
 
     private IEnumerator Jump() {
         isJumping = true;
-        m_Rigidbody.AddForce(new Vector2(0, maxJumpHeight), ForceMode2D.Impulse);
         yield return new WaitForSeconds(jumpClipTime);  // hardcasted casted time for debugged
         StopJump();
     }
