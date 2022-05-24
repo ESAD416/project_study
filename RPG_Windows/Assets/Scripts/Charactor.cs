@@ -106,26 +106,27 @@ public abstract class Charactor : MonoBehaviour
         }
         
         if(!isJumping) {
-            //jumpOffset = 1f;
             Move();
         } else {
-            // height += jumpOffset;
-            // if(jumpOffset >= 0) {
-            //     jumpOffset += (g / 2); 
-            // } else {
-            //     var hm = GameObject.FindObjectOfType(typeof(HeightManager)) as HeightManager;
-            //     float groundCheckHeight = Mathf.Round(height);
-            //     if(hm.GroundableChecked(m_center, groundCheckHeight)) {
-            //         if(height <= groundCheckHeight) {
-            //             height = groundCheckHeight;
-            //             isJumping = false;
-            //         } else {
-            //             jumpOffset += g; 
-            //         }
-            //     } else {
-            //         jumpOffset += g; 
-            //     }
-            // }
+            height += jumpOffset;
+            if(jumpOffset >= 0) {
+                jumpOffset += (g / 2); 
+            } else {
+                var hm = GameObject.FindObjectOfType(typeof(HeightManager)) as HeightManager;
+                float groundCheckHeight = Mathf.Round(height);
+                if(hm.GroundableChecked(m_center, groundCheckHeight)) {
+                    Debug.Log("Groundable true");
+                    if(height <= groundCheckHeight) {
+                        height = groundCheckHeight;
+                        StopJump();
+                    } else {
+                        jumpOffset += g; 
+                    }
+                } else {
+                    Debug.Log("Groundable false");
+                    jumpOffset += g; 
+                }
+            }
         }
     }
 
@@ -194,6 +195,7 @@ public abstract class Charactor : MonoBehaviour
         }
 
         isJumping = false;
+        jumpOffset = 1f;
         //Debug.Log("attack end");
     }
 
@@ -205,7 +207,7 @@ public abstract class Charactor : MonoBehaviour
                 //Debug.Log("collider2D tag: "+collider2D.tag);
                 var block = collider2D.GetComponent<HeightOfObject>() as HeightOfObject;
                 if(block != null) {
-                    Debug.Log("collider2D name: "+collider2D.name);
+                    //Debug.Log("collider2D name: "+collider2D.name);
                     if(height > block.GetCorrespondHeight()) {
                         collider2D.enabled = false;
                     } else {

@@ -34,7 +34,7 @@ public class Player : Charactor
             HeightSettleOnStair(onStairs);
         }
         DetectedToJump();
-        Debug.Log("GetCoordinate: "+GetCoordinate());
+        //Debug.Log("GetCoordinate: "+GetCoordinate());
         base.Update();
     }
 
@@ -196,7 +196,7 @@ public class Player : Charactor
 
                 if(jumpUp || jumpDown) {
                     if(!isJumping) {
-                        //jumpRoutine = StartCoroutine(Jump());
+                        isJumping = true;
                     }
                 }
 

@@ -6,7 +6,7 @@ using UnityEngine.Tilemaps;
 [CreateAssetMenu]
 public class TileData : ScriptableObject
 {
-    public TileBase[] tiles;
+    public Tile[] tiles;
 
     public float height;
 }

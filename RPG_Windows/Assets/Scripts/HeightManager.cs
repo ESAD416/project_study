@@ -10,7 +10,7 @@ public class HeightManager : MonoBehaviour
     [SerializeField]
     private List<TileData> defaultTileDatas;
     private Tilemap[] maps;
-    private Dictionary<TileBase, TileData> dataFromTiles;
+    private Dictionary<Tile, TileData> dataFromTiles;
     Vector2 mousePosition;
 
     void Start()
@@ -19,9 +19,10 @@ public class HeightManager : MonoBehaviour
     }
 
     private void Awake() {
-        dataFromTiles = new Dictionary<TileBase, TileData>();
+        dataFromTiles = new Dictionary<Tile, TileData>();
         foreach(TileData data in defaultTileDatas) {
-            foreach(TileBase tile in data.tiles) {
+            foreach(Tile tile in data.tiles) {
+                //Debug.Log("tile name: "+tile.name);
                 dataFromTiles.Add(tile, data);
             }
         }
@@ -47,7 +48,7 @@ public class HeightManager : MonoBehaviour
         }
     }
 
-    public float GetHeightByTileBase(TileBase tileBase) {
+    public float GetHeightByTileBase(Tile tileBase) {
         return dataFromTiles[tileBase].height;
     }
 
@@ -56,7 +57,7 @@ public class HeightManager : MonoBehaviour
         foreach(var map in maps) {
             Vector3Int gridPos = map.WorldToCell(worldPosition);
             if(map.HasTile(gridPos)) {
-                TileBase resultTile = map.GetTile(gridPos);
+                Tile resultTile = map.GetTile<Tile>(gridPos);
                 //Debug.Log("At grid position "+gridPos+" there is a "+resultTile+" in map "+map.name);
 
                 result.Add(dataFromTiles[resultTile].height);
@@ -68,13 +69,45 @@ public class HeightManager : MonoBehaviour
     }
 
     public bool GroundableChecked(Vector2 worldPos, float height) {
+        Debug.Log("worldPos: "+worldPos);
         foreach(var map in maps) {
             Vector3Int gridPos = map.WorldToCell(worldPos);
             if(map.HasTile(gridPos)) {
-                TileBase resultTile = map.GetTile(gridPos);
-                //Debug.Log("At grid position "+gridPos+" there is a "+resultTile+" in map "+map.name);
+                Tile resultTile = map.GetTile<Tile>(gridPos);
+                Debug.Log("At grid position "+gridPos+" there is a "+resultTile+" in map "+map.name);
                 if(dataFromTiles[resultTile].height == height) {
-                    // TODO Get Sptite to get color 
+                    // TODO Get Sptite to get color
+                    
+                    Sprite s = resultTile.sprite;
+                    Debug.Log("sprite name: "+s.name);
+                    
+                    
+                    float perX = worldPos.x - Mathf.Round(worldPos.x);
+                    float perY = worldPos.y - Mathf.Round(worldPos.y);
+                    if(perX < 0) {
+                        perX = 1f + perX;
+                    }
+                    if(perY < 0) {
+                        perY = 1f + perY;
+                    }
+                    Debug.Log("perX: "+perX);
+                    Debug.Log("perY: "+perY);
+
+                    float textW = s.texture.width;
+                    float textH = s.texture.height;
+                    Debug.Log("textW: "+textW);
+                    Debug.Log("textH: "+textH);
+
+                    int pixelX = (int) Mathf.Round(perX * textW);
+                    Debug.Log("pixelX: "+pixelX);
+                    int pixelY = (int) Mathf.Round(perY * textH);
+                    Debug.Log("pixelY: "+pixelY);
+                    Color goalColor = s.texture.GetPixel(pixelX, pixelY);
+                    Debug.Log("goalColor: "+ goalColor);
+                    if(goalColor.a == 0f) {
+                        return false;
+                    } 
+
                     return true;
                 }
             }
