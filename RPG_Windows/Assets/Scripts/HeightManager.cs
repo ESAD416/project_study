@@ -9,13 +9,14 @@ public class HeightManager : MonoBehaviour
 {
     [SerializeField]
     private List<TileData> defaultTileDatas;
-    private Tilemap[] maps;
+    private Tilemap[] levels;
     private Dictionary<Tile, TileData> dataFromTiles;
     Vector2 mousePosition;
 
     void Start()
     {
-        maps = transform.GetComponentsInChildren<Tilemap>();
+        Tilemap[] maps = transform.GetComponentsInChildren<Tilemap>();
+        levels = maps.Where(x => x.tag == "Level").ToArray();
     }
 
     private void Awake() {
@@ -54,7 +55,7 @@ public class HeightManager : MonoBehaviour
 
     public List<float> GetHeightsFromTileMapsByWorldPos(Vector2 worldPosition) {
         List<float> result = new List<float>();
-        foreach(var map in maps) {
+        foreach(var map in levels) {
             Vector3Int gridPos = map.WorldToCell(worldPosition);
             if(map.HasTile(gridPos)) {
                 Tile resultTile = map.GetTile<Tile>(gridPos);
@@ -70,11 +71,13 @@ public class HeightManager : MonoBehaviour
 
     public bool GroundableChecked(Vector2 worldPos, float height) {
         Debug.Log("worldPos: "+worldPos);
-        foreach(var map in maps) {
+        Debug.Log("height: "+height);
+        foreach(var map in levels) {
             Vector3Int gridPos = map.WorldToCell(worldPos);
             if(map.HasTile(gridPos)) {
                 Tile resultTile = map.GetTile<Tile>(gridPos);
                 Debug.Log("At grid position "+gridPos+" there is a "+resultTile+" in map "+map.name);
+                Debug.Log("resultTile height: "+dataFromTiles[resultTile].height);
                 if(dataFromTiles[resultTile].height == height) {
                     // TODO Get Sptite to get color
                     

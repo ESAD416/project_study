@@ -49,7 +49,7 @@ public abstract class Charactor : MonoBehaviour
 
     public float height = 0;
     [SerializeField] protected float maxJumpHeight = 1.5f;
-    protected float jumpOffset = 1f;
+    protected float jumpOffset = 0.8f;
     protected float g = -0.5f;
     protected Coroutine jumpRoutine;
     protected bool isJumping;
@@ -96,6 +96,8 @@ public abstract class Charactor : MonoBehaviour
     }
 
     private void FixedUpdate() {
+        Debug.Log("FixedUpdate start player height: "+height);
+        Debug.Log("FixedUpdate start player jumpOffset: "+jumpOffset);
         if(isAttacking) {
             //Debug.Log("attacking");
             if(isMoving) {
@@ -105,15 +107,13 @@ public abstract class Charactor : MonoBehaviour
             movement = Vector3.zero;
         }
         
-        if(!isJumping) {
-            Move();
-        } else {
-            height += jumpOffset;
+        if(isJumping) {
+            height = height + jumpOffset;
             if(jumpOffset >= 0) {
                 jumpOffset += (g / 2); 
             } else {
                 var hm = GameObject.FindObjectOfType(typeof(HeightManager)) as HeightManager;
-                float groundCheckHeight = Mathf.Round(height);
+                float groundCheckHeight = Mathf.Floor(height);
                 if(hm.GroundableChecked(m_center, groundCheckHeight)) {
                     Debug.Log("Groundable true");
                     if(height <= groundCheckHeight) {
@@ -128,6 +128,9 @@ public abstract class Charactor : MonoBehaviour
                 }
             }
         }
+        Debug.Log("FixedUpdate end player height: "+height);
+        Debug.Log("FixedUpdate end player jumpOffset: "+jumpOffset);
+        Move();
     }
 
     public void Move() {
