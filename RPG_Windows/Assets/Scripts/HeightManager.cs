@@ -74,15 +74,16 @@ public class HeightManager : MonoBehaviour
         Debug.Log("height: "+height);
         foreach(var map in levels) {
             Vector3Int gridPos = map.WorldToCell(worldPos);
+            Debug.Log("rotation: "+map.GetTransformMatrix(gridPos).rotation);
+            Debug.Log("eulerAngles: "+map.GetTransformMatrix(gridPos).rotation.eulerAngles);
             if(map.HasTile(gridPos)) {
                 Tile resultTile = map.GetTile<Tile>(gridPos);
                 Debug.Log("At grid position "+gridPos+" there is a "+resultTile+" in map "+map.name);
                 Debug.Log("resultTile height: "+dataFromTiles[resultTile].height);
                 if(dataFromTiles[resultTile].height == height) {
                     // TODO Get Sptite to get color
-                    
                     Sprite s = resultTile.sprite;
-                    Debug.Log("sprite name: "+s.name);
+                    // Debug.Log("sprite name: "+s.name);
                     
                     
                     float perX = worldPos.x - Mathf.Round(worldPos.x);
@@ -93,18 +94,20 @@ public class HeightManager : MonoBehaviour
                     if(perY < 0) {
                         perY = 1f + perY;
                     }
-                    Debug.Log("perX: "+perX);
-                    Debug.Log("perY: "+perY);
+                    // Debug.Log("perX: "+perX);
+                    // Debug.Log("perY: "+perY);
 
-                    float textW = s.texture.width;
-                    float textH = s.texture.height;
-                    Debug.Log("textW: "+textW);
-                    Debug.Log("textH: "+textH);
+                    float textureWidth = s.rect.width;
+                    float textureHeight = s.rect.height;
+                    // Debug.Log("textureWidth: "+textureWidth);
+                    // Debug.Log("textureHeight: "+textureHeight);
+                    // Debug.Log("xMin: "+s.rect.xMin);
+                    // Debug.Log("yMin: "+s.rect.yMin);
 
-                    int pixelX = (int) Mathf.Round(perX * textW);
-                    Debug.Log("pixelX: "+pixelX);
-                    int pixelY = (int) Mathf.Round(perY * textH);
-                    Debug.Log("pixelY: "+pixelY);
+                    int pixelX = (int) (s.rect.xMin + Mathf.Round(perX * textureWidth));
+                    int pixelY = (int) (s.rect.yMin + Mathf.Round(perY * textureHeight));
+                    // Debug.Log("pixelX: "+pixelX);
+                    // Debug.Log("pixelY: "+pixelY);
                     Color goalColor = s.texture.GetPixel(pixelX, pixelY);
                     Debug.Log("goalColor: "+ goalColor);
                     if(goalColor.a == 0f) {

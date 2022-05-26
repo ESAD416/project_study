@@ -14,7 +14,19 @@ public class Test : MonoBehaviour
     [ContextMenu("Get Colors")]
     public void GetColors() {
         Debug.Log("rect: "+m_sprite.rect);
+        Debug.Log("rect x: "+m_sprite.rect.x);
+        Debug.Log("rect y: "+m_sprite.rect.y);
+        Debug.Log("rect xMin: "+m_sprite.rect.xMin);
+        Debug.Log("rect yMin: "+m_sprite.rect.yMin);
+        Debug.Log("rect xMax: "+m_sprite.rect.xMax);
+        Debug.Log("rect yMax: "+m_sprite.rect.yMax);
         Debug.Log("textureRect: "+m_sprite.textureRect);
+        Debug.Log("textureRect x: "+m_sprite.textureRect.x);
+        Debug.Log("textureRect y: "+m_sprite.textureRect.y);
+        Debug.Log("textureRect xMin: "+m_sprite.textureRect.xMin);
+        Debug.Log("textureRect yMin: "+m_sprite.textureRect.yMin);
+        Debug.Log("textureRect xMin: "+m_sprite.textureRect.xMax);
+        Debug.Log("textureRect yMin: "+m_sprite.textureRect.yMax);
         Debug.Log("textureRectOffset: "+m_sprite.textureRectOffset);
 
         // var map = m_sprite.texture;

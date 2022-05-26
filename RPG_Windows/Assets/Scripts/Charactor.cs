@@ -49,8 +49,8 @@ public abstract class Charactor : MonoBehaviour
 
     public float height = 0;
     [SerializeField] protected float maxJumpHeight = 1.5f;
-    protected float jumpOffset = 0.8f;
-    protected float g = -0.5f;
+    protected float jumpOffset = 0.35f;
+    protected float g = -0.09f;
     protected Coroutine jumpRoutine;
     protected bool isJumping;
     protected float jumpClipTime = 0.2f;
@@ -92,7 +92,7 @@ public abstract class Charactor : MonoBehaviour
     {
         HandleAnimatorLayers();
         SetAnimateMovementPara(movement, facingDir);
-        FocusCollidersWithHeight();
+        //FocusCollidersWithHeight();
     }
 
     private void FixedUpdate() {
@@ -108,23 +108,27 @@ public abstract class Charactor : MonoBehaviour
         }
         
         if(isJumping) {
-            height = height + jumpOffset;
+            float goalheight = height + jumpOffset;
+            Debug.Log("goalheight: "+goalheight);
             if(jumpOffset >= 0) {
                 jumpOffset += (g / 2); 
+                height = goalheight;
             } else {
                 var hm = GameObject.FindObjectOfType(typeof(HeightManager)) as HeightManager;
                 float groundCheckHeight = Mathf.Floor(height);
                 if(hm.GroundableChecked(m_center, groundCheckHeight)) {
                     Debug.Log("Groundable true");
-                    if(height <= groundCheckHeight) {
+                    if(goalheight <= groundCheckHeight) {
                         height = groundCheckHeight;
                         StopJump();
                     } else {
-                        jumpOffset += g; 
+                        jumpOffset += g;
+                        height = goalheight;
                     }
                 } else {
                     Debug.Log("Groundable false");
                     jumpOffset += g; 
+                    height = goalheight;
                 }
             }
         }
@@ -210,12 +214,14 @@ public abstract class Charactor : MonoBehaviour
                 //Debug.Log("collider2D tag: "+collider2D.tag);
                 var block = collider2D.GetComponent<HeightOfObject>() as HeightOfObject;
                 if(block != null) {
-                    //Debug.Log("collider2D name: "+collider2D.name);
-                    if(height > block.GetCorrespondHeight()) {
+                    // Debug.Log("FocusCollidersWithHeight collider2D name: "+collider2D.name);
+                    // Debug.Log("FocusCollidersWithHeight collider2D type: "+collider2D.GetType());
+                    if(height >= block.GetCorrespondHeight()) {
                         collider2D.enabled = false;
                     } else {
                         collider2D.enabled = true;
                     }
+                    // Debug.Log("FocusCollidersWithHeight collider2D enabled: "+collider2D.enabled);
                 }
 
             }
