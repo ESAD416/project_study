@@ -49,14 +49,55 @@ public class Test : MonoBehaviour
         // }
     }
 
-    [ContextMenu("Get TileInfo")]
+    [ContextMenu("Get Matrix Test")]
     public void GetTileInfo() {
-        // Debug.Log("gameObj name: "+m_Tile.gameObject.name);
-        // Debug.Log(m_Tile.)
+        float rad1 = 180 * Mathf.Deg2Rad;
+        float rad2 = 90 * Mathf.Deg2Rad;
+        float rad3 = 270 * Mathf.Deg2Rad;
+        Matrix4x4 m1 = MatrixUtils.RotateZ(rad1);
+        Matrix4x4 m2 = MatrixUtils.RotateZ(rad2);
+        Matrix4x4 m3 = MatrixUtils.RotateZ(rad3);
+        Debug.Log("m1: \n"+m1);
+        Debug.Log("m2: \n"+m2);
+        Debug.Log("m3: \n"+m3);
+        Vector2 originPos = new Vector2(66, 255);
+        Vector2 diagonalPos = originPos + new Vector2(32, 32);
+        Vector2 xaxisPos = originPos + new Vector2(32, 0);
+        Vector2 yaxisPos = originPos + new Vector2(0, 32);
+        Vector2 centerPos = new Vector2(66, 255) + new Vector2(16, 16);
+        Vector2 pos1 = new Vector2(97, 271);
+        Vector2 pos2 = new Vector2(77, 282);
+        Vector2 move1 = pos1 - centerPos;
+        Vector2 move2 = pos2 - centerPos;
         
+        Debug.Log("originPos: "+originPos);
+        Debug.Log("diagonalPos: "+diagonalPos);
+        Debug.Log("xaxisPos: "+xaxisPos);
+        Debug.Log("yaxisPos: "+yaxisPos);
+        Debug.Log("centerPos: "+centerPos);
+        Debug.Log("pos1: "+pos1);
+        Debug.Log("pos2: "+pos2);
+        Debug.Log("move1: "+move1);
+        Debug.Log("move2: "+move2);
+
+        float moveX1 = move1.x * Mathf.Cos(rad1) + move1.y * Mathf.Sin(rad1);
+        float moveY1 = move1.x * -Mathf.Sin(rad1) + move1.y * Mathf.Cos(rad1);
+        Debug.Log("movement1 Vector: "+moveX1+", "+moveY1);
+
+        Vector2 result1 = new Vector2(centerPos.x + moveX1, centerPos.y + moveY1);
+        Debug.Log("result1: "+result1);
+
+        float moveX2 = move2.x * Mathf.Cos(rad2) + move2.y * Mathf.Sin(rad2);
+        float moveY2 = move2.x * -Mathf.Sin(rad2) + move2.y * Mathf.Cos(rad2);
+        Debug.Log("movement2 Vector: "+moveX2+", "+moveY2);
+
+        Vector2 result2 = new Vector2(centerPos.x + moveX2, centerPos.y + moveY2);
+        Debug.Log("result1: "+result2);
+
+        // float moveX3 = move2.x * m3.m00 + move2.y * m3.m01;
+        // float moveY3 = move2.x * m3.m10 + move2.y * m3.m11;
+        // Debug.Log("movement3 Vector: "+moveX3+", "+moveY3);
+
     }
 
-    public void SetColors() {
-        
-    }
 }
