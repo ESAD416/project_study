@@ -29,18 +29,15 @@ public class Player : Charactor
 
     protected override void Update()
     { 
-        m_center = new Vector3(transform.position.x, transform.position.y - 0.5f);
+        m_Center = new Vector3(transform.position.x, transform.position.y - 0.5f);
         if(!string.IsNullOrEmpty(onStairs)) {
             HeightSettleOnStair(onStairs);
         }
-        DetectedToJump();
+        if(!isJumping) {
+            DetectedToJump();
+        }
         //Debug.Log("GetCoordinate: "+GetCoordinate());
         base.Update();
-    }
-
-    private void OnDrawGizmos() {
-        //Gizmos.DrawWireSphere(m_center, radius);
-        //DrawCapsule(m_center, capsuleSize);
     }
 
     // private void DrawCapsule(Vector3 orgin, Vector2 size) {
@@ -74,22 +71,6 @@ public class Player : Charactor
         }
     }
 
-    public void OnJump(InputAction.CallbackContext value) {
-        if(value.started) {
-            Debug.Log("Junp click");
-            //jumpRoutine = StartCoroutine(Jump());
-        }
-    }
-
-    public Vector3 GetCoordinate() {
-        Vector3 result = new Vector3();
-        result.x = m_center.x;
-        result.z = height;
-        result.y =  m_center.y - result.z;
-
-        return result;
-    }
- 
     private void DetectedToJump() {
         if(isMoving) {
             if(movement.x == 0 && movement.y > 0) {
@@ -162,11 +143,11 @@ public class Player : Charactor
                             var trigger = hit.collider.GetComponent<HeightOfObject>() as HeightOfObject;
                             if(trigger != null) {
                                 float correspondHeight = trigger.GetCorrespondHeight();
-                                altitudeVariation = Math.Abs(height - correspondHeight) ;
-                                if(height < correspondHeight && altitudeVariation > 0 && altitudeVariation <= 2) {
+                                altitudeVariation = Math.Abs(currHeight - correspondHeight) ;
+                                if(currHeight < correspondHeight && altitudeVariation > 0 && altitudeVariation <= 2) {
                                     // jumpUp
                                     jumpUp = true;
-                                } else if(height >= correspondHeight) {
+                                } else if(currHeight >= correspondHeight) {
                                     // jumpDown
                                     jumpDown = true;
                                 }
@@ -199,16 +180,6 @@ public class Player : Charactor
                         isJumping = true;
                     }
                 }
-
-                // if(jumpUp) {
-                //     Debug.Log("jumpUp");
-                //     if(!isJumping) {
-                //         Debug.Log("Start jumpUp");
-                //         jumpRoutine = StartCoroutine(Jump());
-                //     }
-                // } else if(jumpDown){
-                //     Debug.Log("jumpDown");
-                // }
             }
         } 
     }
@@ -224,8 +195,8 @@ public class Player : Charactor
         }
 
         if(currStair != null) {
-            height = currStair.SetPlayerHeightOnStair();
-            Debug.Log("SetPlayerHeightOnStair player height: "+height);
+            currHeight = currStair.SetPlayerHeightOnStair();
+            Debug.Log("SetPlayerHeightOnStair player height: "+currHeight);
         }
 
     }

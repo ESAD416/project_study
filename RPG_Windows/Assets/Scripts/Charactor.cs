@@ -6,6 +6,7 @@ using UnityEngine;
 public abstract class Charactor : MonoBehaviour
 {
     #region 角色物件
+
     /// <summary>
     /// 角色動畫控制器
     /// </summary>
@@ -17,12 +18,15 @@ public abstract class Charactor : MonoBehaviour
     /// <summary>
     /// 角色中心
     /// </summary>
-    public Vector3 m_center;
+    public Vector3 m_Center;
+    /// <summary>
+    /// 角色橫縱高座標
+    /// </summary>
+    public Vector3 m_Coordinate;
+
     #endregion
 
-    #region 角色相關參數
-
-    #region 移動
+    #region 移動參數
     /// <summary>
     /// 角色移速
     /// </summary>
@@ -45,9 +49,10 @@ public abstract class Charactor : MonoBehaviour
     }
     #endregion
 
-    #region 跳躍
+    #region 跳躍參數
 
-    public float height = 0;
+    public float currHeight = 0f;
+    private float lastHeight = 0f;
     [SerializeField] protected float maxJumpHeight = 1.5f;
     protected float jumpOffset = 0.35f;
     protected float g = -0.09f;
@@ -57,7 +62,7 @@ public abstract class Charactor : MonoBehaviour
 
     #endregion
 
-    #region 攻擊
+    #region 攻擊參數
     /// <summary>
     /// 角色攻擊動作為即時觸發，故宣告一協程進行處理獨立的動作
     /// </summary>
@@ -77,27 +82,30 @@ public abstract class Charactor : MonoBehaviour
     
     #endregion
 
-    #endregion
 
     // Start is called before the first frame update
     protected virtual void Start()
     {
         m_Animator = GetComponentInChildren<Animator>();
         m_Rigidbody = GetComponent<Rigidbody2D>();
+        m_Coordinate = Vector3.zero;
         SetAnimateAttackClipTime();
     }
 
     // Update is called once per frame
     protected virtual void Update()
     {
+        m_Coordinate = UpdateCoordinate();
+        Debug.Log("coordinate"+m_Coordinate);
         HandleAnimatorLayers();
         SetAnimateMovementPara(movement, facingDir);
         //FocusCollidersWithHeight();
     }
 
     private void FixedUpdate() {
-        Debug.Log("FixedUpdate start player height: "+height);
-        Debug.Log("FixedUpdate start player jumpOffset: "+jumpOffset);
+        // Debug.Log("FixedUpdate start player height: "+height);
+        // Debug.Log("FixedUpdate start player jumpOffset: "+jumpOffset);
+        transform.position = GetWorldPosByCoordinate(m_Coordinate) + new Vector3(0, 0.5f);   // 預設中心點是(x, y-0.5)
         if(isAttacking) {
             //Debug.Log("attacking");
             if(isMoving) {
@@ -106,34 +114,12 @@ public abstract class Charactor : MonoBehaviour
             }
             movement = Vector3.zero;
         }
-        
-        if(isJumping) {
-            float goalheight = height + jumpOffset;
-            Debug.Log("goalheight: "+goalheight);
-            if(jumpOffset >= 0) {
-                jumpOffset += (g / 2); 
-                height = goalheight;
-            } else {
-                var hm = GameObject.FindObjectOfType(typeof(HeightManager)) as HeightManager;
-                float groundCheckHeight = Mathf.Floor(height);
-                if(hm.GroundableChecked(m_center, groundCheckHeight)) {
-                    Debug.Log("Groundable true");
-                    if(goalheight <= groundCheckHeight) {
-                        height = groundCheckHeight;
-                        StopJump();
-                    } else {
-                        jumpOffset += g;
-                        height = goalheight;
-                    }
-                } else {
-                    Debug.Log("Groundable false");
-                    jumpOffset += g; 
-                    height = goalheight;
-                }
-            }
+        else if(isJumping) {
+            FocusCollidersWithHeight();
+            HandleJumpingProcess();
         }
-        Debug.Log("FixedUpdate end player height: "+height);
-        Debug.Log("FixedUpdate end player jumpOffset: "+jumpOffset);
+        // Debug.Log("FixedUpdate end player height: "+height);
+        // Debug.Log("FixedUpdate end player jumpOffset: "+jumpOffset);
         Move();
     }
 
@@ -206,6 +192,53 @@ public abstract class Charactor : MonoBehaviour
         //Debug.Log("attack end");
     }
 
+    public Vector3 UpdateCoordinate() {
+        Vector3 result = Vector3.zero;
+        result.x = m_Center.x;
+        result.z = currHeight;
+        result.y = m_Center.y - lastHeight;
+
+        return result;
+    }
+
+    public Vector3 GetWorldPosByCoordinate(Vector3 coordinate) {
+        Vector3 result = Vector3.zero;
+        result.x = coordinate.x;
+        result.y = coordinate.y + coordinate.z;
+
+        return result;
+    }
+
+    private void HandleJumpingProcess() {
+        float goalheight = currHeight + jumpOffset;
+        Debug.Log("goalheight: "+goalheight);
+        if(jumpOffset >= 0) {
+            lastHeight = currHeight;
+            currHeight = goalheight;
+            jumpOffset += (g / 2); 
+        } else {
+            var hm = GameObject.FindObjectOfType(typeof(HeightManager)) as HeightManager;
+            float groundCheckHeight = Mathf.Floor(currHeight);
+            if(hm.GroundableChecked(m_Center, groundCheckHeight)) {
+                Debug.Log("Groundable true");
+                if(goalheight <= groundCheckHeight) {
+                    lastHeight = currHeight;
+                    currHeight = groundCheckHeight;
+                    StopJump();
+                } else {
+                    lastHeight = currHeight;
+                    currHeight = goalheight;
+                    jumpOffset += g;
+                }
+            } else {
+                Debug.Log("Groundable false");
+                lastHeight = currHeight;
+                currHeight = goalheight;
+                jumpOffset += g; 
+            }
+        }
+    }
+
     private void FocusCollidersWithHeight() {
         var grid = GameObject.FindObjectOfType(typeof(Grid)) as Grid;
         Collider2D[] collider2Ds = grid.GetComponentsInChildren<Collider2D>();
@@ -216,7 +249,7 @@ public abstract class Charactor : MonoBehaviour
                 if(block != null) {
                     // Debug.Log("FocusCollidersWithHeight collider2D name: "+collider2D.name);
                     // Debug.Log("FocusCollidersWithHeight collider2D type: "+collider2D.GetType());
-                    if(height >= block.GetCorrespondHeight()) {
+                    if(currHeight >= block.GetCorrespondHeight()) {
                         collider2D.enabled = false;
                     } else {
                         collider2D.enabled = true;
@@ -226,14 +259,5 @@ public abstract class Charactor : MonoBehaviour
 
             }
         }
-    }
-
-
-    public float GetMoveSpeed() {
-        return moveSpeed;
-    }
-
-    public Vector2 GetFacingDir() {
-        return facingDir;
     }
 }

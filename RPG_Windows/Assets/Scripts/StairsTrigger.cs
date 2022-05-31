@@ -47,7 +47,7 @@ public class StairsTrigger : MonoBehaviour
         if(otherCollider.gameObject.tag == "Player") {
             Debug.Log("player enter in StairsTrigger");
             player.onStairs = gameObject.name;
-            playerOrginHeight = player.height;
+            playerOrginHeight = player.currHeight;
             // if(string.IsNullOrEmpty(player.onStairs)) {
             //     Debug.Log("player not in StairsTrigger yet");
             //     playerStartHeight = player.height;
@@ -80,21 +80,21 @@ public class StairsTrigger : MonoBehaviour
     private IEnumerator HeightSettleDown() {
         //計算player高度 ver 2
         var heightManager = GameObject.FindObjectOfType(typeof(HeightManager)) as HeightManager; 
-        List<float> heightsOfTile = heightManager.GetHeightsFromTileMapsByWorldPos(player.m_center);
+        List<float> heightsOfTile = heightManager.GetHeightsFromTileMapsByWorldPos(player.m_Center);
         if(heightsOfTile.Count > 0) {
             if(heightsOfTile.Count == 1) {
                 float first = heightsOfTile.First();
-                player.height = first;
+                player.currHeight = first;
             }
             else {
-                float final = player.height;
+                float final = player.currHeight;
                 foreach(float h in heightsOfTile) {
                     if(h != final) {
                         final = h;
                     }
                 }
 
-                player.height = final;
+                player.currHeight = final;
             }
         }
 
@@ -137,14 +137,14 @@ public class StairsTrigger : MonoBehaviour
         float limitedHeight = playerOrginHeight + altitudeVariation * dir;
         Debug.Log("height var dir: "+dir);
         Debug.Log("stair startPos: "+startPos);
-        Debug.Log("player curr centerPos: "+player.m_center);
+        Debug.Log("player curr centerPos: "+player.m_Center);
         Debug.Log("limitedHeight: "+limitedHeight);
 
         float playerMoveDist;
         if(isVertical) {
-            playerMoveDist = Math.Abs(startPos.y - player.m_center.y);
+            playerMoveDist = Math.Abs(startPos.y - player.m_Center.y);
         } else {
-            playerMoveDist = Math.Abs(startPos.x - player.m_center.x);
+            playerMoveDist = Math.Abs(startPos.x - player.m_Center.x);
         }
         Debug.Log("playerMoveDist: "+playerMoveDist);
         Debug.Log("( playerMoveDist / stairDistance ) : "+( playerMoveDist / stairDistance ));

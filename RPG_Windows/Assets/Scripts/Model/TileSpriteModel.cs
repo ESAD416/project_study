@@ -21,6 +21,12 @@ public class TileSpriteModel
         this.width = spriteOfTile.rect.width;
         this.height = spriteOfTile.rect.height;
         this.rotatedEulerAngles = eulerAngles;
+
+        Debug.Log("sprite name: "+this.spriteOfTile.name);
+        Debug.Log("originNode: "+this.originNode);
+        Debug.Log("textureWidth: "+this.width);
+        Debug.Log("textureHeight: "+this.height);
+        Debug.Log("rotatedEulerAngles: "+this.rotatedEulerAngles);
     }
 
     public Vector2 GetXYMaxNode() {
@@ -64,9 +70,14 @@ public class TileSpriteModel
         if(perY < 0) {
             perY = 1f + perY;
         }
-        int pixelX = (int) (this.originNode.x + Mathf.Round(perX * this.width));
-        int pixelY = (int) (this.originNode.y + Mathf.Round(perY * this.height));
-        return new Vector2(pixelX, pixelY);
+        Debug.Log("perX: "+perX);
+        Debug.Log("perY: "+perY);
+
+        int pixelsPosX = (int) (this.originNode.x + Mathf.Round(perX * this.width));
+        int pixelsPosY = (int) (this.originNode.y + Mathf.Round(perY * this.height));
+        Debug.Log("pixelsPosX: "+pixelsPosX);
+        Debug.Log("pixelsPosY: "+pixelsPosY);
+        return new Vector2(pixelsPosX, pixelsPosY);
     }
 
 
