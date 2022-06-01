@@ -95,11 +95,11 @@ public abstract class Charactor : MonoBehaviour
     // Update is called once per frame
     protected virtual void Update()
     {
-        m_Coordinate = UpdateCoordinate();
-        Debug.Log("coordinate"+m_Coordinate);
+        UpdateCoordinate();
+        Debug.Log("coordinate: "+m_Coordinate);
         HandleAnimatorLayers();
         SetAnimateMovementPara(movement, facingDir);
-        //FocusCollidersWithHeight();
+        FocusCollidersWithHeight();
     }
 
     private void FixedUpdate() {
@@ -115,7 +115,7 @@ public abstract class Charactor : MonoBehaviour
             movement = Vector3.zero;
         }
         else if(isJumping) {
-            FocusCollidersWithHeight();
+            //FocusCollidersWithHeight();
             HandleJumpingProcess();
         }
         // Debug.Log("FixedUpdate end player height: "+height);
@@ -189,16 +189,21 @@ public abstract class Charactor : MonoBehaviour
 
         isJumping = false;
         jumpOffset = 1f;
+        lastHeight = currHeight;
         //Debug.Log("attack end");
     }
 
-    public Vector3 UpdateCoordinate() {
+    public void UpdateCoordinate() {
         Vector3 result = Vector3.zero;
         result.x = m_Center.x;
         result.z = currHeight;
         result.y = m_Center.y - lastHeight;
 
-        return result;
+        m_Coordinate = result;
+    }
+
+    public Vector3 GetShadowCoordinate(float groundLevel = 0) {
+        return new Vector3(m_Coordinate.x, m_Coordinate.y, groundLevel);
     }
 
     public Vector3 GetWorldPosByCoordinate(Vector3 coordinate) {
@@ -210,8 +215,11 @@ public abstract class Charactor : MonoBehaviour
     }
 
     private void HandleJumpingProcess() {
+        // Debug.Log("currHeight start: "+currHeight);
+        // Debug.Log("lastHeight start: "+lastHeight);
+        // Debug.Log("jumpOffset start: "+jumpOffset);
         float goalheight = currHeight + jumpOffset;
-        Debug.Log("goalheight: "+goalheight);
+        // Debug.Log("goalheight: "+goalheight);
         if(jumpOffset >= 0) {
             lastHeight = currHeight;
             currHeight = goalheight;
@@ -237,6 +245,9 @@ public abstract class Charactor : MonoBehaviour
                 jumpOffset += g; 
             }
         }
+        // Debug.Log("currHeight end: "+currHeight);
+        // Debug.Log("lastHeight end: "+lastHeight);
+        // Debug.Log("jumpOffset end: "+jumpOffset);
     }
 
     private void FocusCollidersWithHeight() {
