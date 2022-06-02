@@ -188,7 +188,7 @@ public abstract class Charactor : MonoBehaviour
         }
 
         isJumping = false;
-        jumpOffset = 1f;
+        jumpOffset = 0.35f;
         lastHeight = currHeight;
         //Debug.Log("attack end");
     }
@@ -227,7 +227,8 @@ public abstract class Charactor : MonoBehaviour
         } else {
             var hm = GameObject.FindObjectOfType(typeof(HeightManager)) as HeightManager;
             float groundCheckHeight = Mathf.Floor(currHeight);
-            if(hm.GroundableChecked(m_Center, groundCheckHeight)) {
+            // if(hm.GroundableChecked(m_Center, groundCheckHeight)) {
+            if(hm.GroundableChecked(m_Coordinate)) {
                 Debug.Log("Groundable true");
                 if(goalheight <= groundCheckHeight) {
                     lastHeight = currHeight;
