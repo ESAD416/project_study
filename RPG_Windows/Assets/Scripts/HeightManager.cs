@@ -89,25 +89,33 @@ public class HeightManager : MonoBehaviour
     }
 
     public bool GroundableChecked(Vector3 coordinate) {
+        List<float> levelsHeight = defaultTileDatas.OrderByDescending(h => h.height).Select(h => h.height).ToList();   // 取現有Level的高，由高至低排序
         float groundCheckH = Mathf.Floor(coordinate.z);
-        Vector3 shadowCoordinate = new Vector3(coordinate.x, coordinate.y, groundCheckH);
-        Vector3 worldPos = new Vector3(shadowCoordinate.x, shadowCoordinate.y + shadowCoordinate.z);
-        Debug.Log("groundCheck shadowCoordinate: "+shadowCoordinate);
-        Debug.Log("groundCheck worldPos: "+worldPos);
-        foreach(var map in levels) {
-            Vector3Int gridPos = map.WorldToCell(worldPos);
-            if(map.HasTile(gridPos)) {
-                Tile resultTile = map.GetTile<Tile>(gridPos);
-                Debug.Log("At grid position "+gridPos+" there is a "+resultTile+" in map "+map.name);
-                Debug.Log("resultTile height: "+dataFromTiles[resultTile].height);
-                Debug.Log("groundCheck height: "+groundCheckH);
-                if(dataFromTiles[resultTile].height == groundCheckH) {
-                    TileSpriteModel model = new TileSpriteModel(resultTile.sprite, map.GetTransformMatrix(gridPos).rotation.eulerAngles.z);
-                    bool IsTransparent = TileUtils.TilePixelIsTransparent(model, worldPos);
-                    return !IsTransparent;
+
+        foreach(var h in levelsHeight) {
+            Vector3 shadowCoordinate = new Vector3(coordinate.x, coordinate.y, groundCheckH);
+            Vector3 worldPos = new Vector3(shadowCoordinate.x, shadowCoordinate.y + shadowCoordinate.z);
+            Debug.Log("groundCheck shadowCoordinate: "+shadowCoordinate);
+            Debug.Log("groundCheck worldPos: "+worldPos);
+
+            foreach(var map in levels) {
+                Vector3Int gridPos = map.WorldToCell(worldPos);
+                if(map.HasTile(gridPos)) {
+                    Tile resultTile = map.GetTile<Tile>(gridPos);
+                    Debug.Log("At grid position "+gridPos+" there is a "+resultTile+" in map "+map.name);
+                    Debug.Log("resultTile height: "+dataFromTiles[resultTile].height);
+                    Debug.Log("groundCheck height: "+groundCheckH);
+                    if(dataFromTiles[resultTile].height == groundCheckH) {
+                        TileSpriteModel model = new TileSpriteModel(resultTile.sprite, map.GetTransformMatrix(gridPos).rotation.eulerAngles.z);
+                        bool IsTransparent = TileUtils.TilePixelIsTransparent(model, worldPos);
+                        return !IsTransparent;
+                    }
                 }
             }
+
+            groundCheckH--;
         }
+        
         return false;
     }
 }
