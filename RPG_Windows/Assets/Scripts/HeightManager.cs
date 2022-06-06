@@ -8,7 +8,7 @@ using UnityEngine.InputSystem;
 public class HeightManager : MonoBehaviour
 {
     [SerializeField]
-    private List<TileData> defaultTileDatas;
+    public List<TileData> defaultTileDatas;
     private Tilemap[] levels;
     private Dictionary<Tile, TileData> dataFromTiles;
     Vector2 mousePosition;
@@ -108,7 +108,9 @@ public class HeightManager : MonoBehaviour
                     if(dataFromTiles[resultTile].height == groundCheckH) {
                         TileSpriteModel model = new TileSpriteModel(resultTile.sprite, map.GetTransformMatrix(gridPos).rotation.eulerAngles.z);
                         bool IsTransparent = TileUtils.TilePixelIsTransparent(model, worldPos);
-                        return !IsTransparent;
+                        if(!IsTransparent) {
+                            return true;
+                        }
                     }
                 }
             }

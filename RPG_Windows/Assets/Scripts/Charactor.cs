@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -215,11 +216,11 @@ public abstract class Charactor : MonoBehaviour
     }
 
     private void HandleJumpingProcess() {
-        // Debug.Log("currHeight start: "+currHeight);
+        Debug.Log("currHeight start: "+currHeight);
         // Debug.Log("lastHeight start: "+lastHeight);
         // Debug.Log("jumpOffset start: "+jumpOffset);
         float goalheight = currHeight + jumpOffset;
-        // Debug.Log("goalheight: "+goalheight);
+        Debug.Log("goalheight: "+goalheight);
         if(jumpOffset >= 0) {
             lastHeight = currHeight;
             currHeight = goalheight;
@@ -227,26 +228,64 @@ public abstract class Charactor : MonoBehaviour
         } else {
             var hm = GameObject.FindObjectOfType(typeof(HeightManager)) as HeightManager;
             float groundCheckHeight = Mathf.Floor(currHeight);
-            // if(hm.GroundableChecked(m_Center, groundCheckHeight)) {
-            if(hm.GroundableChecked(m_Coordinate)) {
-                Debug.Log("Groundable true");
-                if(goalheight <= groundCheckHeight) {
-                    lastHeight = currHeight;
-                    currHeight = groundCheckHeight;
-                    StopJump();
-                } else {
-                    lastHeight = currHeight;
-                    currHeight = goalheight;
-                    jumpOffset += g;
+            List<float> levelsHeight = hm.defaultTileDatas.Select(h => h.height).ToList();   // 取現有Level的高，由高至低排序
+            bool notGroundable = true;
+
+            while(levelsHeight.Contains(groundCheckHeight)) {
+                Vector3 shadowCoordinate = new Vector3(m_Coordinate.x, m_Coordinate.y, groundCheckHeight);
+                Vector3 worldPos = new Vector3(shadowCoordinate.x, shadowCoordinate.y + shadowCoordinate.z);
+                Debug.Log("groundCheck shadowCoordinate: "+shadowCoordinate);
+                Debug.Log("groundCheck worldPos: "+worldPos);
+
+                if(hm.GroundableChecked(worldPos, groundCheckHeight)) {
+                // if(hm.GroundableChecked(m_Coordinate)) {
+                    Debug.Log("Groundable true");
+                    Debug.Log("goalheight: "+goalheight);
+                    Debug.Log("groundCheckHeight: "+groundCheckHeight);
+                    if(goalheight <= groundCheckHeight) {
+                        lastHeight = currHeight;
+                        currHeight = groundCheckHeight;
+                        StopJump();
+                    } else {
+                        lastHeight = currHeight;
+                        currHeight = goalheight;
+                        jumpOffset += g;
+                    }
+                    notGroundable = false;
+                    break;
                 }
-            } else {
+
+                groundCheckHeight--;
+            }
+
+            if(notGroundable) {
                 Debug.Log("Groundable false");
                 lastHeight = currHeight;
                 currHeight = goalheight;
                 jumpOffset += g; 
             }
+
+            // if(hm.GroundableChecked(m_Center, groundCheckHeight)) {
+            // if(hm.GroundableChecked(m_Coordinate)) {
+            //     Debug.Log("Groundable true");
+            //     if(goalheight <= groundCheckHeight) {
+            //         lastHeight = currHeight;
+            //         currHeight = groundCheckHeight;
+            //         StopJump();
+            //     } else {
+            //         lastHeight = currHeight;
+            //         currHeight = goalheight;
+            //         jumpOffset += g;
+            //     }
+            // } else {
+            //     Debug.Log("Groundable false");
+            //     lastHeight = currHeight;
+            //     currHeight = goalheight;
+            //     jumpOffset += g; 
+            // }
+
         }
-        // Debug.Log("currHeight end: "+currHeight);
+        Debug.Log("currHeight end: "+currHeight);
         // Debug.Log("lastHeight end: "+lastHeight);
         // Debug.Log("jumpOffset end: "+jumpOffset);
     }
