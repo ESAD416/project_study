@@ -52,13 +52,15 @@ public abstract class Charactor : MonoBehaviour
 
     #region 跳躍參數
 
+    protected Vector3 takeOffPos = Vector3.zero;
+    protected Rigidbody2D shawdowBody;
     public float currHeight = 0f;
     private float lastHeight = 0f;
     [SerializeField] protected float maxJumpHeight = 1.5f;
     protected float jumpOffset = 0.35f;
     protected float g = -0.09f;
-    protected Coroutine jumpRoutine;
     protected bool isJumping;
+    protected Coroutine jumpRoutine;
     protected float jumpClipTime = 0.2f;
 
     #endregion
@@ -89,6 +91,7 @@ public abstract class Charactor : MonoBehaviour
     {
         m_Animator = GetComponentInChildren<Animator>();
         m_Rigidbody = GetComponent<Rigidbody2D>();
+        shawdowBody = transform.parent.Find("PlayerShadow").GetComponent<Rigidbody2D>();
         m_Coordinate = Vector3.zero;
         SetAnimateAttackClipTime();
     }
@@ -97,7 +100,7 @@ public abstract class Charactor : MonoBehaviour
     protected virtual void Update()
     {
         UpdateCoordinate();
-        Debug.Log("coordinate: "+m_Coordinate);
+        //Debug.Log("coordinate: "+m_Coordinate);
         HandleAnimatorLayers();
         SetAnimateMovementPara(movement, facingDir);
         FocusCollidersWithHeight();
@@ -116,17 +119,20 @@ public abstract class Charactor : MonoBehaviour
             movement = Vector3.zero;
         }
         else if(isJumping) {
-            //FocusCollidersWithHeight();
             HandleJumpingProcess();
         }
         // Debug.Log("FixedUpdate end player height: "+height);
         // Debug.Log("FixedUpdate end player jumpOffset: "+jumpOffset);
+
+
         Move();
     }
 
     public void Move() {
         m_Rigidbody.velocity = movement.normalized * moveSpeed;
-        //Debug.Log("Move velocity: "+m_Rigidbody.velocity);
+        shawdowBody.velocity = movement.normalized * moveSpeed;
+        Debug.Log("m_Rigidbody velocity: "+m_Rigidbody.velocity);
+        Debug.Log("shawdowBody velocity: "+m_Rigidbody.velocity);
         // transform.Translate(movement*moveSpeed*Time.deltaTime);
     }
 
@@ -191,6 +197,7 @@ public abstract class Charactor : MonoBehaviour
         isJumping = false;
         jumpOffset = 0.35f;
         lastHeight = currHeight;
+        takeOffPos = Vector3.zero;
         //Debug.Log("attack end");
     }
 
@@ -234,8 +241,9 @@ public abstract class Charactor : MonoBehaviour
             while(levelsHeight.Contains(groundCheckHeight)) {
                 Vector3 shadowCoordinate = new Vector3(m_Coordinate.x, m_Coordinate.y, groundCheckHeight);
                 Vector3 worldPos = new Vector3(shadowCoordinate.x, shadowCoordinate.y + shadowCoordinate.z);
+                Debug.Log("groundCheck m_Center: "+m_Center);
                 Debug.Log("groundCheck shadowCoordinate: "+shadowCoordinate);
-                Debug.Log("groundCheck worldPos: "+worldPos);
+                Debug.Log("groundCheck shadowWorldPos: "+worldPos);
 
                 if(hm.GroundableChecked(worldPos, groundCheckHeight)) {
                 // if(hm.GroundableChecked(m_Coordinate)) {

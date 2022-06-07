@@ -177,6 +177,7 @@ public class Player : Charactor
 
                 if(jumpUp || jumpDown) {
                     if(!isJumping) {
+                        takeOffPos = m_Center;
                         isJumping = true;
                     }
                 }
