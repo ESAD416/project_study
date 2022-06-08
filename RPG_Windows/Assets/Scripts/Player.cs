@@ -143,8 +143,9 @@ public class Player : Charactor
                             var trigger = hit.collider.GetComponent<HeightOfObject>() as HeightOfObject;
                             if(trigger != null) {
                                 float correspondHeight = trigger.GetCorrespondHeight();
+                                float selfHeight = trigger.GetSelfHeight();
                                 altitudeVariation = Math.Abs(currHeight - correspondHeight) ;
-                                if(currHeight < correspondHeight && altitudeVariation > 0 && altitudeVariation <= 2) {
+                                if(currHeight < correspondHeight && altitudeVariation > 0 && altitudeVariation <= 1) {
                                     // jumpUp
                                     jumpUp = true;
                                 } else if(currHeight >= correspondHeight) {

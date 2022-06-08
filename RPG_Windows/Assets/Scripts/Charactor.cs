@@ -57,8 +57,8 @@ public abstract class Charactor : MonoBehaviour
     public float currHeight = 0f;
     private float lastHeight = 0f;
     [SerializeField] protected float maxJumpHeight = 1.5f;
-    protected float jumpOffset = 0.35f;
-    protected float g = -0.09f;
+    protected float jumpOffset = 0.33f;
+    protected float g = -0.07f;
     protected bool isJumping;
     protected Coroutine jumpRoutine;
     protected float jumpClipTime = 0.2f;
@@ -91,7 +91,7 @@ public abstract class Charactor : MonoBehaviour
     {
         m_Animator = GetComponentInChildren<Animator>();
         m_Rigidbody = GetComponent<Rigidbody2D>();
-        shawdowBody = transform.parent.Find("PlayerShadow").GetComponent<Rigidbody2D>();
+        shawdowBody = transform.parent.Find("FakeShadow").GetComponent<Rigidbody2D>();
         m_Coordinate = Vector3.zero;
         SetAnimateAttackClipTime();
     }
@@ -130,9 +130,11 @@ public abstract class Charactor : MonoBehaviour
 
     public void Move() {
         m_Rigidbody.velocity = movement.normalized * moveSpeed;
-        shawdowBody.velocity = movement.normalized * moveSpeed;
-        Debug.Log("m_Rigidbody velocity: "+m_Rigidbody.velocity);
-        Debug.Log("shawdowBody velocity: "+m_Rigidbody.velocity);
+        if(isJumping) {
+            shawdowBody.velocity = movement.normalized * (moveSpeed * 1.5f);
+        } else {
+            shawdowBody.transform.position = m_Center + new Vector3(0, -0.5f); 
+        }
         // transform.Translate(movement*moveSpeed*Time.deltaTime);
     }
 
@@ -210,10 +212,6 @@ public abstract class Charactor : MonoBehaviour
         m_Coordinate = result;
     }
 
-    public Vector3 GetShadowCoordinate(float groundLevel = 0) {
-        return new Vector3(m_Coordinate.x, m_Coordinate.y, groundLevel);
-    }
-
     public Vector3 GetWorldPosByCoordinate(Vector3 coordinate) {
         Vector3 result = Vector3.zero;
         result.x = coordinate.x;
@@ -239,13 +237,14 @@ public abstract class Charactor : MonoBehaviour
             bool notGroundable = true;
 
             while(levelsHeight.Contains(groundCheckHeight)) {
-                Vector3 shadowCoordinate = new Vector3(m_Coordinate.x, m_Coordinate.y, groundCheckHeight);
-                Vector3 worldPos = new Vector3(shadowCoordinate.x, shadowCoordinate.y + shadowCoordinate.z);
+                // Vector3 shadowCoordinate = new Vector3(m_Coordinate.x, m_Coordinate.y, groundCheckHeight);
+                // Vector3 worldPos = new Vector3(shadowCoordinate.x, shadowCoordinate.y + shadowCoordinate.z);
                 Debug.Log("groundCheck m_Center: "+m_Center);
-                Debug.Log("groundCheck shadowCoordinate: "+shadowCoordinate);
-                Debug.Log("groundCheck shadowWorldPos: "+worldPos);
+                Debug.Log("groundCheck shawdowBody.transform.position: "+shawdowBody.transform.position);
+                // Debug.Log("groundCheck shadowCoordinate: "+shadowCoordinate);
+                // Debug.Log("groundCheck shadowWorldPos: "+worldPos);
 
-                if(hm.GroundableChecked(worldPos, groundCheckHeight)) {
+                if(hm.GroundableChecked(shawdowBody.transform.position, groundCheckHeight)) {
                 // if(hm.GroundableChecked(m_Coordinate)) {
                     Debug.Log("Groundable true");
                     Debug.Log("goalheight: "+goalheight);
