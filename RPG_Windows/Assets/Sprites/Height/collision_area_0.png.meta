@@ -33,9 +33,6 @@ TextureImporter:
       213: 2404198568012627666
     second: collision_area_0_9
   - first:
-      213: -3977578592392099303
-    second: collision_area_0_10
-  - first:
       213: -4779570858318267530
     second: collision_area_0_11
   - first:
@@ -45,32 +42,14 @@ TextureImporter:
       213: 397732600035370863
     second: collision_area_0_13
   - first:
-      213: 8293866665958863428
-    second: collision_area_0_14
-  - first:
-      213: 601890336365939358
-    second: collision_area_0_15
-  - first:
       213: 4748351377904590524
     second: collision_area_0_16
   - first:
       213: 733287875962207234
     second: collision_area_0_17
   - first:
-      213: 270623680165742003
-    second: collision_area_0_18
-  - first:
-      213: 3276817244265994618
-    second: collision_area_0_19
-  - first:
       213: 908999991628351273
     second: collision_area_0_20
-  - first:
-      213: -911804486491997142
-    second: collision_area_0_21
-  - first:
-      213: -3266930988063296988
-    second: collision_area_0_22
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -89,7 +68,7 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
-  isReadable: 1
+  isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
@@ -353,7 +332,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 132
-        y: 256
+        y: 257
         width: 32
         height: 32
       alignment: 0

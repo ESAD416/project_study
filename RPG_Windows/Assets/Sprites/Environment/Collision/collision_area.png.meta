@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 4980505779712364d812861c1d489938
+guid: 421a879309ce2a34b9c21d60c13b86d6
 TextureImporter:
   internalIDToNameTable:
   - first:
@@ -33,9 +33,6 @@ TextureImporter:
       213: 7426767913381528437
     second: collision_area_9
   - first:
-      213: -439702427684744596
-    second: collision_area_10
-  - first:
       213: -921572730242329108
     second: collision_area_11
   - first:
@@ -45,11 +42,14 @@ TextureImporter:
       213: -568032732954294976
     second: collision_area_13
   - first:
-      213: -1996789980230849548
-    second: collision_area_14
+      213: -8543045473797757544
+    second: collision_area_16
   - first:
-      213: 8681238736830070294
-    second: collision_area_15
+      213: 7896389456147329500
+    second: collision_area_17
+  - first:
+      213: 6189200075956598017
+    second: collision_area_20
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -147,7 +147,7 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -168,7 +168,7 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -189,7 +189,7 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -210,7 +210,7 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -231,7 +231,7 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -252,7 +252,7 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -273,7 +273,7 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -294,7 +294,7 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -315,7 +315,7 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -336,7 +336,7 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -349,7 +349,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: collision_area_10
+      name: collision_area_11
       rect:
         serializedVersion: 2
         x: 33
@@ -357,28 +357,7 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: c6259feb8fcd5e9f0800000000000000
-      internalID: -439702427684744596
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: collision_area_11
-      rect:
-        serializedVersion: 2
-        x: 66
-        y: 222
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -394,12 +373,12 @@ TextureImporter:
       name: collision_area_12
       rect:
         serializedVersion: 2
-        x: 99
+        x: 66
         y: 222
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -415,12 +394,12 @@ TextureImporter:
       name: collision_area_13
       rect:
         serializedVersion: 2
-        x: 66
-        y: 189
+        x: 99
+        y: 222
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -433,7 +412,28 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: collision_area_14
+      name: collision_area_16
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 189
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 895a6429761017980800000000000000
+      internalID: -8543045473797757544
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: collision_area_17
       rect:
         serializedVersion: 2
         x: 99
@@ -441,20 +441,20 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4fbe749a71af944e0800000000000000
-      internalID: -1996789980230849548
+      spriteID: cd13dcd9f5c959d60800000000000000
+      internalID: 7896389456147329500
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: collision_area_15
+      name: collision_area_20
       rect:
         serializedVersion: 2
         x: 99
@@ -462,14 +462,14 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 61efd1fc2a4f97870800000000000000
-      internalID: 8681238736830070294
+      spriteID: 105b6336da474e550800000000000000
+      internalID: 6189200075956598017
       vertices: []
       indices: 
       edges: []
