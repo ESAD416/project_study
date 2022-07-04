@@ -77,7 +77,7 @@ public class Player : Charactor
                 // Up
                 raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_Up");
             } else if(movement.x == 0 && movement.y < 0) {
-                // Down
+                // Down 
                 raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_Down");
             } else if(movement.x < 0 && movement.y == 0) {
                 // Left
@@ -128,7 +128,7 @@ public class Player : Charactor
 
 
             // 偵測跳躍Edge ver.3
-            RaycastHit2D[] hits = Physics2D.LinecastAll(raycastPoint.position, rayCastEndPos, 1 << LayerMask.NameToLayer("Trigger"));
+            RaycastHit2D[] hits = Physics2D.LinecastAll(raycastPoint.position, rayCastEndPos, 1 << LayerMask.NameToLayer("HeightObj"));
             if(hits.Length > 0) {
                 var heightManager = GameObject.FindObjectOfType(typeof(HeightManager)) as HeightManager; 
                 float altitudeVariation = 0f;
