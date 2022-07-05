@@ -139,39 +139,37 @@ public class Player : Charactor
                     Debug.Log("hits.Length > 1");
                     foreach(RaycastHit2D hit in hits) {
                         Debug.Log("hits collider name: "+hit.collider.name);
-                        if(hit.collider.tag == "Jump") {
-                            var trigger = hit.collider.GetComponent<HeightOfObject>() as HeightOfObject;
-                            if(trigger != null) {
-                                float correspondHeight = trigger.GetCorrespondHeight();
-                                float selfHeight = trigger.GetSelfHeight();
-                                altitudeVariation = Math.Abs(currHeight - correspondHeight) ;
-                                if(currHeight < correspondHeight && altitudeVariation > 0 && altitudeVariation <= 1) {
-                                    // jumpUp
-                                    jumpUp = true;
-                                } else if(currHeight >= correspondHeight) {
-                                    // jumpDown
-                                    jumpDown = true;
-                                }
+                        var heightObj = hit.collider.GetComponent<HeightOfObject>() as HeightOfObject;
+                        if(heightObj != null) {
+                            float correspondHeight = heightObj.GetCorrespondHeight();
+                            float selfHeight = heightObj.GetSelfHeight();
+                            altitudeVariation = Math.Abs(currHeight - correspondHeight) ;
+                            if(currHeight < correspondHeight && altitudeVariation > 0 && altitudeVariation <= 1) {
+                                // jumpUp
+                                jumpUp = true;
+                            } else if(currHeight >= correspondHeight) {
+                                // jumpDown
+                                jumpDown = true;
                             }
-                            // var map = hit.collider.gameObject.transform.parent.GetComponent<Tilemap>();
-                            // Debug.Log("hitted map name: "+map.name);
-                            // if(map != null) {
-                            //     Vector3Int gridPos = map.WorldToCell(rayCastEndPos);
-                            //     if(map.HasTile(gridPos)) {
-                            //         TileBase resultTile = map.GetTile(gridPos);
-                            //         Debug.Log("At grid position "+gridPos+" there is a "+resultTile+" in map "+map.name);
-                            //         float mapAltitude = heightManager.GetHeightByTileBase(resultTile);
-                            //         altitudeVariation = Math.Abs(height - mapAltitude) ;
-                            //         if(height < mapAltitude && altitudeVariation > 0 && altitudeVariation <= 2) {
-                            //             // jumpUp
-                            //             jumpUp = true;
-                            //         } else if(height >= mapAltitude) {
-                            //             // jumpDown
-                            //             jumpDown = true;
-                            //         }
-                            //     }
-                            // } 
                         }
+                        // var map = hit.collider.gameObject.transform.parent.GetComponent<Tilemap>();
+                        // Debug.Log("hitted map name: "+map.name);
+                        // if(map != null) {
+                        //     Vector3Int gridPos = map.WorldToCell(rayCastEndPos);
+                        //     if(map.HasTile(gridPos)) {
+                        //         TileBase resultTile = map.GetTile(gridPos);
+                        //         Debug.Log("At grid position "+gridPos+" there is a "+resultTile+" in map "+map.name);
+                        //         float mapAltitude = heightManager.GetHeightByTileBase(resultTile);
+                        //         altitudeVariation = Math.Abs(height - mapAltitude) ;
+                        //         if(height < mapAltitude && altitudeVariation > 0 && altitudeVariation <= 2) {
+                        //             // jumpUp
+                        //             jumpUp = true;
+                        //         } else if(height >= mapAltitude) {
+                        //             // jumpDown
+                        //             jumpDown = true;
+                        //         }
+                        //     }
+                        // } 
                     }
                 }
 
