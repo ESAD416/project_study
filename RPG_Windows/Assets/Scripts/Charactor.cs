@@ -58,8 +58,8 @@ public abstract class Charactor : MonoBehaviour
     public float currHeight = 0f;
     private float lastHeight = 0f;
     [SerializeField] protected float maxJumpHeight = 1.5f;
-    protected float jumpOffset = 0.33f;
-    protected float g = -0.07f;
+    protected float jumpOffset = 0.3f;
+    protected float g = -0.06f;
     protected bool isJumping;
     protected Coroutine jumpRoutine;
     protected float jumpClipTime = 0.2f;
@@ -99,6 +99,9 @@ public abstract class Charactor : MonoBehaviour
     // Update is called once per frame
     protected virtual void Update()
     {
+        var center = transform.Find("PlayerCenter").GetComponent<Transform>();
+        m_Center = new Vector3(center.position.x, center.position.y);
+
         UpdateCoordinate();
         //Debug.Log("coordinate: "+m_Coordinate);
         HandleAnimatorLayers();
@@ -118,7 +121,7 @@ public abstract class Charactor : MonoBehaviour
             movement = Vector3.zero;
         }
         else if(isJumping) {
-            transform.position = GetWorldPosByCoordinate(m_Coordinate) + new Vector3(0, 0.5f);   // 預設中心點是(x, y-0.5)
+            transform.position = GetWorldPosByCoordinate(m_Coordinate) + new Vector3(0, 0.4f);   // 預設中心點是(x, y-0.4)
             HandleJumpingProcess();
         }
         // Debug.Log("FixedUpdate end player height: "+height);
@@ -192,10 +195,9 @@ public abstract class Charactor : MonoBehaviour
         }
 
         isJumping = false;
-        jumpOffset = 0.35f;
+        jumpOffset = 0.3f;
         lastHeight = currHeight;
         takeOffPos = Vector3.zero;
-        //Debug.Log("attack end");
     }
 
     public void UpdateCoordinate() {
@@ -217,8 +219,8 @@ public abstract class Charactor : MonoBehaviour
 
     private void HandleJumpingProcess() {
         Debug.Log("currHeight start: "+currHeight);
-        // Debug.Log("lastHeight start: "+lastHeight);
-        // Debug.Log("jumpOffset start: "+jumpOffset);
+        Debug.Log("lastHeight start: "+lastHeight);
+        Debug.Log("jumpOffset start: "+jumpOffset);
         float goalheight = currHeight + jumpOffset;
         Debug.Log("goalheight: "+goalheight);
         if(jumpOffset >= 0) {
@@ -255,9 +257,6 @@ public abstract class Charactor : MonoBehaviour
                 }
             }
 
-            
-
-
             // List<float> levelsHeight = hm.defaultTileDatas.Select(h => h.height).ToList();   // 取現有Level的高，由高至低排序
             // bool notGroundable = true;
 
@@ -290,17 +289,11 @@ public abstract class Charactor : MonoBehaviour
             //     groundCheckHeight--;
             // }
 
-            // if(notGroundable) {
-            //     Debug.Log("Groundable false");
-            //     lastHeight = currHeight;
-            //     currHeight = goalheight;
-            //     jumpOffset += g; 
-            // }
 
         }
         Debug.Log("currHeight end: "+currHeight);
-        // Debug.Log("lastHeight end: "+lastHeight);
-        // Debug.Log("jumpOffset end: "+jumpOffset);
+        Debug.Log("lastHeight end: "+lastHeight);
+        Debug.Log("jumpOffset end: "+jumpOffset);
     }
 
     private void FocusCollidersWithHeight() {
@@ -311,10 +304,10 @@ public abstract class Charactor : MonoBehaviour
                 if(heightObj != null) {
                     // Debug.Log("FocusCollidersWithHeight collider2D name: "+collider2D.name);
                     // Debug.Log("FocusCollidersWithHeight collider2D type: "+collider2D.GetType());
-                    if(currHeight >= heightObj.GetCorrespondHeight()) {
-                        collider2D.enabled = false;
-                    } else {
+                    if(currHeight == heightObj.GetSelfHeight()) {
                         collider2D.enabled = true;
+                    } else {
+                        collider2D.enabled = false;
                     }
                     // Debug.Log("FocusCollidersWithHeight collider2D enabled: "+collider2D.enabled);
                 }
