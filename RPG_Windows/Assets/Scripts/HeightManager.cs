@@ -55,6 +55,7 @@ public class HeightManager : MonoBehaviour
 
     public List<float> GetHeightsFromTileMapsByWorldPos(Vector2 worldPosition) {
         List<float> result = new List<float>();
+        
         foreach(var map in levels) {
             Vector3Int gridPos = map.WorldToCell(worldPosition);
             if(map.HasTile(gridPos)) {
@@ -70,6 +71,9 @@ public class HeightManager : MonoBehaviour
     }
 
     public bool GroundableChecked(Vector2 worldPos, float height) {
+        // List<float> levelsHeight = defaultTileDatas.OrderByDescending(h => h.height).Select(h => h.height).ToList();   // 取現有Level的高，由高至低排序
+        // float groundCheckH = Mathf.Floor(height);
+
         Debug.Log("groundCheck worldPos: "+worldPos);
         Debug.Log("groundCheck height: "+height);
         foreach(var map in levels) {

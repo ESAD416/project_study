@@ -103,7 +103,7 @@ public abstract class Charactor : MonoBehaviour
         m_Center = new Vector3(center.position.x, center.position.y);
 
         UpdateCoordinate();
-        //Debug.Log("coordinate: "+m_Coordinate);
+        Debug.Log("coordinate: "+m_Coordinate);
         HandleAnimatorLayers();
         SetAnimateMovementPara(movement, facingDir);
         FocusCollidersWithHeight();
@@ -122,11 +122,11 @@ public abstract class Charactor : MonoBehaviour
         }
         else if(isJumping) {
             transform.position = GetWorldPosByCoordinate(m_Coordinate) + new Vector3(0, 0.4f);   // 預設中心點是(x, y-0.4)
+            Debug.Log("Jumping transform.position" + transform.position);
             HandleJumpingProcess();
         }
         // Debug.Log("FixedUpdate end player height: "+height);
         // Debug.Log("FixedUpdate end player jumpOffset: "+jumpOffset);
-
 
         Move();
     }
@@ -210,10 +210,12 @@ public abstract class Charactor : MonoBehaviour
     }
 
     public Vector3 GetWorldPosByCoordinate(Vector3 coordinate) {
+        Debug.Log("GetWorldPosByCoordinate coordinate" + coordinate);
         Vector3 result = Vector3.zero;
         result.x = coordinate.x;
         result.y = coordinate.y + coordinate.z;
 
+        Debug.Log("GetWorldPosByCoordinate result" + result);
         return result;
     }
 
@@ -229,32 +231,29 @@ public abstract class Charactor : MonoBehaviour
             jumpOffset += (g / 2); 
         } else {
             var hm = GameObject.FindObjectOfType(typeof(HeightManager)) as HeightManager;
-            List<float> levelsHeight = hm.defaultTileDatas.OrderByDescending(h => h.height).Select(h => h.height).ToList();   // 取現有Level的高，由高至低排序
 
-            foreach(var h in levelsHeight) {
-                float groundCheckHeight = Mathf.Floor(currHeight);
+            float groundCheckHeight = Mathf.Floor(currHeight);
 
-                Vector3 shadowCoordinate = new Vector3(m_Coordinate.x, m_Coordinate.y, groundCheckHeight);
-                Vector3 shadowWorldPos = new Vector3(shadowCoordinate.x, shadowCoordinate.y + shadowCoordinate.z);
+            Vector3 shadowCoordinate = new Vector3(m_Coordinate.x, m_Coordinate.y, groundCheckHeight);
+            Vector3 shadowWorldPos = new Vector3(shadowCoordinate.x, shadowCoordinate.y + shadowCoordinate.z);
 
-                if(hm.GroundableChecked(shadowWorldPos, groundCheckHeight)) {
-                // if(hm.GroundableChecked(m_Coordinate)) {
-                    Debug.Log("Groundable true");
-                    if(goalheight <= groundCheckHeight) {
-                        lastHeight = currHeight;
-                        currHeight = groundCheckHeight;
-                        StopJump();
-                    } else {
-                        lastHeight = currHeight;
-                        currHeight = goalheight;
-                        jumpOffset += g;
-                    }
+            if(hm.GroundableChecked(shadowWorldPos, groundCheckHeight)) {
+            // if(hm.GroundableChecked(m_Coordinate)) {
+                Debug.Log("Groundable true");
+                if(goalheight <= groundCheckHeight) {
+                    lastHeight = currHeight;
+                    currHeight = groundCheckHeight;
+                    StopJump();
                 } else {
-                    Debug.Log("Groundable false");
                     lastHeight = currHeight;
                     currHeight = goalheight;
-                    jumpOffset += g; 
+                    jumpOffset += g;
                 }
+            } else {
+                Debug.Log("Groundable false");
+                lastHeight = currHeight;
+                currHeight = goalheight;
+                jumpOffset += g; 
             }
 
             // List<float> levelsHeight = hm.defaultTileDatas.Select(h => h.height).ToList();   // 取現有Level的高，由高至低排序
