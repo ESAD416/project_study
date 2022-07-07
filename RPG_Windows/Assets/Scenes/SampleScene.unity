@@ -1357,6 +1357,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selfHeight: 0
   correspondHeight: 1
+  noEntry: 0
 --- !u!1 &133208035
 GameObject:
   m_ObjectHideFlags: 0
@@ -2026,6 +2027,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selfHeight: 1
   correspondHeight: 0
+  noEntry: 0
 --- !u!1 &187897964
 GameObject:
   m_ObjectHideFlags: 0
@@ -2183,8 +2185,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 846716007
-  m_SortingLayer: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7620148328315415820, guid: 4cefcafcd72a56548a4d97db39fba169, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -5053,9 +5055,9 @@ TilemapRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 10
+  m_SortingLayerID: -1722387549
+  m_SortingLayer: -1
+  m_SortingOrder: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
   m_MaxChunkCount: 16
@@ -5584,7 +5586,7 @@ Tilemap:
     m_Data: {r: 2.6176e-41, g: 2.6176e-41, b: 2.6176e-41, a: 2.6176e-41}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
-  m_Color: {r: 0.10791205, g: 0.26677072, b: 0.9150943, a: 0.39215687}
+  m_Color: {r: 0.10791205, g: 0.26677072, b: 0.9150943, a: 0}
   m_Origin: {x: -12, y: -6, z: 0}
   m_Size: {x: 12, y: 12, z: 1}
   m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
@@ -5940,7 +5942,7 @@ TilemapRenderer:
   m_MaxChunkCount: 16
   m_MaxFrameAge: 16
   m_SortOrder: 0
-  m_Mode: 0
+  m_Mode: 1
   m_DetectChunkCullingBounds: 0
   m_MaskInteraction: 0
 --- !u!1839735485 &1769827431
@@ -10742,8 +10744,8 @@ TilemapRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1722387549
+  m_SortingLayer: -1
   m_SortingOrder: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
@@ -15283,7 +15285,7 @@ Tilemap:
     m_Data: {r: 2.5795e-41, g: 2.5795e-41, b: 2.5795e-41, a: 2.5795e-41}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
-  m_Color: {r: 1, g: 1, b: 1, a: 0.39215687}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_Origin: {x: -12, y: -7, z: 0}
   m_Size: {x: 24, y: 21, z: 1}
   m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
@@ -15968,6 +15970,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selfHeight: 0
   correspondHeight: 1
+  noEntry: 1
 --- !u!1 &2016991027
 GameObject:
   m_ObjectHideFlags: 0

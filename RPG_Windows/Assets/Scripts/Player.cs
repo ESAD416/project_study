@@ -143,12 +143,20 @@ public class Player : Charactor
                             float correspondHeight = heightObj.GetCorrespondHeight();
                             float selfHeight = heightObj.GetSelfHeight();
                             altitudeVariation = Math.Abs(currHeight - correspondHeight) ;
+                            var angle = Vector2.Angle((Vector2)raycastPoint.position - rayCastEndPos, hit.normal);
+                            angle = 90.0f - Mathf.Abs(angle);
+                            Debug.Log("linecast angle:"+angle);
+
                             if(currHeight < correspondHeight && altitudeVariation > 0 && altitudeVariation <= 1) {
                                 // jumpUp
-                                jumpUp = true;
+                                if(angle >= 60f && 180f - angle >= 60f) {
+                                    jumpUp = true;
+                                    jumpTrigger = hit.collider;
+                                }
                             } else if(currHeight >= correspondHeight) {
                                 // jumpDown
                                 jumpDown = true;
+                                jumpTrigger = hit.collider;
                             }
                         }
                         // var map = hit.collider.gameObject.transform.parent.GetComponent<Tilemap>();

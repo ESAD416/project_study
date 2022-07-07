@@ -54,6 +54,7 @@ public abstract class Charactor : MonoBehaviour
     #region 跳躍參數
 
     protected Vector3 takeOffPos = Vector3.zero;
+    protected Collider2D jumpTrigger = null;
     protected Rigidbody2D shawdowBody;
     public float currHeight = 0f;
     private float lastHeight = 0f;
@@ -103,7 +104,7 @@ public abstract class Charactor : MonoBehaviour
         m_Center = new Vector3(center.position.x, center.position.y);
 
         UpdateCoordinate();
-        Debug.Log("coordinate: "+m_Coordinate);
+        //Debug.Log("coordinate: "+m_Coordinate);
         HandleAnimatorLayers();
         SetAnimateMovementPara(movement, facingDir);
         FocusCollidersWithHeight();
@@ -197,6 +198,24 @@ public abstract class Charactor : MonoBehaviour
         isJumping = false;
         jumpOffset = 0.3f;
         lastHeight = currHeight;
+        
+        if(jumpTrigger != null) {
+            var hObj = jumpTrigger.GetComponent<HeightOfObject>() as HeightOfObject;
+            if(hObj.GetNoEntry()) {
+                var area = jumpTrigger.GetComponent<Tilemap>();
+                Vector3Int gridPos = area.WorldToCell((Vector2)transform.position);
+                if(area.HasTile(gridPos)) {
+                    Tile resultTile = area.GetTile<Tile>(gridPos);
+                    TileSpriteModel model = new TileSpriteModel(resultTile.sprite, area.GetTransformMatrix(gridPos).rotation.eulerAngles.z);
+                    bool IsTransparent = TileUtils.TilePixelIsTransparent(model, (Vector2)transform.position);
+                    Debug.Log("StopJump IsTransparent: "+IsTransparent);
+                }
+            }
+        }
+
+        transform.position = new Vector3(transform.position.x, transform.position.y, currHeight);
+
+        jumpTrigger = null;
         takeOffPos = Vector3.zero;
     }
 
@@ -210,12 +229,13 @@ public abstract class Charactor : MonoBehaviour
     }
 
     public Vector3 GetWorldPosByCoordinate(Vector3 coordinate) {
-        Debug.Log("GetWorldPosByCoordinate coordinate" + coordinate);
+        //Debug.Log("GetWorldPosByCoordinate coordinate" + coordinate);
         Vector3 result = Vector3.zero;
         result.x = coordinate.x;
         result.y = coordinate.y + coordinate.z;
+        result.z = coordinate.z;
 
-        Debug.Log("GetWorldPosByCoordinate result" + result);
+        //Debug.Log("GetWorldPosByCoordinate result" + result);
         return result;
     }
 
