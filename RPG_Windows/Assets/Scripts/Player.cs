@@ -151,12 +151,10 @@ public class Player : Charactor
                                 // jumpUp
                                 if(angle >= 60f && 180f - angle >= 60f) {
                                     jumpUp = true;
-                                    jumpTrigger = hit.collider;
                                 }
                             } else if(currHeight >= correspondHeight) {
                                 // jumpDown
                                 jumpDown = true;
-                                jumpTrigger = hit.collider;
                             }
                         }
                         // var map = hit.collider.gameObject.transform.parent.GetComponent<Tilemap>();

@@ -54,7 +54,6 @@ public abstract class Charactor : MonoBehaviour
     #region 跳躍參數
 
     protected Vector3 takeOffPos = Vector3.zero;
-    protected Collider2D jumpTrigger = null;
     protected Rigidbody2D shawdowBody;
     public float currHeight = 0f;
     private float lastHeight = 0f;
@@ -198,24 +197,26 @@ public abstract class Charactor : MonoBehaviour
         isJumping = false;
         jumpOffset = 0.3f;
         lastHeight = currHeight;
-        
-        if(jumpTrigger != null) {
-            var hObj = jumpTrigger.GetComponent<HeightOfObject>() as HeightOfObject;
-            if(hObj.GetNoEntry()) {
-                var area = jumpTrigger.GetComponent<Tilemap>();
-                Vector3Int gridPos = area.WorldToCell((Vector2)transform.position);
-                if(area.HasTile(gridPos)) {
-                    Tile resultTile = area.GetTile<Tile>(gridPos);
-                    TileSpriteModel model = new TileSpriteModel(resultTile.sprite, area.GetTransformMatrix(gridPos).rotation.eulerAngles.z);
-                    bool IsTransparent = TileUtils.TilePixelIsTransparent(model, (Vector2)transform.position);
-                    Debug.Log("StopJump IsTransparent: "+IsTransparent);
+
+        Collider2D[] heightObjColls = GridUtils.GetColliders("Grid", currHeight);
+        Debug.Log("StopJump heightObjColls.Length: "+heightObjColls.Length);
+        if(heightObjColls != null) {
+            foreach(Collider2D coll in heightObjColls) {
+                var hObj = coll.GetComponent<HeightOfObject>() as HeightOfObject;
+                if(hObj.GetNoEntry()) {
+                    var area = coll.GetComponent<Tilemap>();
+                    Vector3Int gridPos = area.WorldToCell((Vector2)transform.position);
+                    if(area.HasTile(gridPos)) {
+                        Tile resultTile = area.GetTile<Tile>(gridPos);
+                        TileSpriteModel model = new TileSpriteModel(resultTile.sprite, area.GetTransformMatrix(gridPos).rotation.eulerAngles.z);
+                        bool IsTransparent = TileUtils.TilePixelIsTransparent(model, (Vector2)transform.position);
+                        Debug.Log("StopJump IsTransparent: "+IsTransparent);
+                    }
                 }
             }
         }
 
         transform.position = new Vector3(transform.position.x, transform.position.y, currHeight);
-
-        jumpTrigger = null;
         takeOffPos = Vector3.zero;
     }
 
@@ -316,20 +317,19 @@ public abstract class Charactor : MonoBehaviour
     }
 
     private void FocusCollidersWithHeight() {
-        var grid = GameObject.FindObjectOfType(typeof(Grid)) as Grid;
-        Collider2D[] collider2Ds = grid.GetComponentsInChildren<Collider2D>().Where(c => c.GetType() == typeof(TilemapCollider2D)).ToArray();
-        foreach(var collider2D in collider2Ds) {
+        Collider2D[] jumpColls = GridUtils.GetColliders("Grid");
+        foreach(var collider2D in jumpColls) {
             var heightObj = collider2D.GetComponent<HeightOfObject>() as HeightOfObject;
-                if(heightObj != null) {
-                    // Debug.Log("FocusCollidersWithHeight collider2D name: "+collider2D.name);
-                    // Debug.Log("FocusCollidersWithHeight collider2D type: "+collider2D.GetType());
-                    if(currHeight == heightObj.GetSelfHeight()) {
-                        collider2D.enabled = true;
-                    } else {
-                        collider2D.enabled = false;
-                    }
-                    // Debug.Log("FocusCollidersWithHeight collider2D enabled: "+collider2D.enabled);
+            if(heightObj != null) {
+                // Debug.Log("FocusCollidersWithHeight collider2D name: "+collider2D.name);
+                // Debug.Log("FocusCollidersWithHeight collider2D type: "+collider2D.GetType());
+                if(currHeight == heightObj.GetSelfHeight()) {
+                    collider2D.enabled = true;
+                } else {
+                    collider2D.enabled = false;
                 }
+                // Debug.Log("FocusCollidersWithHeight collider2D enabled: "+collider2D.enabled);
+            }
         }
     }
 }
