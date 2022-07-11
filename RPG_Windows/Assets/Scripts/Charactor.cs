@@ -211,6 +211,7 @@ public abstract class Charactor : MonoBehaviour
                         TileSpriteModel model = new TileSpriteModel(resultTile.sprite, area.GetTransformMatrix(gridPos).rotation.eulerAngles.z);
                         bool IsTransparent = TileUtils.TilePixelIsTransparent(model, (Vector2)transform.position);
                         Debug.Log("StopJump IsTransparent: "+IsTransparent);
+                        break;
                     }
                 }
             }
