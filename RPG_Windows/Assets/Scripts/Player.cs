@@ -157,24 +157,6 @@ public class Player : Charactor
                                 jumpDown = true;
                             }
                         }
-                        // var map = hit.collider.gameObject.transform.parent.GetComponent<Tilemap>();
-                        // Debug.Log("hitted map name: "+map.name);
-                        // if(map != null) {
-                        //     Vector3Int gridPos = map.WorldToCell(rayCastEndPos);
-                        //     if(map.HasTile(gridPos)) {
-                        //         TileBase resultTile = map.GetTile(gridPos);
-                        //         Debug.Log("At grid position "+gridPos+" there is a "+resultTile+" in map "+map.name);
-                        //         float mapAltitude = heightManager.GetHeightByTileBase(resultTile);
-                        //         altitudeVariation = Math.Abs(height - mapAltitude) ;
-                        //         if(height < mapAltitude && altitudeVariation > 0 && altitudeVariation <= 2) {
-                        //             // jumpUp
-                        //             jumpUp = true;
-                        //         } else if(height >= mapAltitude) {
-                        //             // jumpDown
-                        //             jumpDown = true;
-                        //         }
-                        //     }
-                        // } 
                     }
                 }
 

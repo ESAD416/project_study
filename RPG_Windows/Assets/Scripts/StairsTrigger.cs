@@ -20,8 +20,7 @@ public class StairsTrigger : MonoBehaviour
 
     protected void Start() {
         player = GameObject.FindObjectOfType(typeof(Player)) as Player;
-        var grid = GameObject.FindObjectOfType(typeof(Grid)) as Grid;
-        collider2Ds = grid.GetComponentsInChildren<Collider2D>();
+        collider2Ds = GridUtils.GetColliders("Grid");
 
         // InitStairsStatus();
 
@@ -48,14 +47,8 @@ public class StairsTrigger : MonoBehaviour
             Debug.Log("player enter in StairsTrigger");
             player.onStairs = gameObject.name;
             playerOrginHeight = player.currHeight;
-            // if(string.IsNullOrEmpty(player.onStairs)) {
-            //     Debug.Log("player not in StairsTrigger yet");
-            //     playerStartHeight = player.height;
-            //     // Debug.Log("startPos: "+startPos);
-            // }
 
             FocusOnStairsColliders();
-            //Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Blocks"));
         }
     }
 
@@ -64,58 +57,7 @@ public class StairsTrigger : MonoBehaviour
         if(otherCollider.gameObject.tag == "Player") {
             Debug.Log("player leave StairsTrigger");
             InitStairsStatus();
-            // if(string.IsNullOrEmpty(player.onStairs)) {
-            //     Debug.Log("player enter in StairsTrigger");
-            //     player.onStairs = gameObject.name;
-                
-            // } else {
-            //     Debug.Log("player prepare to leave StairsTrigger");
-            //     // endPos = new Vector2(player.gameObject.transform.position.x, player.gameObject.transform.position.y);
-            //     // Debug.Log("endPos: "+endPos);
-            //     //heightSettleRoutine = StartCoroutine(HeightSettleDown());
-            // }
         }
-    }
-
-    private IEnumerator HeightSettleDown() {
-        //計算player高度 ver 2
-        var heightManager = GameObject.FindObjectOfType(typeof(HeightManager)) as HeightManager; 
-        List<float> heightsOfTile = heightManager.GetHeightsFromTileMapsByWorldPos(player.m_Center);
-        if(heightsOfTile.Count > 0) {
-            if(heightsOfTile.Count == 1) {
-                float first = heightsOfTile.First();
-                player.currHeight = first;
-            }
-            else {
-                float final = player.currHeight;
-                foreach(float h in heightsOfTile) {
-                    if(h != final) {
-                        final = h;
-                    }
-                }
-
-                player.currHeight = final;
-            }
-        }
-
-        //計算player高度 ver 1
-        // if(player.stair_start == "Stair_Top" && player.stair_end == "Stair_Down") {
-        //     // 下樓梯
-        //     player.height -= altitudeVariation;
-        // }
-        // else if(player.stair_start == "Stair_Down" && player.stair_end == "Stair_Top") {
-        //     // 上樓梯
-        //     player.height += altitudeVariation;
-        // }
-        // else {
-        //     // TODO 途中離開樓梯
-        //     float distance = Vector2.Distance( endPos, startPos );  // 計算途中離開樓梯區域的高度距離向量
-        // }
-
-        // Physics2D.IgnoreLayerCollision(6, 8, false);
-        yield return new WaitForSeconds(0.2f);
-
-        InitStairsStatus();
     }
 
     public float SetPlayerHeightOnStair() {
@@ -173,24 +115,16 @@ public class StairsTrigger : MonoBehaviour
 
     private void FocusOnStairsColliders() {
         foreach(var collider2D in collider2Ds) {
-            //Debug.Log("collider2D name: "+collider2D.name);
-            if(collider2D.gameObject.layer != LayerMask.NameToLayer("Trigger")) {
-                //Debug.Log("collider2D tag: "+collider2D.tag);
-                if(collider2D.tag != "Stairs") {
-                    collider2D.enabled = false;
-                }
+            if(collider2D.tag != "Stairs" && collider2D.tag != "Stair_Up" && collider2D.tag != "Stair_Down") {
+                collider2D.enabled = false;
             }
         }
     }
     
     private void RevertFocusOnStairsColliders() {
         foreach(var collider2D in collider2Ds) {
-            //Debug.Log("collider2D name: "+collider2D.name);
-            if(collider2D.gameObject.layer != LayerMask.NameToLayer("Trigger")) {
-                //Debug.Log("collider2D tag: "+collider2D.tag);
-                if(collider2D.tag != "Stairs") {
-                    collider2D.enabled = true;
-                }
+            if(collider2D.tag != "Stairs" && collider2D.tag != "Stair_Up" && collider2D.tag != "Stair_Down") {
+                collider2D.enabled = true;
             }
         }
     }

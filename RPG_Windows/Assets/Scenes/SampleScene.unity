@@ -2056,7 +2056,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1755975794}
-  - {fileID: 1832528631}
+  - {fileID: 1858961899}
   - {fileID: 1451395579}
   - {fileID: 1218450811}
   - {fileID: 1759759227}
@@ -2198,7 +2198,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
+  m_SpriteSortPoint: 1
 --- !u!1 &246516605
 GameObject:
   m_ObjectHideFlags: 0
@@ -2618,6 +2618,7 @@ GameObject:
   m_Component:
   - component: {fileID: 660635678}
   - component: {fileID: 660635679}
+  - component: {fileID: 660635680}
   m_Layer: 0
   m_Name: Gateway_Down
   m_TagString: Stair_Down
@@ -2661,6 +2662,18 @@ EdgeCollider2D:
   m_AdjacentEndPoint: {x: 0, y: 0}
   m_UseAdjacentStartPoint: 0
   m_UseAdjacentEndPoint: 0
+--- !u!114 &660635680
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 660635677}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecb222ac223aa7d43820de29663bf475, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &691503195
 GameObject:
   m_ObjectHideFlags: 0
@@ -2733,6 +2746,7 @@ GameObject:
   - component: {fileID: 784979533}
   - component: {fileID: 784979532}
   - component: {fileID: 784979534}
+  - component: {fileID: 784979535}
   m_Layer: 0
   m_Name: Tunnel
   m_TagString: Stairs
@@ -2901,7 +2915,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.48742485, y: -0.7507621}
+  m_Offset: {x: -0.5042434, y: -0.7507621}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -2912,8 +2926,23 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.1969395, y: 1.4982817}
+  m_Size: {x: 1.1633024, y: 1.4982817}
   m_EdgeRadius: 0
+--- !u!114 &784979535
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 784979530}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0619e997670c0aa46b87010765324966, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  altitudeVariation: 1
+  isVertical: 1
+  stairDistance: 0
 --- !u!1 &817114048
 GameObject:
   m_ObjectHideFlags: 0
@@ -11185,37 +11214,6 @@ Transform:
   m_Father: {fileID: 1858961899}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1832528630
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1832528631}
-  m_Layer: 0
-  m_Name: PlayerController
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1832528631
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1832528630}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 1858961899}
-  m_Father: {fileID: 187897965}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1858961898
 GameObject:
   m_ObjectHideFlags: 0
@@ -11258,8 +11256,8 @@ Transform:
   - {fileID: 368953353}
   - {fileID: 372112796}
   - {fileID: 691503196}
-  m_Father: {fileID: 1832528631}
-  m_RootOrder: 0
+  m_Father: {fileID: 187897965}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1858961901
 MonoBehaviour:
@@ -11421,6 +11419,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1928484189}
   - component: {fileID: 1928484190}
+  - component: {fileID: 1928484191}
   m_Layer: 0
   m_Name: Gateway_Top
   m_TagString: Stair_Top
@@ -11464,6 +11463,18 @@ EdgeCollider2D:
   m_AdjacentEndPoint: {x: 0, y: 0}
   m_UseAdjacentStartPoint: 0
   m_UseAdjacentEndPoint: 0
+--- !u!114 &1928484191
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1928484188}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecb222ac223aa7d43820de29663bf475, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1944259054
 GameObject:
   m_ObjectHideFlags: 0
