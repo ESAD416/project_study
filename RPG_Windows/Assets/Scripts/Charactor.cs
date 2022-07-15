@@ -121,7 +121,7 @@ public abstract class Charactor : MonoBehaviour
             movement = Vector3.zero;
         }
         else if(isJumping) {
-            transform.position = GetWorldPosByCoordinate(m_Coordinate) + new Vector3(0, 0.4f);   // 預設中心點是(x, y-0.4)
+            transform.position = GetWorldPosByCoordinate(m_Coordinate) - new Vector3(0, 1.7f);   // 預設中心點是(x, y-0.4)
             Debug.Log("Jumping transform.position" + transform.position);
             HandleJumpingProcess();
         }
@@ -198,6 +198,7 @@ public abstract class Charactor : MonoBehaviour
         jumpOffset = 0.3f;
         lastHeight = currHeight;
 
+        bool IsTransparent = false;
         Collider2D[] heightObjColls = GridUtils.GetColliders("Grid", currHeight);
         Debug.Log("StopJump heightObjColls.Length: "+heightObjColls.Length);
         if(heightObjColls != null) {
@@ -209,7 +210,7 @@ public abstract class Charactor : MonoBehaviour
                     if(area.HasTile(gridPos)) {
                         Tile resultTile = area.GetTile<Tile>(gridPos);
                         TileSpriteModel model = new TileSpriteModel(resultTile.sprite, area.GetTransformMatrix(gridPos).rotation.eulerAngles.z);
-                        bool IsTransparent = TileUtils.TilePixelIsTransparent(model, (Vector2)transform.position);
+                        IsTransparent = TileUtils.TilePixelIsTransparent(model, (Vector2)transform.position);
                         Debug.Log("StopJump IsTransparent: "+IsTransparent);
                         break;
                     }
@@ -217,7 +218,12 @@ public abstract class Charactor : MonoBehaviour
             }
         }
 
-        transform.position = new Vector3(transform.position.x, transform.position.y, currHeight);
+        if(IsTransparent) {
+            transform.position = takeOffPos;
+        } else {
+            transform.position = new Vector3(transform.position.x, transform.position.y, currHeight);
+        }
+        
         takeOffPos = Vector3.zero;
     }
 

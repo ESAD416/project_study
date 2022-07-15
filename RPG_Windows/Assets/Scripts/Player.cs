@@ -11,8 +11,6 @@ public class Player : Charactor
     [Header("Input Settings")]
     public PlayerInput playerInput;
 
-    public Vector2 capsuleSize = new Vector2(1.5f, 2f);
-    public float radius = 2f;
     [SerializeField] private Transform raycastPoint;
     public Vector2 rayCastEndPos;
 
@@ -23,7 +21,7 @@ public class Player : Charactor
 
     
     protected override void Start() {
-        rayCastEndPos = new Vector2(raycastPoint.position.x, raycastPoint.position.y) + new Vector2(0, -1) * 0.5f;   // 預設射線終點
+        rayCastEndPos = new Vector2(raycastPoint.position.x, raycastPoint.position.y) + new Vector2(0, -1) * 0.35f;   // 預設射線終點
         base.Start();
     }
 
@@ -32,19 +30,12 @@ public class Player : Charactor
         if(!string.IsNullOrEmpty(onStairs)) {
             HeightSettleOnStair(onStairs);
         }
-        if(!isJumping) {
+        else if(!isJumping) {
             DetectedToJump();
         }
         //Debug.Log("GetCoordinate: "+GetCoordinate());
         base.Update();
     }
-
-    // private void DrawCapsule(Vector3 orgin, Vector2 size) {
-    //     Vector3 up = transform.up * (size.y - size.x) / 2f;
-    //     UnityEditor.Handles.color = Color.yellow;
-    //     UnityEditor.Handles.DrawWireArc(orgin + up, Vector3.forward, transform.right, 180f, size.x / 2.3f, 2);
-    //     UnityEditor.Handles.DrawWireArc(orgin - up, Vector3.forward, -transform.right, 180f, size.x / 2.3f, 2);
-    // }
 
     public void OnMovement(InputAction.CallbackContext value)
     {
@@ -98,33 +89,10 @@ public class Player : Charactor
                 raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_DownLeft");
             }
 
-            Vector2 distance = new Vector2(movement.x, movement.y) * 0.5f;
+            Vector2 distance = new Vector2(movement.x, movement.y) * 0.35f;
             rayCastEndPos = new Vector2(raycastPoint.position.x, raycastPoint.position.y) + distance;
             //Debug.Log("castEndPos: "+rayCastEndPos);
             Debug.DrawLine(raycastPoint.position, rayCastEndPos, Color.blue);
-
-            // 偵測跳躍 ver2
-            // float heightVariation = 0;
-            // var heightManager = GameObject.FindObjectOfType(typeof(HeightManager)) as HeightManager; 
-            // List<float> heightsOfRayCastEndTile = heightManager.GetHeightFromTile(rayCastEndPos);
-            // float endTileHeight = height;
-            // if(heightsOfRayCastEndTile.Count == 1) {
-            //     endTileHeight = heightsOfRayCastEndTile.First();
-            // } else if(heightsOfRayCastEndTile.Count > 1) {
-            //     foreach(float h in heightsOfRayCastEndTile) {
-            //         if(endTileHeight != h) {
-            //             endTileHeight = h;
-            //         }
-            //     }
-            // }
-
-            // heightVariation = height - endTileHeight;
-            // if(heightVariation > 0) {
-            //     Debug.Log("jumpDown");
-            // } else if(heightVariation < 0){
-            //     Debug.Log("jumpUp");
-            // }
-
 
             // 偵測跳躍Edge ver.3
             RaycastHit2D[] hits = Physics2D.LinecastAll(raycastPoint.position, rayCastEndPos, 1 << LayerMask.NameToLayer("HeightObj"));
@@ -160,7 +128,6 @@ public class Player : Charactor
                     }
                 }
 
-
                 if(jumpUp || jumpDown) {
                     if(!isJumping) {
                         takeOffPos = m_Center;
@@ -184,6 +151,8 @@ public class Player : Charactor
         if(currStair != null) {
             currHeight = currStair.SetPlayerHeightOnStair();
             Debug.Log("SetPlayerHeightOnStair player height: "+currHeight);
+
+            transform.position = new Vector3(transform.position.x, transform.position.y, currHeight);
         }
 
     }

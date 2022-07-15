@@ -76,6 +76,7 @@ public class StairsTrigger : MonoBehaviour
             startPos = gateWayPos_down;
             dir = 1f;
         }
+
         float limitedHeight = playerOrginHeight + altitudeVariation * dir;
         Debug.Log("height var dir: "+dir);
         Debug.Log("stair startPos: "+startPos);
@@ -115,7 +116,7 @@ public class StairsTrigger : MonoBehaviour
 
     private void FocusOnStairsColliders() {
         foreach(var collider2D in collider2Ds) {
-            if(collider2D.tag != "Stairs" && collider2D.tag != "Stair_Up" && collider2D.tag != "Stair_Down") {
+            if(collider2D.tag != "Stairs" && collider2D.tag != "Stair_Top" && collider2D.tag != "Stair_Down") {
                 collider2D.enabled = false;
             }
         }
@@ -123,7 +124,7 @@ public class StairsTrigger : MonoBehaviour
     
     private void RevertFocusOnStairsColliders() {
         foreach(var collider2D in collider2Ds) {
-            if(collider2D.tag != "Stairs" && collider2D.tag != "Stair_Up" && collider2D.tag != "Stair_Down") {
+            if(collider2D.tag != "Stairs" && collider2D.tag != "Stair_Top" && collider2D.tag != "Stair_Down") {
                 collider2D.enabled = true;
             }
         }
