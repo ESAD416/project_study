@@ -121,7 +121,7 @@ public abstract class Charactor : MonoBehaviour
             movement = Vector3.zero;
         }
         else if(isJumping) {
-            transform.position = GetWorldPosByCoordinate(m_Coordinate) - new Vector3(0, 1.7f);   // 預設中心點是(x, y-0.4)
+            transform.position = GetWorldPosByCoordinate(m_Coordinate) - new Vector3(0, 1.7f);   // 預設中心點是(x, y+1.7)
             Debug.Log("Jumping transform.position" + transform.position);
             HandleJumpingProcess();
         }
@@ -194,35 +194,43 @@ public abstract class Charactor : MonoBehaviour
             StopCoroutine(jumpRoutine);
         }
 
-        isJumping = false;
-        jumpOffset = 0.3f;
-        lastHeight = currHeight;
-
-        bool IsTransparent = false;
+        Debug.Log("StopJump currHeight: "+currHeight);
+        Debug.Log("StopJump takeOffPos: "+takeOffPos);
+        bool IsTransparent = true;
         Collider2D[] heightObjColls = GridUtils.GetColliders("Grid", currHeight);
         Debug.Log("StopJump heightObjColls.Length: "+heightObjColls.Length);
         if(heightObjColls != null) {
             foreach(Collider2D coll in heightObjColls) {
                 var hObj = coll.GetComponent<HeightOfObject>() as HeightOfObject;
+                Debug.Log("StopJump hObj selfHeight: "+hObj.GetSelfHeight());
                 if(hObj.GetNoEntry()) {
                     var area = coll.GetComponent<Tilemap>();
-                    Vector3Int gridPos = area.WorldToCell((Vector2)transform.position);
+                    Vector3Int gridPos = area.WorldToCell((Vector2)m_Center);
                     if(area.HasTile(gridPos)) {
                         Tile resultTile = area.GetTile<Tile>(gridPos);
                         TileSpriteModel model = new TileSpriteModel(resultTile.sprite, area.GetTransformMatrix(gridPos).rotation.eulerAngles.z);
-                        IsTransparent = TileUtils.TilePixelIsTransparent(model, (Vector2)transform.position);
-                        Debug.Log("StopJump IsTransparent: "+IsTransparent);
+                        IsTransparent = TileUtils.TilePixelIsTransparent(model, (Vector2)m_Center);
+                        Debug.Log("StopJump IsTransparent in loop: "+IsTransparent);
                         break;
                     }
                 }
             }
         }
 
+
         if(IsTransparent) {
-            transform.position = takeOffPos;
-        } else {
             transform.position = new Vector3(transform.position.x, transform.position.y, currHeight);
+        } else {
+            Debug.Log("Set to takeOffPos: "+takeOffPos);
+            transform.position = takeOffPos - new Vector3(0, 1.7f);   // 預設中心點是(x, y+1.7);
+            currHeight = takeOffPos.z;
         }
+
+        isJumping = false;
+        jumpOffset = 0.3f;
+        lastHeight = currHeight;
+
+        //transform.position = new Vector3(transform.position.x, transform.position.y, currHeight);
         
         takeOffPos = Vector3.zero;
     }
