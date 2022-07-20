@@ -197,7 +197,7 @@ public abstract class Charactor : MonoBehaviour
         Debug.Log("StopJump currHeight: "+currHeight);
         Debug.Log("StopJump takeOffPos: "+takeOffPos);
         bool IsTransparent = true;
-        Collider2D[] heightObjColls = GridUtils.GetColliders("Grid", currHeight);
+        Collider2D[] heightObjColls = GridUtils.GetColliders("Stage5", currHeight);
         Debug.Log("StopJump heightObjColls.Length: "+heightObjColls.Length);
         if(heightObjColls != null) {
             foreach(Collider2D coll in heightObjColls) {
@@ -332,7 +332,7 @@ public abstract class Charactor : MonoBehaviour
     }
 
     private void FocusCollidersWithHeight() {
-        Collider2D[] jumpColls = GridUtils.GetColliders("Grid");
+        Collider2D[] jumpColls = GridUtils.GetColliders("Stage5");
         foreach(var collider2D in jumpColls) {
             var heightObj = collider2D.GetComponent<HeightOfObject>() as HeightOfObject;
             if(heightObj != null) {

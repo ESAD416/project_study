@@ -20,7 +20,7 @@ public class StairsTrigger : MonoBehaviour
 
     protected void Start() {
         player = GameObject.FindObjectOfType(typeof(Player)) as Player;
-        collider2Ds = GridUtils.GetColliders("Grid");
+        collider2Ds = GridUtils.GetColliders("Stage5");
 
         // InitStairsStatus();
 
