@@ -8,7 +8,6 @@ TagManager:
   - Stair_Top
   - Stair_Down
   - Level
-  - Jump
   layers:
   - Default
   - TransparentFX
