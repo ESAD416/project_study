@@ -12,5 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb9104a3ee804b3438642edd6d120a13, type: 3}
   m_Name: Level4
   m_EditorClassIdentifier: 
-  tiles: []
-  height: 0
+  tiles:
+  - {fileID: 11400000, guid: 44bcaa51557641f4caad10c499d04c1a, type: 2}
+  - {fileID: 11400000, guid: 7d5f21338afa9464983a6b2950dddff0, type: 2}
+  - {fileID: 11400000, guid: a2dfdbe40a2e6d14da83437dc42bbd30, type: 2}
+  - {fileID: 11400000, guid: 42706291f8f2ab54e86dc49890da12a7, type: 2}
+  - {fileID: 11400000, guid: c94dde8885d5ca84086c6e54991af7bf, type: 2}
+  - {fileID: 11400000, guid: d6cc34d7525efe24383d28f583972f44, type: 2}
+  - {fileID: 11400000, guid: 6003094bbdd95bc4a8f4452899813bea, type: 2}
+  - {fileID: 11400000, guid: c265d902d405f5c4cb0676e86c851079, type: 2}
+  - {fileID: 11400000, guid: d0583db15a8a1014f8d2c0d31017808d, type: 2}
+  - {fileID: 11400000, guid: 6a28cdf32f64a704db7592e28e8a4e73, type: 2}
+  - {fileID: 11400000, guid: c0ebb6899343c744faf044dcee298e95, type: 2}
+  - {fileID: 11400000, guid: 0e525a23a3de6ef4eabed0acb0a101b9, type: 2}
+  - {fileID: 11400000, guid: 89fa5040117867d41979ef406b5a6a50, type: 2}
+  - {fileID: 11400000, guid: 5a25e098ccb38e949b53d967df64a2e5, type: 2}
+  - {fileID: 11400000, guid: fbdffb36cce9a64499e5a0566a5c8b02, type: 2}
+  - {fileID: 11400000, guid: 0588d03e8f95c9842817d32403e96f61, type: 2}
+  height: 4
