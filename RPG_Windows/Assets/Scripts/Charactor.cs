@@ -279,6 +279,7 @@ public abstract class Charactor : MonoBehaviour
                 if(goalheight <= groundCheckHeight) {
                     lastHeight = currHeight;
                     currHeight = groundCheckHeight;
+                    // TODO NG判定
                     StopJump();
                 } else {
                     lastHeight = currHeight;
