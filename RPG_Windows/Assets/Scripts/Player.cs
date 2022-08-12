@@ -130,9 +130,10 @@ public class Player : Charactor
 
                 if(jumpUp || jumpDown) {
                     if(!isJumping) {
-                        takeOffPos = m_Center + new Vector3(0, 0, currHeight);
+                        takeOffCoord = m_Coordinate;
+                        takeOffDir = facingDir;
                         isJumping = true;
-                        Debug.Log("takeOffPos: "+takeOffPos);
+                        Debug.Log("takeOffPos: "+takeOffCoord);
                     }
                 }
             }

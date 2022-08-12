@@ -22,6 +22,10 @@ public abstract class Charactor : MonoBehaviour
     /// </summary>
     public Vector3 m_Center;
     /// <summary>
+    /// 角色底部
+    /// </summary>
+    public Vector3 m_Buttom;
+    /// <summary>
     /// 角色橫縱高座標
     /// </summary>
     public Vector3 m_Coordinate;
@@ -53,7 +57,8 @@ public abstract class Charactor : MonoBehaviour
 
     #region 跳躍參數
 
-    protected Vector3 takeOffPos = Vector3.zero;
+    protected Vector3 takeOffCoord = Vector3.zero;
+    protected Vector2 takeOffDir = Vector2.zero;
     protected Rigidbody2D shawdowBody;
     public float currHeight = 0f;
     private float lastHeight = 0f;
@@ -63,6 +68,8 @@ public abstract class Charactor : MonoBehaviour
     protected bool isJumping;
     protected Coroutine jumpRoutine;
     protected float jumpClipTime = 0.2f;
+    protected bool maximumHeightReach = false;
+    protected float maximumHeightReachDistance;
 
     #endregion
 
@@ -102,6 +109,9 @@ public abstract class Charactor : MonoBehaviour
         var center = transform.Find("PlayerCenter").GetComponent<Transform>();
         m_Center = new Vector3(center.position.x, center.position.y);
 
+        var buttom = transform.Find("PlayerButtom").GetComponent<Transform>();
+        m_Buttom = new Vector3(buttom.position.x, buttom.position.y);
+
         UpdateCoordinate();
         //Debug.Log("coordinate: "+m_Coordinate);
         HandleAnimatorLayers();
@@ -123,6 +133,17 @@ public abstract class Charactor : MonoBehaviour
         else if(isJumping) {
             transform.position = GetWorldPosByCoordinate(m_Coordinate) - new Vector3(0, 1.7f);   // 預設中心點是(x, y+1.7)
             Debug.Log("Jumping transform.position" + transform.position);
+            if(maximumHeightReach && currHeight == lastHeight ) {
+                Debug.Log("maximumHeightReach currHeight: "+currHeight);
+                Debug.Log("maximumHeightReach lastHeight: "+lastHeight);
+                Debug.Log("maximumHeightReach takeOffPos: "+takeOffCoord);
+                Debug.Log("maximumHeightReach m_Coordinate: "+m_Coordinate);
+                Debug.Log("maximumHeightReach distance1: "+Math.Abs(m_Coordinate.y - takeOffCoord.y));
+                Debug.Log("maximumHeightReach distance2: "+maximumHeightReachDistance);
+                
+            } else {
+
+            }
             HandleJumpingProcess();
         }
         // Debug.Log("FixedUpdate end player height: "+height);
@@ -195,36 +216,36 @@ public abstract class Charactor : MonoBehaviour
         }
 
         Debug.Log("StopJump currHeight: "+currHeight);
-        Debug.Log("StopJump takeOffPos: "+takeOffPos);
-        bool IsTransparent = true;
-        Collider2D[] heightObjColls = GridUtils.GetColliders("Stage5", currHeight);
-        Debug.Log("StopJump heightObjColls.Length: "+heightObjColls.Length);
-        if(heightObjColls != null) {
-            foreach(Collider2D coll in heightObjColls) {
-                var hObj = coll.GetComponent<HeightOfObject>() as HeightOfObject;
-                Debug.Log("StopJump hObj selfHeight: "+hObj.GetSelfHeight());
-                if(hObj.GetNoEntry()) {
-                    var area = coll.GetComponent<Tilemap>();
-                    Vector3Int gridPos = area.WorldToCell((Vector2)m_Center);
-                    if(area.HasTile(gridPos)) {
-                        Tile resultTile = area.GetTile<Tile>(gridPos);
-                        TileSpriteModel model = new TileSpriteModel(resultTile.sprite, area.GetTransformMatrix(gridPos).rotation.eulerAngles.z);
-                        IsTransparent = TileUtils.TilePixelIsTransparent(model, (Vector2)m_Center);
-                        Debug.Log("StopJump IsTransparent in loop: "+IsTransparent);
-                        break;
-                    }
-                }
-            }
-        }
+        Debug.Log("StopJump takeOffPos: "+takeOffCoord);
+        // bool IsTransparent = true;
+        // Collider2D[] heightObjColls = GridUtils.GetColliders("Stage5", currHeight);
+        // Debug.Log("StopJump heightObjColls.Length: "+heightObjColls.Length);
+        // if(heightObjColls != null) {
+        //     foreach(Collider2D coll in heightObjColls) {
+        //         var hObj = coll.GetComponent<HeightOfObject>() as HeightOfObject;
+        //         Debug.Log("StopJump hObj selfHeight: "+hObj.GetSelfHeight());
+        //         if(hObj.GetNoEntry()) {
+        //             var area = coll.GetComponent<Tilemap>();
+        //             Vector3Int gridPos = area.WorldToCell((Vector2)m_Center);
+        //             if(area.HasTile(gridPos)) {
+        //                 Tile resultTile = area.GetTile<Tile>(gridPos);
+        //                 TileSpriteModel model = new TileSpriteModel(resultTile.sprite, area.GetTransformMatrix(gridPos).rotation.eulerAngles.z);
+        //                 IsTransparent = TileUtils.TilePixelIsTransparent(model, (Vector2)m_Center);
+        //                 Debug.Log("StopJump IsTransparent in loop: "+IsTransparent);
+        //                 break;
+        //             }
+        //         }
+        //     }
+        // }
 
 
-        if(IsTransparent) {
-            transform.position = new Vector3(transform.position.x, transform.position.y, currHeight);
-        } else {
-            Debug.Log("Set to takeOffPos: "+takeOffPos);
-            transform.position = takeOffPos - new Vector3(0, 1.7f);   // 預設中心點是(x, y+1.7);
-            currHeight = takeOffPos.z;
-        }
+        // if(IsTransparent) {
+            //transform.position = new Vector3(transform.position.x, transform.position.y, currHeight);
+        // } else {
+        //     Debug.Log("Set to takeOffPos: "+takeOffCoord);
+            // transform.position = takeOffCoord - new Vector3(0, 1.7f);   // 預設中心點是(x, y+1.7);
+            // currHeight = takeOffCoord.z;
+        // }
 
         isJumping = false;
         jumpOffset = 0.3f;
@@ -232,7 +253,7 @@ public abstract class Charactor : MonoBehaviour
 
         //transform.position = new Vector3(transform.position.x, transform.position.y, currHeight);
         
-        takeOffPos = Vector3.zero;
+        takeOffCoord = Vector3.zero;
     }
 
     public void UpdateCoordinate() {
@@ -249,7 +270,7 @@ public abstract class Charactor : MonoBehaviour
         Vector3 result = Vector3.zero;
         result.x = coordinate.x;
         result.y = coordinate.y + coordinate.z;
-        result.z = coordinate.z;
+        //result.z = coordinate.z;
 
         //Debug.Log("GetWorldPosByCoordinate result" + result);
         return result;
@@ -261,11 +282,13 @@ public abstract class Charactor : MonoBehaviour
         Debug.Log("jumpOffset start: "+jumpOffset);
         float goalheight = currHeight + jumpOffset;
         Debug.Log("goalheight: "+goalheight);
+
         if(jumpOffset >= 0) {
             lastHeight = currHeight;
             currHeight = goalheight;
             jumpOffset += (g / 2); 
-        } else {
+        } 
+        else {
             var hm = GameObject.FindObjectOfType(typeof(HeightManager)) as HeightManager;
 
             float groundCheckHeight = Mathf.Floor(currHeight);
@@ -277,10 +300,15 @@ public abstract class Charactor : MonoBehaviour
             // if(hm.GroundableChecked(m_Coordinate)) {
                 Debug.Log("Groundable true");
                 if(goalheight <= groundCheckHeight) {
-                    lastHeight = currHeight;
-                    currHeight = groundCheckHeight;
-                    // TODO NG判定
-                    StopJump();
+                    if(hm.NotGroundableChecked(m_Center) || hm.NotGroundableChecked(shadowWorldPos)) {
+                        // NotGroundable(ex: 岩壁)判定
+                        Debug.Log("NotGroundable true");
+                    } else {
+                        Debug.Log("NotGroundable false");
+                        lastHeight = currHeight;
+                        currHeight = groundCheckHeight;
+                        StopJump();
+                    }                    
                 } else {
                     lastHeight = currHeight;
                     currHeight = goalheight;
@@ -292,44 +320,15 @@ public abstract class Charactor : MonoBehaviour
                 currHeight = goalheight;
                 jumpOffset += g; 
             }
-
-            // List<float> levelsHeight = hm.defaultTileDatas.Select(h => h.height).ToList();   // 取現有Level的高，由高至低排序
-            // bool notGroundable = true;
-
-            // while(levelsHeight.Contains(groundCheckHeight)) {
-            //     // Vector3 shadowCoordinate = new Vector3(m_Coordinate.x, m_Coordinate.y, groundCheckHeight);
-            //     // Vector3 worldPos = new Vector3(shadowCoordinate.x, shadowCoordinate.y + shadowCoordinate.z);
-            //     Debug.Log("groundCheck m_Center: "+m_Center);
-            //     Debug.Log("groundCheck shawdowBody.transform.position: "+shawdowBody.transform.position);
-            //     // Debug.Log("groundCheck shadowCoordinate: "+shadowCoordinate);
-            //     // Debug.Log("groundCheck shadowWorldPos: "+worldPos);
-
-            //     if(hm.GroundableChecked(shawdowBody.transform.position, groundCheckHeight)) {
-            //     // if(hm.GroundableChecked(m_Coordinate)) {
-            //         Debug.Log("Groundable true");
-            //         Debug.Log("goalheight: "+goalheight);
-            //         Debug.Log("groundCheckHeight: "+groundCheckHeight);
-            //         if(goalheight <= groundCheckHeight) {
-            //             lastHeight = currHeight;
-            //             currHeight = groundCheckHeight;
-            //             StopJump();
-            //         } else {
-            //             lastHeight = currHeight;
-            //             currHeight = goalheight;
-            //             jumpOffset += g;
-            //         }
-            //         notGroundable = false;
-            //         break;
-            //     }
-
-            //     groundCheckHeight--;
-            // }
-
-
         }
         Debug.Log("currHeight end: "+currHeight);
         Debug.Log("lastHeight end: "+lastHeight);
         Debug.Log("jumpOffset end: "+jumpOffset);
+
+        if(currHeight == lastHeight && !maximumHeightReach) {
+            maximumHeightReach = true;
+            maximumHeightReachDistance = Vector2.Distance(new Vector2(m_Coordinate.x, m_Coordinate.y), new Vector2(takeOffCoord.x, takeOffCoord.y));
+        }
     }
 
     private void FocusCollidersWithHeight() {
