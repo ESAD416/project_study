@@ -68,9 +68,7 @@ public abstract class Charactor : MonoBehaviour
     protected bool isJumping;
     protected Coroutine jumpRoutine;
     protected float jumpClipTime = 0.2f;
-    protected bool maximumHeightReach = false;
-    protected float maximumHeightReachDistance;
-
+    
     #endregion
 
     #region 攻擊參數
@@ -132,18 +130,6 @@ public abstract class Charactor : MonoBehaviour
         }
         else if(isJumping) {
             transform.position = GetWorldPosByCoordinate(m_Coordinate) - new Vector3(0, 1.7f);   // 預設中心點是(x, y+1.7)
-            Debug.Log("Jumping transform.position" + transform.position);
-            if(maximumHeightReach && currHeight == lastHeight ) {
-                Debug.Log("maximumHeightReach currHeight: "+currHeight);
-                Debug.Log("maximumHeightReach lastHeight: "+lastHeight);
-                Debug.Log("maximumHeightReach takeOffPos: "+takeOffCoord);
-                Debug.Log("maximumHeightReach m_Coordinate: "+m_Coordinate);
-                Debug.Log("maximumHeightReach distance1: "+Math.Abs(m_Coordinate.y - takeOffCoord.y));
-                Debug.Log("maximumHeightReach distance2: "+maximumHeightReachDistance);
-                
-            } else {
-
-            }
             HandleJumpingProcess();
         }
         // Debug.Log("FixedUpdate end player height: "+height);
@@ -251,8 +237,7 @@ public abstract class Charactor : MonoBehaviour
         jumpOffset = 0.3f;
         lastHeight = currHeight;
 
-        //transform.position = new Vector3(transform.position.x, transform.position.y, currHeight);
-        
+        transform.position = new Vector3(transform.position.x, transform.position.y, currHeight);
         takeOffCoord = Vector3.zero;
     }
 
@@ -270,7 +255,7 @@ public abstract class Charactor : MonoBehaviour
         Vector3 result = Vector3.zero;
         result.x = coordinate.x;
         result.y = coordinate.y + coordinate.z;
-        //result.z = coordinate.z;
+        result.z = coordinate.z;
 
         //Debug.Log("GetWorldPosByCoordinate result" + result);
         return result;
@@ -324,11 +309,6 @@ public abstract class Charactor : MonoBehaviour
         Debug.Log("currHeight end: "+currHeight);
         Debug.Log("lastHeight end: "+lastHeight);
         Debug.Log("jumpOffset end: "+jumpOffset);
-
-        if(currHeight == lastHeight && !maximumHeightReach) {
-            maximumHeightReach = true;
-            maximumHeightReachDistance = Vector2.Distance(new Vector2(m_Coordinate.x, m_Coordinate.y), new Vector2(takeOffCoord.x, takeOffCoord.y));
-        }
     }
 
     private void FocusCollidersWithHeight() {
