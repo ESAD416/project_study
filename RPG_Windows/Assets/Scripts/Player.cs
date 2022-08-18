@@ -120,7 +120,8 @@ public class Player : Charactor
                                 if(angle >= 60f && 180f - angle >= 60f) {
                                     jumpUp = true;
                                 }
-                            } else if(currHeight >= correspondHeight  && altitudeVariation > 0 && altitudeVariation <= 1) {
+                            }  else if(currHeight >= correspondHeight) {
+                            //else if(currHeight >= correspondHeight  && altitudeVariation > 0 && altitudeVariation <= 1) {
                                 // jumpDown
                                 jumpDown = true;
                             }
