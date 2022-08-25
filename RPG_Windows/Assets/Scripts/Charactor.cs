@@ -114,7 +114,11 @@ public abstract class Charactor : MonoBehaviour
         //Debug.Log("coordinate: "+m_Coordinate);
         HandleAnimatorLayers();
         SetAnimateMovementPara(movement, facingDir);
-        FocusCollidersWithHeight();
+        if(isJumping) {
+            FocusCollidersWithHeightWhileJumping();
+        } else {
+            FocusCollidersWithHeight();
+        }
     }
 
     private void FixedUpdate() {
@@ -319,6 +323,24 @@ public abstract class Charactor : MonoBehaviour
                 // Debug.Log("FocusCollidersWithHeight collider2D name: "+collider2D.name);
                 // Debug.Log("FocusCollidersWithHeight collider2D type: "+collider2D.GetType());
                 if(currHeight == heightObj.GetSelfHeight()) {
+                    collider2D.enabled = true;
+                } else {
+                    collider2D.enabled = false;
+                }
+                // Debug.Log("FocusCollidersWithHeight collider2D enabled: "+collider2D.enabled);
+            }
+        }
+    }
+
+    private void FocusCollidersWithHeightWhileJumping() {
+        Collider2D[] jumpColls = GridUtils.GetColliders("Stage5");
+        foreach(var collider2D in jumpColls) {
+            var heightObj = collider2D.GetComponent<HeightOfObject>() as HeightOfObject;
+            if(heightObj != null) {
+                float groundCheckHeight = Mathf.Floor(currHeight);
+                // Debug.Log("FocusCollidersWithHeight collider2D name: "+collider2D.name);
+                // Debug.Log("FocusCollidersWithHeight collider2D type: "+collider2D.GetType());
+                if(groundCheckHeight + 1 == heightObj.GetSelfHeight()) {
                     collider2D.enabled = true;
                 } else {
                     collider2D.enabled = false;
