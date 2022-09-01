@@ -30,8 +30,12 @@ public class Player : Charactor
         if(!string.IsNullOrEmpty(onStairs)) {
             HeightSettleOnStair(onStairs);
         }
-        else if(!isJumping) {
-            DetectedToJump();
+        else {
+            if(!isJumping) {
+                DetectedToJump();   
+            } else if(!jumpHitColli) {
+                DetectedWhileJump();
+            }
         }
         //Debug.Log("GetCoordinate: "+GetCoordinate());
         base.Update();
@@ -103,9 +107,9 @@ public class Player : Charactor
                 bool jumpDown = false;
 
                 if(hits.Length >= 1) {
-                    Debug.Log("hits.Length > 1");
+                    Debug.Log("DetectedToJump hits.Length > 1");
                     foreach(RaycastHit2D hit in hits) {
-                        Debug.Log("hits collider name: "+hit.collider.name);
+                        Debug.Log("DetectedToJump hits collider name: "+hit.collider.name);
                         var heightObj = hit.collider.GetComponent<HeightOfObject>() as HeightOfObject;
                         if(heightObj != null) {
                             float correspondHeight = heightObj.GetCorrespondHeight();
@@ -113,7 +117,7 @@ public class Player : Charactor
                             altitudeVariation = Math.Abs(currHeight - correspondHeight) ;
                             var angle = Vector2.Angle((Vector2)raycastPoint.position - rayCastEndPos, hit.normal);
                             angle = 90.0f - Mathf.Abs(angle);
-                            Debug.Log("linecast angle:"+angle);
+                            Debug.Log("DetectedToJump linecast angle:"+angle);
 
                             if(currHeight < correspondHeight && altitudeVariation > 0 && altitudeVariation <= 1) {
                                 // jumpUp
@@ -139,6 +143,63 @@ public class Player : Charactor
                 }
             }
         } 
+    }
+
+    private void DetectedWhileJump() {
+        if(isMoving) {
+            if(movement.x == 0 && movement.y > 0) {
+                // Up
+                raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_Up");
+            } else if(movement.x == 0 && movement.y < 0) {
+                // Down 
+                raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_Down");
+            } else if(movement.x < 0 && movement.y == 0) {
+                // Left
+                raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_Left");
+            } else if(movement.x > 0 && movement.y == 0) {
+                // Right
+                raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_Right");
+            } else if(movement.x > 0 && movement.y > 0) {
+                // UpRight
+                raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_UpRight");
+            } else if(movement.x < 0 && movement.y > 0) {
+                // UpLeft
+                raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_UpLeft");
+            } else if(movement.x > 0 && movement.y < 0) {
+                // DownRight
+                raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_DownRight");
+            } else if(movement.x < 0 && movement.y < 0) {
+                // DownLeft
+                raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_DownLeft");
+            }
+
+            Vector2 distance = new Vector2(movement.x, movement.y) * 0.35f;
+            rayCastEndPos = new Vector2(raycastPoint.position.x, raycastPoint.position.y) + distance;
+            //Debug.Log("castEndPos: "+rayCastEndPos);
+            Debug.DrawLine(raycastPoint.position, rayCastEndPos, Color.blue);
+
+            RaycastHit2D[] hits = Physics2D.LinecastAll(raycastPoint.position, rayCastEndPos, 1 << LayerMask.NameToLayer("HeightObj"));
+            if(hits.Length > 0) {
+                var heightManager = GameObject.FindObjectOfType(typeof(HeightManager)) as HeightManager;
+                if(hits.Length >= 1) {
+                    foreach(RaycastHit2D hit in hits) {
+                        Debug.Log("DetectedWhileJump hits collider name: "+hit.collider.name);
+                        var heightObj = hit.collider.GetComponent<HeightOfObject>() as HeightOfObject;
+                        if(heightObj != null) {
+                            float correspondHeight = heightObj.GetCorrespondHeight();
+                            float selfHeight = heightObj.GetSelfHeight();
+
+                            if(currHeight < selfHeight && jumpOffset <= 0) {
+                                Debug.Log("DetectedWhileJump correspondHeight: "+correspondHeight);
+                                Debug.Log("DetectedWhileJump selfHeight: "+selfHeight);
+                                Debug.Log("DetectedWhileJump jumpOffset: "+jumpOffset);
+                                jumpHitColli = true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private void HeightSettleOnStair(string stairName) {

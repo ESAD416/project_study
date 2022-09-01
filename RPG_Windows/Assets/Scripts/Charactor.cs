@@ -65,7 +65,8 @@ public abstract class Charactor : MonoBehaviour
     [SerializeField] protected float maxJumpHeight = 1.5f;
     protected float jumpOffset = 0.3f;
     protected float g = -0.06f;
-    protected bool isJumping;
+    public bool isJumping;
+    public bool jumpHitColli;
     protected Coroutine jumpRoutine;
     protected float jumpClipTime = 0.2f;
     
@@ -139,7 +140,9 @@ public abstract class Charactor : MonoBehaviour
         // Debug.Log("FixedUpdate end player height: "+height);
         // Debug.Log("FixedUpdate end player jumpOffset: "+jumpOffset);
 
-        Move();
+        if(!jumpHitColli) {
+            Move();
+        }
     }
 
     public void Move() {
@@ -238,8 +241,10 @@ public abstract class Charactor : MonoBehaviour
         // }
 
         isJumping = false;
+        jumpHitColli = false;
         jumpOffset = 0.3f;
         lastHeight = currHeight;
+        moveSpeed = 14f;
 
         transform.position = new Vector3(transform.position.x, transform.position.y, currHeight);
         takeOffCoord = Vector3.zero;
@@ -271,6 +276,12 @@ public abstract class Charactor : MonoBehaviour
         Debug.Log("jumpOffset start: "+jumpOffset);
         float goalheight = currHeight + jumpOffset;
         Debug.Log("goalheight: "+goalheight);
+
+        // if(facingDir == takeOffDir) {
+        //     moveSpeed = 5f;
+        // } else {
+        //     moveSpeed = 14f;
+        // }
 
         if(jumpOffset >= 0) {
             lastHeight = currHeight;
