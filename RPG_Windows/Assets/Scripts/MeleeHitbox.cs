@@ -4,8 +4,14 @@ using UnityEngine;
 
 public class MeleeHitbox : MonoBehaviour
 {
-    private void OnTriggerEnter2D(Collider2D other) {
-        // Debug.Log("Hit Target !!");
-        // Debug.Log("Target name" + other.name);
+    public int meleeDamage = 10;
+
+    private void OnTriggerEnter2D(Collider2D otherCollider) {
+        if(otherCollider.gameObject.tag == "Enemies") {
+            Debug.Log("Hit Target !!");
+            Debug.Log("Target name: " + otherCollider.name);
+
+            otherCollider.gameObject.GetComponent<Enemy_Horizontal>().TakeDamage(meleeDamage);
+        }
     }
 }

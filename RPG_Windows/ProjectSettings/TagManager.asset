@@ -8,6 +8,7 @@ TagManager:
   - Stair_Top
   - Stair_Down
   - Level
+  - Enemies
   - Enemy_Turn
   layers:
   - Default

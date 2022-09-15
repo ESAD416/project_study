@@ -36,7 +36,7 @@ public abstract class Charactor : MonoBehaviour
     /// <summary>
     /// 角色移速
     /// </summary>
-    [SerializeField] private float moveSpeed = 5f;
+    [SerializeField] protected float moveSpeed = 5f;
     /// <summary>
     /// 角色移動向量
     /// </summary>

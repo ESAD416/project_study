@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class Enemy_Horizontal : Charactor
 {
+    public int currHealth = 10;
+    private SpriteRenderer m_SprtRenderer;
     public bool moveRight;
 
     protected override void Start() {
+        m_SprtRenderer = GetComponentInChildren<SpriteRenderer>();
         m_Animator = GetComponentInChildren<Animator>();
         m_Rigidbody = GetComponent<Rigidbody2D>();
         m_Coordinate = Vector3.zero;
@@ -21,13 +24,30 @@ public class Enemy_Horizontal : Charactor
 
         if(moveRight) {
             movement = Vector3.right;
+            m_SprtRenderer.flipX = true;
+
         } else {
             movement = Vector3.left;
+            m_SprtRenderer.flipX = false;
         }
+
+        m_Animator.SetFloat("moveSpeed", moveSpeed);
     }
 
     private void FixedUpdate() {
         Move();
+    }
+
+    public void TakeDamage(int damage) {
+        Debug.Log("TakeDamage: "+damage);
+        currHealth -= damage;
+        if(currHealth <= 0) {
+            Die();
+        }
+    }
+
+    public void Die() {
+        Debug.Log("Enemy Die");
     }
 
     void OnTriggerEnter2D(Collider2D trig)
