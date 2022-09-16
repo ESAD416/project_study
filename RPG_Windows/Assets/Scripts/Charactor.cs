@@ -210,35 +210,6 @@ public abstract class Charactor : MonoBehaviour
 
         Debug.Log("StopJump currHeight: "+currHeight);
         Debug.Log("StopJump takeOffPos: "+takeOffCoord);
-        // bool IsTransparent = true;
-        // Collider2D[] heightObjColls = GridUtils.GetColliders("Stage5", currHeight);
-        // Debug.Log("StopJump heightObjColls.Length: "+heightObjColls.Length);
-        // if(heightObjColls != null) {
-        //     foreach(Collider2D coll in heightObjColls) {
-        //         var hObj = coll.GetComponent<HeightOfObject>() as HeightOfObject;
-        //         Debug.Log("StopJump hObj selfHeight: "+hObj.GetSelfHeight());
-        //         if(hObj.GetNoEntry()) {
-        //             var area = coll.GetComponent<Tilemap>();
-        //             Vector3Int gridPos = area.WorldToCell((Vector2)m_Center);
-        //             if(area.HasTile(gridPos)) {
-        //                 Tile resultTile = area.GetTile<Tile>(gridPos);
-        //                 TileSpriteModel model = new TileSpriteModel(resultTile.sprite, area.GetTransformMatrix(gridPos).rotation.eulerAngles.z);
-        //                 IsTransparent = TileUtils.TilePixelIsTransparent(model, (Vector2)m_Center);
-        //                 Debug.Log("StopJump IsTransparent in loop: "+IsTransparent);
-        //                 break;
-        //             }
-        //         }
-        //     }
-        // }
-
-
-        // if(IsTransparent) {
-            //transform.position = new Vector3(transform.position.x, transform.position.y, currHeight);
-        // } else {
-        //     Debug.Log("Set to takeOffPos: "+takeOffCoord);
-            // transform.position = takeOffCoord - new Vector3(0, 1.7f);   // 預設中心點是(x, y+1.7);
-            // currHeight = takeOffCoord.z;
-        // }
 
         isJumping = false;
         jumpHitColli = false;
