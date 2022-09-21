@@ -92,6 +92,30 @@ public abstract class Charactor : MonoBehaviour
     
     #endregion
 
+    #region 受擊參數
+
+    /// <summary>
+    /// 血量
+    /// </summary>
+    public int currHealth = 20;
+    /// <summary>
+    /// 已死亡
+    /// </summary>
+    protected bool isDead = false;
+    /// <summary>
+    /// 正在受擊
+    /// </summary>
+    protected bool isTakingDmg = false;
+    /// <summary>
+    /// 受擊動作為即時觸發，故宣告一協程進行處理獨立的動作
+    /// </summary>
+    protected Coroutine takeDmgRoutine;
+    /// <summary>
+    /// 一次受擊動畫所需的時間
+    /// </summary>
+    protected float takeDmgClipTime;
+
+    #endregion
 
     // Start is called before the first frame update
     protected virtual void Start()
@@ -99,7 +123,6 @@ public abstract class Charactor : MonoBehaviour
         m_Animator = GetComponentInChildren<Animator>();
         m_Rigidbody = GetComponent<Rigidbody2D>();
         m_Coordinate = Vector3.zero;
-        SetAnimateAttackClipTime();
     }
 
     // Update is called once per frame
@@ -145,80 +168,10 @@ public abstract class Charactor : MonoBehaviour
         }
     }
 
+    #region 位移控制
     public void Move() {
         m_Rigidbody.velocity = movement.normalized * moveSpeed;
         // transform.Translate(movement*moveSpeed*Time.deltaTime);
-    }
-
-    public void HandleAnimatorLayers() {
-        if(isAttacking) {
-            ActivateAnimatorLayer("AttackLayer");
-        }
-        else if(isMoving) {
-            ActivateAnimatorLayer("MoveLayer");
-        }
-        else {
-            ActivateAnimatorLayer("IdleLayer");
-        }
-    }
-
-    public void ActivateAnimatorLayer(string layerName) {
-        for(int i = 0 ; i < m_Animator.layerCount; i++) {
-            m_Animator.SetLayerWeight(i, 0);
-        }
-
-        m_Animator.SetLayerWeight(m_Animator.GetLayerIndex(layerName), 1);
-    }
-
-    public void SetAnimateMovementPara(Vector3 movement, Vector2 facingDir) {
-        // Debug.Log("movement.x: "+movement.x + "movement.y: "+movement.y);
-        // Debug.Log("facingDir.x: "+facingDir.x + "facingDir.y: "+facingDir.y);
-        m_Animator.SetFloat("movementX", movement.x);
-        m_Animator.SetFloat("movementY", movement.y);
-        m_Animator.SetFloat("facingDirX", facingDir.x);
-        m_Animator.SetFloat("facingDirY", facingDir.y);
-    }
-
-    private void SetAnimateAttackClipTime() {
-        RuntimeAnimatorController ac = m_Animator.runtimeAnimatorController;
-        for(int i = 0; i < ac.animationClips.Length; i++) {
-            if( ac.animationClips[i].name == "Attack_Down")        //If it has the same name as your clip
-            {
-                attackClipTime = ac.animationClips[i].length;
-                break;
-            }
-        }
-    }
-
-    public void StopAttack() {
-        if(attackRoutine != null) {
-            StopCoroutine(attackRoutine);
-        }
-
-        isAttacking = false;
-        m_Animator.SetBool("attack", isAttacking);
-
-        movement = movementAfterAttack;
-        movementAfterAttack = Vector3.zero;
-        //Debug.Log("attack end");
-    }
-
-    public void StopJump() {
-        if(jumpRoutine != null) {
-            StopCoroutine(jumpRoutine);
-        }
-
-        Debug.Log("StopJump currHeight: "+currHeight);
-        Debug.Log("StopJump takeOffPos: "+takeOffCoord);
-
-        isJumping = false;
-        jumpHitColli = false;
-        jumpOffset = 0.3f;
-        lastHeight = currHeight;
-        moveSpeed = 14f;
-
-        transform.position = new Vector3(transform.position.x, transform.position.y, currHeight);
-        takeOffCoord = Vector3.zero;
     }
 
     public void UpdateCoordinate() {
@@ -241,6 +194,59 @@ public abstract class Charactor : MonoBehaviour
         return result;
     }
 
+    #endregion
+
+    #region 動畫控制
+    public void HandleAnimatorLayers() {
+        if(isAttacking) {
+            AnimeUtils.ActivateAnimatorLayer(m_Animator, "AttackLayer");
+        }
+        else if(isMoving) {
+            AnimeUtils.ActivateAnimatorLayer(m_Animator, "MoveLayer");
+        }
+        else {
+            AnimeUtils.ActivateAnimatorLayer(m_Animator, "IdleLayer");
+        }
+    }
+
+    public void SetAnimateMovementPara(Vector3 movement, Vector2 facingDir) {
+        // Debug.Log("movement.x: "+movement.x + "movement.y: "+movement.y);
+        // Debug.Log("facingDir.x: "+facingDir.x + "facingDir.y: "+facingDir.y);
+        Dictionary<string, float> dict = new Dictionary<string, float>();
+        dict.Add("movementX", movement.x);
+        dict.Add("movementY", movement.y);
+        dict.Add("facingDirX", facingDir.x);
+        dict.Add("facingDirY", facingDir.y);
+
+        AnimeUtils.SetAnimateFloatPara(m_Animator, dict);
+    }
+
+    #endregion
+
+    #region 攻擊控制
+    protected IEnumerator Attack() {
+        //Debug.Log("attack start");
+        isAttacking = true;
+        m_Animator.SetBool("attack", isAttacking);
+        yield return new WaitForSeconds(attackClipTime);  // hardcasted casted time for debugged
+        FinishAttack();
+    }
+
+    public void FinishAttack() {
+        if(attackRoutine != null) {
+            StopCoroutine(attackRoutine);
+        }
+
+        isAttacking = false;
+        m_Animator.SetBool("attack", isAttacking);
+
+        movement = movementAfterAttack;
+        movementAfterAttack = Vector3.zero;
+        //Debug.Log("attack end");
+    }
+    #endregion
+    
+    #region 跳躍控制
     private void HandleJumpingProcess() {
         Debug.Log("currHeight start: "+currHeight);
         Debug.Log("lastHeight start: "+lastHeight);
@@ -278,7 +284,7 @@ public abstract class Charactor : MonoBehaviour
                         Debug.Log("NotGroundable false");
                         lastHeight = currHeight;
                         currHeight = groundCheckHeight;
-                        StopJump();
+                        FinishJump();
                     }                    
                 } else {
                     lastHeight = currHeight;
@@ -297,6 +303,70 @@ public abstract class Charactor : MonoBehaviour
         Debug.Log("jumpOffset end: "+jumpOffset);
     }
 
+    protected IEnumerator Jump() {
+        isJumping = true;
+        yield return new WaitForSeconds(jumpClipTime);  // hardcasted casted time for debugged
+        FinishJump();
+    }
+
+    public void FinishJump() {
+        if(jumpRoutine != null) {
+            StopCoroutine(jumpRoutine);
+        }
+
+        Debug.Log("StopJump currHeight: "+currHeight);
+        Debug.Log("StopJump takeOffPos: "+takeOffCoord);
+
+        isJumping = false;
+        jumpHitColli = false;
+        jumpOffset = 0.3f;
+        lastHeight = currHeight;
+        moveSpeed = 14f;
+
+        transform.position = new Vector3(transform.position.x, transform.position.y, currHeight);
+        takeOffCoord = Vector3.zero;
+    }
+    #endregion
+
+    #region 受擊控制
+    protected IEnumerator TakeDmg() {
+        moveSpeed = 0f;
+        isTakingDmg = true;
+        yield return new WaitForSeconds(takeDmgClipTime);  // hardcasted casted time for debugged
+        FinishTakeDmg();
+    }
+
+    public void FinishTakeDmg() {
+        if(takeDmgRoutine != null) {
+            StopCoroutine(takeDmgRoutine);
+        }
+
+        isTakingDmg = false;
+        moveSpeed = 5f;
+        //Debug.Log("TakeDmg end");
+    }
+
+    public void TakeDmgProcess(int damage) {
+        Debug.Log("TakeDamage: "+damage);
+        currHealth -= damage;
+        m_Animator.SetTrigger("hurt");
+
+        takeDmgRoutine = StartCoroutine(TakeDmg());
+
+        if(currHealth <= 0) {
+            Die();
+        }
+    }
+
+    public void Die() {
+        Debug.Log("Enemy Die");
+        isDead = true;
+        m_Animator.SetBool("isDead", isDead); 
+        GetComponent<Collider2D>().enabled = false;
+    }
+    #endregion
+
+    #region 碰撞控制
     private void FocusCollidersWithHeight() {
         Collider2D[] jumpColls = GridUtils.GetColliders("Stage5");
         foreach(var collider2D in jumpColls) {
@@ -331,4 +401,5 @@ public abstract class Charactor : MonoBehaviour
             }
         }
     }
+    #endregion
 }

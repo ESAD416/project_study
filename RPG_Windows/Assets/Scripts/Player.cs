@@ -23,6 +23,7 @@ public class Player : Charactor
     protected override void Start() {
         rayCastEndPos = new Vector2(raycastPoint.position.x, raycastPoint.position.y) + new Vector2(0, -1) * 0.35f;   // 預設射線終點
         base.Start();
+        attackClipTime = AnimeUtils.GetAnimateClipTime(m_Animator, "Attack_Down");
     }
 
     protected override void Update()
@@ -219,20 +220,6 @@ public class Player : Charactor
             transform.position = new Vector3(transform.position.x, transform.position.y, currHeight);
         }
 
-    }
-
-    private IEnumerator Attack() {
-        //Debug.Log("attack start");
-        isAttacking = true;
-        m_Animator.SetBool("attack", isAttacking);
-        yield return new WaitForSeconds(attackClipTime);  // hardcasted casted time for debugged
-        StopAttack();
-    }
-
-    private IEnumerator Jump() {
-        isJumping = true;
-        yield return new WaitForSeconds(jumpClipTime);  // hardcasted casted time for debugged
-        StopJump();
     }
 
 }
