@@ -8,16 +8,15 @@ using UnityEngine.InputSystem;
 
 public class Player : Charactor
 {
-    [Header("Input Settings")]
-    public PlayerInput playerInput;
-
+    [Header("Player Parameters")]
     [SerializeField] private Transform raycastPoint;
     public Vector2 rayCastEndPos;
-
-
     public string onStairs;
     public string stair_start;
     public string stair_end ;
+
+    [Header("Input Settings")]
+    public PlayerInput playerInput;
 
     
     protected override void Start() {

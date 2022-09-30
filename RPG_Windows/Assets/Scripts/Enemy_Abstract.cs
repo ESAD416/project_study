@@ -4,7 +4,6 @@ using UnityEngine;
 
 public abstract class Enemy_Abstract : Charactor
 {
-
     // Start is called before the first frame update
     protected override void Start() {
         base.Start();
@@ -14,10 +13,10 @@ public abstract class Enemy_Abstract : Charactor
     // Update is called once per frame
     protected override void Update() {
         //Debug.Log("moveSpeed: "+moveSpeed);
-        var center = transform.Find("AttrinkCenter").GetComponent<Transform>();
+        var center = transform.Find(centerObjName).GetComponent<Transform>();
         m_Center = new Vector3(center.position.x, center.position.y);
 
-        var buttom = transform.Find("AttrinkButtom").GetComponent<Transform>();
+        var buttom = transform.Find(buttomObjName).GetComponent<Transform>();
         m_Buttom = new Vector3(buttom.position.x, buttom.position.y);
 
         UpdateCoordinate();

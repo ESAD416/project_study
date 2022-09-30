@@ -7,8 +7,8 @@ using UnityEngine.Tilemaps;
 
 public abstract class Charactor : MonoBehaviour
 {
+    
     #region 角色物件
-
     /// <summary>
     /// 角色動畫控制器
     /// </summary>
@@ -20,6 +20,7 @@ public abstract class Charactor : MonoBehaviour
     /// <summary>
     /// 角色中心
     /// </summary>
+    [Header("Basic Objects")]
     public Vector3 m_Center;
     /// <summary>
     /// 角色底部
@@ -29,10 +30,13 @@ public abstract class Charactor : MonoBehaviour
     /// 角色橫縱高座標
     /// </summary>
     public Vector3 m_Coordinate;
+    [SerializeField] protected string centerObjName;
+    [SerializeField] protected string buttomObjName;
 
     #endregion
 
     #region 移動參數
+    [Header("Movement Parameters")]
     /// <summary>
     /// 角色移速
     /// </summary>
@@ -56,23 +60,24 @@ public abstract class Charactor : MonoBehaviour
     #endregion
 
     #region 跳躍參數
-
+    [Header("Jumping Parameters")]
+    public float currHeight = 0f;
     protected Vector3 takeOffCoord = Vector3.zero;
     protected Vector2 takeOffDir = Vector2.zero;
     protected Rigidbody2D shawdowBody;
-    public float currHeight = 0f;
-    private float lastHeight = 0f;
-    [SerializeField] protected float maxJumpHeight = 1.5f;
+    protected float maxJumpHeight = 1.5f;
     protected float jumpOffset = 0.3f;
     protected float g = -0.06f;
-    public bool isJumping;
-    public bool jumpHitColli;
+    protected bool isJumping;
+    protected bool jumpHitColli;
     protected Coroutine jumpRoutine;
     protected float jumpClipTime = 0.2f;
+    private float lastHeight = 0f;
     
     #endregion
 
     #region 攻擊參數
+    [Header("Attack Parameters")]
     /// <summary>
     /// 角色攻擊動作為即時觸發，故宣告一協程進行處理獨立的動作
     /// </summary>
@@ -93,7 +98,7 @@ public abstract class Charactor : MonoBehaviour
     #endregion
 
     #region 受擊參數
-
+    [Header("DamageTaking Parameters")]
     /// <summary>
     /// 血量
     /// </summary>
@@ -117,6 +122,8 @@ public abstract class Charactor : MonoBehaviour
 
     #endregion
 
+    
+
     // Start is called before the first frame update
     protected virtual void Start()
     {
@@ -128,10 +135,10 @@ public abstract class Charactor : MonoBehaviour
     // Update is called once per frame
     protected virtual void Update()
     {
-        var center = transform.Find("PlayerCenter").GetComponent<Transform>();
+        var center = transform.Find(centerObjName).GetComponent<Transform>();
         m_Center = new Vector3(center.position.x, center.position.y);
 
-        var buttom = transform.Find("PlayerButtom").GetComponent<Transform>();
+        var buttom = transform.Find(buttomObjName).GetComponent<Transform>();
         m_Buttom = new Vector3(buttom.position.x, buttom.position.y);
 
         UpdateCoordinate();
