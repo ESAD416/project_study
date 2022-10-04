@@ -15,12 +15,10 @@ public class Enemy_Horizontal : Enemy_Abstract
     protected override void Update() {
         if(moveRight) {
             movement = Vector3.right;
-            m_SprtRenderer.flipX = true;
-
         } else {
             movement = Vector3.left;
-            m_SprtRenderer.flipX = false;
         }
+        m_SprtRenderer.flipX = moveRight;
         base.Update();
     }
 

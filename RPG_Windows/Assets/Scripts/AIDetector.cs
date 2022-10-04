@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class AIDetector : MonoBehaviour
 {
@@ -8,18 +9,9 @@ public class AIDetector : MonoBehaviour
     [Range(.1f, 1)]
     public float detectRadius;
     [SerializeField] private LayerMask targetLayer;
-    [SerializeField] private LayerMask visibilityLayer;
     public bool targetDetected;
-    public bool targetVisable;
-    
-    private Transform target = null;
-    public Transform Target {
-        get => target;
-        set {
-            target = value;
-            targetVisable = false;
-        }
-    }
+
+    public UnityEvent OnTargetDected;
 
     [Header("Gizmo Parameters")]
     public Color gizmoColor = Color.blue;
@@ -30,22 +22,16 @@ public class AIDetector : MonoBehaviour
     {
         var collider = Physics2D.OverlapCircle(transform.position, detectRadius, targetLayer);
         targetDetected = collider != null;
-        if(targetDetected)
-            Debug.Log("Player Detected");
+        if(targetDetected) {
+            Debug.Log("target Detected");
+            OnTargetDected?.Invoke();
+        }
     }
     
     private void OnDrawGizmos() {
         if(showGizmos) {
             Gizmos.color = gizmoColor;
             Gizmos.DrawWireSphere(transform.position, detectRadius);
-        }
-    }
-
-    private void DectectTarget() {
-        if(Target == null) {
-
-        } else if(Target != null) {
-            
         }
     }
 }
