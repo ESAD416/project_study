@@ -33,7 +33,8 @@ public class AIChaser : MonoBehaviour
 
     private void Update() {
         if(TargetModel != null) {
-            
+            Debug.Log("TargetModel != null)");
+            CheckTargetVisible();
         }
     }
 
@@ -56,7 +57,14 @@ public class AIChaser : MonoBehaviour
         Collider2D col = Physics2D.OverlapCircle(transform.position, chaseRadius, targetLayer);
         if(col != null) {
             Debug.Log("Target transform: "+col.transform);
-            TargetModel = col.transform;
+            var charactor = col.GetComponent<Charactor>() as Charactor;
+            if(charactor != null) {
+                Debug.Log("Target m_Center: "+charactor.m_Center);
+                TargetModel = col.transform.Find(charactor.centerObjName).GetComponent<Transform>();
+            }
+            else {
+                TargetModel = col.transform;
+            }
         }
     }
 
@@ -68,8 +76,13 @@ public class AIChaser : MonoBehaviour
 
     private bool CheckTargetVisible() {
         var result = Physics2D.Raycast(transform.position, TargetModel.position - transform.position, chaseRadius, visibilityLayer);
+        Debug.DrawRay(transform.position, TargetModel.position - transform.position, gizmoColor);
         if(result.collider != null) {
-            return (targetLayer & (1 << result.collider.gameObject.layer)) != 0;
+            Debug.Log("CheckTargetVisible gameObject: "+result.collider.gameObject);
+            Debug.Log("CheckTargetVisible layer: "+result.collider.gameObject.layer);
+            Debug.Log("targetLayer: "+targetLayer);
+            Debug.Log("(1 << result.collider.gameObject.layer): "+(1 << result.collider.gameObject.layer));
+            //return (targetLayer & (1 << result.collider.gameObject.layer)) != 0;
         }
         return false;
     }

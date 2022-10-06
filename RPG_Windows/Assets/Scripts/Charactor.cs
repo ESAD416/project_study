@@ -30,8 +30,8 @@ public abstract class Charactor : MonoBehaviour
     /// 角色橫縱高座標
     /// </summary>
     public Vector3 m_Coordinate;
-    [SerializeField] protected string centerObjName;
-    [SerializeField] protected string buttomObjName;
+    public string centerObjName;
+    public string buttomObjName;
 
     #endregion
 
