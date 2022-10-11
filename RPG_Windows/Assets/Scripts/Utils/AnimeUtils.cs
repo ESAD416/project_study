@@ -4,6 +4,17 @@ using UnityEngine;
 
 internal static class AnimeUtils
 {
+    #region 常數
+    public const string PATH_UP = "PATH_UP";
+    public const string PATH_DOWN = "PATH_DOWN";
+    public const string PATH_LEFT = "PATH_LEFT";
+    public const string PATH_RIGHT = "PATH_RIGHT";
+    public const string PATH_UP_LEFT = "PATH_UP_LEFT";
+    public const string PATH_UP_RIGHT = "PATH_UP_RIGHT";
+    public const string PATH_DOWN_LEFT = "PATH_DOWN_LEFT";
+    public const string PATH_DOWN_RIGHT = "PATH_DOWN_RIGHT";
+    #endregion
+    
     public static float GetAnimateClipTime(Animator animator, string animeClipName) {
         float attackClipTime = 0f;
         RuntimeAnimatorController ac = animator.runtimeAnimatorController;
@@ -35,4 +46,44 @@ internal static class AnimeUtils
             }
         }
     }
+
+    public static string DefineMovementPath(Vector3 movement) {
+        Vector3 nomalizedMovement = movement.normalized;
+        if(movement.x == 0 && movement.y > 0) {
+            // Up
+            return PATH_UP;
+        } else if(nomalizedMovement.x == 0 && nomalizedMovement.y < 0) {
+            // Down 
+            return PATH_DOWN;
+        } else if(nomalizedMovement.x < 0 && nomalizedMovement.y == 0) {
+            // Left
+            return PATH_LEFT;
+        } else if(nomalizedMovement.x > 0 && nomalizedMovement.y == 0) {
+            // Right
+            return PATH_RIGHT;
+        } else if(nomalizedMovement.x > 0 && nomalizedMovement.y > 0) {
+            // UpRight
+            return PATH_UP_RIGHT;
+        } else if(nomalizedMovement.x < 0 && nomalizedMovement.y > 0) {
+            // UpLeft
+            return PATH_UP_LEFT;
+        } else if(nomalizedMovement.x > 0 && nomalizedMovement.y < 0) {
+            // DownRight
+            return PATH_DOWN_RIGHT;
+        } else if(nomalizedMovement.x < 0 && nomalizedMovement.y < 0) {
+            // DownLeft
+            return PATH_DOWN_LEFT;
+        }
+
+        return null;
+    }
+
+    public static bool isRightForHorizontalAnimation(Vector3 movement) {
+        string path = DefineMovementPath(movement);
+        if(path.Equals(PATH_RIGHT) || path.Equals(PATH_UP_RIGHT) || path.Equals(PATH_DOWN_RIGHT)) {
+            return true;
+        }
+        return false;
+    }
+
 }

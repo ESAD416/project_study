@@ -7,9 +7,9 @@ public class AIChaser : MonoBehaviour
     [Header("Chaser Parameters")]
     [Range(.1f, 5)]
     public float chaseRadius;
+    [SerializeField] private Enemy_Abstract EnemyAI;
     [SerializeField] private LayerMask targetLayer;
     [SerializeField] private LayerMask visibilityLayer;
-    public bool targetDetected;
     public bool targetVisable;
     private float detectionCheckDelay = 0.1f;
 
@@ -27,14 +27,26 @@ public class AIChaser : MonoBehaviour
     public bool showGizmos = true;
 
     private void Start() {
-        Debug.Log("AIChaser start");
         StartCoroutine(Detection());
     }
 
     private void Update() {
         if(TargetModel != null) {
-            Debug.Log("TargetModel != null)");
-            CheckTargetVisible();
+            //Debug.Log("TargetModel != null)");
+            EnemyAI.isPatroling = false;
+            EnemyAI.isChasing = true;
+            targetVisable = CheckTargetVisible();
+            
+            if(targetVisable) {
+                EnemyAI.SetMovement(TargetModel.position - transform.position);
+            }
+            else {
+                EnemyAI.SetDefaultMovement();
+            }
+        } else {
+            EnemyAI.isPatroling = true;
+            EnemyAI.isChasing = false;
+            EnemyAI.SetDefaultMovement();
         }
     }
 
@@ -81,8 +93,13 @@ public class AIChaser : MonoBehaviour
             Debug.Log("CheckTargetVisible gameObject: "+result.collider.gameObject);
             Debug.Log("CheckTargetVisible layer: "+result.collider.gameObject.layer);
             Debug.Log("targetLayer: "+targetLayer);
-            Debug.Log("(1 << result.collider.gameObject.layer): "+(1 << result.collider.gameObject.layer));
-            //return (targetLayer & (1 << result.collider.gameObject.layer)) != 0;
+
+            var binaryTgtLayer = (1 << result.collider.gameObject.layer);
+            Debug.Log("binaryTgtLayer: "+binaryTgtLayer);
+            Debug.Log("(targetLayer & (1 << result.collider.gameObject.layer)): "+(targetLayer & (1 << result.collider.gameObject.layer)));
+
+            // targetLayer AND binaryTgtLayer will be zero if there are different
+            return (targetLayer & binaryTgtLayer) != 0;
         }
         return false;
     }

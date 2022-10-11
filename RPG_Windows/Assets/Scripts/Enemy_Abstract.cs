@@ -4,10 +4,16 @@ using UnityEngine;
 
 public abstract class Enemy_Abstract : Charactor
 {
+    [SerializeField]  private Vector3 defaultMovement = Vector3.left;
+    public bool isPatroling = false;
+    public bool isChasing = false;
+
+
     // Start is called before the first frame update
     protected override void Start() {
         base.Start();
         takeDmgClipTime = AnimeUtils.GetAnimateClipTime(m_Animator, "Hurt");
+        isPatroling = true;
     }
 
     // Update is called once per frame
@@ -31,4 +37,7 @@ public abstract class Enemy_Abstract : Charactor
         Move();
     }
 
+    public void SetDefaultMovement() {
+        movement = defaultMovement;
+    }
 }

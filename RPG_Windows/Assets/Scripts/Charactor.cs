@@ -409,4 +409,15 @@ public abstract class Charactor : MonoBehaviour
         }
     }
     #endregion
+
+    #region Getter、Setter
+    public Vector3 GetMovement() {
+        return movement;
+    }
+
+    public void SetMovement(Vector3 vector3) {
+        movement = vector3;
+    }
+    
+    #endregion
 }

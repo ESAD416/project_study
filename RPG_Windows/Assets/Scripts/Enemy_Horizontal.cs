@@ -13,11 +13,16 @@ public class Enemy_Horizontal : Enemy_Abstract
     }
 
     protected override void Update() {
-        if(moveRight) {
-            movement = Vector3.right;
-        } else {
-            movement = Vector3.left;
+        if(isPatroling) {
+            if(moveRight) {
+                movement = Vector3.right;
+            } else {
+                movement = Vector3.left;
+            }
+        } else if(isChasing) {
+            moveRight = AnimeUtils.isRightForHorizontalAnimation(movement);
         }
+        
         m_SprtRenderer.flipX = moveRight;
         base.Update();
     }
@@ -35,4 +40,6 @@ public class Enemy_Horizontal : Enemy_Abstract
 			}	
 		}
 	}
+
+    
 }
