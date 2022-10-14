@@ -12,6 +12,7 @@ public class AIChaser : MonoBehaviour
     [SerializeField] private LayerMask visibilityLayer;
     public bool targetVisable;
     private float detectionCheckDelay = 0.1f;
+    public float chaseModeDelay = 1.0f;
 
     private Transform target = null;
     public Transform TargetModel {
@@ -27,26 +28,25 @@ public class AIChaser : MonoBehaviour
     public bool showGizmos = true;
 
     private void Start() {
+        EnemyAI.isPatroling = false;
+        EnemyAI.isChasing = true;
         StartCoroutine(Detection());
     }
 
     private void Update() {
         if(TargetModel != null) {
             //Debug.Log("TargetModel != null)");
-            EnemyAI.isPatroling = false;
-            EnemyAI.isChasing = true;
             targetVisable = CheckTargetVisible();
             
             if(targetVisable) {
                 EnemyAI.SetMovement(TargetModel.position - transform.position);
             }
             else {
-                EnemyAI.SetDefaultMovement();
+                StartCoroutine(ChaseModeEndingProcess());
             }
-        } else {
-            EnemyAI.isPatroling = true;
-            EnemyAI.isChasing = false;
-            EnemyAI.SetDefaultMovement();
+        }
+        else {
+            StartCoroutine(ChaseModeEndingProcess());
         }
     }
 
@@ -55,6 +55,10 @@ public class AIChaser : MonoBehaviour
             Gizmos.color = gizmoColor;
             Gizmos.DrawWireSphere(transform.position, chaseRadius);
         }
+    }
+
+    private void OnEnable() {
+        Start();
     }
 
     private void DectectTarget() {
@@ -90,13 +94,12 @@ public class AIChaser : MonoBehaviour
         var result = Physics2D.Raycast(transform.position, TargetModel.position - transform.position, chaseRadius, visibilityLayer);
         Debug.DrawRay(transform.position, TargetModel.position - transform.position, gizmoColor);
         if(result.collider != null) {
-            Debug.Log("CheckTargetVisible gameObject: "+result.collider.gameObject);
-            Debug.Log("CheckTargetVisible layer: "+result.collider.gameObject.layer);
-            Debug.Log("targetLayer: "+targetLayer);
+            // Debug.Log("CheckTargetVisible gameObject: "+result.collider.gameObject);
+            // Debug.Log("CheckTargetVisible layer: "+result.collider.gameObject.layer);
+            // Debug.Log("targetLayer: "+targetLayer);
 
             var binaryTgtLayer = (1 << result.collider.gameObject.layer);
-            Debug.Log("binaryTgtLayer: "+binaryTgtLayer);
-            Debug.Log("(targetLayer & (1 << result.collider.gameObject.layer)): "+(targetLayer & (1 << result.collider.gameObject.layer)));
+            // Debug.Log("binaryTgtLayer: "+binaryTgtLayer);
 
             // targetLayer AND binaryTgtLayer will be zero if there are different
             return (targetLayer & binaryTgtLayer) != 0;
@@ -109,4 +112,23 @@ public class AIChaser : MonoBehaviour
         DectectTarget();
         StartCoroutine(Detection());
     }
+
+    private IEnumerator ChaseModeEndingProcess() {
+        Debug.Log("ChaseModeEndingProcess start");
+        // if(TargetModel != null && !targetVisable) {
+        //     EnemyAI.SetMovement(TargetModel.position - transform.position);
+        // }
+
+        yield return new WaitForSeconds(chaseModeDelay);  // hardcasted casted time for debugged
+        if(TargetModel == null) {
+            EnemyAI.isPatroling = true;
+            EnemyAI.isChasing = false;
+            targetVisable = false;
+            EnemyAI.SetDefaultMovement();
+            transform.gameObject.SetActive(false);
+        }
+        Debug.Log("ChaseModeEndingProcess end");
+    }
+
+    
 }

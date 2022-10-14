@@ -8,7 +8,6 @@ public abstract class Enemy_Abstract : Charactor
     public bool isPatroling = false;
     public bool isChasing = false;
 
-
     // Start is called before the first frame update
     protected override void Start() {
         base.Start();
