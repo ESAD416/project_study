@@ -34,20 +34,25 @@ public class AIChaser : MonoBehaviour
     }
 
     private void Update() {
-        if(TargetModel != null) {
-            //Debug.Log("TargetModel != null)");
-            targetVisable = CheckTargetVisible();
-            
-            if(targetVisable) {
-                EnemyAI.SetMovement(TargetModel.position - transform.position);
+        if(EnemyAI.isDead) {
+            transform.gameObject.SetActive(false);
+        } else {
+            if(TargetModel != null) {
+                //Debug.Log("TargetModel != null)");
+                targetVisable = CheckTargetVisible();
+                
+                if(targetVisable) {
+                    EnemyAI.SetMovement(TargetModel.position - transform.position);
+                }
+                else {
+                    StartCoroutine(ChaseModeEndingProcess());
+                }
             }
             else {
                 StartCoroutine(ChaseModeEndingProcess());
             }
         }
-        else {
-            StartCoroutine(ChaseModeEndingProcess());
-        }
+        
     }
 
     private void OnDrawGizmos() {

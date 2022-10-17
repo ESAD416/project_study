@@ -11,7 +11,7 @@ public class MeleeHitbox : MonoBehaviour
             Debug.Log("Hit Target !!");
             Debug.Log("Target name: " + otherCollider.name);
 
-            otherCollider.gameObject.GetComponent<Enemy_Horizontal>().TakeDmgProcess(meleeDamage);
+            otherCollider.gameObject.GetComponent<Enemy_Horizontal>().TakeHitProcess(meleeDamage, otherCollider.gameObject.transform);
         }
     }
 }

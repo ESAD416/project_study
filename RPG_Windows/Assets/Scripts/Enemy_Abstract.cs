@@ -11,7 +11,7 @@ public abstract class Enemy_Abstract : Charactor
     // Start is called before the first frame update
     protected override void Start() {
         base.Start();
-        takeDmgClipTime = AnimeUtils.GetAnimateClipTime(m_Animator, "Hurt");
+        hitRecoveryTime = AnimeUtils.GetAnimateClipTime(m_Animator, "Hurt");
         isPatroling = true;
     }
 

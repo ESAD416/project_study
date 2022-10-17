@@ -97,8 +97,8 @@ public abstract class Charactor : MonoBehaviour
     
     #endregion
 
-    #region 受擊參數
-    [Header("DamageTaking Parameters")]
+    #region 血量系統參數
+
     /// <summary>
     /// 血量
     /// </summary>
@@ -106,19 +106,39 @@ public abstract class Charactor : MonoBehaviour
     /// <summary>
     /// 已死亡
     /// </summary>
-    protected bool isDead = false;
+    public bool isDead = false;
+
+    #endregion
+
+    #region 受擊參數
+    [Header("TakingHit Parameters")]
     /// <summary>
     /// 正在受擊
     /// </summary>
-    protected bool isTakingDmg = false;
+    protected bool isTakingHit = false;
     /// <summary>
     /// 受擊動作為即時觸發，故宣告一協程進行處理獨立的動作
     /// </summary>
-    protected Coroutine takeDmgRoutine;
+    protected Coroutine takeHitRoutine;
     /// <summary>
     /// 一次受擊動畫所需的時間
     /// </summary>
-    protected float takeDmgClipTime;
+    protected float hitRecoveryTime;
+
+    public int knockOffThrust ;
+
+    public bool hyperArmor;
+
+    #endregion
+
+    #region 眩暈參數
+
+    protected bool isStunned = false;
+
+    protected int armorToStunned = -1;
+
+    protected float stunnedClipTime;
+
 
     #endregion
 
@@ -336,29 +356,40 @@ public abstract class Charactor : MonoBehaviour
     #endregion
 
     #region 受擊控制
-    protected IEnumerator TakeDmg() {
-        moveSpeed = 0f;
-        isTakingDmg = true;
-        yield return new WaitForSeconds(takeDmgClipTime);  // hardcasted casted time for debugged
-        FinishTakeDmg();
+    protected IEnumerator TakeHit() {
+        isTakingHit = true;
+        
+        if(!hyperArmor)
+            moveSpeed = 0f;
+        
+        yield return new WaitForSeconds(hitRecoveryTime);  // hardcasted casted time for debugged
+        FinishTakeHit();
     }
 
-    public void FinishTakeDmg() {
-        if(takeDmgRoutine != null) {
-            StopCoroutine(takeDmgRoutine);
+    public void FinishTakeHit() {
+        if(takeHitRoutine != null) {
+            StopCoroutine(takeHitRoutine);
         }
 
-        isTakingDmg = false;
-        moveSpeed = 5f;
+        isTakingHit = false;
+        moveSpeed = 3f;
         //Debug.Log("TakeDmg end");
     }
 
-    public void TakeDmgProcess(int damage) {
+    public void TakeHitProcess(int damage, Transform attacker) {
         Debug.Log("TakeDamage: "+damage);
         currHealth -= damage;
         m_Animator.SetTrigger("hurt");
 
-        takeDmgRoutine = StartCoroutine(TakeDmg());
+        if(!hyperArmor) {
+            Debug.Log("TakeHitProcess AddForce");
+            Vector3 oppositeDir = attacker.transform.position - transform.position;
+            Vector3 oppositeForce = oppositeDir.normalized * knockOffThrust;
+            
+            m_Rigidbody.AddForce(oppositeDir, ForceMode2D.Impulse);
+        }
+
+        takeHitRoutine = StartCoroutine(TakeHit());
 
         if(currHealth <= 0) {
             Die();

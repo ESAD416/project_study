@@ -9,6 +9,10 @@ public class Test : MonoBehaviour
 
     public Tile m_Tile;
 
+    public Rigidbody2D player;
+
+    public Rigidbody2D enemy;
+
     public Color[] pixels;
 
     [ContextMenu("Get Colors")]
@@ -100,4 +104,13 @@ public class Test : MonoBehaviour
 
     }
 
+    
+    [ContextMenu("Test Add Force")]
+    public void AddRigidbodyForce() {
+        Debug.Log("AddRigidbodyForce");
+        Vector3 oppositeDir = player.transform.position - transform.position;
+        Vector3 oppositeForce = oppositeDir.normalized * 5;
+        
+        enemy.AddForce(oppositeDir, ForceMode2D.Impulse);
+    }
 }

@@ -17,19 +17,25 @@ public class Enemy_Horizontal : Enemy_Abstract
     }
 
     protected override void Update() {
-        if(isPatroling) {
-            if(moveRight) {
-                movement = Vector3.right;
-            } else {
-                movement = Vector3.left;
+        if(!isDead) {
+            if(isPatroling) {
+                if(moveRight) {
+                    movement = Vector3.right;
+                } else {
+                    movement = Vector3.left;
+                }
+            } else if(isChasing) {
+                moveRight = AnimeUtils.isRightForHorizontalAnimation(movement);
             }
-        } else if(isChasing) {
-            moveRight = AnimeUtils.isRightForHorizontalAnimation(movement);
+            
+            m_SprtRenderer.flipX = moveRight;
+            leftDetector.gameObject.SetActive(!moveRight);
+            rightDetector.gameObject.SetActive(moveRight);
+        } else {
+            leftDetector.gameObject.SetActive(false);
+            rightDetector.gameObject.SetActive(false);
         }
-        
-        m_SprtRenderer.flipX = moveRight;
-        leftDetector.gameObject.SetActive(!moveRight);
-        rightDetector.gameObject.SetActive(moveRight);
+
         base.Update();
         // Debug.Log("Enemy_Horizontal movement" + movement);
         // Debug.Log("Enemy_Horizontal moveRight" + moveRight);
