@@ -57,6 +57,12 @@ public abstract class Charactor : MonoBehaviour
             return movement.x != 0 || movement.y != 0;
         }
     }
+
+    public bool cantMove {
+        get {
+            return jumpHitColli || (isTakingHit && !hyperArmor);
+        }
+    }
     #endregion
 
     #region 跳躍參數
@@ -115,7 +121,7 @@ public abstract class Charactor : MonoBehaviour
     /// <summary>
     /// 正在受擊
     /// </summary>
-    protected bool isTakingHit = false;
+    public bool isTakingHit = false;
     /// <summary>
     /// 受擊動作為即時觸發，故宣告一協程進行處理獨立的動作
     /// </summary>
@@ -138,7 +144,6 @@ public abstract class Charactor : MonoBehaviour
     protected int armorToStunned = -1;
 
     protected float stunnedClipTime;
-
 
     #endregion
 
@@ -190,7 +195,7 @@ public abstract class Charactor : MonoBehaviour
         // Debug.Log("FixedUpdate end player height: "+height);
         // Debug.Log("FixedUpdate end player jumpOffset: "+jumpOffset);
 
-        if(!jumpHitColli) {
+        if(!cantMove) {
             Move();
         }
     }
@@ -198,6 +203,7 @@ public abstract class Charactor : MonoBehaviour
     #region 位移控制
     public void Move() {
         m_Rigidbody.velocity = movement.normalized * moveSpeed;
+        //m_Rigidbody.AddForce(movement.normalized* moveSpeed * Time.fixedDeltaTime, ForceMode2D.Force);
         // transform.Translate(movement*moveSpeed*Time.deltaTime);
     }
 
@@ -358,7 +364,6 @@ public abstract class Charactor : MonoBehaviour
     #region 受擊控制
     protected IEnumerator TakeHit() {
         isTakingHit = true;
-        
         if(!hyperArmor)
             moveSpeed = 0f;
         
@@ -378,17 +383,14 @@ public abstract class Charactor : MonoBehaviour
 
     public void TakeHitProcess(int damage, Transform attacker) {
         Debug.Log("TakeDamage: "+damage);
-        currHealth -= damage;
-        m_Animator.SetTrigger("hurt");
 
         if(!hyperArmor) {
-            Debug.Log("TakeHitProcess AddForce");
-            Vector3 oppositeDir = attacker.transform.position - transform.position;
-            Vector3 oppositeForce = oppositeDir.normalized * knockOffThrust;
-            
-            m_Rigidbody.AddForce(oppositeDir, ForceMode2D.Impulse);
+            KnockbackFeedback feedback = GetComponent<KnockbackFeedback>();
+            feedback.ActiveFeedback(attacker.gameObject);
         }
 
+        currHealth -= damage;
+        m_Animator.SetTrigger("hurt");
         takeHitRoutine = StartCoroutine(TakeHit());
 
         if(currHealth <= 0) {

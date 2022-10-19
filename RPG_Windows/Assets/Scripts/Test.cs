@@ -108,9 +108,16 @@ public class Test : MonoBehaviour
     [ContextMenu("Test Add Force")]
     public void AddRigidbodyForce() {
         Debug.Log("AddRigidbodyForce");
-        Vector3 oppositeDir = player.transform.position - transform.position;
-        Vector3 oppositeForce = oppositeDir.normalized * 5;
+        enemy.velocity = Vector3.zero;
+        Vector3 oppositeDir = enemy.transform.position - player.transform.position;
+        Vector3 oppositeForce = oppositeDir.normalized * 3;
         
-        enemy.AddForce(oppositeDir, ForceMode2D.Impulse);
+        enemy.AddForce(oppositeForce, ForceMode2D.Impulse);
+        StartCoroutine(KnockCo());
+    }
+
+    private IEnumerator KnockCo() {
+        yield return new WaitForSeconds(0.4f);  // hardcasted casted time for debugged
+        enemy.velocity = Vector3.zero;
     }
 }
