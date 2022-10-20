@@ -7,16 +7,18 @@ public class KnockbackFeedback : MonoBehaviour
 {
     [SerializeField] private Rigidbody2D rb2d;
 
+    [SerializeField] private Transform objectCenter;
+
     [SerializeField] private float thrust = 16;
 
     [SerializeField] private float hitRecoveryTime = 0.2f;
 
     public UnityEvent OnBegin, OnDone;
 
-    public void ActiveFeedback(GameObject sender) {
+    public void ActiveFeedback(Vector3 senderPos) {
         StopAllCoroutines();
         OnBegin?.Invoke();
-        Vector3 dir = transform.position - sender.transform.position;
+        Vector3 dir = objectCenter.position - senderPos;
         Vector3 force = dir.normalized * thrust;
         rb2d.AddForce(force, ForceMode2D.Impulse);
         StartCoroutine(EndProcess());

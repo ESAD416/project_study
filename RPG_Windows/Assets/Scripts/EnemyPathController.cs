@@ -42,6 +42,8 @@ public class EnemyPathController : MonoBehaviour
                     StartCoroutine(UpdatePathParaEndingDelay());
                 }
             }
+        } else if(Enemy.isTakingHit){
+            UpdatePathParaForHorizontal();
         }
     }
 

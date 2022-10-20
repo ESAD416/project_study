@@ -143,7 +143,7 @@ public abstract class Charactor : MonoBehaviour
 
     protected int armorToStunned = -1;
 
-    protected float stunnedClipTime;
+    protected float stunRecoveryTime;
 
     #endregion
 
@@ -381,12 +381,12 @@ public abstract class Charactor : MonoBehaviour
         //Debug.Log("TakeDmg end");
     }
 
-    public void TakeHitProcess(int damage, Transform attacker) {
+    public void TakeHitProcess(int damage, Vector3 senderPos) {
         Debug.Log("TakeDamage: "+damage);
 
         if(!hyperArmor) {
             KnockbackFeedback feedback = GetComponent<KnockbackFeedback>();
-            feedback.ActiveFeedback(attacker.gameObject);
+            feedback.ActiveFeedback(senderPos);
         }
 
         currHealth -= damage;
