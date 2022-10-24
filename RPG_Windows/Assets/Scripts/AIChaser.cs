@@ -77,10 +77,10 @@ public class AIChaser : MonoBehaviour
     private void CheckIfTargetInRange() {
         Collider2D col = Physics2D.OverlapCircle(transform.position, chaseRadius, targetLayer);
         if(col != null) {
-            Debug.Log("Target transform: "+col.transform);
+            //Debug.Log("Target transform: "+col.transform);
             var charactor = col.GetComponent<Charactor>() as Charactor;
             if(charactor != null) {
-                Debug.Log("Target m_Center: "+charactor.m_Center);
+                //Debug.Log("Target m_Center: "+charactor.m_Center);
                 TargetModel = col.transform.Find(charactor.centerObjName).GetComponent<Transform>();
             }
             else {
@@ -119,10 +119,6 @@ public class AIChaser : MonoBehaviour
     }
 
     private IEnumerator ChaseModeEndingProcess() {
-        Debug.Log("ChaseModeEndingProcess start");
-        // if(TargetModel != null && !targetVisable) {
-        //     EnemyAI.SetMovement(TargetModel.position - transform.position);
-        // }
 
         yield return new WaitForSeconds(chaseModeDelay);  // hardcasted casted time for debugged
         if(TargetModel == null) {
@@ -132,7 +128,6 @@ public class AIChaser : MonoBehaviour
             EnemyAI.SetDefaultMovement();
             transform.gameObject.SetActive(false);
         }
-        Debug.Log("ChaseModeEndingProcess end");
     }
 
     

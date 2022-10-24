@@ -23,7 +23,7 @@ public class AIDetector : MonoBehaviour
         var collider = Physics2D.OverlapCircle(transform.position, detectRadius, targetLayer);
         targetDetected = collider != null;
         if(targetDetected) {
-            Debug.Log("target Detected");
+            //Debug.Log("target Detected");
             OnTargetDected?.Invoke();
         }
     }

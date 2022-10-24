@@ -125,7 +125,7 @@ public abstract class Charactor : MonoBehaviour
     /// <summary>
     /// 受擊動作為即時觸發，故宣告一協程進行處理獨立的動作
     /// </summary>
-    protected Coroutine takeHitRoutine;
+    protected Coroutine takeHitRoutine = null;
     /// <summary>
     /// 一次受擊動畫所需的時間
     /// </summary>
@@ -138,12 +138,14 @@ public abstract class Charactor : MonoBehaviour
     #endregion
 
     #region 眩暈參數
+    [Header("Stunned Parameters")]
+    public bool stunnable;
 
     protected bool isStunned = false;
 
-    protected int armorToStunned = -1;
+    protected int armorToStunned = 3;
 
-    protected float stunRecoveryTime;
+    protected float stunRecoveryTime = 1.5f;
 
     #endregion
 
@@ -160,6 +162,8 @@ public abstract class Charactor : MonoBehaviour
     // Update is called once per frame
     protected virtual void Update()
     {
+        //Debug.Log("takeHitRoutine == null: "+(takeHitRoutine == null));
+
         var center = transform.Find(centerObjName).GetComponent<Transform>();
         m_Center = new Vector3(center.position.x, center.position.y);
 
@@ -363,6 +367,7 @@ public abstract class Charactor : MonoBehaviour
 
     #region 受擊控制
     protected IEnumerator TakeHit() {
+        Debug.Log("TakeHit");
         isTakingHit = true;
         if(!hyperArmor)
             moveSpeed = 0f;
@@ -378,20 +383,29 @@ public abstract class Charactor : MonoBehaviour
 
         isTakingHit = false;
         moveSpeed = 3f;
-        //Debug.Log("TakeDmg end");
+        Debug.Log("FinishTakeHit");
     }
 
     public void TakeHitProcess(int damage, Vector3 senderPos) {
         Debug.Log("TakeDamage: "+damage);
-
-        if(!hyperArmor) {
-            KnockbackFeedback feedback = GetComponent<KnockbackFeedback>();
-            feedback.ActiveFeedback(senderPos);
-        }
-
         currHealth -= damage;
-        m_Animator.SetTrigger("hurt");
-        takeHitRoutine = StartCoroutine(TakeHit());
+        if(stunnable && !isStunned) {
+            armorToStunned--;
+            if(armorToStunned <= 0 ) isStunned = true;
+        }
+        
+        Debug.Log("TakeDamage isStunned: "+isStunned);
+        if(isStunned) {
+            //TODO set stunned animation
+            takeHitRoutine = StartCoroutine(BeingStunned());
+        } else {
+            m_Animator.SetTrigger("hurt");
+            if(!hyperArmor) {
+                KnockbackFeedback feedback = GetComponent<KnockbackFeedback>();
+                feedback.ActiveFeedback(senderPos);
+            } 
+            takeHitRoutine = StartCoroutine(TakeHit());
+        }
 
         if(currHealth <= 0) {
             Die();
@@ -403,6 +417,25 @@ public abstract class Charactor : MonoBehaviour
         isDead = true;
         m_Animator.SetBool("isDead", isDead); 
         GetComponent<Collider2D>().enabled = false;
+    }
+
+    
+    protected IEnumerator BeingStunned() {
+        Debug.Log("BeingStunned");
+        moveSpeed = 0f;
+        yield return new WaitForSeconds(stunRecoveryTime);  // hardcasted casted time for debugged
+        FinishBeingStunned();
+    }
+
+    public void FinishBeingStunned() {
+        if(takeHitRoutine != null) {
+            StopCoroutine(takeHitRoutine);
+        }
+
+        isStunned = false;
+        armorToStunned = 3;
+        moveSpeed = 3f;
+        Debug.Log("FinishBeingStunned");
     }
     #endregion
 

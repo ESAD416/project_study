@@ -11,7 +11,7 @@ public class StunnedFeedback : MonoBehaviour
 
     public UnityEvent OnBegin, OnDone;
 
-    public void ActiveFeedback(Vector3 senderPos) {
+    public void ActiveFeedback() {
         StopAllCoroutines();
         OnBegin?.Invoke();
         
