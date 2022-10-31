@@ -12,6 +12,7 @@ public class Enemy_Horizontal : Enemy_Abstract
     [SerializeField] private Transform rightDetector;
 
     protected override void Start() {
+        attackClipTime = AnimeUtils.GetAnimateClipTime(m_Animator, "Attack_Down");
         m_SprtRenderer = GetComponentInChildren<SpriteRenderer>();
         base.Start();
     }

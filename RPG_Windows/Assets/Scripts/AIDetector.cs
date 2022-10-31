@@ -10,7 +10,6 @@ public class AIDetector : MonoBehaviour
     public float detectRadius;
     [SerializeField] private LayerMask targetLayer;
     public bool targetDetected;
-
     public UnityEvent OnTargetDected;
 
     [Header("Gizmo Parameters")]

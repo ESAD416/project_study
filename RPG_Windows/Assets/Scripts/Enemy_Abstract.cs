@@ -39,4 +39,11 @@ public abstract class Enemy_Abstract : Charactor
     public void SetDefaultMovement() {
         movement = defaultMovement;
     }
+
+    public void OnAttack() {
+        if(isMoving) {
+            facingDir = movement;
+        }
+        attackRoutine = StartCoroutine(Attack());
+    }
 }
