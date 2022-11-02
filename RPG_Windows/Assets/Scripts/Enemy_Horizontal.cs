@@ -8,11 +8,21 @@ public class Enemy_Horizontal : Enemy_Abstract
 
     [Header("Detector Parameters")]
     public bool moveRight;
+
+    private Transform detectorL;
+    private Transform detectorR;
+
     [SerializeField] private Transform leftDetector;
     [SerializeField] private Transform rightDetector;
 
+    [SerializeField] private Transform leftAttackDetector;
+    [SerializeField] private Transform rightAttackDetector;
+
     protected override void Start() {
-        attackClipTime = AnimeUtils.GetAnimateClipTime(m_Animator, "Attack_Down");
+        //attackClipTime = AnimeUtils.GetAnimateClipTime(m_Animator, "Attack_Down");
+        
+        detectorL = leftDetector;
+        detectorR = rightDetector;
         m_SprtRenderer = GetComponentInChildren<SpriteRenderer>();
         base.Start();
     }
@@ -30,11 +40,11 @@ public class Enemy_Horizontal : Enemy_Abstract
             }
             
             m_SprtRenderer.flipX = moveRight;
-            leftDetector.gameObject.SetActive(!moveRight);
-            rightDetector.gameObject.SetActive(moveRight);
+            detectorL.gameObject.SetActive(!moveRight);
+            detectorR.gameObject.SetActive(moveRight);
         } else {
-            leftDetector.gameObject.SetActive(false);
-            rightDetector.gameObject.SetActive(false);
+            detectorL.gameObject.SetActive(false);
+            detectorR.gameObject.SetActive(false);
         }
 
         base.Update();
@@ -65,6 +75,20 @@ public class Enemy_Horizontal : Enemy_Abstract
 			}	
 		}
 	}
+
+    public void ChangeDetector() {
+        var dL =  detectorL.GetComponent<AIDetector>();
+        var dR =  detectorR.GetComponent<AIDetector>();
+
+        bool partrolDetecting = (dL != null && dR != null);
+        if(partrolDetecting) {
+            detectorL = leftAttackDetector;
+            detectorR = rightAttackDetector;
+        } else {
+            detectorL = leftDetector;
+            detectorR = rightDetector;
+        }
+    }
 
     
 }

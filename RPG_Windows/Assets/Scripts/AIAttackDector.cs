@@ -8,14 +8,14 @@ public class AIAttackDector : MonoBehaviour
     public Enemy_Abstract enemyAI;
 
     [Header("Detector Parameters")]
-    [Range(.1f, 3)]
+    [Range(.1f, 1)]
     public float detectRadius;
 
     [SerializeField] private LayerMask targetLayer;
     public bool targetDetected;
 
     [Header("Gizmo Parameters")]
-    public Color gizmoColor = Color.blue;
+    public Color gizmoColor = Color.black;
     public bool showGizmos = true;
 
     // Update is called once per frame
@@ -27,4 +27,11 @@ public class AIAttackDector : MonoBehaviour
             enemyAI.OnAttack();
         }
     } 
+
+    private void OnDrawGizmos() {
+        if(showGizmos) {
+            Gizmos.color = gizmoColor;
+            Gizmos.DrawWireSphere(transform.position, detectRadius);
+        }
+    }
 }

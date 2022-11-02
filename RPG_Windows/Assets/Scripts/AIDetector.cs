@@ -6,14 +6,14 @@ using UnityEngine.Events;
 public class AIDetector : MonoBehaviour
 {
     [Header("Detector Parameters")]
-    [Range(.1f, 1)]
+    [Range(.1f, 3)]
     public float detectRadius;
     [SerializeField] private LayerMask targetLayer;
     public bool targetDetected;
     public UnityEvent OnTargetDected;
 
     [Header("Gizmo Parameters")]
-    public Color gizmoColor = Color.blue;
+    public Color gizmoColor = Color.black;
     public bool showGizmos = true;
 
     // Update is called once per frame

@@ -14,7 +14,7 @@ public class MeleeHitbox : MonoBehaviour
             Debug.Log("Target name: " + otherCollider.name);
             Debug.Log("Attacker name: " + attacker.name);
 
-            otherCollider.gameObject.GetComponent<Enemy_Horizontal>().TakeHitProcess(meleeDamage, attacker.m_Center);
+            otherCollider.gameObject.GetComponent<Charactor>().TakeHitProcess(meleeDamage, attacker.m_Center);
         }
     }
 }
