@@ -20,7 +20,8 @@ public class Enemy_Horizontal : Enemy_Abstract
 
     protected override void Start() {
         //attackClipTime = AnimeUtils.GetAnimateClipTime(m_Animator, "Attack_Down");
-        
+        attackClipTime = 1f;
+
         detectorL = leftDetector;
         detectorR = rightDetector;
         m_SprtRenderer = GetComponentInChildren<SpriteRenderer>();
@@ -28,15 +29,33 @@ public class Enemy_Horizontal : Enemy_Abstract
     }
 
     protected override void Update() {
+        base.Update();
+        // Debug.Log("Enemy_Horizontal movement" + movement);
+        // Debug.Log("Enemy_Horizontal moveRight" + moveRight);
+        // Debug.Log("Enemy_Horizontal movement" + movement);
+        // Debug.Log("Enemy_Horizontal moveRight" + moveRight);
+    }
+
+    protected override void FixedUpdate() {
+        facingDir = movement;
         if(!isDead) {
-            if(isPatroling) {
-                if(moveRight) {
-                    movement = Vector3.right;
-                } else {
-                    movement = Vector3.left;
+            if(isAttacking) {
+                //Debug.Log("attacking");
+                if(isMoving) {
+                    movementAfterAttack = movement;
+                    //Debug.Log("movementAfterAttack: "+movementAfterAttack);
                 }
-            } else if(isChasing) {
-                moveRight = AnimeUtils.isRightForHorizontalAnimation(movement);
+                movement = Vector3.zero;
+            } else {
+                if(isPatroling) {
+                    if(moveRight) {
+                        movement = Vector3.right;
+                    } else {
+                        movement = Vector3.left;
+                    }
+                } else if(isChasing) {
+                    moveRight = AnimeUtils.isRightForHorizontalAnimation(movement);
+                }
             }
             
             m_SprtRenderer.flipX = moveRight;
@@ -47,11 +66,7 @@ public class Enemy_Horizontal : Enemy_Abstract
             detectorR.gameObject.SetActive(false);
         }
 
-        base.Update();
-        // Debug.Log("Enemy_Horizontal movement" + movement);
-        // Debug.Log("Enemy_Horizontal moveRight" + moveRight);
-        // Debug.Log("Enemy_Horizontal movement" + movement);
-        // Debug.Log("Enemy_Horizontal moveRight" + moveRight);
+        base.FixedUpdate();
     }
 
     private void OnCollisionEnter2D(Collision2D other) {

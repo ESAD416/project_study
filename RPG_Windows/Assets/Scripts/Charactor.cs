@@ -262,7 +262,7 @@ public abstract class Charactor : MonoBehaviour
 
     #region 攻擊控制
     protected IEnumerator Attack() {
-        //Debug.Log("attack start");
+        Debug.Log("attack start");
         isAttacking = true;
         m_Animator.SetBool("attack", isAttacking);
         yield return new WaitForSeconds(attackClipTime);  // hardcasted casted time for debugged

@@ -17,6 +17,7 @@ public abstract class Enemy_Abstract : Charactor
 
     // Update is called once per frame
     protected override void Update() {
+        
         //Debug.Log("moveSpeed: "+moveSpeed);
         var center = transform.Find(centerObjName).GetComponent<Transform>();
         m_Center = new Vector3(center.position.x, center.position.y);
@@ -41,6 +42,7 @@ public abstract class Enemy_Abstract : Charactor
     }
 
     public void OnAttack() {
+        Debug.Log("Enemy onAttack: ");
         if(isMoving) {
             facingDir = movement;
         }
