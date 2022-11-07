@@ -29,6 +29,7 @@ public class Enemy_Horizontal : Enemy_Abstract
     }
 
     protected override void Update() {
+        //Debug.Log("Update movement: "+movement);
         base.Update();
         // Debug.Log("Enemy_Horizontal movement" + movement);
         // Debug.Log("Enemy_Horizontal moveRight" + moveRight);
@@ -37,8 +38,10 @@ public class Enemy_Horizontal : Enemy_Abstract
     }
 
     protected override void FixedUpdate() {
-        facingDir = movement;
         if(!isDead) {
+            //Debug.Log("FixedUpdate isAttacking: "+isAttacking);
+            //Debug.Log("FixedUpdate movement: "+movement);
+            //Debug.Log("FixedUpdate movementAfterAttack: "+movementAfterAttack);
             if(isAttacking) {
                 //Debug.Log("attacking");
                 if(isMoving) {
@@ -54,6 +57,9 @@ public class Enemy_Horizontal : Enemy_Abstract
                         movement = Vector3.left;
                     }
                 } else if(isChasing) {
+                    // if(movement.Equals(Vector3.zero)) {
+                    //     moveRight = AnimeUtils.isRightForHorizontalAnimation(movementAfterAttack);
+                    // }
                     moveRight = AnimeUtils.isRightForHorizontalAnimation(movement);
                 }
             }
@@ -104,6 +110,5 @@ public class Enemy_Horizontal : Enemy_Abstract
             detectorR = rightDetector;
         }
     }
-
     
 }

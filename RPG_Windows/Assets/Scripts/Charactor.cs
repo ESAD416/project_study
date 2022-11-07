@@ -91,7 +91,7 @@ public abstract class Charactor : MonoBehaviour
     /// <summary>
     /// 角色正在攻擊
     /// </summary>
-    protected bool isAttacking;
+    public bool isAttacking;
     /// <summary>
     /// 記錄攻擊動作完成後的角色移動向量
     /// </summary>
@@ -262,7 +262,7 @@ public abstract class Charactor : MonoBehaviour
 
     #region 攻擊控制
     protected IEnumerator Attack() {
-        Debug.Log("attack start");
+        //Debug.Log("attack start");
         isAttacking = true;
         m_Animator.SetBool("attack", isAttacking);
         yield return new WaitForSeconds(attackClipTime);  // hardcasted casted time for debugged
@@ -270,6 +270,7 @@ public abstract class Charactor : MonoBehaviour
     }
 
     public void FinishAttack() {
+        Debug.Log("FinishAttack start");
         if(attackRoutine != null) {
             StopCoroutine(attackRoutine);
         }
@@ -279,7 +280,7 @@ public abstract class Charactor : MonoBehaviour
 
         movement = movementAfterAttack;
         movementAfterAttack = Vector3.zero;
-        //Debug.Log("attack end");
+        Debug.Log("FinishAttack end");
     }
     #endregion
     
