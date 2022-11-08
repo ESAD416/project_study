@@ -269,7 +269,7 @@ public abstract class Charactor : MonoBehaviour
         FinishAttack();
     }
 
-    public void FinishAttack() {
+    public virtual void FinishAttack() {
         Debug.Log("FinishAttack start");
         if(attackRoutine != null) {
             StopCoroutine(attackRoutine);

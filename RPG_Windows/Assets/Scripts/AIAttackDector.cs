@@ -13,6 +13,7 @@ public class AIAttackDector : MonoBehaviour
 
     [SerializeField] private LayerMask targetLayer;
     public bool targetDetected;
+    public UnityEvent OnTargetDected;
 
     [Header("Gizmo Parameters")]
     public Color gizmoColor = Color.black;

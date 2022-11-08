@@ -31,6 +31,7 @@ public class Enemy_Horizontal : Enemy_Abstract
     protected override void Update() {
         //Debug.Log("Update movement: "+movement);
         base.Update();
+        UpdateDetector();
         // Debug.Log("Enemy_Horizontal movement" + movement);
         // Debug.Log("Enemy_Horizontal moveRight" + moveRight);
         // Debug.Log("Enemy_Horizontal movement" + movement);
@@ -39,9 +40,9 @@ public class Enemy_Horizontal : Enemy_Abstract
 
     protected override void FixedUpdate() {
         if(!isDead) {
-            //Debug.Log("FixedUpdate isAttacking: "+isAttacking);
-            //Debug.Log("FixedUpdate movement: "+movement);
-            //Debug.Log("FixedUpdate movementAfterAttack: "+movementAfterAttack);
+            Debug.Log("FixedUpdate isAttacking: "+isAttacking);
+            Debug.Log("FixedUpdate movement: "+movement);
+            Debug.Log("FixedUpdate movementAfterAttack: "+movementAfterAttack);
             if(isAttacking) {
                 //Debug.Log("attacking");
                 if(isMoving) {
@@ -62,11 +63,12 @@ public class Enemy_Horizontal : Enemy_Abstract
                     // }
                     moveRight = AnimeUtils.isRightForHorizontalAnimation(movement);
                 }
+
+                detectorL.gameObject.SetActive(!moveRight);
+                detectorR.gameObject.SetActive(moveRight);
             }
             
             m_SprtRenderer.flipX = moveRight;
-            detectorL.gameObject.SetActive(!moveRight);
-            detectorR.gameObject.SetActive(moveRight);
         } else {
             detectorL.gameObject.SetActive(false);
             detectorR.gameObject.SetActive(false);
@@ -97,12 +99,8 @@ public class Enemy_Horizontal : Enemy_Abstract
 		}
 	}
 
-    public void ChangeDetector() {
-        var dL =  detectorL.GetComponent<AIDetector>();
-        var dR =  detectorR.GetComponent<AIDetector>();
-
-        bool partrolDetecting = (dL != null && dR != null);
-        if(partrolDetecting) {
+    public void UpdateDetector() {
+        if(isChasing) {
             detectorL = leftAttackDetector;
             detectorR = rightAttackDetector;
         } else {
@@ -111,4 +109,28 @@ public class Enemy_Horizontal : Enemy_Abstract
         }
     }
     
+    public override void OnAttack() {
+        Debug.Log("Enemy_Horizontal onAttack: ");
+        if(isMoving) {
+            facingDir = movement;
+        }
+
+        detectorL.gameObject.SetActive(false);
+        detectorR.gameObject.SetActive(false);
+        attackRoutine = StartCoroutine(Attack());
+    }
+
+    public override void FinishAttack() {
+        Debug.Log("Enemy_Horizontal FinishAttack start");
+        if(attackRoutine != null) {
+            StopCoroutine(attackRoutine);
+        }
+
+        isAttacking = false;
+        m_Animator.SetBool("attack", isAttacking);
+
+        movement = movementAfterAttack;
+        movementAfterAttack = Vector3.zero;
+        Debug.Log("Enemy_Horizontal FinishAttack end");
+    }
 }

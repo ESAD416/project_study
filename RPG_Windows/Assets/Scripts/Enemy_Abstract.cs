@@ -40,8 +40,8 @@ public abstract class Enemy_Abstract : Charactor
         movement = defaultMovement;
     }
 
-    public void OnAttack() {
-        //Debug.Log("Enemy onAttack: ");
+    public virtual void OnAttack() {
+        Debug.Log("Enemy_Abstract onAttack: ");
         if(isMoving) {
             facingDir = movement;
         }
