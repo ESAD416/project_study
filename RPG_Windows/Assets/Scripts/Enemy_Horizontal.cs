@@ -40,9 +40,9 @@ public class Enemy_Horizontal : Enemy_Abstract
 
     protected override void FixedUpdate() {
         if(!isDead) {
-            Debug.Log("FixedUpdate isAttacking: "+isAttacking);
-            Debug.Log("FixedUpdate movement: "+movement);
-            Debug.Log("FixedUpdate movementAfterAttack: "+movementAfterAttack);
+            // Debug.Log("FixedUpdate isAttacking: "+isAttacking);
+            // Debug.Log("FixedUpdate movement: "+movement);
+            // Debug.Log("FixedUpdate movementAfterAttack: "+movementAfterAttack);
             if(isAttacking) {
                 //Debug.Log("attacking");
                 if(isMoving) {
@@ -110,7 +110,7 @@ public class Enemy_Horizontal : Enemy_Abstract
     }
     
     public override void OnAttack() {
-        Debug.Log("Enemy_Horizontal onAttack: ");
+        //Debug.Log("Enemy_Horizontal onAttack: ");
         if(isMoving) {
             facingDir = movement;
         }
@@ -121,7 +121,7 @@ public class Enemy_Horizontal : Enemy_Abstract
     }
 
     public override void FinishAttack() {
-        Debug.Log("Enemy_Horizontal FinishAttack start");
+        //Debug.Log("Enemy_Horizontal FinishAttack start");
         if(attackRoutine != null) {
             StopCoroutine(attackRoutine);
         }
@@ -131,6 +131,6 @@ public class Enemy_Horizontal : Enemy_Abstract
 
         movement = movementAfterAttack;
         movementAfterAttack = Vector3.zero;
-        Debug.Log("Enemy_Horizontal FinishAttack end");
+        //Debug.Log("Enemy_Horizontal FinishAttack end");
     }
 }
