@@ -308,14 +308,18 @@ public abstract class Charactor : MonoBehaviour
 
             float groundCheckHeight = Mathf.Floor(currHeight);
 
+            Debug.Log("Center: "+m_Center);
+            Debug.Log("Coordinate: "+m_Coordinate);
+            Debug.Log("transform_pos: "+transform.position);
             Vector3 shadowCoordinate = new Vector3(m_Coordinate.x, m_Coordinate.y, groundCheckHeight);
+            Debug.Log("shadowCoordinate: "+shadowCoordinate);
             Vector3 shadowWorldPos = new Vector3(shadowCoordinate.x, shadowCoordinate.y + shadowCoordinate.z);
 
             if(hm.GroundableChecked(shadowWorldPos, groundCheckHeight)) {
             // if(hm.GroundableChecked(m_Coordinate)) {
                 Debug.Log("Groundable true");
                 if(goalheight <= groundCheckHeight) {
-                    if(hm.NotGroundableChecked(m_Center) || hm.NotGroundableChecked(shadowWorldPos)) {
+                    if(hm.NotGroundableChecked(m_Center, groundCheckHeight) || hm.NotGroundableChecked(shadowWorldPos, groundCheckHeight)) {
                         // NotGroundable(ex: 岩壁)判定
                         Debug.Log("NotGroundable true");
                     } else {

@@ -10,7 +10,6 @@ public class HeightManager : MonoBehaviour
     [SerializeField]
     public List<TileData> defaultTileDatas;
     private Tilemap[] levels;
-    private Tilemap notGroundable;
     private Dictionary<Tile, TileData> dataFromTiles;
     Vector2 mousePosition;
 
@@ -18,7 +17,6 @@ public class HeightManager : MonoBehaviour
     {
         Tilemap[] maps = transform.GetComponentsInChildren<Tilemap>();
         levels = maps.Where(x => x.tag == "Level").ToArray();
-        notGroundable = maps.Where(x => x.name == "NG").FirstOrDefault();
     }
 
     private void Awake() {
@@ -91,17 +89,26 @@ public class HeightManager : MonoBehaviour
         return false;
     }
 
-    public bool NotGroundableChecked(Vector2 worldPos) {
+    public bool NotGroundableChecked(Vector2 worldPos, float height) {
         Debug.Log("NotGroundable Check worldPos: "+worldPos);
-        Vector3Int gridPos = notGroundable.WorldToCell(worldPos);
-        if(notGroundable.HasTile(gridPos)) {
-            Tile resultTile = notGroundable.GetTile<Tile>(gridPos);
-            Debug.Log("At grid position "+gridPos+" there is a "+resultTile+" in map "+notGroundable.name);
-            TileSpriteModel model = new TileSpriteModel(resultTile.sprite, notGroundable.GetTransformMatrix(gridPos).rotation.eulerAngles.z);
-            bool IsTransparent = TileUtils.TilePixelIsTransparent(model, worldPos);
-            return !IsTransparent;
+        foreach(var map in levels) {
+            Vector3Int gridPos = map.WorldToCell(worldPos);
+            if(map.HasTile(gridPos)) {
+                Tile resultTile = map.GetTile<Tile>(gridPos);
+                if(dataFromTiles[resultTile].height == height) {
+                    Debug.Log("NotGroundable height: "+dataFromTiles[resultTile].height);
+                    var notGroundable = map.GetComponentsInChildren<Tilemap>().Where(x => x.tag != "Level").FirstOrDefault();
+                    gridPos = notGroundable.WorldToCell(worldPos);
+                    if(notGroundable.HasTile(gridPos)) {
+                        resultTile = notGroundable.GetTile<Tile>(gridPos);
+                        Debug.Log("At grid position "+gridPos+" there is a "+resultTile+" in map "+notGroundable.name);
+                        TileSpriteModel model = new TileSpriteModel(resultTile.sprite, notGroundable.GetTransformMatrix(gridPos).rotation.eulerAngles.z);
+                        bool IsTransparent = TileUtils.TilePixelIsTransparent(model, worldPos);
+                        return !IsTransparent;
+                    }
+                }
+            }
         }
-
         return false;
     }
 }
