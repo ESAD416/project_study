@@ -71,7 +71,7 @@ public abstract class Charactor : MonoBehaviour
     protected Vector3 takeOffCoord = Vector3.zero;
     protected Vector2 takeOffDir = Vector2.zero;
     protected Rigidbody2D shawdowBody;
-    protected float maxJumpHeight = 1.5f;
+    protected float minjumpOffSet = -0.3f;
     protected float jumpOffset = 0.3f;
     protected float g = -0.06f;
     protected bool isJumping;
@@ -322,6 +322,15 @@ public abstract class Charactor : MonoBehaviour
                     if(hm.NotGroundableChecked(m_Center, groundCheckHeight) || hm.NotGroundableChecked(shadowWorldPos, groundCheckHeight)) {
                         // NotGroundable(ex: 岩壁)判定
                         Debug.Log("NotGroundable true");
+                        // Vector3 rayCastEndPos = new Vector2(m_Center.x, m_Center.y)  + new Vector2(movement.x, movement.y) * 0.35f;   // 預設射線終點
+                        // Vector3 dir = m_Center - rayCastEndPos;
+                        // Vector3 force = dir.normalized * 5;
+                        // m_Rigidbody.AddForce(force, ForceMode2D.Impulse);
+                        
+
+                        // lastHeight = currHeight;
+                        // currHeight = groundCheckHeight - 0.01f;
+                        // jumpOffset += g;
                     } else {
                         Debug.Log("NotGroundable false");
                         lastHeight = currHeight;
@@ -340,6 +349,11 @@ public abstract class Charactor : MonoBehaviour
                 jumpOffset += g; 
             }
         }
+
+        if(jumpOffset <= minjumpOffSet) {
+            jumpOffset = minjumpOffSet;
+        }
+        
         Debug.Log("currHeight end: "+currHeight);
         Debug.Log("lastHeight end: "+lastHeight);
         Debug.Log("jumpOffset end: "+jumpOffset);
@@ -468,6 +482,7 @@ public abstract class Charactor : MonoBehaviour
             var heightObj = collider2D.GetComponent<HeightOfObject>() as HeightOfObject;
             if(heightObj != null) {
                 float groundCheckHeight = Mathf.Floor(currHeight);
+                float maxGroundCheckHeight = groundCheckHeight + 1;
                 // Debug.Log("FocusCollidersWithHeight collider2D name: "+collider2D.name);
                 // Debug.Log("FocusCollidersWithHeight collider2D type: "+collider2D.GetType());
                 if(groundCheckHeight + 1 == heightObj.GetSelfHeight()) {
