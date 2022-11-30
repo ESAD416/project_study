@@ -322,15 +322,14 @@ public abstract class Charactor : MonoBehaviour
                     if(hm.NotGroundableChecked(m_Center, groundCheckHeight) || hm.NotGroundableChecked(shadowWorldPos, groundCheckHeight)) {
                         // NotGroundable(ex: 岩壁)判定
                         Debug.Log("NotGroundable true");
-                        // Vector3 rayCastEndPos = new Vector2(m_Center.x, m_Center.y)  + new Vector2(movement.x, movement.y) * 0.35f;   // 預設射線終點
-                        // Vector3 dir = m_Center - rayCastEndPos;
-                        // Vector3 force = dir.normalized * 5;
-                        // m_Rigidbody.AddForce(force, ForceMode2D.Impulse);
+                        bool hasCeiling = hm.CeilingChecked(m_Center, groundCheckHeight); 
+                        if(hasCeiling) {
+                            lastHeight = currHeight;
+                            currHeight = goalheight;
+                            // currHeight = groundCheckHeight - 0.01f;
+                            jumpOffset += g;
+                        }
                         
-
-                        // lastHeight = currHeight;
-                        // currHeight = groundCheckHeight - 0.01f;
-                        // jumpOffset += g;
                     } else {
                         Debug.Log("NotGroundable false");
                         lastHeight = currHeight;

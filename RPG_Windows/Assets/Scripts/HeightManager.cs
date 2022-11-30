@@ -82,29 +82,11 @@ public class HeightManager : MonoBehaviour
                 if(dataFromTiles[resultTile].height == height) {
                     TileSpriteModel model = new TileSpriteModel(resultTile.sprite, map.GetTransformMatrix(gridPos).rotation.eulerAngles.z);
                     bool IsTransparent = TileUtils.TilePixelIsTransparent(model, worldPos);
-                    if(!IsTransparent) {
-                        bool hasCeiling = CeilingChecked(worldPos, height);
-                        return !hasCeiling;
-                    }
-                }
-            }
-        }
-        return false;
-    }
-
-    private bool CeilingChecked(Vector2 worldPos, float height) {
-        Debug.Log("CeilingChecked worldPos: "+worldPos);
-        Debug.Log("CeilingChecked height: "+height);
-        foreach(var map in levels) {
-            Vector3Int gridPos = map.WorldToCell(worldPos);
-            if(map.HasTile(gridPos)) {
-                Tile resultTile = map.GetTile<Tile>(gridPos);
-                Debug.Log("At grid position "+gridPos+" there is a "+resultTile+" in map "+map.name);
-                Debug.Log("resultTile height: "+dataFromTiles[resultTile].height);
-                if(dataFromTiles[resultTile].height > height) {
-                    TileSpriteModel model = new TileSpriteModel(resultTile.sprite, map.GetTransformMatrix(gridPos).rotation.eulerAngles.z);
-                    bool IsTransparent = TileUtils.TilePixelIsTransparent(model, worldPos);
                     return !IsTransparent;
+                    // if(!IsTransparent) {
+                    //     bool hasCeiling = CeilingChecked(worldPos, height);
+                    //     return !hasCeiling;
+                    // }
                 }
             }
         }
@@ -128,6 +110,26 @@ public class HeightManager : MonoBehaviour
                         bool IsTransparent = TileUtils.TilePixelIsTransparent(model, worldPos);
                         return !IsTransparent;
                     }
+                }
+            }
+        }
+        return false;
+    }
+
+    
+    public bool CeilingChecked(Vector2 worldPos, float height) {
+        Debug.Log("CeilingChecked worldPos: "+worldPos);
+        Debug.Log("CeilingChecked height: "+height);
+        foreach(var map in levels) {
+            Vector3Int gridPos = map.WorldToCell(worldPos);
+            if(map.HasTile(gridPos)) {
+                Tile resultTile = map.GetTile<Tile>(gridPos);
+                Debug.Log("At grid position "+gridPos+" there is a "+resultTile+" in map "+map.name);
+                Debug.Log("resultTile height: "+dataFromTiles[resultTile].height);
+                if(dataFromTiles[resultTile].height > height) {
+                    TileSpriteModel model = new TileSpriteModel(resultTile.sprite, map.GetTransformMatrix(gridPos).rotation.eulerAngles.z);
+                    bool IsTransparent = TileUtils.TilePixelIsTransparent(model, worldPos);
+                    return !IsTransparent;
                 }
             }
         }
