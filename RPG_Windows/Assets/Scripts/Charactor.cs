@@ -110,6 +110,10 @@ public abstract class Charactor : MonoBehaviour
     /// </summary>
     public int currHealth = 20;
     /// <summary>
+    /// 血量
+    /// </summary>
+    public int maxHealth = 20;
+    /// <summary>
     /// 已死亡
     /// </summary>
     public bool isDead = false;
@@ -149,7 +153,6 @@ public abstract class Charactor : MonoBehaviour
 
     #endregion
 
-    
 
     // Start is called before the first frame update
     protected virtual void Start()
@@ -404,9 +407,12 @@ public abstract class Charactor : MonoBehaviour
         Debug.Log("FinishTakeHit");
     }
 
-    public void TakeHitProcess(int damage, Vector3 senderPos) {
+    public virtual void DmgCalculate(int damage) {
         Debug.Log("TakeDamage: "+damage);
         currHealth -= damage;
+    }
+
+    public void TakeHitProcess(int damage, Vector3 senderPos) {
         if(stunnable && !isStunned) {
             armorToStunned--;
             if(armorToStunned <= 0 ) isStunned = true;

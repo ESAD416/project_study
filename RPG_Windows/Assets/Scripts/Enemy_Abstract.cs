@@ -4,15 +4,18 @@ using UnityEngine;
 
 public abstract class Enemy_Abstract : Charactor
 {
-    [SerializeField]  private Vector3 defaultMovement = Vector3.left;
+    [SerializeField] private Vector3 defaultMovement = Vector3.left;
     public bool isPatroling = false;
     public bool isChasing = false;
+
+    [SerializeField] private HealthBar healthBar;
 
     // Start is called before the first frame update
     protected override void Start() {
         base.Start();
         hitRecoveryTime = AnimeUtils.GetAnimateClipTime(m_Animator, "Hurt");
         isPatroling = true;
+        healthBar.SetHealth(currHealth, maxHealth);
     }
 
     // Update is called once per frame
@@ -46,5 +49,11 @@ public abstract class Enemy_Abstract : Charactor
             facingDir = movement;
         }
         attackRoutine = StartCoroutine(Attack());
+    }
+
+    public override void DmgCalculate(int damage)
+    {
+        base.DmgCalculate(damage);
+        healthBar.SetHealth(currHealth, maxHealth);
     }
 }

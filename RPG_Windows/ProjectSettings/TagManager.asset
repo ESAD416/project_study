@@ -56,3 +56,6 @@ TagManager:
   - name: Projectile
     uniqueID: 3343522911
     locked: 0
+  - name: FrontGround
+    uniqueID: 3815499763
+    locked: 0
