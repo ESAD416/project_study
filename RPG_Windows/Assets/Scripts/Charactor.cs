@@ -466,6 +466,7 @@ public abstract class Charactor : MonoBehaviour
     #region 碰撞控制
     private void FocusCollidersWithHeight() {
         Collider2D[] jumpColls = GridUtils.GetColliders("Stage5");
+        
         foreach(var collider2D in jumpColls) {
             var heightObj = collider2D.GetComponent<HeightOfObject>() as HeightOfObject;
             if(heightObj != null) {
