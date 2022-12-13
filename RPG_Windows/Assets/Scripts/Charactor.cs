@@ -32,6 +32,7 @@ public abstract class Charactor : MonoBehaviour
     public Vector3 m_Coordinate;
     public string centerObjName;
     public string buttomObjName;
+    public PlayerStorage infoStorage;
 
     #endregion
 
@@ -152,7 +153,6 @@ public abstract class Charactor : MonoBehaviour
     protected float stunRecoveryTime = 1.5f;
 
     #endregion
-
 
     // Start is called before the first frame update
     protected virtual void Start()
@@ -465,38 +465,43 @@ public abstract class Charactor : MonoBehaviour
 
     #region 碰撞控制
     private void FocusCollidersWithHeight() {
-        Collider2D[] jumpColls = GridUtils.GetColliders("Stage5");
-        
-        foreach(var collider2D in jumpColls) {
-            var heightObj = collider2D.GetComponent<HeightOfObject>() as HeightOfObject;
-            if(heightObj != null) {
-                // Debug.Log("FocusCollidersWithHeight collider2D name: "+collider2D.name);
-                // Debug.Log("FocusCollidersWithHeight collider2D type: "+collider2D.GetType());
-                if(currHeight == heightObj.GetSelfHeight()) {
-                    collider2D.enabled = true;
-                } else {
-                    collider2D.enabled = false;
+        Collider2D[] jumpColls = GridUtils.GetColliders(infoStorage.jumpCollidersName);
+
+        if(jumpColls != null) {
+            foreach(var collider2D in jumpColls) {
+                var heightObj = collider2D.GetComponent<HeightOfObject>() as HeightOfObject;
+                if(heightObj != null) {
+                    // Debug.Log("FocusCollidersWithHeight collider2D name: "+collider2D.name);
+                    // Debug.Log("FocusCollidersWithHeight collider2D type: "+collider2D.GetType());
+                    if(currHeight == heightObj.GetSelfHeight()) {
+                        collider2D.enabled = true;
+                    } else {
+                        collider2D.enabled = false;
+                    }
+                    // Debug.Log("FocusCollidersWithHeight collider2D enabled: "+collider2D.enabled);
                 }
-                // Debug.Log("FocusCollidersWithHeight collider2D enabled: "+collider2D.enabled);
             }
         }
     }
 
     private void FocusCollidersWithHeightWhileJumping() {
-        Collider2D[] jumpColls = GridUtils.GetColliders("Stage5");
-        foreach(var collider2D in jumpColls) {
-            var heightObj = collider2D.GetComponent<HeightOfObject>() as HeightOfObject;
-            if(heightObj != null) {
-                float groundCheckHeight = Mathf.Floor(currHeight);
-                float maxGroundCheckHeight = groundCheckHeight + 1;
-                // Debug.Log("FocusCollidersWithHeight collider2D name: "+collider2D.name);
-                // Debug.Log("FocusCollidersWithHeight collider2D type: "+collider2D.GetType());
-                if(groundCheckHeight + 1 == heightObj.GetSelfHeight()) {
-                    collider2D.enabled = true;
-                } else {
-                    collider2D.enabled = false;
+        Collider2D[] jumpColls = GridUtils.GetColliders(infoStorage.jumpCollidersName);
+
+        if(jumpColls != null) {
+            foreach(var collider2D in jumpColls) {
+                var heightObj = collider2D.GetComponent<HeightOfObject>() as HeightOfObject;
+                if(heightObj != null) {
+                    float groundCheckHeight = Mathf.Floor(currHeight);
+                    float maxGroundCheckHeight = groundCheckHeight + 1;
+                    // Debug.Log("FocusCollidersWithHeight collider2D name: "+collider2D.name);
+                    // Debug.Log("FocusCollidersWithHeight collider2D type: "+collider2D.GetType());
+                    if(groundCheckHeight + 1 == heightObj.GetSelfHeight()) {
+                        collider2D.enabled = true;
+                    } else {
+                        collider2D.enabled = false;
+                    }
+                    // Debug.Log("FocusCollidersWithHeight collider2D enabled: "+collider2D.enabled);
                 }
-                // Debug.Log("FocusCollidersWithHeight collider2D enabled: "+collider2D.enabled);
             }
         }
     }

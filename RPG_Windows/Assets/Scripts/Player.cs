@@ -23,6 +23,7 @@ public class Player : Charactor
         rayCastEndPos = new Vector2(raycastPoint.position.x, raycastPoint.position.y) + new Vector2(0, -1) * 0.35f;   // 預設射線終點
         base.Start();
         attackClipTime = AnimeUtils.GetAnimateClipTime(m_Animator, "Attack_Down");
+        transform.position = infoStorage.initialPos;
     }
 
     protected override void Update()
