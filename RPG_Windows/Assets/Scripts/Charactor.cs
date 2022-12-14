@@ -177,10 +177,12 @@ public abstract class Charactor : MonoBehaviour
         //Debug.Log("coordinate: "+m_Coordinate);
         HandleAnimatorLayers();
         SetAnimateMovementPara(movement, facingDir);
-        if(isJumping) {
+        if(!string.IsNullOrEmpty(infoStorage.jumpCollidersName)) {
+            if(isJumping ) {
             FocusCollidersWithHeightWhileJumping();
-        } else {
-            FocusCollidersWithHeight();
+            } else {
+                FocusCollidersWithHeight();
+            }
         }
     }
 
