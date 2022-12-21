@@ -5,7 +5,7 @@ using UnityEngine.Events;
 using System.Linq;
 
 [System.Serializable]
-public class InventoryHolderModel
+public class InventoryHolder : MonoBehaviour
 {
     [SerializeField] private int inventorySize;
     [SerializeField] protected InventorySystemModel inventorySystem;

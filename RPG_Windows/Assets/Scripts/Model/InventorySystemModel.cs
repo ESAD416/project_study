@@ -22,4 +22,9 @@ public class InventorySystemModel
             inventorySlots.Add(new InventorySlotModel());
         }
     }
+
+    public bool AddToInventory(InventoryItemData itemToAdd, int amountToAdd) {
+        inventorySlots.Add(new InventorySlotModel(itemToAdd, amountToAdd));
+        return true;
+    }
 }
