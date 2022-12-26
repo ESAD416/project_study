@@ -1,10 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using System.Linq;
 
-[System.Serializable]
+[Serializable]
 public class InventoryHolder : MonoBehaviour
 {
     [SerializeField] private int inventorySize;
