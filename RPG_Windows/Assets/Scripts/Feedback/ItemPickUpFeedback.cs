@@ -6,6 +6,7 @@ public class ItemPickUpFeedback : MonoBehaviour
 {
     //public float pickUpRadius = 1f;
     public InventoryItemData itemData;
+    public int itemAmount = 1;
     private Collider2D selfCollider;
 
     private void Start()
@@ -18,7 +19,7 @@ public class ItemPickUpFeedback : MonoBehaviour
         var inventory = other.transform.GetComponent<InventoryHolder>();
         if(!inventory) return;
 
-        if(inventory.InventorySystem.AddToInventory(itemData, 1)) {
+        if(inventory.InventorySystem.AddToInventory(itemData, itemAmount)) {
             Destroy(this.gameObject);
         }
     }

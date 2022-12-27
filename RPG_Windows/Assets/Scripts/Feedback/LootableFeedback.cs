@@ -13,12 +13,17 @@ public class LootableFeedback : MonoBehaviour
     public void InstantiateLoot() {
         for(int i = 0; i < dropLootCount; i++) {
             LootData lootItem = GetDroppedLoot();
+            if(!lootItem) {
+                continue;
+            }
+
             Vector3 pos = transform.position;
             pos.x += spread * Random.value - spread / 2;
             pos.y += spread * Random.value - spread / 2;
 
             GameObject dropLoot = Instantiate(lootPrefeb);
             dropLoot.GetComponent<SpriteRenderer>().sprite = lootItem.lootSprite;
+            dropLoot.GetComponent<ItemPickUpFeedback>().itemData = lootItem;
             dropLoot.transform.position = pos;
         }
     }

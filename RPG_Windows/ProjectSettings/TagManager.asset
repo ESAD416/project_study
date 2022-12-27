@@ -10,6 +10,7 @@ TagManager:
   - Level
   - Enemies
   - Enemy_Turn
+  - BreakableObj
   layers:
   - Default
   - TransparentFX

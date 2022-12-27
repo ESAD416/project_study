@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 1
   displayName: Apple
-  description: An Apple
+  description: An Apple, heal 10
   icon: {fileID: -3764680047136686143, guid: 7e6e7ea7113ea0749838be879a13a9e5, type: 3}
   maxStackSize: 2

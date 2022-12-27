@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5dd406a426f7444d84d31ec2aa0a300, type: 3}
   m_Name: TestLoot1
   m_EditorClassIdentifier: 
-  ID: 0
-  displayName: 
-  description: 
-  icon: {fileID: 0}
-  maxStackSize: 0
-  lootSprite: {fileID: 0}
-  dropChance: 0
+  ID: 1
+  displayName: Apple
+  description: An Apple, heal 10
+  icon: {fileID: -3764680047136686143, guid: 7e6e7ea7113ea0749838be879a13a9e5, type: 3}
+  maxStackSize: 2
+  lootSprite: {fileID: -3764680047136686143, guid: 7e6e7ea7113ea0749838be879a13a9e5, type: 3}
+  dropChance: 80

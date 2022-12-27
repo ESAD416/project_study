@@ -17,5 +17,9 @@ public class MeleeHitbox : MonoBehaviour
             otherCollider.gameObject.GetComponent<Charactor>().DmgCalculate(meleeDamage);
             otherCollider.gameObject.GetComponent<Charactor>().TakeHitProcess(meleeDamage, attacker.m_Center);
         }
+
+        if(otherCollider.gameObject.tag == "BreakableObj") {
+            otherCollider.gameObject.GetComponent<BreakableObjects>().TakeHit();
+        }
     }
 }
