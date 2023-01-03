@@ -10944,9 +10944,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1124968440}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a18f16449e1d4804397ba7d0fb5097fa, type: 3}
+  m_Script: {fileID: 11500000, guid: fcf094f490a19fa4eb42738d5f788fba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sceneIndexToLoad: 0
   sceneNameToLoad: SampleScene
   playerPos: {x: 15, y: 0}
   jumpCollidersName: Stage5

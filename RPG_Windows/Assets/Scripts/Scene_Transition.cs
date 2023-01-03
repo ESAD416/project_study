@@ -5,45 +5,24 @@ using UnityEngine.SceneManagement;
 
 public class Scene_Transition : MonoBehaviour
 {
-
+    public int sceneIndexToLoad;
     public string sceneNameToLoad;
 
+    [Header("Player Position Controls")]
     public Vector2 playerPos ;
-
     public string jumpCollidersName;
-
     public PlayerStorage playerStorage;
 
+    [Header("Transition Controls")]
     public TransitionStorage infoStorage;
-    
     public Animator transitionAnimaCtrl;
-
     public float transitionDelay = 1f;
 
-
-    private void OnTriggerEnter2D(Collider2D other) {
-        if(other.gameObject.tag == "Player" && !other.isTrigger) {
-            playerStorage.initialPos = playerPos;
-            playerStorage.jumpCollidersName = jumpCollidersName;
-            infoStorage.fadeTransitionActive = true;
-            LoadAlterScene();
-        }
-    }
-
-    private void Start() {
-        // Debug.Log("Scene_Transition Start");
-        if(infoStorage.fadeTransitionActive) {
-            // Debug.Log("Scene_Transition SetTrigger End");
-            transitionAnimaCtrl.SetTrigger("End");
-            infoStorage.fadeTransitionActive = false;
-        }
-    }
-
-    public void LoadAlterScene() {
+    protected virtual void LoadScene() {
         StartCoroutine(LoadSceneProcess());
     }
 
-    IEnumerator LoadSceneProcess() {
+    protected virtual IEnumerator LoadSceneProcess() {
         transitionAnimaCtrl.SetTrigger("Start");
 
         yield return new WaitForSeconds(transitionDelay);
