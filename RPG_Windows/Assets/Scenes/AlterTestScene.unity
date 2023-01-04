@@ -10947,7 +10947,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fcf094f490a19fa4eb42738d5f788fba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneIndexToLoad: 0
+  sceneIndexToLoad: 1
   sceneNameToLoad: SampleScene
   playerPos: {x: 15, y: 0}
   jumpCollidersName: Stage5

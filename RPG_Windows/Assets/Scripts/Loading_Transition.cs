@@ -3,22 +3,29 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;
+using System;
+using System.Threading.Tasks;
 
-public class Loading_Transition : MonoBehaviour
+public class Loading_Transition : Scene_Transition
 {
-    [SerializeField] private GameObject loadingCanvas;
-    [SerializeField] private Image progessBar;
+    [Header("Loading Controls")]
+    [SerializeField] private GameObject loadingScreen;
+    [SerializeField] private Slider progessBar;
+    [SerializeField] private TMP_Text progessText;
 
-    public void LoadScene(int sceneIndex) {
-        StartCoroutine(LoadSceneAsyncProcess(sceneIndex));
-    }
 
-    IEnumerator LoadSceneAsyncProcess(int sceneIndex) {
-        AsyncOperation oper = SceneManager.LoadSceneAsync(sceneIndex);
-        loadingCanvas.SetActive(true);
+    protected override IEnumerator LoadSceneAsyncProcess() {
+        loadingScreen.SetActive(true);
+
+        AsyncOperation oper = SceneManager.LoadSceneAsync(sceneIndexToLoad);
+        oper.allowSceneActivation = false;
         while(!oper.isDone) {
             float progessValue = Mathf.Clamp01(oper.progress / 0.9f);
-            progessBar.fillAmount = progessValue;
+
+            progessBar.value = progessValue;
+            progessText.text = progessValue * 100f + "%";
+
             yield return null;
         }
     }

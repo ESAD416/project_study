@@ -23,15 +23,9 @@ public class Fade_Transition : Scene_Transition
         }
     }
 
-    protected override void LoadScene() {
-        StartCoroutine(LoadSceneProcess());
-    }
-
     protected override IEnumerator LoadSceneProcess() {
         transitionAnimaCtrl.SetTrigger("Start");
 
-        yield return new WaitForSeconds(transitionDelay);
-
-        SceneManager.LoadScene(sceneNameToLoad);
+        yield return base.LoadSceneProcess();
     }
 }
