@@ -6,10 +6,18 @@ using UnityEngine.Events;
 
 public class MenuController : MonoBehaviour
 {
-    public UnityEvent OnPlayClicked, OnOptionClicked, OnQuitClicked;
+    public MsgConfirmDialog dialog;
 
-    public void QuitGame() {
-        Debug.Log("QUIT GAME");
+    public void OnPlayClicked() {
+        Debug.Log("OnPlayClicked");
+    }
+
+    public void OnOptionClicked() {
+        Debug.Log("OnOptionClicked");
+    }
+
+    public void OnQuitClicked() {
+        Debug.Log("OnQuitClicked");
         Application.Quit();
     }
 }
