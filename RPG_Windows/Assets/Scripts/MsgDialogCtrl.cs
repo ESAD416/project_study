@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MsgConfirmDialog : MonoBehaviour
+public class MsgDialogCtrl : MonoBehaviour
 {
     public GameObject dialogBox;
     public Text titleTxt;

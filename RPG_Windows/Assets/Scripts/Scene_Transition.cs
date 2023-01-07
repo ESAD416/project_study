@@ -10,7 +10,8 @@ public class Scene_Transition : MonoBehaviour
     public int sceneIndexToLoad;
     public string sceneNameToLoad;
     public TransitionStorage infoStorage;
-    public MsgConfirmDialog dialog;
+    public MsgDialogCtrl dialogCtrl;
+    protected AsyncOperation asyncLoad;
 
     [Header("Player Controls")]
     public Vector2 playerPos ;
@@ -30,7 +31,7 @@ public class Scene_Transition : MonoBehaviour
             string errorContent = ex.Message;
             string confirmBtnStr = "重新讀取";
             string cancelBtnStr = "離開遊戲";
-            dialog.InitialDialogBox(errorTitle, errorContent, confirmBtnStr, cancelBtnStr);
+            dialogCtrl.InitialDialogBox(errorTitle, errorContent, confirmBtnStr, cancelBtnStr);
         }
     }
 
@@ -48,7 +49,7 @@ public class Scene_Transition : MonoBehaviour
             string errorContent = ex.Message;
             string confirmBtnStr = "重新讀取";
             string cancelBtnStr = "離開遊戲";
-            dialog.InitialDialogBox(errorTitle, errorContent, confirmBtnStr, cancelBtnStr);
+            dialogCtrl.InitialDialogBox(errorTitle, errorContent, confirmBtnStr, cancelBtnStr);
         }
     }
 
@@ -64,7 +65,7 @@ public class Scene_Transition : MonoBehaviour
 
     protected virtual IEnumerator LoadSceneAsyncProcess(bool allowSceneActive) {
         yield return new WaitForSeconds(transitionDelay);
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneIndexToLoad);
+        asyncLoad = SceneManager.LoadSceneAsync(sceneIndexToLoad);
         asyncLoad.allowSceneActivation = allowSceneActive;
         while (!asyncLoad.isDone)
         {

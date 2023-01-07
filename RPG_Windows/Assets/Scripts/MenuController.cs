@@ -6,7 +6,7 @@ using UnityEngine.Events;
 
 public class MenuController : MonoBehaviour
 {
-    public MsgConfirmDialog dialog;
+    public MsgDialogCtrl dialogCtrl;
 
     public void OnPlayClicked() {
         Debug.Log("OnPlayClicked");

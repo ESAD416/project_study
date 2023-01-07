@@ -9,21 +9,44 @@ public class Loading_Transition : Scene_Transition
     [Header("Loading Controls")]
     [SerializeField] private GameObject loadingScreen;
     [SerializeField] private Slider progessBar;
-    [SerializeField] private Text progessText;
+    [SerializeField] private Text progessPctText;
+    [SerializeField] private Text descrpText;
+    [SerializeField] private Button transBtn;
+
+    private void Awake() {
+        transBtn.gameObject.SetActive(false);
+        loadingScreen.SetActive(false);
+    }
 
 
     protected override IEnumerator LoadSceneAsyncProcess(bool allowSceneActive) {
         loadingScreen.SetActive(true);
 
-        AsyncOperation oper = SceneManager.LoadSceneAsync(sceneIndexToLoad);
-        oper.allowSceneActivation = allowSceneActive;
-        while(!oper.isDone) {
-            float progessValue = Mathf.Clamp01(oper.progress / 0.9f);
+        asyncLoad = SceneManager.LoadSceneAsync(sceneIndexToLoad);
+        asyncLoad.allowSceneActivation = allowSceneActive;
+        while(!asyncLoad.isDone) {
+            float progessValue = Mathf.Clamp01(asyncLoad.progress / 0.9f);
 
             progessBar.value = progessValue;
-            progessText.text = progessValue * 100f + "%";
+            progessPctText.text = progessValue * 100f + "%";
 
-            yield return null;
+            // Check if the load has finished
+            if (asyncLoad.progress >= 0.9f)
+            {
+                Debug.Log("asyncLoad process is finish");
+                transBtn.gameObject.SetActive(true);
+                descrpText.text = "點擊螢幕後繼續";
+            }
+
+            yield return new WaitForEndOfFrame();
         }
+
+        
     }
+
+    public void AllowSceneTransition() {
+        asyncLoad.allowSceneActivation = true;
+    }
+
+    
 }
