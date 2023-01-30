@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 public class Scene_Transition : MonoBehaviour
@@ -10,7 +11,6 @@ public class Scene_Transition : MonoBehaviour
     public int sceneIndexToLoad;
     public string sceneNameToLoad;
     public TransitionStorage infoStorage;
-    public MsgDialogCtrl dialogCtrl;
     protected AsyncOperation asyncLoad;
 
     [Header("Player Controls")]
@@ -22,6 +22,8 @@ public class Scene_Transition : MonoBehaviour
     public Animator transitionAnimaCtrl;
     public float transitionDelay = 1f;
 
+    #region Load Scene
+
     public virtual void LoadScene() {
         try {
             StartCoroutine(LoadSceneProcess());
@@ -31,14 +33,34 @@ public class Scene_Transition : MonoBehaviour
             string errorContent = ex.Message;
             string confirmBtnStr = "重新讀取";
             string cancelBtnStr = "離開遊戲";
-            dialogCtrl.InitialDialogBox(errorTitle, errorContent, confirmBtnStr, cancelBtnStr);
+
+            UnityEvent confirmAction = new UnityEvent();
+            confirmAction.AddListener(ReloadScene);
+            confirmAction.AddListener(UIController.instance.ModalPanel.DeactivateModelPanel);
+
+            UnityEvent declineAction = new UnityEvent();
+            declineAction.AddListener(UIController.instance.ModalPanel.DeactivateModelPanel);
+
+            UIController.instance.ModalPanel.ShowModalVertically(errorTitle, null, errorContent, confirmBtnStr, confirmAction.Invoke, cancelBtnStr, declineAction.Invoke);
+            //dialogCtrl.InitialDialogBox(errorTitle, errorContent, confirmBtnStr, cancelBtnStr);
         }
     }
 
     public virtual void ReloadScene() {
+        Debug.Log("ReloadScene");
         StopAllCoroutines();
         LoadScene();
     }
+
+    
+    protected virtual IEnumerator LoadSceneProcess() {
+        yield return new WaitForSeconds(transitionDelay);
+        SceneManager.LoadScene(sceneIndexToLoad);
+    }
+
+    #endregion
+
+    #region Async Load Scene
 
     public virtual void LoadSceneAsync(bool allowSceneActive) {
         try {
@@ -49,18 +71,23 @@ public class Scene_Transition : MonoBehaviour
             string errorContent = ex.Message;
             string confirmBtnStr = "重新讀取";
             string cancelBtnStr = "離開遊戲";
-            dialogCtrl.InitialDialogBox(errorTitle, errorContent, confirmBtnStr, cancelBtnStr);
+
+            UnityEvent confirmAction = new UnityEvent();
+            confirmAction.AddListener(delegate { ReloadSceneAsync(false); });
+            confirmAction.AddListener(UIController.instance.ModalPanel.DeactivateModelPanel);
+
+            UnityEvent declineAction = new UnityEvent();
+            declineAction.AddListener(UIController.instance.ModalPanel.DeactivateModelPanel);
+
+            UIController.instance.ModalPanel.ShowModalVertically(errorTitle, null, errorContent, confirmBtnStr, confirmAction.Invoke, cancelBtnStr, declineAction.Invoke);
+            //dialogCtrl.InitialDialogBox(errorTitle, errorContent, confirmBtnStr, cancelBtnStr);
         }
     }
 
-    public virtual void ReloadSceneAsynce(bool allowSceneActive) {
+    public virtual void ReloadSceneAsync(bool allowSceneActive) {
+        Debug.Log("ReloadSceneAsync");
         StopAllCoroutines();
         LoadSceneAsync(allowSceneActive);
-    }
-
-    protected virtual IEnumerator LoadSceneProcess() {
-        yield return new WaitForSeconds(transitionDelay);
-        SceneManager.LoadScene(sceneIndexToLoad);
     }
 
     protected virtual IEnumerator LoadSceneAsyncProcess(bool allowSceneActive) {
@@ -78,4 +105,24 @@ public class Scene_Transition : MonoBehaviour
             yield return null;
         }
     }
+
+    #endregion
+
+    public void TextError() {
+        Debug.Log("Exception ");
+        string errorTitle = "發生錯誤";
+        string errorContent = "Exception";
+        string confirmBtnStr = "重新讀取";
+        string cancelBtnStr = "離開遊戲";
+
+        UnityEvent confirmAction = new UnityEvent();
+        confirmAction.AddListener(delegate { ReloadSceneAsync(false); });
+        confirmAction.AddListener(UIController.instance.ModalPanel.DeactivateModelPanel);
+        
+        UnityEvent declineAction = new UnityEvent();
+        declineAction.AddListener(UIController.instance.ModalPanel.DeactivateModelPanel);
+
+        UIController.instance.ModalPanel.ShowModalVertically(errorTitle, null, errorContent, confirmBtnStr, confirmAction.Invoke, cancelBtnStr, declineAction.Invoke);
+    }
+
 }
