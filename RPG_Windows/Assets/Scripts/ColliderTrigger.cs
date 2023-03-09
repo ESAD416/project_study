@@ -2,10 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class ColliderTrigger : MonoBehaviour
 {
-    public event EventHandler OnPlayerEnterTrigger;
+    public UnityAction OnPlayerEnterTrigger;
 
     protected void OnTriggerEnter2D(Collider2D otherCollider) {
         // if(otherCollider.gameObject.tag == "Player")
@@ -13,7 +14,7 @@ public class ColliderTrigger : MonoBehaviour
         if(player != null) {
             // Player inside trigger area
             Debug.Log("player inside trigger area");
-            OnPlayerEnterTrigger?.Invoke(this, EventArgs.Empty);
+            OnPlayerEnterTrigger?.Invoke();
         }
     }
 }

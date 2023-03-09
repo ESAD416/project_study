@@ -389,6 +389,13 @@ public abstract class Charactor : MonoBehaviour
     #endregion
 
     #region 受擊控制
+    public float GetCurrHealthNormalized() {
+        float result = 1.0f;
+        float normalized = 100.0f / maxHealth;
+        result = currHealth * normalized / 100.0f;
+        return result;
+    }
+
     protected IEnumerator TakeHit() {
         Debug.Log("TakeHit");
         isTakingHit = true;
