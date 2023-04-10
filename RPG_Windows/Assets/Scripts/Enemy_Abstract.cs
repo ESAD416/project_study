@@ -15,7 +15,6 @@ public abstract class Enemy_Abstract : Charactor
         base.Start();
         hitRecoveryTime = AnimeUtils.GetAnimateClipTime(m_Animator, "Hurt");
         isPatroling = true;
-        healthBar.SetHealth(currHealth, maxHealth);
     }
 
     // Update is called once per frame
@@ -32,7 +31,7 @@ public abstract class Enemy_Abstract : Charactor
         m_Animator.SetFloat("moveSpeed", moveSpeed);
     }
 
-    protected virtual void FixedUpdate() {
+    protected override void FixedUpdate() {
         if(isDead) {
             movement = Vector3.zero;
         }
@@ -51,9 +50,9 @@ public abstract class Enemy_Abstract : Charactor
         attackRoutine = StartCoroutine(Attack());
     }
 
-    public override void DmgCalculate(int damage)
-    {
-        base.DmgCalculate(damage);
-        healthBar.SetHealth(currHealth, maxHealth);
-    }
+    // public override void DmgCalculate(int damage)
+    // {
+    //     base.DmgCalculate(damage);
+    //     healthBar.SetHealth(currHealth, maxHealth);
+    // }
 }

@@ -43,19 +43,19 @@ public class BossFight_1 : MonoBehaviour
         // Area took damage
         switch(stage) {
             case Stage.Stage1:
-                if(boss.GetCurrHealthNormalized() <= 0.7f) {
+                if(boss.HealthSystem.GetCurrHealthNormalized() <= 0.7f) {
                     // if under 70% health
                     StartNextStage();
                 }
                 break;
             case Stage.Stage2:
-                if(boss.GetCurrHealthNormalized() <= 0.5f) {
+                if(boss.HealthSystem.GetCurrHealthNormalized() <= 0.5f) {
                     // if under 50% health
                     StartNextStage();
                 }
                 break;
             case Stage.Stage3:
-                if(boss.GetCurrHealthNormalized() <= 0.2f) {
+                if(boss.HealthSystem.GetCurrHealthNormalized() <= 0.2f) {
                     // if under 20% health
                     StartNextStage();
                 }

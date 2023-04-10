@@ -4,6 +4,7 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using static JumpMechanismUtils;
 
 public abstract class Charactor : MonoBehaviour
 {
@@ -30,8 +31,17 @@ public abstract class Charactor : MonoBehaviour
     /// 角色橫縱高座標
     /// </summary>
     public Vector3 m_Coordinate;
+    /// <summary>
+    /// 角色中心物件名稱
+    /// </summary>
     public string centerObjName;
+    /// <summary>
+    /// 角色底部物件名稱
+    /// </summary>
     public string buttomObjName;
+    /// <summary>
+    /// 角色相關資訊存取
+    /// </summary>
     public PlayerStorage infoStorage;
 
     #endregion
@@ -42,14 +52,23 @@ public abstract class Charactor : MonoBehaviour
     /// 角色移速
     /// </summary>
     [SerializeField] protected float moveSpeed = 5f;
+    public float MoveSpeed => moveSpeed;
+    public void SetMoveSpeed(float speed) {
+        this.moveSpeed = speed;
+    }
     /// <summary>
     /// 角色移動向量
     /// </summary>
     protected Vector3 movement;
+    public Vector3 Movement => movement;
+    public void SetMovement(Vector3 vector3) {
+        this.movement = vector3;
+    }
     /// <summary>
     /// 角色面向方向
     /// </summary>
     protected Vector2 facingDir = Vector2.down;
+    public Vector3 FacingDir => facingDir;
     /// <summary>
     /// 角色目前是否為移動中
     /// </summary>
@@ -58,10 +77,13 @@ public abstract class Charactor : MonoBehaviour
             return movement.x != 0 || movement.y != 0;
         }
     }
-
+    /// <summary>
+    /// 角色目前是否能移動
+    /// </summary>
     public bool cantMove {
         get {
-            return jumpHitColli || (isTakingHit && !hyperArmor);
+            bool jumpingUpButNotFinish = isJumping && jumpState == JumpState.JumpUp && jumpIncrement < 1f;
+            return jumpingUpButNotFinish || jumpHitColli || (isTakingHit && !hyperArmor);
         }
     }
     #endregion
@@ -69,17 +91,26 @@ public abstract class Charactor : MonoBehaviour
     #region 跳躍參數
     [Header("Jumping Parameters")]
     public float currHeight = 0f;
+    public float CurrentHeight => currHeight;
+    public void SetCurrentHeight(float height) {
+        this.currHeight = height;
+    }
     protected Vector3 takeOffCoord = Vector3.zero;
     protected Vector2 takeOffDir = Vector2.zero;
-    protected Rigidbody2D shawdowBody;
+    protected float lastHeight = 0f;
     protected float minjumpOffSet = -0.3f;
     protected float jumpOffset = 0.3f;
+    protected float jumpIncrement = 0f;
     protected float g = -0.06f;
     protected bool isJumping;
+    protected JumpState jumpState;
     protected bool jumpHitColli;
-    protected Coroutine jumpRoutine;
-    protected float jumpClipTime = 0.2f;
-    private float lastHeight = 0f;
+    protected Coroutine jumpDelayRoutine;
+    protected float jumpDelay = 0.1f;
+    protected bool jumpDelaying = false;
+    protected Coroutine groundDelayRoutine;
+    protected float groundDelay = 0.2f;
+    protected bool groundDelaying = false;
     
     #endregion
 
@@ -106,14 +137,17 @@ public abstract class Charactor : MonoBehaviour
 
     #region 血量系統參數
 
+    private HealthSystemModel healthSystem;
+    // Getter
+    public HealthSystemModel HealthSystem => healthSystem;
     /// <summary>
     /// 血量
     /// </summary>
-    public int currHealth = 20;
+    // private int currHealth = 20;
     /// <summary>
     /// 血量
     /// </summary>
-    public int maxHealth = 20;
+    private int maxHealth = 20;
     /// <summary>
     /// 已死亡
     /// </summary>
@@ -160,6 +194,7 @@ public abstract class Charactor : MonoBehaviour
         m_Animator = GetComponentInChildren<Animator>();
         m_Rigidbody = GetComponent<Rigidbody2D>();
         m_Coordinate = Vector3.zero;
+        healthSystem = new HealthSystemModel(maxHealth);
     }
 
     // Update is called once per frame
@@ -178,7 +213,7 @@ public abstract class Charactor : MonoBehaviour
         HandleAnimatorLayers();
         SetAnimateMovementPara(movement, facingDir);
         if(!string.IsNullOrEmpty(infoStorage.jumpCollidersName)) {
-            if(isJumping ) {
+            if(isJumping) {
             FocusCollidersWithHeightWhileJumping();
             } else {
                 FocusCollidersWithHeight();
@@ -186,7 +221,7 @@ public abstract class Charactor : MonoBehaviour
         }
     }
 
-    private void FixedUpdate() {
+    protected virtual void FixedUpdate() {
         // Debug.Log("FixedUpdate start player height: "+height);
         // Debug.Log("FixedUpdate start player jumpOffset: "+jumpOffset);
         if(isAttacking) {
@@ -197,15 +232,20 @@ public abstract class Charactor : MonoBehaviour
             }
             movement = Vector3.zero;
         }
-        else if(isJumping) {
-            transform.position = GetWorldPosByCoordinate(m_Coordinate) - new Vector3(0, 1.7f);   // 預設中心點是(x, y+1.7)
-            HandleJumpingProcess();
-        }
+        // else if(isJumping) {
+        //     transform.position = GetWorldPosByCoordinate(m_Coordinate) - new Vector3(0, 1.7f);   // 預設中心點是(x, y+1.7)
+        //     HandleJumpingProcess();
+        // }
         // Debug.Log("FixedUpdate end player height: "+height);
         // Debug.Log("FixedUpdate end player jumpOffset: "+jumpOffset);
 
+        Debug.Log("cantMove: "+cantMove);
         if(!cantMove) {
-            Move();
+            if(isJumping) {
+                MoveWhileJump();
+            } else {
+                Move();
+            }
         }
     }
 
@@ -214,6 +254,10 @@ public abstract class Charactor : MonoBehaviour
         m_Rigidbody.velocity = movement.normalized * moveSpeed;
         //m_Rigidbody.AddForce(movement.normalized* moveSpeed * Time.fixedDeltaTime, ForceMode2D.Force);
         // transform.Translate(movement*moveSpeed*Time.deltaTime);
+    }
+
+    public void MoveWhileJump() {
+        m_Rigidbody.velocity = movement.normalized * 0.5f * moveSpeed;
     }
 
     public void UpdateCoordinate() {
@@ -290,6 +334,7 @@ public abstract class Charactor : MonoBehaviour
     #endregion
     
     #region 跳躍控制
+    /*
     private void HandleJumpingProcess() {
         Debug.Log("currHeight start: "+currHeight);
         Debug.Log("lastHeight start: "+lastHeight);
@@ -340,6 +385,7 @@ public abstract class Charactor : MonoBehaviour
                         lastHeight = currHeight;
                         currHeight = groundCheckHeight;
                         FinishJump();
+                        groundDelayRoutine = StartCoroutine(GroundDelay());
                     }                    
                 } else {
                     lastHeight = currHeight;
@@ -363,15 +409,29 @@ public abstract class Charactor : MonoBehaviour
         Debug.Log("jumpOffset end: "+jumpOffset);
     }
 
-    protected IEnumerator Jump() {
-        isJumping = true;
-        yield return new WaitForSeconds(jumpClipTime);  // hardcasted casted time for debugged
-        FinishJump();
+    protected IEnumerator GroundDelay() {
+        groundDelaying = true;
+        yield return new WaitForSeconds(groundDelay);  // hardcasted casted time for debugged
+        //FinishJump();
+        groundDelaying = false;
+    }
+
+    protected IEnumerator JumpDelay() {
+        jumpDelaying = true;
+        yield return new WaitForSeconds(jumpDelay);  // hardcasted casted time for debugged
+        jumpDelaying = false;
+        
+        if(!isJumping) {
+            takeOffCoord = m_Coordinate;
+            takeOffDir = facingDir;
+            isJumping = true;
+            Debug.Log("takeOffPos: "+takeOffCoord);
+        }
     }
 
     public void FinishJump() {
-        if(jumpRoutine != null) {
-            StopCoroutine(jumpRoutine);
+        if(groundDelayRoutine != null) {
+            StopCoroutine(groundDelayRoutine);
         }
 
         Debug.Log("StopJump currHeight: "+currHeight);
@@ -379,6 +439,7 @@ public abstract class Charactor : MonoBehaviour
 
         isJumping = false;
         jumpHitColli = false;
+        groundDelaying = false;
         jumpOffset = 0.3f;
         lastHeight = currHeight;
         moveSpeed = 14f;
@@ -386,16 +447,10 @@ public abstract class Charactor : MonoBehaviour
         transform.position = new Vector3(transform.position.x, transform.position.y, currHeight);
         takeOffCoord = Vector3.zero;
     }
+    */
     #endregion
 
     #region 受擊控制
-    public float GetCurrHealthNormalized() {
-        float result = 1.0f;
-        float normalized = 100.0f / maxHealth;
-        result = currHealth * normalized / 100.0f;
-        return result;
-    }
-
     protected IEnumerator TakeHit() {
         Debug.Log("TakeHit");
         isTakingHit = true;
@@ -416,12 +471,7 @@ public abstract class Charactor : MonoBehaviour
         Debug.Log("FinishTakeHit");
     }
 
-    public virtual void DmgCalculate(int damage) {
-        Debug.Log("TakeDamage: "+damage);
-        currHealth -= damage;
-    }
-
-    public void TakeHitProcess(int damage, Vector3 senderPos) {
+    public void TakeHitProcess(Vector3 senderPos) {
         if(stunnable && !isStunned) {
             armorToStunned--;
             if(armorToStunned <= 0 ) isStunned = true;
@@ -440,7 +490,7 @@ public abstract class Charactor : MonoBehaviour
             takeHitRoutine = StartCoroutine(TakeHit());
         }
 
-        if(currHealth <= 0) {
+        if(healthSystem.CurrHealth <= 0) {
             Die();
         }
     }
@@ -514,16 +564,5 @@ public abstract class Charactor : MonoBehaviour
             }
         }
     }
-    #endregion
-
-    #region Getter、Setter
-    public Vector3 GetMovement() {
-        return movement;
-    }
-
-    public void SetMovement(Vector3 vector3) {
-        movement = vector3;
-    }
-    
     #endregion
 }
