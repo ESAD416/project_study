@@ -28,6 +28,9 @@ public static class JumpMechanismUtils
                     float correspondHeight = heightObj.GetCorrespondHeight();
                     float selfHeight = heightObj.GetSelfHeight();
                     altitudeVariation = Math.Abs(currHeight - correspondHeight) ;
+                    Debug.Log("DetectedJumpState correspondHeight: "+correspondHeight);
+                    Debug.Log("DetectedJumpState selfHeight: "+selfHeight);
+                    Debug.Log("DetectedJumpState altitudeVariation: "+altitudeVariation);
 
                     if(currHeight < correspondHeight && altitudeVariation > 0 && altitudeVariation <= 1) {
                         var angle = Vector2.Angle((Vector2)raycastStartPoint - rayCastEndPosition, hit.normal);
@@ -43,6 +46,7 @@ public static class JumpMechanismUtils
             }
         }
 
+        Debug.Log("DetectedJumpState jumpUp: "+jumpUp  + ", jumpDown: "+jumpDown);
         if(jumpUp) {
             return JumpState.JumpUp;
         } else if(jumpDown) {

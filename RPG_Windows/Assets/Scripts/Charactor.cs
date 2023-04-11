@@ -100,8 +100,9 @@ public abstract class Charactor : MonoBehaviour
     protected float lastHeight = 0f;
     protected float minjumpOffSet = -0.3f;
     protected float jumpOffset = 0.3f;
+    protected float maxJumpHeight = 1.5f;
     protected float jumpIncrement = 0f;
-    protected float g = -0.06f;
+    protected float g = -0.056f;
     protected bool isJumping;
     protected JumpState jumpState;
     protected bool jumpHitColli;
@@ -239,9 +240,9 @@ public abstract class Charactor : MonoBehaviour
         // Debug.Log("FixedUpdate end player height: "+height);
         // Debug.Log("FixedUpdate end player jumpOffset: "+jumpOffset);
 
-        Debug.Log("cantMove: "+cantMove);
+        //Debug.Log("cantMove: "+cantMove);
         if(!cantMove) {
-            if(isJumping) {
+            if(isJumping && jumpState == JumpState.JumpUp) {
                 MoveWhileJump();
             } else {
                 Move();

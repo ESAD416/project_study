@@ -67,6 +67,7 @@ public class Player : Charactor
     public void OnMovement(InputAction.CallbackContext value)
     {
         Vector2 inputVecter2 = value.ReadValue<Vector2>();
+        //Debug.Log("inputVecter2: "+inputVecter2);
         bool noInputMovement = inputVecter2.x == 0 && inputVecter2.y == 0;
         if(noInputMovement && movement.x != 0 || movement.y != 0) {
             facingDir = movement;
@@ -239,6 +240,7 @@ public class Player : Charactor
     }
 
     private void TriggerToJumpDown() {
+        Debug.Log("TriggerToJumpDown start");
         SetRaycastPoint();
 
         Vector2 distance = new Vector2(movement.x, movement.y) * -0.35f;
@@ -259,9 +261,11 @@ public class Player : Charactor
                 }
             }
         }
+        Debug.Log("TriggerToJumpDown end");
     }
 
     private void TriggerToJumpUp() {
+        Debug.Log("TriggerToJumpUp start");
         SetRaycastPoint();
 
         Vector2 distance = new Vector2(movement.x, movement.y) * 0.35f;
@@ -288,6 +292,7 @@ public class Player : Charactor
                 }
             }
         }
+        Debug.Log("TriggerToJumpUp end");
     }
 
     #region 跳躍控制
@@ -297,8 +302,11 @@ public class Player : Charactor
         Debug.Log("jumpOffset start: "+jumpOffset);
         Debug.Log("jumpIncrement end: "+jumpIncrement);
         float goalheight = currHeight + jumpOffset;
-
+        if(goalheight >= maxJumpHeight) {
+            goalheight = maxJumpHeight;
+        }
         Debug.Log("goalheight: "+goalheight);
+
 
         // if(facingDir == takeOffDir) {
         //     moveSpeed = 5f;
@@ -307,9 +315,11 @@ public class Player : Charactor
         // }
 
         if(jumpOffset >= 0) {
-            lastHeight = currHeight;
-            currHeight = goalheight;
             jumpIncrement += jumpOffset;
+            lastHeight = currHeight;
+            
+            currHeight = goalheight;
+            
             jumpOffset += (g / 2); 
         } 
         else {
@@ -385,6 +395,7 @@ public class Player : Charactor
             takeOffCoord = m_Coordinate;
             takeOffDir = facingDir;
             isJumping = true;
+            maxJumpHeight = currHeight + 1.5f;
             Debug.Log("takeOffPos: "+takeOffCoord);
         }
     }
@@ -404,6 +415,7 @@ public class Player : Charactor
             takeOffCoord = m_Coordinate;
             takeOffDir = facingDir;
             isJumping = true;
+            maxJumpHeight = currHeight + 1.5f;
             Debug.Log("takeOffPos: "+takeOffCoord);
         }
     }
@@ -421,7 +433,7 @@ public class Player : Charactor
         groundDelaying = false;
         jumpOffset = 0.3f;
         lastHeight = currHeight;
-        moveSpeed = 14f;
+        moveSpeed = 10f;
 
         transform.position = new Vector3(transform.position.x, transform.position.y, currHeight);
         takeOffCoord = Vector3.zero;
