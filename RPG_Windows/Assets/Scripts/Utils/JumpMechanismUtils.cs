@@ -46,7 +46,7 @@ public static class JumpMechanismUtils
             }
         }
 
-        Debug.Log("DetectedJumpState jumpUp: "+jumpUp  + ", jumpDown: "+jumpDown);
+        //Debug.Log("DetectedJumpState jumpUp: "+jumpUp  + ", jumpDown: "+jumpDown);
         if(jumpUp) {
             return JumpState.JumpUp;
         } else if(jumpDown) {

@@ -102,7 +102,7 @@ public abstract class Charactor : MonoBehaviour
     protected float jumpOffset = 0.3f;
     protected float maxJumpHeight = 1.5f;
     protected float jumpIncrement = 0f;
-    protected float g = -0.056f;
+    protected float g = -0.0565f;
     protected bool isJumping;
     protected JumpState jumpState;
     protected bool jumpHitColli;

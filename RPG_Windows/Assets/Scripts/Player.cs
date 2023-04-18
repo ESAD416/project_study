@@ -92,18 +92,36 @@ public class Player : Charactor
     #region 碰撞偵測
 
     private void OnCollisionEnter2D(Collision2D other) {
-        //Debug.Log("OnCollisionEnter2D");
+        //Debug.Log("OnCollisionEnter2D: "+other.gameObject.name);
         OnCollisioning = true;
     }
 
     private void OnCollisionStay2D(Collision2D other) {
-        //Debug.Log("OnCollisionStay2D");
+        //Debug.Log("OnCollisionStay2D: "+other.gameObject.name);
         OnCollisioning = true;
     }
 
     private void OnCollisionExit2D(Collision2D other) {
-        //Debug.Log("OnCollisionExit2D");
+        //Debug.Log("OnCollisionExit2D: "+other.gameObject.name);
         OnCollisioning = false;
+    }
+
+    private void ChangeColliderToJumpDown() {
+        var body = GetComponent<BoxCollider2D>();
+        var jumpTrigger = GetComponent<CircleCollider2D>();
+        if(body != null && jumpTrigger != null) {
+            body.enabled = false;
+            jumpTrigger.enabled = true;
+        }
+    }
+
+    private void RevertColliderFromJumpDown() {
+        var body = GetComponent<BoxCollider2D>();
+        var jumpTrigger = GetComponent<CircleCollider2D>();
+        if(body != null && jumpTrigger != null) {
+            jumpTrigger.enabled = false;
+            body.enabled = true;
+        }
     }
 
     #endregion
@@ -240,10 +258,11 @@ public class Player : Charactor
     }
 
     private void TriggerToJumpDown() {
+        ChangeColliderToJumpDown();
         Debug.Log("TriggerToJumpDown start");
         SetRaycastPoint();
 
-        Vector2 distance = new Vector2(movement.x, movement.y) * -0.35f;
+        Vector2 distance = new Vector2(movement.x, movement.y) * 0.35f;
         rayCastEndPos = new Vector2(raycastPoint.position.x, raycastPoint.position.y) + distance;
         //Debug.Log("castEndPos: "+rayCastEndPos);
         Debug.DrawLine(raycastPoint.position, rayCastEndPos, Color.blue);
@@ -254,7 +273,7 @@ public class Player : Charactor
             foreach(RaycastHit2D hit in hits) {
                 Debug.Log("TriggerToJumpDown hits collider name: "+hit.collider.name);
                 var heightObj = hit.collider.GetComponent<HeightOfObject>() as HeightOfObject;
-                if(heightObj != null) {
+                if(heightObj != null && OnCollisioning) {
                     if(!jumpDelaying) {
                         jumpDelayRoutine = StartCoroutine(JumpDownDelay());
                     }
@@ -396,6 +415,7 @@ public class Player : Charactor
             takeOffDir = facingDir;
             isJumping = true;
             maxJumpHeight = currHeight + 1.5f;
+            RevertColliderFromJumpDown();
             Debug.Log("takeOffPos: "+takeOffCoord);
         }
     }
@@ -433,7 +453,7 @@ public class Player : Charactor
         groundDelaying = false;
         jumpOffset = 0.3f;
         lastHeight = currHeight;
-        moveSpeed = 10f;
+        moveSpeed = 11f;
 
         transform.position = new Vector3(transform.position.x, transform.position.y, currHeight);
         takeOffCoord = Vector3.zero;
