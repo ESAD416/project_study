@@ -15,6 +15,7 @@ public class Player : Charactor
     public string onStairs;
     public string stair_start;
     public string stair_end ;
+    private bool prepareToJump = false;
     private bool OnCollisioning = false;
     
     [Header("Input Settings")]
@@ -36,7 +37,10 @@ public class Player : Charactor
         else if(!groundDelaying) {
             if(!isJumping) {
                 //DetectedToJump();
-                jumpState = DetectedWhetherNeedToJump();
+                if(!prepareToJump) {
+                    jumpState = DetectedWhetherNeedToJump();
+                }
+                
                 switch(jumpState) {
                     case JumpState.Ground:
                         break;
@@ -92,17 +96,17 @@ public class Player : Charactor
     #region 碰撞偵測
 
     private void OnCollisionEnter2D(Collision2D other) {
-        //Debug.Log("OnCollisionEnter2D: "+other.gameObject.name);
+        Debug.Log("OnCollisionEnter2D: "+other.gameObject.name);
         OnCollisioning = true;
     }
 
     private void OnCollisionStay2D(Collision2D other) {
-        //Debug.Log("OnCollisionStay2D: "+other.gameObject.name);
+        Debug.Log("OnCollisionStay2D: "+other.gameObject.name);
         OnCollisioning = true;
     }
 
     private void OnCollisionExit2D(Collision2D other) {
-        //Debug.Log("OnCollisionExit2D: "+other.gameObject.name);
+        Debug.Log("OnCollisionExit2D: "+other.gameObject.name);
         OnCollisioning = false;
     }
 
@@ -126,31 +130,35 @@ public class Player : Charactor
 
     #endregion
     
-    private void SetRaycastPoint() {
-        if(movement.x == 0 && movement.y > 0) {
-            // Up
-            raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_Up");
-        } else if(movement.x == 0 && movement.y < 0) {
-            // Down 
-            raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_Down");
-        } else if(movement.x < 0 && movement.y == 0) {
-            // Left
-            raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_Left");
-        } else if(movement.x > 0 && movement.y == 0) {
-            // Right
-            raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_Right");
-        } else if(movement.x > 0 && movement.y > 0) {
-            // UpRight
-            raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_UpRight");
-        } else if(movement.x < 0 && movement.y > 0) {
-            // UpLeft
-            raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_UpLeft");
-        } else if(movement.x > 0 && movement.y < 0) {
-            // DownRight
-            raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_DownRight");
-        } else if(movement.x < 0 && movement.y < 0) {
-            // DownLeft
-            raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_DownLeft");
+    private void SetRaycastPoint(string raycastPointName = null) {
+        if(raycastPointName != null) {
+            raycastPoint = GetComponentInChildren<Transform>().Find(raycastPointName);
+        } else {
+            if(movement.x == 0 && movement.y > 0) {
+                // Up
+                raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_Up");
+            } else if(movement.x == 0 && movement.y < 0) {
+                // Down 
+                raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_Down");
+            } else if(movement.x < 0 && movement.y == 0) {
+                // Left
+                raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_Left");
+            } else if(movement.x > 0 && movement.y == 0) {
+                // Right
+                raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_Right");
+            } else if(movement.x > 0 && movement.y > 0) {
+                // UpRight
+                raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_UpRight");
+            } else if(movement.x < 0 && movement.y > 0) {
+                // UpLeft
+                raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_UpLeft");
+            } else if(movement.x > 0 && movement.y < 0) {
+                // DownRight
+                raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_DownRight");
+            } else if(movement.x < 0 && movement.y < 0) {
+                // DownLeft
+                raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_DownLeft");
+            }
         }
     }
 
@@ -258,14 +266,15 @@ public class Player : Charactor
     }
 
     private void TriggerToJumpDown() {
-        ChangeColliderToJumpDown();
         Debug.Log("TriggerToJumpDown start");
-        SetRaycastPoint();
+        prepareToJump = true;
+        ChangeColliderToJumpDown();
+        SetRaycastPoint("RaycastPoint_Down");
 
-        Vector2 distance = new Vector2(movement.x, movement.y) * 0.35f;
+        Vector2 distance = new Vector2(movement.x, movement.y) * 0.5f;
         rayCastEndPos = new Vector2(raycastPoint.position.x, raycastPoint.position.y) + distance;
         //Debug.Log("castEndPos: "+rayCastEndPos);
-        Debug.DrawLine(raycastPoint.position, rayCastEndPos, Color.blue);
+        Debug.DrawLine(raycastPoint.position, rayCastEndPos, Color.red);
 
         RaycastHit2D[] hits = Physics2D.LinecastAll(raycastPoint.position, rayCastEndPos, 1 << LayerMask.NameToLayer("HeightObj"));
         if(hits.Length >= 1) {
@@ -285,12 +294,13 @@ public class Player : Charactor
 
     private void TriggerToJumpUp() {
         Debug.Log("TriggerToJumpUp start");
+        prepareToJump = true;
         SetRaycastPoint();
 
         Vector2 distance = new Vector2(movement.x, movement.y) * 0.35f;
         rayCastEndPos = new Vector2(raycastPoint.position.x, raycastPoint.position.y) + distance;
         //Debug.Log("castEndPos: "+rayCastEndPos);
-        Debug.DrawLine(raycastPoint.position, rayCastEndPos, Color.blue);
+        Debug.DrawLine(raycastPoint.position, rayCastEndPos, Color.red);
 
         RaycastHit2D[] hits = Physics2D.LinecastAll(raycastPoint.position, rayCastEndPos, 1 << LayerMask.NameToLayer("HeightObj"));
         if(hits.Length >= 1) {
@@ -409,6 +419,7 @@ public class Player : Charactor
         jumpDelaying = true;
         yield return new WaitForSeconds(jumpDelay);  // hardcasted casted time for debugged
         jumpDelaying = false;
+        prepareToJump = false;
         
         if(!isJumping) {
             takeOffCoord = m_Coordinate;
@@ -430,6 +441,7 @@ public class Player : Charactor
 
         yield return new WaitForSeconds(jumpDelay);  // hardcasted casted time for debugged
         jumpDelaying = false;
+        prepareToJump = false;
         
         if(!isJumping) {
             takeOffCoord = m_Coordinate;
