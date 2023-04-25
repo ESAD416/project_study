@@ -96,36 +96,48 @@ public class Player : Charactor
     #region 碰撞偵測
 
     private void OnCollisionEnter2D(Collision2D other) {
-        Debug.Log("OnCollisionEnter2D: "+other.gameObject.name);
+        //Debug.Log("OnCollisionEnter2D: "+other.gameObject.name);
         OnCollisioning = true;
     }
 
     private void OnCollisionStay2D(Collision2D other) {
-        Debug.Log("OnCollisionStay2D: "+other.gameObject.name);
+        //Debug.Log("OnCollisionStay2D: "+other.gameObject.name);
         OnCollisioning = true;
     }
 
     private void OnCollisionExit2D(Collision2D other) {
-        Debug.Log("OnCollisionExit2D: "+other.gameObject.name);
+        //Debug.Log("OnCollisionExit2D: "+other.gameObject.name);
         OnCollisioning = false;
+    }
+
+    private void OnTriggerEnter2D(Collider2D other) {
+        Debug.Log("OnTriggerEnter2D: "+other.gameObject.name);
+    }
+
+    private void OnTriggerStay2D(Collider2D other) {
+        Debug.Log("OnTriggerStay2D: "+other.gameObject.name);
+    }
+
+    private void OnTriggerExit2D(Collider2D other) {
+        Debug.Log("OnTriggerStay2D: "+other.gameObject.name);
     }
 
     private void ChangeColliderToJumpDown() {
         var body = GetComponent<BoxCollider2D>();
-        var jumpTrigger = GetComponent<CircleCollider2D>();
-        if(body != null && jumpTrigger != null) {
-            body.enabled = false;
-            jumpTrigger.enabled = true;
-        }
+        body.isTrigger = true;
+        // var jumpTrigger = GetComponent<CircleCollider2D>();
+        // if(body != null && jumpTrigger != null) {
+        //     jumpTrigger.enabled = true;
+        // }
     }
 
     private void RevertColliderFromJumpDown() {
         var body = GetComponent<BoxCollider2D>();
-        var jumpTrigger = GetComponent<CircleCollider2D>();
-        if(body != null && jumpTrigger != null) {
-            jumpTrigger.enabled = false;
-            body.enabled = true;
-        }
+        body.isTrigger = false;
+        //var jumpTrigger = GetComponent<CircleCollider2D>();
+        // if(body != null && jumpTrigger != null) {
+        //     jumpTrigger.enabled = false;
+        // }
     }
 
     #endregion
@@ -166,7 +178,7 @@ public class Player : Charactor
         if(isMoving) {
             SetRaycastPoint();
 
-            Vector2 distance = new Vector2(movement.x, movement.y) * 0.35f;
+            Vector2 distance = new Vector2(movement.x, movement.y) * 0.5f;
             rayCastEndPos = new Vector2(raycastPoint.position.x, raycastPoint.position.y) + distance;
             //Debug.Log("castEndPos: "+rayCastEndPos);
             Debug.DrawLine(raycastPoint.position, rayCastEndPos, Color.blue);
@@ -271,7 +283,7 @@ public class Player : Charactor
         ChangeColliderToJumpDown();
         SetRaycastPoint("RaycastPoint_Down");
 
-        Vector2 distance = new Vector2(movement.x, movement.y) * 0.5f;
+        Vector2 distance = new Vector2(movement.x, movement.y) * 0.35f;
         rayCastEndPos = new Vector2(raycastPoint.position.x, raycastPoint.position.y) + distance;
         //Debug.Log("castEndPos: "+rayCastEndPos);
         Debug.DrawLine(raycastPoint.position, rayCastEndPos, Color.red);
@@ -282,7 +294,7 @@ public class Player : Charactor
             foreach(RaycastHit2D hit in hits) {
                 Debug.Log("TriggerToJumpDown hits collider name: "+hit.collider.name);
                 var heightObj = hit.collider.GetComponent<HeightOfObject>() as HeightOfObject;
-                if(heightObj != null && OnCollisioning) {
+                if(heightObj != null) {
                     if(!jumpDelaying) {
                         jumpDelayRoutine = StartCoroutine(JumpDownDelay());
                     }

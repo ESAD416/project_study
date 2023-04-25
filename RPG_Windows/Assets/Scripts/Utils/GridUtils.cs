@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-internal static class GridUtils
+public static class GridUtils
 {
     public static Collider2D[] GetColliders(string gridName, string[] excludeCollsTag = null) {
         Collider2D[] result = null;

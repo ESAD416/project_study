@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-internal static class AnimeUtils
+public static class AnimeUtils
 {
     #region 常數
     public const string PATH_UP = "PATH_UP";
