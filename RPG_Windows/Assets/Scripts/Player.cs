@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Interactions;
 using static JumpMechanismUtils;
 
 public class Player : Charactor
@@ -17,16 +18,53 @@ public class Player : Charactor
     public string stair_end ;
     private bool prepareToJump = false;
     private bool OnCollisioning = false;
+    private bool processingPushback = false;
+    [SerializeField] private ColliderTrigger jumpPoint;
+    private bool jumpPointTrigger = false;
     
     [Header("Input Settings")]
-    public PlayerInput playerInput;
-
+    [SerializeField] private InputActionReference movementActionReference;
+    private bool isHoldInteraction = false;
+    private Vector2 holdActionInput = Vector2.zero;
     
     protected override void Start() {
         rayCastEndPos = new Vector2(raycastPoint.position.x, raycastPoint.position.y) + new Vector2(0, -1) * 0.35f;   // 預設射線終點
         base.Start();
         attackClipTime = AnimeUtils.GetAnimateClipTime(m_Animator, "Attack_Down");
         transform.position = infoStorage.initialPos;
+
+        movementActionReference.action.started += content => {
+            var inputVecter2 = content.ReadValue<Vector2>();
+            if(content.interaction is HoldInteraction) {
+                //Debug.Log("HoldInteraction started");
+                //Debug.Log("inputVecter2: "+inputVecter2);
+            }
+        };
+
+        movementActionReference.action.performed += content => {
+            var inputVecter2 = content.ReadValue<Vector2>();
+            if(content.interaction is HoldInteraction) {
+                //Debug.Log("HoldInteraction performed");
+                //Debug.Log("inputVecter2: "+inputVecter2);
+                holdActionInput = inputVecter2;
+                isHoldInteraction = true;
+            }
+        };
+        
+        movementActionReference.action.canceled += content => {
+            var inputVecter2 = content.ReadValue<Vector2>();
+            if(content.interaction is HoldInteraction) {
+                //Debug.Log("HoldInteraction canceled");
+                //Debug.Log("inputVecter2: "+inputVecter2);
+                holdActionInput = Vector2.zero;
+                isHoldInteraction = false;
+            }
+        };
+
+        jumpPoint.OnPlayerEnterTrigger += () => {
+            Debug.Log("ColliderTrigger jumpPointTrigger = true");
+            jumpPointTrigger = true;
+        };
     }
 
     protected override void Update()
@@ -46,14 +84,20 @@ public class Player : Charactor
                         break;
                     case JumpState.JumpDown:
                         TriggerToJumpDown();
+                        // if(!processingPushback) {
+                        //     TriggerToJumpDown();
+                        // } else {
+                        //     m_Rigidbody.AddForce((-new Vector2(movement.x, movement.y))* moveSpeed, ForceMode2D.Force);
+                        // }
                         break;
                     case JumpState.JumpUp:
                         TriggerToJumpUp();
                         break;
                 }
-            } else if(!jumpHitColli) {
-                DetectedWhileJump();
-            }
+            } 
+            // else if(!jumpHitColli) {
+            //     DetectedWhileJump();
+            // }
         }
         //Debug.Log("GetCoordinate: "+GetCoordinate());
         base.Update();
@@ -295,9 +339,48 @@ public class Player : Charactor
                 Debug.Log("TriggerToJumpDown hits collider name: "+hit.collider.name);
                 var heightObj = hit.collider.GetComponent<HeightOfObject>() as HeightOfObject;
                 if(heightObj != null) {
-                    if(!jumpDelaying) {
-                        jumpDelayRoutine = StartCoroutine(JumpDownDelay());
+                    if(jumpPointTrigger) {
+                        Debug.Log("TriggerToJumpDown jumpPointTrigger");
+                         
+                        //if(isHoldInteraction && facingDir.Equals(new Vector2(movement.x, movement.y))) {  
+                        if(isHoldInteraction && holdActionInput.Equals(new Vector2(movement.x, movement.y))) {
+                            Debug.Log("TriggerToJumpDown prepareToJump = false");
+                            prepareToJump = false;
+        
+                            if(!isJumping) {
+                                takeOffCoord = m_Coordinate;
+                                takeOffDir = facingDir;
+                                isJumping = true;
+                                maxJumpHeight = currHeight + 1.5f;
+                                RevertColliderFromJumpDown();
+                                Debug.Log("takeOffPos: "+takeOffCoord);
+                            }
+                            jumpPointTrigger = false;
+                        }
+                        else if((!isHoldInteraction || isHoldInteraction && !facingDir.Equals(new Vector2(movement.x, movement.y)))) {
+                            Debug.Log("TriggerToJumpDown KnockbackFeedback");
+                            Debug.Log("TriggerToJumpDown isHoldInteraction "+isHoldInteraction);
+                            Debug.Log("TriggerToJumpDown facingDir "+facingDir);
+                            Debug.Log("TriggerToJumpDown new Vector2(movement.x, movement.y) "+new Vector2(movement.x, movement.y));
+                            KnockbackFeedback feedback = GetComponent<KnockbackFeedback>();
+                            feedback.ActiveFeedbackByDir(-new Vector2(movement.x, movement.y));
+                            jumpPointTrigger = false;
+                        }
                     }
+
+                    // if(!jumpDelaying) {
+                    //     jumpDelayRoutine = StartCoroutine(JumpDownDelay());
+                    //     //jumpHitColli = true;
+                    //     // if(!isHoldInteraction || (isHoldInteraction && !new Vector2(movement.x, movement.y).Equals(facingDir))) {
+                    //     //     Debug.Log("TriggerToJumpDown pushBack");
+                    //     //     jumpDelayRoutine = StartCoroutine(ProcessPushBack());
+                    //     // } else {
+                    //     //     Debug.Log("TriggerToJumpDown jumpDelay");
+                    //     //     jumpDelayRoutine = StartCoroutine(JumpDownDelay());
+                    //     // }
+                    // }
+                    
+                    //m_Rigidbody.AddForce((-new Vector2(movement.x, movement.y))* moveSpeed, ForceMode2D.Force);
                 }
             }
         }
@@ -425,6 +508,14 @@ public class Player : Charactor
         yield return new WaitForSeconds(groundDelay);  // hardcasted casted time for debugged
         //FinishJump();
         groundDelaying = false;
+    }
+
+    protected IEnumerator ProcessPushBack() {
+        jumpHitColli = true;
+        processingPushback = true;
+        yield return new WaitForSeconds(jumpDelay);  // hardcasted casted time for debugged
+        processingPushback = false;
+        jumpHitColli = false;
     }
 
     protected IEnumerator JumpDownDelay() {

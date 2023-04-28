@@ -24,6 +24,15 @@ public class KnockbackFeedback : MonoBehaviour
         StartCoroutine(EndProcess());
     }
 
+    public void ActiveFeedbackByDir(Vector3 dir) {
+        Debug.Log("ActiveFeedbackByDir dir"+dir);
+        StopAllCoroutines();
+        OnBegin?.Invoke();
+        Vector3 force = dir.normalized * thrust;
+        rb2d.AddForce(force, ForceMode2D.Impulse);
+        StartCoroutine(EndProcess());
+    }
+
     private IEnumerator EndProcess() {
         yield return new WaitForSeconds(hitRecoveryTime);  // hardcasted casted time for debugged
         rb2d.velocity = Vector3.zero;
