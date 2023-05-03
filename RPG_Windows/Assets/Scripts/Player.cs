@@ -357,7 +357,7 @@ public class Player : Charactor
                             }
                             jumpPointTrigger = false;
                         }
-                        else if((!isHoldInteraction || isHoldInteraction && !facingDir.Equals(new Vector2(movement.x, movement.y)))) {
+                        else {
                             Debug.Log("TriggerToJumpDown KnockbackFeedback");
                             Debug.Log("TriggerToJumpDown isHoldInteraction "+isHoldInteraction);
                             Debug.Log("TriggerToJumpDown facingDir "+facingDir);
@@ -447,6 +447,7 @@ public class Player : Charactor
             jumpOffset += (g / 2); 
         } 
         else {
+            
             var hm = GameObject.FindObjectOfType(typeof(HeightManager)) as HeightManager;
 
             float groundCheckHeight = Mathf.Floor(currHeight);
