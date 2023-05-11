@@ -16,6 +16,8 @@ public class Player : Charactor
     public string onStairs;
     public string stair_start;
     public string stair_end ;
+
+    [Header(" Parameters")]
     private bool prepareToJump = false;
     private bool OnCollisioning = false;
     private bool processingPushback = false;
@@ -423,8 +425,9 @@ public class Player : Charactor
     private void HandleJumpingProcess(JumpState state) {
         Debug.Log("currHeight start: "+currHeight);
         Debug.Log("lastHeight start: "+lastHeight);
-        Debug.Log("jumpOffset start: "+jumpOffset);
-        Debug.Log("jumpIncrement end: "+jumpIncrement);
+
+        // Debug.Log("jumpOffset start: "+jumpOffset);
+        // Debug.Log("jumpIncrement end: "+jumpIncrement);
         float goalheight = currHeight + jumpOffset;
         if(goalheight >= maxJumpHeight) {
             goalheight = maxJumpHeight;
@@ -452,46 +455,149 @@ public class Player : Charactor
 
             float groundCheckHeight = Mathf.Floor(currHeight);
 
+            Debug.Log("jumpstate: "+state);
             Debug.Log("Center: "+m_Center);
             Debug.Log("Coordinate: "+m_Coordinate);
             Debug.Log("transform_pos: "+transform.position);
-            Vector3 shadowCoordinate = new Vector3(m_Coordinate.x, m_Coordinate.y, groundCheckHeight);
-            Debug.Log("shadowCoordinate: "+shadowCoordinate);
-            Vector3 shadowWorldPos = new Vector3(shadowCoordinate.x, shadowCoordinate.y + shadowCoordinate.z);
 
-            if(hm.GroundableChecked(shadowWorldPos, groundCheckHeight)) {
-            // if(hm.GroundableChecked(m_Coordinate)) {
-                Debug.Log("Groundable true");
-                if(goalheight <= groundCheckHeight) {
-                    if(hm.NotGroundableChecked(m_Center, groundCheckHeight) || hm.NotGroundableChecked(shadowWorldPos, groundCheckHeight)) {
-                        // NotGroundable(ex: 岩壁)判定
-                        Debug.Log("NotGroundable true");
-                        bool hasCeiling = hm.CeilingChecked(m_Center, groundCheckHeight); 
-                        if(hasCeiling) {
+            if(state != JumpState.JumpUp) {
+                
+                Vector3 shadowCoordinate = new Vector3(m_Coordinate.x, m_Coordinate.y, groundCheckHeight);
+                Debug.Log("shadowCoordinate: "+shadowCoordinate);
+                Vector3 shadowWorldPos = new Vector3(shadowCoordinate.x, shadowCoordinate.y + shadowCoordinate.z);
+
+                if(hm.GroundableChecked(shadowWorldPos, groundCheckHeight)) {
+                // if(hm.GroundableChecked(m_Coordinate)) {
+                    Debug.Log("Groundable true");
+                    if(goalheight <= groundCheckHeight) {
+                        if(hm.NotGroundableChecked(m_Center, groundCheckHeight) || hm.NotGroundableChecked(shadowWorldPos, groundCheckHeight)) {
+                            // NotGroundable(ex: 岩壁)判定
+                            Debug.Log("NotGroundable true");
+                            bool hasCeiling = hm.CeilingChecked(m_Center, groundCheckHeight); 
+                            if(hasCeiling) {
+                                lastHeight = currHeight;
+                                currHeight = goalheight;
+                                // currHeight = groundCheckHeight - 0.01f;
+                                jumpOffset += g;
+                            }
+                        } else {
+                            Debug.Log("NotGroundable false");
                             lastHeight = currHeight;
-                            currHeight = goalheight;
-                            // currHeight = groundCheckHeight - 0.01f;
-                            jumpOffset += g;
-                        }
-                        
+                            currHeight = groundCheckHeight;
+                            FinishJump();
+                            groundDelayRoutine = StartCoroutine(GroundDelay());
+                        }                    
                     } else {
-                        Debug.Log("NotGroundable false");
+                        lastHeight = currHeight;
+                        currHeight = goalheight;
+                        jumpOffset += g;
+                    }
+                } else {
+                    Debug.Log("Groundable false");
+                    lastHeight = currHeight;
+                    currHeight = goalheight;
+                    jumpOffset += g; 
+                }
+            } 
+            else {
+                var jumpPointCollider = GetComponent<BoxCollider2D>();
+                var jumpPointColliderPoint1 = jumpPointCollider.bounds.min;
+                var jumpPointColliderPoint2 = jumpPointCollider.bounds.max;
+                var jumpPointColliderPoint3 = new Vector2(jumpPointColliderPoint1.x, jumpPointColliderPoint2.y);
+                var jumpPointColliderPoint4 = new Vector2(jumpPointColliderPoint2.x, jumpPointColliderPoint1.y);
+
+                Debug.Log("jumpPointColliderPoint1: "+jumpPointColliderPoint1);
+                Debug.Log("jumpPointColliderPoint2: "+jumpPointColliderPoint2);
+                Debug.Log("jumpPointColliderPoint3: "+jumpPointColliderPoint3);
+                Debug.Log("jumpPointColliderPoint4: "+jumpPointColliderPoint4);
+
+                groundCheckHeight = Mathf.Floor(goalheight);
+
+                if(hm.GroundableChecked(PredictNextJumpPoint(jumpPointColliderPoint1, currHeight, goalheight, movement), groundCheckHeight) || 
+                   hm.GroundableChecked(PredictNextJumpPoint(jumpPointColliderPoint2, currHeight, goalheight, movement), groundCheckHeight) ||
+                   hm.GroundableChecked(PredictNextJumpPoint(jumpPointColliderPoint3, currHeight, goalheight, movement), groundCheckHeight) || 
+                   hm.GroundableChecked(PredictNextJumpPoint(jumpPointColliderPoint4, currHeight, goalheight, movement), groundCheckHeight)) {
+                    Debug.Log("PredictNext Groundable true, groundCheckHeight: "+groundCheckHeight);
+                    // if(hm.NotGroundableChecked(PredictNextJumpPoint(jumpPointColliderPoint1, currHeight, goalheight, movement), groundCheckHeight) ||
+                    //    hm.NotGroundableChecked(PredictNextJumpPoint(jumpPointColliderPoint2, currHeight, goalheight, movement), groundCheckHeight) ||
+                    //    hm.NotGroundableChecked(PredictNextJumpPoint(jumpPointColliderPoint3, currHeight, goalheight, movement), groundCheckHeight) ||
+                    //    hm.NotGroundableChecked(PredictNextJumpPoint(jumpPointColliderPoint4, currHeight, goalheight, movement), groundCheckHeight)) {
+                    //     // NotGroundable(ex: 岩壁)判定
+                    //     Debug.Log("NotGroundable true");
+                    //     bool hasCeiling = hm.CeilingChecked(m_Center, groundCheckHeight); 
+                    //     if(hasCeiling) {
+                    //         lastHeight = currHeight;
+                    //         currHeight = goalheight;
+                    //         // currHeight = groundCheckHeight - 0.01f;
+                    //         jumpOffset += g;
+                    //     }
+                    // } else {
+                        // Debug.Log("NotGroundable false");
                         lastHeight = currHeight;
                         currHeight = groundCheckHeight;
                         FinishJump();
                         groundDelayRoutine = StartCoroutine(GroundDelay());
-                    }                    
                 } else {
-                    lastHeight = currHeight;
-                    currHeight = goalheight;
-                    jumpOffset += g;
+                    Debug.Log("PredictNext Groundable false");
+                    RaycastHit2D[] hits = Physics2D.LinecastAll(raycastPoint.position, rayCastEndPos, 1 << LayerMask.NameToLayer("HeightObj"));
+
+                    if(Mathf.Ceil(currHeight) - currHeight <= 0.5f) {
+                        groundCheckHeight = Mathf.Ceil(currHeight);
+                        if(hm.GroundableChecked(PredictNextJumpPoint(jumpPointColliderPoint1, currHeight, goalheight, movement), groundCheckHeight) || 
+                           hm.GroundableChecked(PredictNextJumpPoint(jumpPointColliderPoint2, currHeight, goalheight, movement), groundCheckHeight) ||
+                           hm.GroundableChecked(PredictNextJumpPoint(jumpPointColliderPoint3, currHeight, goalheight, movement), groundCheckHeight) || 
+                           hm.GroundableChecked(PredictNextJumpPoint(jumpPointColliderPoint4, currHeight, goalheight, movement), groundCheckHeight)) {
+                            Debug.Log("After Ceil Groundable true");
+                            lastHeight = currHeight;
+                            currHeight = groundCheckHeight;
+                            FinishJump();
+                            groundDelayRoutine = StartCoroutine(GroundDelay());
+                        } else {
+                            if(hits.Length >= 1) {
+                                var variableVector = PredictNextJumpPoint(jumpPointColliderPoint1, currHeight, goalheight, movement) - jumpPointColliderPoint1;
+
+                                foreach(RaycastHit2D hit in hits) {
+                                    Debug.Log("TriggerToJumpUp hits collider name: "+hit.collider.name);
+                                    var heightObj = hit.collider.GetComponent<HeightOfObject>() as HeightOfObject;
+                                    if(heightObj != null) {
+                                        Vector2 surfaceVector = Vector2.Perpendicular(hit.normal);
+                                        
+                                        float dotResult = Vector3.Dot(variableVector, surfaceVector);
+                                        Debug.Log("dotResult: "+dotResult);
+                                        jumpingMovementVariable = dotResult;
+                                        break;
+                                    }
+                                }
+                            }
+                            lastHeight = currHeight;
+                            currHeight = goalheight;
+                            jumpOffset += g;
+                        }
+                    } else {
+                        if(hits.Length >= 1) {
+                            var variableVector = PredictNextJumpPoint(jumpPointColliderPoint1, currHeight, goalheight, movement) - jumpPointColliderPoint1;
+
+                            foreach(RaycastHit2D hit in hits) {
+                                Debug.Log("TriggerToJumpUp hits collider name: "+hit.collider.name);
+                                var heightObj = hit.collider.GetComponent<HeightOfObject>() as HeightOfObject;
+                                if(heightObj != null) {
+                                    Vector2 surfaceVector = Vector2.Perpendicular(hit.normal);
+                                    
+                                    float dotResult = Vector3.Dot(variableVector, surfaceVector);
+                                    Debug.Log("dotResult: "+dotResult);
+                                    jumpingMovementVariable = dotResult;
+                                    break;
+                                }
+                            }
+                        }
+                        lastHeight = currHeight;
+                        currHeight = goalheight;
+                        jumpOffset += g; 
+                    }
                 }
-            } else {
-                Debug.Log("Groundable false");
-                lastHeight = currHeight;
-                currHeight = goalheight;
-                jumpOffset += g; 
             }
+
+            
         }
 
         if(jumpOffset <= minjumpOffSet) {
@@ -503,6 +609,17 @@ public class Player : Charactor
         Debug.Log("jumpOffset end: "+jumpOffset);
         Debug.Log("jumpIncrement end: "+jumpIncrement);
     }
+
+        private Vector3 PredictNextJumpPoint(Vector3 point, float lastH, float currH, Vector3 movement) {
+            Vector3 result = Vector3.zero;
+            result.x = point.x;
+            //result.z = currH;
+            result.y = point.y - lastH;
+
+            result = result + (Vector3)(m_Rigidbody.velocity * Time.deltaTime);
+
+            return result;
+        }
 
     protected IEnumerator GroundDelay() {
         groundDelaying = true;
@@ -570,6 +687,7 @@ public class Player : Charactor
         jumpOffset = 0.3f;
         lastHeight = currHeight;
         moveSpeed = 11f;
+        jumpingMovementVariable = 0.5f;
 
         transform.position = new Vector3(transform.position.x, transform.position.y, currHeight);
         takeOffCoord = Vector3.zero;

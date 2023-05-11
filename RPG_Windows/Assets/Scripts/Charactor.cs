@@ -104,6 +104,7 @@ public abstract class Charactor : MonoBehaviour
     protected float jumpIncrement = 0f;
     protected float g = -0.0565f;
     protected bool isJumping;
+    protected float jumpingMovementVariable = 0.5f;
     protected JumpState jumpState;
     protected bool jumpHitColli;
     protected Coroutine jumpDelayRoutine;
@@ -258,7 +259,7 @@ public abstract class Charactor : MonoBehaviour
     }
 
     public void MoveWhileJump() {
-        m_Rigidbody.velocity = movement.normalized * 0.5f * moveSpeed;
+        m_Rigidbody.velocity = movement.normalized * jumpingMovementVariable * moveSpeed;
     }
 
     public void UpdateCoordinate() {
