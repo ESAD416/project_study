@@ -59,7 +59,7 @@ public abstract class Charactor : MonoBehaviour
     /// <summary>
     /// 角色移動向量
     /// </summary>
-    protected Vector3 movement;
+    protected Vector3 movement = Vector3.zero;
     public Vector3 Movement => movement;
     public void SetMovement(Vector3 vector3) {
         this.movement = vector3;

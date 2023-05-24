@@ -19,15 +19,17 @@ public class Player : Charactor
 
     [Header(" Parameters")]
     private bool prepareToJump = false;
-    private bool OnCollisioning = false;
+    //private bool OnCollisioning = false;
+    private List<Collider2D> OnColliders = new List<Collider2D>();
     private bool processingPushback = false;
     [SerializeField] private ColliderTrigger jumpPoint;
     private bool jumpPointTrigger = false;
     
     [Header("Input Settings")]
     [SerializeField] private InputActionReference movementActionReference;
+
+    [SerializeField] private InputActionReference holdActionReference;
     private bool isHoldInteraction = false;
-    private Vector2 holdActionInput = Vector2.zero;
     
     protected override void Start() {
         rayCastEndPos = new Vector2(raycastPoint.position.x, raycastPoint.position.y) + new Vector2(0, -1) * 0.35f;   // 預設射線終點
@@ -35,30 +37,35 @@ public class Player : Charactor
         attackClipTime = AnimeUtils.GetAnimateClipTime(m_Animator, "Attack_Down");
         transform.position = infoStorage.initialPos;
 
-        movementActionReference.action.started += content => {
+        movementActionReference.action.performed += content => {
+            var inputVecter2 = content.ReadValue<Vector2>();
+            facingDir = inputVecter2;
+        };
+
+        holdActionReference.action.started += content => {
             var inputVecter2 = content.ReadValue<Vector2>();
             if(content.interaction is HoldInteraction) {
-                //Debug.Log("HoldInteraction started");
-                //Debug.Log("inputVecter2: "+inputVecter2);
+                // Debug.Log("HoldInteraction started");
+                // Debug.Log("inputVecter2: "+inputVecter2);
             }
         };
 
-        movementActionReference.action.performed += content => {
+        holdActionReference.action.performed += content => {
             var inputVecter2 = content.ReadValue<Vector2>();
             if(content.interaction is HoldInteraction) {
-                //Debug.Log("HoldInteraction performed");
-                //Debug.Log("inputVecter2: "+inputVecter2);
-                holdActionInput = inputVecter2;
+                // Debug.Log("HoldInteraction performed");
+                // Debug.Log("inputVecter2: "+inputVecter2);
+                // Debug.Log("facingDir: "+facingDir);
                 isHoldInteraction = true;
             }
         };
         
-        movementActionReference.action.canceled += content => {
+        holdActionReference.action.canceled += content => {
             var inputVecter2 = content.ReadValue<Vector2>();
             if(content.interaction is HoldInteraction) {
-                //Debug.Log("HoldInteraction canceled");
-                //Debug.Log("inputVecter2: "+inputVecter2);
-                holdActionInput = Vector2.zero;
+                // Debug.Log("HoldInteraction canceled");
+                // Debug.Log("inputVecter2: "+inputVecter2);
+                // Debug.Log("facingDir: "+facingDir);
                 isHoldInteraction = false;
             }
         };
@@ -117,12 +124,7 @@ public class Player : Charactor
     public void OnMovement(InputAction.CallbackContext value)
     {
         Vector2 inputVecter2 = value.ReadValue<Vector2>();
-        //Debug.Log("inputVecter2: "+inputVecter2);
-        bool noInputMovement = inputVecter2.x == 0 && inputVecter2.y == 0;
-        if(noInputMovement && movement.x != 0 || movement.y != 0) {
-            facingDir = movement;
-        }
-
+        // Debug.Log("OnMovement inputVecter2: "+inputVecter2);
         movement = new Vector3(inputVecter2.x, inputVecter2.y);
         // Debug.Log("movement x: "+movement.x);
         // Debug.Log("movement y: "+movement.y);
@@ -142,30 +144,35 @@ public class Player : Charactor
     #region 碰撞偵測
 
     private void OnCollisionEnter2D(Collision2D other) {
-        //Debug.Log("OnCollisionEnter2D: "+other.gameObject.name);
-        OnCollisioning = true;
+        Debug.Log("OnCollisionEnter2D: "+other.gameObject.name);
+        //OnCollisioning = true;
+        OnColliders.Add(other.collider);
     }
 
     private void OnCollisionStay2D(Collision2D other) {
-        //Debug.Log("OnCollisionStay2D: "+other.gameObject.name);
-        OnCollisioning = true;
+        Debug.Log("OnCollisionStay2D: "+other.gameObject.name);
+        //OnCollisioning = true;
     }
 
     private void OnCollisionExit2D(Collision2D other) {
-        //Debug.Log("OnCollisionExit2D: "+other.gameObject.name);
-        OnCollisioning = false;
+        Debug.Log("OnColliders count: "+OnColliders.Count);
+        Debug.Log("OnCollisionExit2D: "+other.gameObject.name);
+        var itemToRemove = OnColliders.Single(r => r.name.Equals(other.collider.name));
+        OnColliders.Remove(itemToRemove);
+        Debug.Log("OnColliders count: "+OnColliders.Count);
+        //OnCollisioning = false;
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
-        Debug.Log("OnTriggerEnter2D: "+other.gameObject.name);
+        //Debug.Log("OnTriggerEnter2D: "+other.gameObject.name);
     }
 
     private void OnTriggerStay2D(Collider2D other) {
-        Debug.Log("OnTriggerStay2D: "+other.gameObject.name);
+        //Debug.Log("OnTriggerStay2D: "+other.gameObject.name);
     }
 
     private void OnTriggerExit2D(Collider2D other) {
-        Debug.Log("OnTriggerStay2D: "+other.gameObject.name);
+        //Debug.Log("OnTriggerStay2D: "+other.gameObject.name);
     }
 
     private void ChangeColliderToJumpDown() {
@@ -220,6 +227,15 @@ public class Player : Charactor
         }
     }
 
+    private bool IsObliqueRaycast() {
+        if(movement.x > 0 && movement.y > 0 || movement.x < 0 && movement.y > 0 ||
+           movement.x > 0 && movement.y < 0 || movement.x < 0 && movement.y < 0) {
+            return true;
+        }
+
+        return false;
+    }
+
     private JumpState DetectedWhetherNeedToJump() {
         if(isMoving) {
             SetRaycastPoint();
@@ -229,7 +245,7 @@ public class Player : Charactor
             //Debug.Log("castEndPos: "+rayCastEndPos);
             Debug.DrawLine(raycastPoint.position, rayCastEndPos, Color.blue);
 
-            return JumpMechanismUtils.DetectedJumpState(raycastPoint.position, rayCastEndPos, distance, currHeight, isMoving, OnCollisioning);
+            return JumpMechanismUtils.DetectedJumpState(raycastPoint.position, rayCastEndPos, distance, currHeight, isMoving);
         }
         return JumpState.Ground;
     }
@@ -329,12 +345,28 @@ public class Player : Charactor
         ChangeColliderToJumpDown();
         SetRaycastPoint("RaycastPoint_Down");
 
-        Vector2 distance = new Vector2(movement.x, movement.y) * 0.35f;
-        rayCastEndPos = new Vector2(raycastPoint.position.x, raycastPoint.position.y) + distance;
-        //Debug.Log("castEndPos: "+rayCastEndPos);
-        Debug.DrawLine(raycastPoint.position, rayCastEndPos, Color.red);
+        RaycastHit2D[] hits = null;
+        if(IsObliqueRaycast()) {
+            Vector2 distance1 = new Vector2(movement.x, 0) * 0.35f;
+            var rayCastEndPos1 = new Vector2(raycastPoint.position.x, raycastPoint.position.y) + distance1;
+            Debug.DrawLine(raycastPoint.position, rayCastEndPos1, Color.red);
+            Vector2 distance2 = new Vector2(0, movement.y) * 0.35f;
+            var rayCastEndPos2 = new Vector2(raycastPoint.position.x, raycastPoint.position.y) + distance2;
+            Debug.DrawLine(raycastPoint.position, rayCastEndPos2, Color.red);
 
-        RaycastHit2D[] hits = Physics2D.LinecastAll(raycastPoint.position, rayCastEndPos, 1 << LayerMask.NameToLayer("HeightObj"));
+            RaycastHit2D[] hits1 = Physics2D.LinecastAll(raycastPoint.position, rayCastEndPos1, 1 << LayerMask.NameToLayer("HeightObj"));
+            RaycastHit2D[] hits2 = Physics2D.LinecastAll(raycastPoint.position, rayCastEndPos2, 1 << LayerMask.NameToLayer("HeightObj"));
+
+            hits = hits1.Concat(hits2).ToArray();
+        } else {
+            Vector2 distance = new Vector2(movement.x, movement.y) * 0.35f;
+            rayCastEndPos = new Vector2(raycastPoint.position.x, raycastPoint.position.y) + distance;
+            //Debug.Log("castEndPos: "+rayCastEndPos);
+            Debug.DrawLine(raycastPoint.position, rayCastEndPos, Color.red);
+
+            hits = Physics2D.LinecastAll(raycastPoint.position, rayCastEndPos, 1 << LayerMask.NameToLayer("HeightObj"));
+        }
+
         if(hits.Length >= 1) {
             Debug.Log("TriggerToJumpDown hits.Length > 1");
             foreach(RaycastHit2D hit in hits) {
@@ -345,7 +377,9 @@ public class Player : Charactor
                         Debug.Log("TriggerToJumpDown jumpPointTrigger");
                          
                         //if(isHoldInteraction && facingDir.Equals(new Vector2(movement.x, movement.y))) {  
-                        if(isHoldInteraction && holdActionInput.Equals(new Vector2(movement.x, movement.y))) {
+                        Debug.Log("isHoldInteraction: "+isHoldInteraction);
+                        Debug.Log("new Vector2(movement.x, movement.y): "+new Vector2(movement.x, movement.y));
+                        if(isHoldInteraction && facingDir.Equals(new Vector2(movement.x, movement.y))) {
                             Debug.Log("TriggerToJumpDown prepareToJump = false");
                             prepareToJump = false;
         
@@ -358,6 +392,7 @@ public class Player : Charactor
                                 Debug.Log("takeOffPos: "+takeOffCoord);
                             }
                             jumpPointTrigger = false;
+                            break;
                         }
                         else {
                             Debug.Log("TriggerToJumpDown KnockbackFeedback");
@@ -409,10 +444,12 @@ public class Player : Charactor
                     var angle = Vector2.Angle((Vector2)raycastPoint.position - rayCastEndPos, hit.normal);
                     angle = 90.0f - Mathf.Abs(angle);
                     Debug.Log("DetectedJumpState linecast angle:"+angle);
-                    if(angle >= 60f && 180f - angle >= 60f && OnCollisioning) {
+                    Debug.Log("OnCollisioning: "+OnColliders.Contains(hit.collider));
+                    if(angle >= 60f && 180f - angle >= 60f && OnColliders.Contains(hit.collider)) {
                         if(!jumpDelaying) {
                             Vector2 faceDirAtJump = facingDir;
                             jumpDelayRoutine = StartCoroutine(JumpUpDelay(faceDirAtJump));
+                            break;
                         }
                     }
                 }
@@ -511,42 +548,45 @@ public class Player : Charactor
                 Debug.Log("jumpPointColliderPoint3: "+jumpPointColliderPoint3);
                 Debug.Log("jumpPointColliderPoint4: "+jumpPointColliderPoint4);
 
+                Debug.Log("PredictNext jumpPointColliderPoint1: "+PredictNextJumpPointWorldPos(jumpPointColliderPoint1, currHeight, goalheight, movement));
+                Debug.Log("PredictNext jumpPointColliderPoint1: "+PredictNextJumpPointWorldPos(jumpPointColliderPoint2, currHeight, goalheight, movement));
+                Debug.Log("PredictNext jumpPointColliderPoint1: "+PredictNextJumpPointWorldPos(jumpPointColliderPoint3, currHeight, goalheight, movement));
+                Debug.Log("PredictNext jumpPointColliderPoint1: "+PredictNextJumpPointWorldPos(jumpPointColliderPoint4, currHeight, goalheight, movement));
+
                 groundCheckHeight = Mathf.Floor(goalheight);
 
-                if(hm.GroundableChecked(PredictNextJumpPoint(jumpPointColliderPoint1, currHeight, goalheight, movement), groundCheckHeight) || 
-                   hm.GroundableChecked(PredictNextJumpPoint(jumpPointColliderPoint2, currHeight, goalheight, movement), groundCheckHeight) ||
-                   hm.GroundableChecked(PredictNextJumpPoint(jumpPointColliderPoint3, currHeight, goalheight, movement), groundCheckHeight) || 
-                   hm.GroundableChecked(PredictNextJumpPoint(jumpPointColliderPoint4, currHeight, goalheight, movement), groundCheckHeight)) {
+                if(hm.GroundableChecked(PredictNextJumpPointWorldPos(jumpPointColliderPoint1, currHeight, goalheight, movement), groundCheckHeight) || 
+                   hm.GroundableChecked(PredictNextJumpPointWorldPos(jumpPointColliderPoint2, currHeight, goalheight, movement), groundCheckHeight) ||
+                   hm.GroundableChecked(PredictNextJumpPointWorldPos(jumpPointColliderPoint3, currHeight, goalheight, movement), groundCheckHeight) || 
+                   hm.GroundableChecked(PredictNextJumpPointWorldPos(jumpPointColliderPoint4, currHeight, goalheight, movement), groundCheckHeight)) {
+
                     Debug.Log("PredictNext Groundable true, groundCheckHeight: "+groundCheckHeight);
-                    // if(hm.NotGroundableChecked(PredictNextJumpPoint(jumpPointColliderPoint1, currHeight, goalheight, movement), groundCheckHeight) ||
-                    //    hm.NotGroundableChecked(PredictNextJumpPoint(jumpPointColliderPoint2, currHeight, goalheight, movement), groundCheckHeight) ||
-                    //    hm.NotGroundableChecked(PredictNextJumpPoint(jumpPointColliderPoint3, currHeight, goalheight, movement), groundCheckHeight) ||
-                    //    hm.NotGroundableChecked(PredictNextJumpPoint(jumpPointColliderPoint4, currHeight, goalheight, movement), groundCheckHeight)) {
-                    //     // NotGroundable(ex: 岩壁)判定
-                    //     Debug.Log("NotGroundable true");
-                    //     bool hasCeiling = hm.CeilingChecked(m_Center, groundCheckHeight); 
-                    //     if(hasCeiling) {
-                    //         lastHeight = currHeight;
-                    //         currHeight = goalheight;
-                    //         // currHeight = groundCheckHeight - 0.01f;
-                    //         jumpOffset += g;
-                    //     }
-                    // } else {
-                        // Debug.Log("NotGroundable false");
+                    if(hm.NotGroundableChecked(PredictNextJumpPointWorldPos(m_Center, currHeight, goalheight, movement), groundCheckHeight)) {
+                        // NotGroundable(ex: 岩壁)判定
+                        Debug.Log("PredictNext NotGroundable true");
+                        // bool hasCeiling = hm.CeilingChecked(m_Center, groundCheckHeight); 
+                        // if(hasCeiling) {
+                            lastHeight = currHeight;
+                            currHeight = goalheight;
+                            jumpOffset += g;
+                        // }
+                    } else {
+                        Debug.Log("PredictNext NotGroundable false");
                         lastHeight = currHeight;
                         currHeight = groundCheckHeight;
                         FinishJump();
                         groundDelayRoutine = StartCoroutine(GroundDelay());
+                    }
                 } else {
                     Debug.Log("PredictNext Groundable false");
                     RaycastHit2D[] hits = Physics2D.LinecastAll(raycastPoint.position, rayCastEndPos, 1 << LayerMask.NameToLayer("HeightObj"));
 
                     if(Mathf.Ceil(currHeight) - currHeight <= 0.5f) {
                         groundCheckHeight = Mathf.Ceil(currHeight);
-                        if(hm.GroundableChecked(PredictNextJumpPoint(jumpPointColliderPoint1, currHeight, goalheight, movement), groundCheckHeight) || 
-                           hm.GroundableChecked(PredictNextJumpPoint(jumpPointColliderPoint2, currHeight, goalheight, movement), groundCheckHeight) ||
-                           hm.GroundableChecked(PredictNextJumpPoint(jumpPointColliderPoint3, currHeight, goalheight, movement), groundCheckHeight) || 
-                           hm.GroundableChecked(PredictNextJumpPoint(jumpPointColliderPoint4, currHeight, goalheight, movement), groundCheckHeight)) {
+                        if(hm.GroundableChecked(PredictNextJumpPointWorldPos(jumpPointColliderPoint1, currHeight, goalheight, movement), groundCheckHeight) || 
+                           hm.GroundableChecked(PredictNextJumpPointWorldPos(jumpPointColliderPoint2, currHeight, goalheight, movement), groundCheckHeight) ||
+                           hm.GroundableChecked(PredictNextJumpPointWorldPos(jumpPointColliderPoint3, currHeight, goalheight, movement), groundCheckHeight) || 
+                           hm.GroundableChecked(PredictNextJumpPointWorldPos(jumpPointColliderPoint4, currHeight, goalheight, movement), groundCheckHeight)) {
                             Debug.Log("After Ceil Groundable true");
                             lastHeight = currHeight;
                             currHeight = groundCheckHeight;
@@ -554,7 +594,7 @@ public class Player : Charactor
                             groundDelayRoutine = StartCoroutine(GroundDelay());
                         } else {
                             if(hits.Length >= 1) {
-                                var variableVector = PredictNextJumpPoint(jumpPointColliderPoint1, currHeight, goalheight, movement) - jumpPointColliderPoint1;
+                                var variableVector = PredictNextJumpPointWorldPos(jumpPointColliderPoint1, currHeight, goalheight, movement) - jumpPointColliderPoint1;
 
                                 foreach(RaycastHit2D hit in hits) {
                                     Debug.Log("TriggerToJumpUp hits collider name: "+hit.collider.name);
@@ -575,7 +615,7 @@ public class Player : Charactor
                         }
                     } else {
                         if(hits.Length >= 1) {
-                            var variableVector = PredictNextJumpPoint(jumpPointColliderPoint1, currHeight, goalheight, movement) - jumpPointColliderPoint1;
+                            var variableVector = PredictNextJumpPointWorldPos(jumpPointColliderPoint1, currHeight, goalheight, movement) - jumpPointColliderPoint1;
 
                             foreach(RaycastHit2D hit in hits) {
                                 Debug.Log("TriggerToJumpUp hits collider name: "+hit.collider.name);
@@ -589,7 +629,7 @@ public class Player : Charactor
                                     break;
                                 }
                             }
-                        }
+                        } 
                         lastHeight = currHeight;
                         currHeight = goalheight;
                         jumpOffset += g; 
@@ -610,16 +650,28 @@ public class Player : Charactor
         Debug.Log("jumpIncrement end: "+jumpIncrement);
     }
 
-        private Vector3 PredictNextJumpPoint(Vector3 point, float lastH, float currH, Vector3 movement) {
-            Vector3 result = Vector3.zero;
-            result.x = point.x;
-            //result.z = currH;
-            result.y = point.y - lastH;
+    private Vector3 PredictNextJumpPointWorldPos(Vector3 point, float lastH, float currH, Vector3 movement) {
+        Debug.Log("PredictNextJumpPoint before add velocity lastH: "+lastH);
+        Debug.Log("PredictNextJumpPoint before add velocity currH: "+currH);
 
-            result = result + (Vector3)(m_Rigidbody.velocity * Time.deltaTime);
+        Vector3 coord = Vector3.zero;
+        coord.x = point.x;
+        coord.z = currH;
+        coord.y = point.y - lastH;
 
-            return result;
-        }
+        Vector3 result = Vector3.zero;
+        result.x = coord.x;
+        result.y = coord.y + coord.z;
+        result.z = coord.z;
+
+        Debug.Log("PredictNextJumpPoint before add velocity result: "+result);
+        Debug.Log("PredictNextJumpPoint before add velocity: "+m_Rigidbody.velocity);
+        Debug.Log("PredictNextJumpPoint before add Time.deltaTime: "+Time.deltaTime);
+
+        result = result + (Vector3)(m_Rigidbody.velocity * Time.deltaTime);
+
+        return result;
+    }
 
     protected IEnumerator GroundDelay() {
         groundDelaying = true;
@@ -688,6 +740,7 @@ public class Player : Charactor
         lastHeight = currHeight;
         moveSpeed = 11f;
         jumpingMovementVariable = 0.5f;
+        OnColliders.Clear();
 
         transform.position = new Vector3(transform.position.x, transform.position.y, currHeight);
         takeOffCoord = Vector3.zero;
