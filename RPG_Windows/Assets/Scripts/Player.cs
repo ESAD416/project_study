@@ -494,15 +494,15 @@ public class Player : Charactor
 
             Debug.Log("jumpstate: "+state);
             Debug.Log("Center: "+m_Center);
+            Debug.Log("Buttom: "+m_Buttom);
             Debug.Log("Coordinate: "+m_Coordinate);
             Debug.Log("transform_pos: "+transform.position);
 
-            if(state != JumpState.JumpUp) {
-                
-                Vector3 shadowCoordinate = new Vector3(m_Coordinate.x, m_Coordinate.y, groundCheckHeight);
-                Debug.Log("shadowCoordinate: "+shadowCoordinate);
-                Vector3 shadowWorldPos = new Vector3(shadowCoordinate.x, shadowCoordinate.y + shadowCoordinate.z);
+            Vector3 shadowCoordinate = new Vector3(m_Coordinate.x, m_Coordinate.y, groundCheckHeight);
+            Debug.Log("shadowCoordinate: "+shadowCoordinate);
+            Vector3 shadowWorldPos = new Vector3(shadowCoordinate.x, shadowCoordinate.y + shadowCoordinate.z);
 
+            if(state != JumpState.JumpUp) {
                 if(hm.GroundableChecked(shadowWorldPos, groundCheckHeight)) {
                 // if(hm.GroundableChecked(m_Coordinate)) {
                     Debug.Log("Groundable true");
@@ -537,12 +537,13 @@ public class Player : Charactor
                 }
             } 
             else {
-                var jumpPointCollider = GetComponent<BoxCollider2D>();
+                var jumpPointCollider = jumpPoint.GetComponent<BoxCollider2D>();
                 var jumpPointColliderPoint1 = jumpPointCollider.bounds.min;
                 var jumpPointColliderPoint2 = jumpPointCollider.bounds.max;
                 var jumpPointColliderPoint3 = new Vector2(jumpPointColliderPoint1.x, jumpPointColliderPoint2.y);
                 var jumpPointColliderPoint4 = new Vector2(jumpPointColliderPoint2.x, jumpPointColliderPoint1.y);
 
+                Debug.Log("jumpPointCollider pos: "+jumpPointCollider.transform.position);
                 Debug.Log("jumpPointColliderPoint1: "+jumpPointColliderPoint1);
                 Debug.Log("jumpPointColliderPoint2: "+jumpPointColliderPoint2);
                 Debug.Log("jumpPointColliderPoint3: "+jumpPointColliderPoint3);
@@ -553,7 +554,12 @@ public class Player : Charactor
                 Debug.Log("PredictNext jumpPointColliderPoint1: "+PredictNextJumpPointWorldPos(jumpPointColliderPoint3, currHeight, goalheight, movement));
                 Debug.Log("PredictNext jumpPointColliderPoint1: "+PredictNextJumpPointWorldPos(jumpPointColliderPoint4, currHeight, goalheight, movement));
 
-                groundCheckHeight = Mathf.Floor(goalheight);
+                if(Mathf.Floor(goalheight) >= 0) {
+                    groundCheckHeight = Mathf.Floor(goalheight);
+                } else {
+                    groundCheckHeight = 0;
+                }
+                
 
                 if(hm.GroundableChecked(PredictNextJumpPointWorldPos(jumpPointColliderPoint1, currHeight, goalheight, movement), groundCheckHeight) || 
                    hm.GroundableChecked(PredictNextJumpPointWorldPos(jumpPointColliderPoint2, currHeight, goalheight, movement), groundCheckHeight) ||
@@ -561,7 +567,9 @@ public class Player : Charactor
                    hm.GroundableChecked(PredictNextJumpPointWorldPos(jumpPointColliderPoint4, currHeight, goalheight, movement), groundCheckHeight)) {
 
                     Debug.Log("PredictNext Groundable true, groundCheckHeight: "+groundCheckHeight);
-                    if(hm.NotGroundableChecked(PredictNextJumpPointWorldPos(m_Center, currHeight, goalheight, movement), groundCheckHeight)) {
+                    
+                    //if(hm.NotGroundableChecked(PredictNextJumpPointWorldPos(m_Center, currHeight, goalheight, movement), groundCheckHeight)) {
+                    if(hm.NotGroundableChecked(m_Center, groundCheckHeight) || hm.NotGroundableChecked(shadowWorldPos, groundCheckHeight)) {
                         // NotGroundable(ex: 岩壁)判定
                         Debug.Log("PredictNext NotGroundable true");
                         // bool hasCeiling = hm.CeilingChecked(m_Center, groundCheckHeight); 
