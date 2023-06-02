@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu]
+[CreateAssetMenu(menuName = "Parameters Storage/Scence Transition")]
 public class TransitionStorage : ScriptableObject, ISerializationCallbackReceiver
 {
     public bool fadeTransitionActive = false;

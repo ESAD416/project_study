@@ -7,18 +7,19 @@ public class Fade_Transition : Scene_Transition
 {
     private void Start() {
         // Debug.Log("Scene_Transition Start");
-        if(infoStorage.fadeTransitionActive) {
+        if(transInfoStorage.fadeTransitionActive) {
             // Debug.Log("Scene_Transition SetTrigger End");
             transitionAnimaCtrl.SetTrigger("End");
-            infoStorage.fadeTransitionActive = false;
+            transInfoStorage.fadeTransitionActive = false;
         }
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
         if(other.gameObject.tag == "Player" && !other.isTrigger) {
-            playerStorage.initialPos = playerPos;
-            playerStorage.jumpCollidersName = jumpCollidersName;
-            infoStorage.fadeTransitionActive = true;
+            destinationPlayerStorage.initialPos = destinationPlayerPos;
+            destinationPlayerStorage.jumpCollidersName = destinationJumpCollidersName;
+            destinationPlayerStorage.initialHeight = destinationPlayerHeight;
+            transInfoStorage.fadeTransitionActive = true;
             LoadScene();
         }
     }

@@ -10,15 +10,16 @@ public class Scene_Transition : MonoBehaviour
 {
     public int sceneIndexToLoad;
     public string sceneNameToLoad;
-    public TransitionStorage infoStorage;
+    public TransitionStorage transInfoStorage;
     protected AsyncOperation asyncLoad;
 
-    [Header("Player Controls")]
-    public Vector2 playerPos ;
-    public string jumpCollidersName;
-    public PlayerStorage playerStorage;
+    [Header("Destination Player Controls")]
+    public Vector2 destinationPlayerPos;
+    public float destinationPlayerHeight;
+    public string destinationJumpCollidersName;
+    public PlayerStorage destinationPlayerStorage;
 
-    [Header("Animation Controls")]
+    [Header("Transition Animation Controls")]
     public Animator transitionAnimaCtrl;
     public float transitionDelay = 1f;
 
