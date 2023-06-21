@@ -10,7 +10,7 @@ public class ColliderTrigger : MonoBehaviour
 
     protected void OnTriggerEnter2D(Collider2D otherCollider) {
         // if(otherCollider.gameObject.tag == "Player")
-        Debug.Log("ColliderTrigger OnTriggerEnter2D");
+        //Debug.Log("ColliderTrigger OnTriggerEnter2D");
         OnPlayerEnterTrigger?.Invoke();
         // Player player = otherCollider.GetComponent<Player>();
         // if(player != null) {
@@ -21,10 +21,10 @@ public class ColliderTrigger : MonoBehaviour
     }
 
     private void OnTriggerExit2D(Collider2D other) {
-        Debug.Log("ColliderTrigger OnTriggerExit2D");
+        //Debug.Log("ColliderTrigger OnTriggerExit2D");
     }
 
     private void OnTriggerStay2D(Collider2D other) {
-        Debug.Log("ColliderTrigger OnTriggerStay2D");
+        //Debug.Log("ColliderTrigger OnTriggerStay2D");
     }
 }

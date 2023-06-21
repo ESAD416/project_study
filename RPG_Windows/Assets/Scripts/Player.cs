@@ -72,7 +72,7 @@ public class Player : Charactor
         };
 
         jumpPoint.OnPlayerEnterTrigger += () => {
-            Debug.Log("ColliderTrigger jumpPointTrigger = true");
+            //Debug.Log("ColliderTrigger jumpPointTrigger = true");
             jumpPointTrigger = true;
         };
     }
@@ -145,22 +145,22 @@ public class Player : Charactor
     #region 碰撞偵測
 
     private void OnCollisionEnter2D(Collision2D other) {
-        Debug.Log("OnCollisionEnter2D: "+other.gameObject.name);
+        //Debug.Log("OnCollisionEnter2D: "+other.gameObject.name);
         //OnCollisioning = true;
         OnColliders.Add(other.collider);
     }
 
     private void OnCollisionStay2D(Collision2D other) {
-        Debug.Log("OnCollisionStay2D: "+other.gameObject.name);
+        //Debug.Log("OnCollisionStay2D: "+other.gameObject.name);
         //OnCollisioning = true;
     }
 
     private void OnCollisionExit2D(Collision2D other) {
-        Debug.Log("OnColliders count: "+OnColliders.Count);
-        Debug.Log("OnCollisionExit2D: "+other.gameObject.name);
+        //Debug.Log("OnColliders count: "+OnColliders.Count);
+        //Debug.Log("OnCollisionExit2D: "+other.gameObject.name);
         var itemToRemove = OnColliders.Single(r => r.name.Equals(other.collider.name));
         OnColliders.Remove(itemToRemove);
-        Debug.Log("OnColliders count: "+OnColliders.Count);
+        //Debug.Log("OnColliders count: "+OnColliders.Count);
         //OnCollisioning = false;
     }
 
