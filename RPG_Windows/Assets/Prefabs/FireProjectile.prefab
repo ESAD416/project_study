@@ -168,4 +168,4 @@ MonoBehaviour:
   projectileHitBox: {fileID: 8029510428359825285}
   speed: 14
   duration: 5
-  spritePointDirection: {x: 0, y: -1, z: 0}
+  referenceAxis: {x: 0, y: -1, z: 0}

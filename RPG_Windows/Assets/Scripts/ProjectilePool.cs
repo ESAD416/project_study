@@ -20,6 +20,7 @@ public class ProjectilePool : MonoBehaviour
     private void Start() {
         for (int i = 0; i < amountToPool; i++) {
             GameObject obj = Instantiate(projectilePrefab);
+            obj.transform.SetParent(transform);
             obj.SetActive(false);
             pooledProjectiles.Add(obj);
         }

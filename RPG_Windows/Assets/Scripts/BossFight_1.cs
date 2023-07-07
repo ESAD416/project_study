@@ -18,11 +18,15 @@ public class BossFight_1 : MonoBehaviour
     private Enemy_Abstract boss;
     private float timeToStartBattle = 3f;
     private float timeBeforeAttacks = 3f;
-    private float timeBetweenAttacks = 5f;
+    private float timeBetweenAttacks = 6f;
     private int countOfLaunches = 2;
     [SerializeField] private Player player;
     [SerializeField] private Projectile_FireBall fireProjectile;
-    [SerializeField] private List<Transform> attackPointOffsets;
+    [SerializeField] private List<Transform> attackOffsets;
+    [SerializeField] private OffScreenIndicatorCtrl_Slider offScreenIndicatorCtrl;
+
+
+    private List<int> randomNums = new List<int>();
 
     // Start is called before the first frame update
     void Start()
@@ -38,8 +42,9 @@ public class BossFight_1 : MonoBehaviour
 
 
     protected void OnPlayerEnterFight() {
-        StartBattle();
+        Debug.Log("OnPlayerEnterFight");
         colliderTrigger.OnPlayerEnterTrigger -= OnPlayerEnterFight;
+        Invoke("StartBattle", timeToStartBattle);
     }
 
     private void BossFight_1_OnDead() {
@@ -74,33 +79,25 @@ public class BossFight_1 : MonoBehaviour
         switch(stage) {
             case Stage.WaitingToStart: 
                 stage = Stage.Stage1;
-                Debug.Log("stage: "+stage);
-                Debug.Log("timeBeforeAttacks: "+timeBeforeAttacks);
-                Debug.Log("timeBetweenAttacks: "+timeBetweenAttacks);
-                Debug.Log("countOfLaunches: "+countOfLaunches);
-                InvokeRepeating("LaunchProjectile", 0f, timeBeforeAttacks);
+                CancelInvoke("LineAttackProcess");
+                LineAttackProcess();
+                //InvokeRepeating("LineAttackProcess", 0f, timeBetweenAttacks);
                 break;
             case Stage.Stage1:
                 stage = Stage.Stage2;
                 timeBeforeAttacks = 2f;
                 timeBetweenAttacks = 4f;
                 countOfLaunches = 3;
-                Debug.Log("stage: "+stage);
-                Debug.Log("timeBeforeAttacks: "+timeBeforeAttacks);
-                Debug.Log("timeBetweenAttacks: "+timeBetweenAttacks);
-                Debug.Log("countOfLaunches: "+countOfLaunches);
-                InvokeRepeating("LaunchProjectile", 0f, timeBeforeAttacks);
+                //CancelInvoke("LineAttackProcess");
+                //InvokeRepeating("LineAttackProcess", 0f, timeBetweenAttacks);
                 break;
             case Stage.Stage2:
                 stage = Stage.Stage3;
-                timeBeforeAttacks = 1f;
+                timeBeforeAttacks = 1.5f;
                 timeBetweenAttacks = 3f;
                 countOfLaunches = 4;
-                Debug.Log("stage: "+stage);
-                Debug.Log("timeBeforeAttacks: "+timeBeforeAttacks);
-                Debug.Log("timeBetweenAttacks: "+timeBetweenAttacks);
-                Debug.Log("countOfLaunches: "+countOfLaunches);
-                InvokeRepeating("LaunchProjectile", 0f, timeBeforeAttacks);
+                //CancelInvoke("LineAttackProcess");
+                //InvokeRepeating("LineAttackProcess", 0f, timeBetweenAttacks);
                 break;
         }
     }
@@ -110,16 +107,21 @@ public class BossFight_1 : MonoBehaviour
         StartNextStage();
     }
 
-    private void LaunchProjectile() {
-        if(attackPointOffsets.Count == 0) {
+    private void LineAttackProcess() {
+        // 包含指示器顯示與Projectile發射
+        Debug.Log("stage: "+stage);
+        Debug.Log("timeBeforeAttacks: "+timeBeforeAttacks);
+        Debug.Log("timeBetweenAttacks: "+timeBetweenAttacks);
+        Debug.Log("countOfLaunches: "+countOfLaunches);
+        
+        if(attackOffsets.Count == 0) {
             Debug.Log("No attack points");
             return;
         }
-
         if(countOfLaunches > 0) {
-            List<int> randomNums = new List<int>();
+            randomNums = new List<int>();
             for(int i = 0; i < countOfLaunches; i++) {
-                int randomNum = UnityEngine.Random.Range(0, attackPointOffsets.Count);
+                int randomNum = UnityEngine.Random.Range(0, attackOffsets.Count);
                 if(randomNums.Contains(randomNum)) {
                     i--;
                     continue;
@@ -128,25 +130,51 @@ public class BossFight_1 : MonoBehaviour
                 }
             }
 
-            foreach(int randomNum in randomNums) {
-                var attackOffset = attackPointOffsets[randomNum];
-                Vector3 dir = player.m_Center - attackOffset.position;
+            // 1. 指示器
+            DisplayAttackIndicators();
+            // 2. 產生Projectile
+            LaunchProjectile();
 
-                //Debug.Log("LunchProjectile player.m_Center: "+player.m_Center);
-                //Debug.Log("LunchProjectile attackOffset: "+attackOffset.position);
-                //Debug.Log("LunchProjectile dir: "+dir);
-                GameObject projectile = ProjectilePool.instance.GetPooledProjectile();
-                if(projectile != null) {
-                    projectile.GetComponent<Projectile>().SetDirection(dir.normalized);
-                    
-                    var angle = Vector3.Angle(dir, projectile.GetComponent<Projectile>().spritePointDirection);
-                    //Debug.Log("LunchProjectile angle: "+angle);
-                    var quaternion = dir.x > 0 ? Quaternion.Euler(0, 0, angle) : Quaternion.Euler(0, 0, -angle);
+            Debug.Log("offScreenIndicatorCtrl targets Count: "+offScreenIndicatorCtrl.targets.Count);
+            
+        }
 
-                    projectile.transform.position = attackOffset.position;
-                    projectile.transform.rotation = quaternion;
-                    projectile.SetActive(true);
-                }
+    }
+    private void DisplayAttackIndicators() {
+        foreach(int randomNum in randomNums) {
+            var attackOffset = attackOffsets[randomNum];
+
+            offScreenIndicatorCtrl.targets.Add(new IndicatorModel() {
+                target = attackOffset,
+                referenceAxis = Vector3.right,
+            });
+        }
+        offScreenIndicatorCtrl.InstantiateIndicators(timeBeforeAttacks);
+    }
+
+    private void LaunchProjectile() {
+        foreach(int randomNum in randomNums) {
+            var attackOffset = attackOffsets[randomNum];
+            Vector3 dir = player.m_Center - attackOffset.position;
+
+            //Debug.Log("LunchProjectile player.m_Center: "+player.m_Center);
+            //Debug.Log("LunchProjectile attackOffset: "+attackOffset.position);
+            //Debug.Log("LunchProjectile dir: "+dir);
+            GameObject projectile = ProjectilePool.instance.GetPooledProjectile();
+            if(projectile != null) {
+                projectile.GetComponent<Projectile>().SetDirection(dir.normalized);
+                
+                Debug.Log("LunchProjectile referenceAxis: "+projectile.GetComponent<Projectile>().referenceAxis);
+                // var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+                // var quaternion =Quaternion.Euler(0, 0, angle);
+                var angle = Vector3.Angle(dir, projectile.GetComponent<Projectile>().referenceAxis);
+                Debug.Log("LunchProjectile angle: "+angle);
+                var quaternion = dir.x > 0 ? Quaternion.Euler(0, 0, angle) : Quaternion.Euler(0, 0, -angle);
+
+                projectile.transform.position = attackOffset.position;
+                projectile.transform.rotation = quaternion;
+                // projectile.transform.rotation = Quaternion.LookRotation(dir.normalized, projectile.GetComponent<Projectile>().referenceAxis);;
+                projectile.SetActive(true);
             }
         }
     }

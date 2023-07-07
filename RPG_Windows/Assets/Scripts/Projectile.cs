@@ -2,12 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Projectile : MonoBehaviour
+public class Projectile : MonoBehaviour
 {
     public Collider2D projectileHitBox;
     public float speed;
     public float duration;
-    public Vector3 spritePointDirection;
+    public Vector3 referenceAxis;
     protected Vector3 launchDirection;
 
     protected virtual void Start()

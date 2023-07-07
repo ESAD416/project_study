@@ -4,9 +4,8 @@ using UnityEngine;
 
 public class Projectile_FireBall : Projectile
 {
-    protected override void Start()
-    {
-        
+    protected void Awake() {
+        referenceAxis = Vector3.down;
     }
 
     // Update is called once per frame
