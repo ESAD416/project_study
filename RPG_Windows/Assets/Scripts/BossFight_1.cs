@@ -17,12 +17,17 @@ public class BossFight_1 : MonoBehaviour
     private Stage stage;
     private Enemy_Abstract boss;
     private float timeToStartBattle = 3f;
-    private float timeBeforeAttacks = 3f;
-    private float timeBetweenAttacks = 6f;
+    private float indicatorDuration = 3f;
+    private float projectileDuration = 2.5f;
+    private float delayTime = 1f;
     private int countOfLaunches = 2;
     [SerializeField] private Player player;
     [SerializeField] private Projectile_FireBall fireProjectile;
-    [SerializeField] private List<Transform> attackOffsets;
+
+
+    [SerializeField] private DynamicOffsets attackOffsets;
+    
+
     [SerializeField] private OffScreenIndicatorCtrl_Slider offScreenIndicatorCtrl;
 
 
@@ -31,7 +36,7 @@ public class BossFight_1 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        colliderTrigger.OnPlayerEnterTrigger += OnPlayerEnterFight;
+        colliderTrigger.OnPlayerEnterTriggerEvent.AddListener(OnPlayerEnterFight);
     }
 
     // Update is called once per frame
@@ -43,7 +48,7 @@ public class BossFight_1 : MonoBehaviour
 
     protected void OnPlayerEnterFight() {
         Debug.Log("OnPlayerEnterFight");
-        colliderTrigger.OnPlayerEnterTrigger -= OnPlayerEnterFight;
+        colliderTrigger.OnPlayerEnterTriggerEvent.RemoveListener(OnPlayerEnterFight);
         Invoke("StartBattle", timeToStartBattle);
     }
 
@@ -79,22 +84,21 @@ public class BossFight_1 : MonoBehaviour
         switch(stage) {
             case Stage.WaitingToStart: 
                 stage = Stage.Stage1;
-                CancelInvoke("LineAttackProcess");
+                //CancelInvoke("LineAttackProcess");
                 LineAttackProcess();
-                //InvokeRepeating("LineAttackProcess", 0f, timeBetweenAttacks);
                 break;
             case Stage.Stage1:
                 stage = Stage.Stage2;
-                timeBeforeAttacks = 2f;
-                timeBetweenAttacks = 4f;
+                indicatorDuration = 2f;
+                projectileDuration = 4f;
                 countOfLaunches = 3;
                 //CancelInvoke("LineAttackProcess");
                 //InvokeRepeating("LineAttackProcess", 0f, timeBetweenAttacks);
                 break;
             case Stage.Stage2:
                 stage = Stage.Stage3;
-                timeBeforeAttacks = 1.5f;
-                timeBetweenAttacks = 3f;
+                indicatorDuration = 1.5f;
+                projectileDuration = 3f;
                 countOfLaunches = 4;
                 //CancelInvoke("LineAttackProcess");
                 //InvokeRepeating("LineAttackProcess", 0f, timeBetweenAttacks);
@@ -110,18 +114,18 @@ public class BossFight_1 : MonoBehaviour
     private void LineAttackProcess() {
         // 包含指示器顯示與Projectile發射
         Debug.Log("stage: "+stage);
-        Debug.Log("timeBeforeAttacks: "+timeBeforeAttacks);
-        Debug.Log("timeBetweenAttacks: "+timeBetweenAttacks);
+        Debug.Log("timeBeforeAttacks: "+indicatorDuration);
+        Debug.Log("timeBetweenAttacks: "+projectileDuration);
         Debug.Log("countOfLaunches: "+countOfLaunches);
         
-        if(attackOffsets.Count == 0) {
+        if(attackOffsets.offsets.Count == 0) {
             Debug.Log("No attack points");
             return;
         }
         if(countOfLaunches > 0) {
             randomNums = new List<int>();
             for(int i = 0; i < countOfLaunches; i++) {
-                int randomNum = UnityEngine.Random.Range(0, attackOffsets.Count);
+                int randomNum = UnityEngine.Random.Range(0, attackOffsets.offsets.Count);
                 if(randomNums.Contains(randomNum)) {
                     i--;
                     continue;
@@ -130,31 +134,52 @@ public class BossFight_1 : MonoBehaviour
                 }
             }
 
-            // 1. 指示器
-            DisplayAttackIndicators();
-            // 2. 產生Projectile
-            LaunchProjectile();
-
-            Debug.Log("offScreenIndicatorCtrl targets Count: "+offScreenIndicatorCtrl.targets.Count);
-            
+            StartCoroutine(LineAttackCoroutines());
         }
 
     }
-    private void DisplayAttackIndicators() {
+
+    private IEnumerator LineAttackCoroutines() {
+        while(true) {
+            // 1. 動態生成攻擊點
+            StartCoroutine(GenerateAttackOffsets());
+            // 2. 指示器
+            StartCoroutine(DisplayAttackIndicators());
+            // 3. 產生Projectile
+            StartCoroutine(LaunchProjectile());
+
+            yield return new WaitForSeconds(indicatorDuration + projectileDuration - delayTime);
+        }
+    }
+
+    private IEnumerator GenerateAttackOffsets() {
+        Debug.Log("LineAttackCoroutines: GenerateAttackOffsets start");
+        attackOffsets.UpdateCombination();
+
+        yield return null;
+        Debug.Log("LineAttackCoroutines: GenerateAttackOffsets end");
+    }
+
+    private IEnumerator DisplayAttackIndicators() {
+        Debug.Log("LineAttackCoroutines: DisplayAttackIndicators start");
+        yield return null;
         foreach(int randomNum in randomNums) {
-            var attackOffset = attackOffsets[randomNum];
+            var attackOffset = attackOffsets.offsets[randomNum];
 
             offScreenIndicatorCtrl.targets.Add(new IndicatorModel() {
                 target = attackOffset,
                 referenceAxis = Vector3.right,
             });
         }
-        offScreenIndicatorCtrl.InstantiateIndicators(timeBeforeAttacks);
+        offScreenIndicatorCtrl.InstantiateIndicators(indicatorDuration);
+        Debug.Log("LineAttackCoroutines: DisplayAttackIndicators end");
     }
 
-    private void LaunchProjectile() {
+    private IEnumerator LaunchProjectile() {
+        Debug.Log("LineAttackCoroutines: LaunchProjectile start");
+        yield return new WaitForSeconds(indicatorDuration);
         foreach(int randomNum in randomNums) {
-            var attackOffset = attackOffsets[randomNum];
+            var attackOffset = attackOffsets.offsets[randomNum];
             Vector3 dir = player.m_Center - attackOffset.position;
 
             //Debug.Log("LunchProjectile player.m_Center: "+player.m_Center);
@@ -164,7 +189,7 @@ public class BossFight_1 : MonoBehaviour
             if(projectile != null) {
                 projectile.GetComponent<Projectile>().SetDirection(dir.normalized);
                 
-                Debug.Log("LunchProjectile referenceAxis: "+projectile.GetComponent<Projectile>().referenceAxis);
+                //Debug.Log("LunchProjectile referenceAxis: "+projectile.GetComponent<Projectile>().referenceAxis);
                 // var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
                 // var quaternion =Quaternion.Euler(0, 0, angle);
                 var angle = Vector3.Angle(dir, projectile.GetComponent<Projectile>().referenceAxis);
@@ -177,6 +202,7 @@ public class BossFight_1 : MonoBehaviour
                 projectile.SetActive(true);
             }
         }
+        Debug.Log("LineAttackCoroutines: LaunchProjectile end");
     }
 
     private void StopBattle() {

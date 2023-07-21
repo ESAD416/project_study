@@ -71,10 +71,10 @@ public class Player : Charactor
             }
         };
 
-        jumpPoint.OnPlayerEnterTrigger += () => {
+        jumpPoint.OnPlayerEnterTriggerEvent.AddListener(() => {
             //Debug.Log("ColliderTrigger jumpPointTrigger = true");
             jumpPointTrigger = true;
-        };
+        });
     }
 
     protected override void Update()
