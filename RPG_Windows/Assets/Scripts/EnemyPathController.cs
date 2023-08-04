@@ -34,15 +34,18 @@ public class EnemyPathController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(AIChaser.gameObject.activeSelf) {
-            if(isHorizontal) {
-                if((AIChaser.TargetModel != null && AIChaser.targetVisable)) {
-                    UpdatePathParaForHorizontal();
-                } else {
-                    StartCoroutine(UpdatePathParaEndingDelay());
+        if(AIChaser != null) {
+            if(AIChaser.gameObject.activeSelf) {
+                if(isHorizontal) {
+                    if((AIChaser.TargetModel != null && AIChaser.targetVisable)) {
+                        UpdatePathParaForHorizontal();
+                    } else {
+                        StartCoroutine(UpdatePathParaEndingDelay());
+                    }
                 }
-            }
-        } else if(Enemy.isTakingHit){
+            } 
+        }
+        else if(Enemy.isTakingHit){
             UpdatePathParaForHorizontal();
         }
     }

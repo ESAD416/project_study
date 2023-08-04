@@ -22,8 +22,8 @@ public class Enemy_Horizontal : Enemy_Abstract
         //attackClipTime = AnimeUtils.GetAnimateClipTime(m_Animator, "Attack_Down");
         attackClipTime = 1f;
 
-        detectorL = leftDetector;
-        detectorR = rightDetector;
+        detectorL = leftDetector ?? null;
+        detectorR = rightDetector ?? null;
         m_SprtRenderer = GetComponentInChildren<SpriteRenderer>();
         base.Start();
     }
@@ -64,14 +64,14 @@ public class Enemy_Horizontal : Enemy_Abstract
                     moveRight = AnimeUtils.isRightForHorizontalAnimation(movement);
                 }
 
-                detectorL.gameObject.SetActive(!moveRight);
-                detectorR.gameObject.SetActive(moveRight);
+                if(detectorL != null) detectorL.gameObject.SetActive(!moveRight);
+                if(detectorR != null) detectorR.gameObject.SetActive(moveRight);
             }
             
-            m_SprtRenderer.flipX = moveRight;
+            if(m_SprtRenderer!= null) m_SprtRenderer.flipX = moveRight;
         } else {
-            detectorL.gameObject.SetActive(false);
-            detectorR.gameObject.SetActive(false);
+            if(detectorL != null) detectorL.gameObject.SetActive(false);
+            if(detectorR != null) detectorR.gameObject.SetActive(false);
         }
 
         base.FixedUpdate();
@@ -101,11 +101,11 @@ public class Enemy_Horizontal : Enemy_Abstract
 
     public void UpdateDetector() {
         if(isChasing) {
-            detectorL = leftAttackDetector;
-            detectorR = rightAttackDetector;
+            detectorL = leftAttackDetector ?? null;
+            detectorR = rightAttackDetector ?? null;
         } else {
-            detectorL = leftDetector;
-            detectorR = rightDetector;
+            detectorL = leftDetector ?? null;
+            detectorR = rightDetector ?? null;
         }
     }
     
@@ -115,8 +115,8 @@ public class Enemy_Horizontal : Enemy_Abstract
             facingDir = movement;
         }
 
-        detectorL.gameObject.SetActive(false);
-        detectorR.gameObject.SetActive(false);
+        if(detectorL != null) detectorL.gameObject.SetActive(false);
+        if(detectorR != null) detectorR.gameObject.SetActive(false);
         attackRoutine = StartCoroutine(Attack());
     }
 

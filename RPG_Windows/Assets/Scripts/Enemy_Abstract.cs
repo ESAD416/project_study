@@ -13,7 +13,7 @@ public abstract class Enemy_Abstract : Charactor
     // Start is called before the first frame update
     protected override void Start() {
         base.Start();
-        hitRecoveryTime = AnimeUtils.GetAnimateClipTime(m_Animator, "Hurt");
+        if(m_Animator != null) hitRecoveryTime = AnimeUtils.GetAnimateClipTime(m_Animator, "Hurt");
         isPatroling = true;
     }
 
@@ -21,14 +21,14 @@ public abstract class Enemy_Abstract : Charactor
     protected override void Update() {
         //Debug.Log("moveSpeed: "+moveSpeed);
         var center = transform.Find(centerObjName).GetComponent<Transform>();
-        m_Center = new Vector3(center.position.x, center.position.y);
+        m_Center = center?.position ?? Vector3.zero;
 
         var buttom = transform.Find(buttomObjName).GetComponent<Transform>();
-        m_Buttom = new Vector3(buttom.position.x, buttom.position.y);
+        m_Buttom = buttom?.position ?? Vector3.zero;
 
         UpdateCoordinate();
 
-        m_Animator.SetFloat("moveSpeed", moveSpeed);
+        m_Animator?.SetFloat("moveSpeed", moveSpeed);
     }
 
     protected override void FixedUpdate() {

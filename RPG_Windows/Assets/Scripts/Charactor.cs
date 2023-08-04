@@ -21,7 +21,7 @@ public abstract class Charactor : MonoBehaviour
     /// <summary>
     /// 角色中心
     /// </summary>
-    [Header("Basic Objects")]
+    [Header("Basic Parameters")]
     public Vector3 m_Center;
     /// <summary>
     /// 角色底部
@@ -67,7 +67,7 @@ public abstract class Charactor : MonoBehaviour
     /// <summary>
     /// 角色面向方向
     /// </summary>
-    protected Vector2 facingDir = Vector2.down;
+    [SerializeField] protected Vector2 facingDir = Vector2.down;
     public Vector3 FacingDir => facingDir;
     /// <summary>
     /// 角色目前是否為移動中
@@ -205,10 +205,10 @@ public abstract class Charactor : MonoBehaviour
         //Debug.Log("takeHitRoutine == null: "+(takeHitRoutine == null));
 
         var center = transform.Find(centerObjName).GetComponent<Transform>();
-        m_Center = new Vector3(center.position.x, center.position.y);
+        m_Center = center?.position ?? Vector3.zero;
 
         var buttom = transform.Find(buttomObjName).GetComponent<Transform>();
-        m_Buttom = new Vector3(buttom.position.x, buttom.position.y);
+        m_Buttom = buttom?.position ?? Vector3.zero;
 
         UpdateCoordinate();
         //Debug.Log("coordinate: "+m_Coordinate);
@@ -287,13 +287,13 @@ public abstract class Charactor : MonoBehaviour
     #region 動畫控制
     public void HandleAnimatorLayers() {
         if(isAttacking) {
-            AnimeUtils.ActivateAnimatorLayer(m_Animator, "AttackLayer");
+            if(m_Animator != null) AnimeUtils.ActivateAnimatorLayer(m_Animator, "AttackLayer");
         }
         else if(isMoving) {
-            AnimeUtils.ActivateAnimatorLayer(m_Animator, "MoveLayer");
+            if(m_Animator != null) AnimeUtils.ActivateAnimatorLayer(m_Animator, "MoveLayer");
         }
         else {
-            AnimeUtils.ActivateAnimatorLayer(m_Animator, "IdleLayer");
+            if(m_Animator != null) AnimeUtils.ActivateAnimatorLayer(m_Animator, "IdleLayer");
         }
     }
 
@@ -306,7 +306,7 @@ public abstract class Charactor : MonoBehaviour
         dict.Add("facingDirX", facingDir.x);
         dict.Add("facingDirY", facingDir.y);
 
-        AnimeUtils.SetAnimateFloatPara(m_Animator, dict);
+        if(m_Animator != null) AnimeUtils.SetAnimateFloatPara(m_Animator, dict);
     }
 
     #endregion
@@ -315,7 +315,7 @@ public abstract class Charactor : MonoBehaviour
     protected IEnumerator Attack() {
         //Debug.Log("attack start");
         isAttacking = true;
-        m_Animator.SetBool("attack", isAttacking);
+        m_Animator?.SetBool("attack", isAttacking);
         yield return new WaitForSeconds(attackClipTime);  // hardcasted casted time for debugged
         FinishAttack();
     }
@@ -327,7 +327,7 @@ public abstract class Charactor : MonoBehaviour
         }
 
         isAttacking = false;
-        m_Animator.SetBool("attack", isAttacking);
+        m_Animator?.SetBool("attack", isAttacking);
 
         movement = movementAfterAttack;
         movementAfterAttack = Vector3.zero;
@@ -484,7 +484,7 @@ public abstract class Charactor : MonoBehaviour
             //TODO set stunned animation
             takeHitRoutine = StartCoroutine(BeingStunned());
         } else {
-            m_Animator.SetTrigger("hurt");
+            m_Animator?.SetTrigger("hurt");
             if(!hyperArmor) {
                 KnockbackFeedback feedback = GetComponent<KnockbackFeedback>();
                 feedback.ActiveFeedback(senderPos);
@@ -500,7 +500,7 @@ public abstract class Charactor : MonoBehaviour
     public void Die() {
         Debug.Log("Enemy Die");
         isDead = true;
-        m_Animator.SetBool("isDead", isDead); 
+        m_Animator?.SetBool("isDead", isDead); 
         GetComponent<Collider2D>().enabled = false;
     }
 

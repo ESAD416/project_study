@@ -21,6 +21,7 @@ public class BossFight_1 : MonoBehaviour
     private float projectileDuration = 2.5f;
     private float delayTime = 1f;
     private int countOfLaunches = 2;
+    
     [SerializeField] private Player player;
     [SerializeField] private Projectile_FireBall fireProjectile;
 

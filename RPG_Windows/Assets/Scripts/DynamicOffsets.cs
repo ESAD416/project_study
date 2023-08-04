@@ -10,7 +10,6 @@ public class DynamicOffsets : MonoBehaviour
     public CinemachineVirtualCamera virtualMainCam;
     public int offsetCount = 7;
     public float offsetDistance = 5f;
-    public float minDistanceFromCamera = 2f;
 
     private Camera activeCam;
     private Transform cameraTransform;
