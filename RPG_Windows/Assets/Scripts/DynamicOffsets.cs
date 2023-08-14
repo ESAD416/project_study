@@ -26,7 +26,7 @@ public class DynamicOffsets : MonoBehaviour
     }
     private List<Direction> directions = Direction.GetValues(typeof(Direction)).Cast<Direction>().ToList();
 
-    public  List<Transform> offsets;
+    public List<Transform> offsets;
 
     void Start()
     {   

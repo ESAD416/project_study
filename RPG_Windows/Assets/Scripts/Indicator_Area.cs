@@ -7,7 +7,7 @@ public class Indicator_Area : MonoBehaviour
     [Range(0, 1)]
     public float areaValue = 0f;
     public float duration;
-    [SerializeField] private RectTransform fillArea;
+    [SerializeField] private Transform fillArea;
     
     private float elapsedTime = 0f;
 

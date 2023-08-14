@@ -17017,7 +17017,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 7.8
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -17041,7 +17041,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 553096433}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -10.000001, z: -10}
+  m_LocalPosition: {x: 0, y: -6.2, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -26305,7 +26305,7 @@ MonoBehaviour:
   m_Follow: {fileID: 1141572877}
   m_Lens:
     FieldOfView: 60
-    OrthographicSize: 5
+    OrthographicSize: 7.8
     NearClipPlane: 0.3
     FarClipPlane: 1000
     Dutch: 0
@@ -31778,7 +31778,6 @@ MonoBehaviour:
   virtualMainCam: {fileID: 1294185472}
   offsetCount: 7
   offsetDistance: 5
-  minDistanceFromCamera: 2
   offsets: []
 --- !u!1 &1708118396
 GameObject:
@@ -31846,6 +31845,7 @@ MonoBehaviour:
   buttomObjName: PlayerButtom
   infoStorage: {fileID: 11400000, guid: d7c540814a759de4fa374d03686a78f3, type: 2}
   moveSpeed: 11
+  facingDir: {x: 0, y: -1}
   currHeight: 0
   isAttacking: 0
   isDead: 0

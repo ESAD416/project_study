@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class OffScreenIndicatorCtrl_Slider : OffScreenIndicatorCtrl
 {
-    protected new void InstantiateIndicators(float duration = 0) {
+    public new void InstantiateIndicators(float duration = 0) {
         foreach(var indicator in targets) {
             if(indicator.indicatorUI == null) {
                 indicator.indicatorUI = Instantiate(indicatorPrefab).transform;
