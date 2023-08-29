@@ -53,7 +53,7 @@ public class Test : MonoBehaviour
         // }
     }
 
-    [ContextMenu("Get Matrix Test")]
+    [ContextMenu("Get Matrix Test1")]
     public void GetTileInfo() {
         float rad1 = 180 * Mathf.Deg2Rad;
         float rad2 = 90 * Mathf.Deg2Rad;
@@ -102,6 +102,17 @@ public class Test : MonoBehaviour
         // float moveY3 = move2.x * m3.m10 + move2.y * m3.m11;
         // Debug.Log("movement3 Vector: "+moveX3+", "+moveY3);
 
+    }
+
+    [ContextMenu("Get Matrix Test2")]
+    public void GetTileInfo2() {
+        float rad1 = 30 * Mathf.Deg2Rad;
+        Matrix4x4 m3 = MatrixUtils.RotateZ(rad1);
+        Vector3 dir = new Vector3(1, 1);
+        Vector3 rotatedPos = m3.MultiplyPoint(dir);
+        Vector3 rotatedDir = m3.MultiplyVector(dir);
+        Debug.Log("rotatedPos: "+rotatedPos);
+        Debug.Log("rotatedDir: "+rotatedDir);
     }
 
     

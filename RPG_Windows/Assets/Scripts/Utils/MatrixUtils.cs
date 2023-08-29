@@ -4,6 +4,10 @@ using UnityEngine;
 
 internal static class MatrixUtils
 {
+    // 以下的方法帶入的float參數都是弧度，如果要用角度來計算需事先將其轉變為弧度
+    // Ex: 角度30度，弧度 = 30 * Mathf.Deg2Rad;
+    // Unity的旋轉預設是逆時針方向(跟數學的向限一樣)，如果想計算出順時針方向，將角度/弧度設為負值即可
+
     [ContextMenu("Get Result")]
     public static void GetResult() {
         Matrix4x4 m = RotateZ(180);

@@ -12,7 +12,6 @@ public class BossFight_2 : MonoBehaviour
     }
 
     private Stage stage;
-    private Enemy_Abstract boss;
     private float timeToStartBattle = 3f;
     private float indicatorDuration = 3f;
     private float attackDuration = 3f;
@@ -20,6 +19,7 @@ public class BossFight_2 : MonoBehaviour
     private int countOfRandomLaunches = 2;
     private Coroutine attackRoutine;
 
+    [SerializeField] private Enemy_Abstract boss;
     [SerializeField] private Player player;
 
     [SerializeField] private AOEIndicatorCtrl indicatorCtrl;
@@ -69,15 +69,18 @@ public class BossFight_2 : MonoBehaviour
         switch(stage) {
             case Stage.WaitingToStart: 
                 stage = Stage.Stage1;
-                StopSimultaneousAttack();
-                AttackSimultaneouslyProcess();
+                StopBattle();
+                //AttackSimultaneouslyProcess();
+                //AttackSeparatelyProcess(0.5f);
+                AttackByTrailProcess(0.5f);
                 break;
             case Stage.Stage1:
                 stage = Stage.Stage2;
                 indicatorDuration = 2f;
-                attackDuration = 4f;
+                attackDuration = 2.5f;
                 countOfRandomLaunches = 3;
-                StopSimultaneousAttack();
+                StopBattle();
+                AttackSeparatelyProcess(0.5f);
                 //InvokeRepeating("LineAttackProcess", 0f, timeBetweenAttacks);
                 break;
             case Stage.Stage2:
@@ -96,12 +99,9 @@ public class BossFight_2 : MonoBehaviour
         StartNextStage();
     }
 
-    private IEnumerator GenerateAttackAOEPositions() {
-        Debug.Log("AttackCoroutines: GenerateAttackAOEsPosition start");
-        indicatorCtrl.UpdateCombination();
-
-        yield return null;
-        Debug.Log("AttackCoroutines: GenerateAttackAOEsPosition end");
+    private void StopBattle() {
+        StopSeparateAttack();
+        StopSimultaneousAttack();
     }
 
     private void AttackSeparatelyProcess(float attackTimeSpan) {
@@ -109,41 +109,36 @@ public class BossFight_2 : MonoBehaviour
         Debug.Log("indicatorDuration: "+indicatorDuration);
         Debug.Log("attackDuration: "+attackDuration);
         Debug.Log("countOfRandomLaunches: "+countOfRandomLaunches);
-        int count = indicatorCtrl.aoePositions.Count + countOfRandomLaunches;
-        if(count > 0) {
-            foreach(var pos in indicatorCtrl.aoePositions) {
-                StartCoroutine(SeparatelyAttackCoroutines(0.5f));
-            }
-        }
+        // int count = indicatorCtrl.aoePositions.Count + countOfRandomLaunches;
+        // if(count > 0) {
+        //     attackRoutine = StartCoroutine(SeparatelyAttackCoroutines(attackTimeSpan));
+        // }
+
+        attackRoutine = StartCoroutine(SeparatelyAttackCoroutines(attackTimeSpan));
     }
 
     private IEnumerator SeparatelyAttackCoroutines(float attackTimeSpan) {
         // 每個AOE攻擊的時段需要不同時地進行
         while(true) {
             // 1. 動態生成攻擊點
-            StartCoroutine(GenerateAttackAOEPositions());
-            //利用迴圈做分別處理
-            float delay = 0f;
-            foreach(var pos in indicatorCtrl.aoePositions) {
-                // 2. 顯示指示器
-                StartCoroutine(DisplayIndicator(pos));
-                // 3. 攻擊的動畫與傷害機制 etc.
-                StartCoroutine(LaunchAttack());
-                delay += indicatorDuration + attackDuration;
-            }
-
+            Vector3 pos = indicatorCtrl.GetAOEPositionByStackCombination();
+            // 2. 顯示指示器
+            StartCoroutine(DisplayIndicator(pos));
+            // 3. 攻擊的動畫與傷害機制 etc.
+            StartCoroutine(LaunchAttack());
+            
             //TODO 增加隨機AOE指示器至Player附近By countOfRandomLaunches
 
-            // 等待下一輪攻擊
-            yield return new WaitForSeconds(delay);
+            yield return new WaitForSeconds(attackTimeSpan);
+            Debug.Log("SeparatelyAttackCoroutines: one round end");
         }
     }
 
     private IEnumerator DisplayIndicator(Vector3 pos) {
         Debug.Log("AttackCoroutines: DisplayIndicator start");
-        yield return null;
-
         indicatorCtrl.InstantiateIndicator(pos, indicatorDuration);
+        
+        yield return null;
         Debug.Log("AttackCoroutines: DisplayIndicator end");
     }
 
@@ -154,6 +149,15 @@ public class BossFight_2 : MonoBehaviour
         Debug.Log("AttackCoroutines: LaunchAttack end");
     }
 
+    private void StopSeparateAttack() {
+        StopCoroutine("GenerateAttackAOEPositions");
+        StopCoroutine("DisplayIndicator");
+        StopCoroutine("LaunchAttack");
+
+        if(attackRoutine != null) {
+            StopCoroutine(attackRoutine);
+        }
+    }
 
     private void AttackSimultaneouslyProcess() {
         Debug.Log("stage: "+stage);
@@ -172,7 +176,7 @@ public class BossFight_2 : MonoBehaviour
 
         while(true) {
             // 1. 動態生成攻擊點
-            StartCoroutine(GenerateAttackAOEPositions());
+            indicatorCtrl.UpdateCombination();
             // 2. 同時顯示指示器
             StartCoroutine(DisplayMutipleIndicatorSimultaneously());
             // 3. 同時控制攻擊的動畫與傷害機制 etc.
@@ -210,5 +214,29 @@ public class BossFight_2 : MonoBehaviour
         }
     }
 
+    private void AttackByTrailProcess(float attackTimeSpan) {
+        Debug.Log("stage: "+stage);
+        Debug.Log("indicatorDuration: "+indicatorDuration);
+        Debug.Log("attackDuration: "+attackDuration);
+        Debug.Log("countOfRandomLaunches: "+countOfRandomLaunches);
+        
+        attackRoutine = StartCoroutine(AttackByTrailCoroutines(attackTimeSpan));
+    }
 
+    private IEnumerator AttackByTrailCoroutines(float attackTimeSpan) {
+        // 每個AOE攻擊的時段需要不同時地進行
+        while(true) {
+            // 1. 動態生成攻擊點
+            Vector3 pos = indicatorCtrl.GetTrailedAOEPosition(player);
+
+            StartCoroutine(DisplayIndicator(pos));
+            // 3. 攻擊的動畫與傷害機制 etc.
+            StartCoroutine(LaunchAttack());
+            
+            //TODO 增加隨機AOE指示器至Player附近By countOfRandomLaunches
+
+            yield return new WaitForSeconds(attackTimeSpan);
+            Debug.Log("SeparatelyAttackCoroutines: one round end");
+        }
+    }
 }

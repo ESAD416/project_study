@@ -15926,6 +15926,7 @@ Transform:
   - {fileID: 574295038}
   - {fileID: 224789622}
   - {fileID: 1791242196}
+  - {fileID: 1696049600}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -16030,7 +16031,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1256979018}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 452680351}
@@ -21613,6 +21614,54 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.22501373, y: 1.5739173}
   m_EdgeRadius: 0
+--- !u!1 &1696049599
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1696049600}
+  - component: {fileID: 1696049601}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1696049600
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1696049599}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1050159226}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1696049601
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1696049599}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 369c996c24473274aaa799dd0503af09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_sprite: {fileID: 0}
+  m_Tile: {fileID: 0}
+  player: {fileID: 0}
+  enemy: {fileID: 0}
+  pixels: []
 --- !u!1 &1791242195
 GameObject:
   m_ObjectHideFlags: 0
@@ -21852,6 +21901,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fcc97cbd49cb4674bb9e9af3b2f8d55b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  boss: {fileID: 0}
   player: {fileID: 477873377}
   indicatorCtrl: {fileID: 2059186697}
 --- !u!1 &2002318829
@@ -31621,14 +31671,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37f81c6077e987041aeb74ea36174812, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  virtualMainCam: {fileID: 631693325}
-  player: {fileID: 477873377}
+  boss: {fileID: 1256979021}
   indicatorPrefab: {fileID: 991720984493063311, guid: 8e5e8a58979815d4c8a1e09706d95795, type: 3}
-  areaRange: {fileID: 774404942}
+  aoeCount: 4
   areaMin: {x: -12, y: -5}
   areaMax: {x: 12, y: -1}
   checkFrequency: 0.1
   offsetDistance: 1
+  trailedPos: {x: 0, y: 0, z: 0}
+  trailOffset: 3.5
+  stackAreas: 
   aoePositions: []
 --- !u!1 &2124854401
 GameObject:
