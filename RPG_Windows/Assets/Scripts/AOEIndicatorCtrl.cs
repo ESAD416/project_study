@@ -7,7 +7,8 @@ using Cinemachine;
 public class AOEIndicatorCtrl : MonoBehaviour
 {
     [SerializeField] private Enemy_Horizontal boss;
-    [SerializeField] private GameObject indicatorPrefab;
+    [SerializeField] private GameObject areaIndicatorPrefab;
+    [SerializeField] private GameObject curveLineIndicatorPrefab;
     [SerializeField] private int aoeCount = 4;
     [SerializeField] private Vector2 areaMin;
     [SerializeField] private Vector2 areaMax;
@@ -43,8 +44,8 @@ public class AOEIndicatorCtrl : MonoBehaviour
     }
 
     
-    public void InstantiateIndicator(Vector3 pos, float duration = 0) {
-        GameObject offsetObject = Instantiate(indicatorPrefab);
+    public void InstantiateAreaIndicator(Vector3 pos, float duration = 0) {
+        GameObject offsetObject = Instantiate(areaIndicatorPrefab);
         offsetObject.transform.position = pos;
         offsetObject.transform.parent = transform;
 
@@ -53,10 +54,21 @@ public class AOEIndicatorCtrl : MonoBehaviour
         }
     }
 
-    public void InstantiateIndicators(float duration = 0) {
+    public void InstantiateCurveLineIndicator(Vector3 pos, float duration = 0) {
+        GameObject offsetObject = Instantiate(curveLineIndicatorPrefab);
+        offsetObject.transform.parent = transform;
+        offsetObject.GetComponent<Indicator_CurveLine>().enemy = boss;
+        offsetObject.GetComponent<Indicator_CurveLine>().endPos = pos;
+
+        if(duration > 0) {
+            StartCoroutine(DestoryIndicator(offsetObject, duration));
+        }
+    }
+
+    public void InstantiateAreaIndicators(float duration = 0) {
         foreach(var pos in aoePositions)
         {
-            GameObject offsetObject = Instantiate(indicatorPrefab);
+            GameObject offsetObject = Instantiate(areaIndicatorPrefab);
             offsetObject.transform.position = pos;
             offsetObject.transform.parent = transform;
         }

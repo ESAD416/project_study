@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Projectile_FireBall : Projectile
+public class Projectile_FireBall : DirectProjectile
 {
     protected void Awake() {
         referenceAxis = Vector3.down;

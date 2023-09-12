@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-internal static class MatrixUtils
+public static class MatrixUtils
 {
     // 以下的方法帶入的float參數都是弧度，如果要用角度來計算需事先將其轉變為弧度
     // Ex: 角度30度，弧度 = 30 * Mathf.Deg2Rad;

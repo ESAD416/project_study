@@ -188,12 +188,12 @@ public class BossFight_1 : MonoBehaviour
             //Debug.Log("LunchProjectile dir: "+dir);
             GameObject projectile = ProjectilePool.instance.GetPooledProjectile();
             if(projectile != null) {
-                projectile.GetComponent<Projectile>().SetDirection(dir.normalized);
+                projectile.GetComponent<DirectProjectile>().SetDirection(dir.normalized);
                 
                 //Debug.Log("LunchProjectile referenceAxis: "+projectile.GetComponent<Projectile>().referenceAxis);
                 // var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
                 // var quaternion =Quaternion.Euler(0, 0, angle);
-                var angle = Vector3.Angle(dir, projectile.GetComponent<Projectile>().referenceAxis);
+                var angle = Vector3.Angle(dir, projectile.GetComponent<DirectProjectile>().referenceAxis);
                 Debug.Log("LunchProjectile angle: "+angle);
                 var quaternion = dir.x > 0 ? Quaternion.Euler(0, 0, angle) : Quaternion.Euler(0, 0, -angle);
 

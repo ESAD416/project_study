@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Projectile : MonoBehaviour
+public class DirectProjectile : MonoBehaviour
 {
     public Collider2D projectileHitBox;
     public float speed;
@@ -17,10 +17,6 @@ public class Projectile : MonoBehaviour
     protected virtual void Update()
     {
         transform.position += launchDirection * speed * Time.deltaTime;
-    }
-
-    private void OnEnable() {
-        Invoke("DestoryProjectile", duration);
     }
 
     private void OnCollisionEnter2D(Collision2D other) {
@@ -44,6 +40,10 @@ public class Projectile : MonoBehaviour
 
     private void DestoryProjectile() {
         gameObject.SetActive(false);
+    }
+
+    private void OnEnable() {
+        Invoke("DestoryProjectile", duration);
     }
 
     private void OnDisable() {

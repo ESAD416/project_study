@@ -13371,26 +13371,20 @@ CompositeCollider2D:
   m_ColliderPaths:
   - m_Collider: {fileID: 774404944}
     m_ColliderPaths:
-    - - X: -39999900
-        Y: -69999959
-      - X: -39999900
-        Y: -70000000
-      - X: 140000000
+    - - X: 140000000
         Y: -70000000
       - X: 140000000
         Y: 10000000
       - X: -140000000
         Y: 10000000
       - X: -140000000
-        Y: -69999900
-      - X: -39999959
-        Y: -69999900
+        Y: -70000000
   m_CompositePaths:
     m_Paths:
     - - {x: 13.999971, y: -7}
       - {x: 13.999971, y: 1}
       - {x: -14, y: 0.99997073}
-      - {x: -13.999971, y: -6.9999905}
+      - {x: -13.999971, y: -7}
   m_VertexDistance: 0.0005
   m_OffsetDistance: 0.00005
 --- !u!50 &774404943
@@ -13467,8 +13461,8 @@ TilemapRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1722387549
+  m_SortingLayer: -1
   m_SortingOrder: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
@@ -15780,6 +15774,51 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!1 &806266552
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 806266553}
+  - component: {fileID: 806266554}
+  m_Layer: 0
+  m_Name: ProjectilePool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &806266553
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 806266552}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1957711742}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &806266554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 806266552}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 631bd2d8ebc9eb242ae614eddeaeccd2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  amountToPool: 20
+  projectilePrefab: {fileID: 8045245791938772898, guid: cdcd0164018e15f42972fe9477b7e7b0, type: 3}
 --- !u!1 &895176951
 GameObject:
   m_ObjectHideFlags: 0
@@ -15790,7 +15829,7 @@ GameObject:
   m_Component:
   - component: {fileID: 895176952}
   m_Layer: 0
-  m_Name: AttrinkButtom
+  m_Name: RgbdButtom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16031,7 +16070,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1256979018}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 6}
+  m_LocalPosition: {x: 0, y: 0, z: 3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 452680351}
@@ -16102,8 +16141,8 @@ MonoBehaviour:
   m_Center: {x: 0, y: 0, z: 0}
   m_Buttom: {x: 0, y: 0, z: 0}
   m_Coordinate: {x: 0, y: 0, z: 0}
-  centerObjName: AttrinkCenter
-  buttomObjName: AttrinkButtom
+  centerObjName: RgbdCenter
+  buttomObjName: RgbdButtom
   infoStorage: {fileID: 0}
   moveSpeed: 3
   facingDir: {x: 0, y: -1}
@@ -16170,7 +16209,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1327648960}
   m_Layer: 0
-  m_Name: AttrinkCenter
+  m_Name: RgbdCenter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16284,8 +16323,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 846716007
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: 7620148328315415820, guid: 4cefcafcd72a56548a4d97db39fba169, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -21886,6 +21925,7 @@ Transform:
   m_Children:
   - {fileID: 1495404254}
   - {fileID: 2059186696}
+  - {fileID: 806266553}
   m_Father: {fileID: 263081889}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -21901,7 +21941,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fcc97cbd49cb4674bb9e9af3b2f8d55b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boss: {fileID: 0}
+  boss: {fileID: 1256979021}
   player: {fileID: 477873377}
   indicatorCtrl: {fileID: 2059186697}
 --- !u!1 &2002318829
@@ -31672,7 +31712,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boss: {fileID: 1256979021}
-  indicatorPrefab: {fileID: 991720984493063311, guid: 8e5e8a58979815d4c8a1e09706d95795, type: 3}
+  areaIndicatorPrefab: {fileID: 991720984493063311, guid: 8e5e8a58979815d4c8a1e09706d95795, type: 3}
+  curveLineIndicatorPrefab: {fileID: 1795781362867507373, guid: 7c1960936c3e1ff41b5dbd163bbf6621, type: 3}
   aoeCount: 4
   areaMin: {x: -12, y: -5}
   areaMax: {x: 12, y: -1}

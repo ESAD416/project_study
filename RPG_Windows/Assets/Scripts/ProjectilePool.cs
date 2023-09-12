@@ -5,9 +5,9 @@ using UnityEngine;
 public class ProjectilePool : MonoBehaviour
 {
     public static ProjectilePool instance;
+    [SerializeField] private int amountToPool = 20;
 
     private List<GameObject> pooledProjectiles = new List<GameObject>();
-    private int amountToPool = 20;
 
     [SerializeField] private GameObject projectilePrefab;
 
@@ -26,9 +26,10 @@ public class ProjectilePool : MonoBehaviour
         }
     }
 
-    public GameObject GetPooledProjectile() {
+    public GameObject GetPooledProjectile(Vector3 initialPosition = default(Vector3)){
         for (int i = 0; i < pooledProjectiles.Count; i++) {
             if (!pooledProjectiles[i].activeInHierarchy) {
+                if(initialPosition != null) pooledProjectiles[i].transform.position = initialPosition;
                 return pooledProjectiles[i];
             }
         }

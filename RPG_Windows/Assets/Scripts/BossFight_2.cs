@@ -14,7 +14,7 @@ public class BossFight_2 : MonoBehaviour
     private Stage stage;
     private float timeToStartBattle = 3f;
     private float indicatorDuration = 3f;
-    private float attackDuration = 3f;
+    private float attackDuration = 0.65f;
     private float delayTime = 1f;
     private int countOfRandomLaunches = 2;
     private Coroutine attackRoutine;
@@ -23,6 +23,7 @@ public class BossFight_2 : MonoBehaviour
     [SerializeField] private Player player;
 
     [SerializeField] private AOEIndicatorCtrl indicatorCtrl;
+    
 
 
     // Start is called before the first frame update
@@ -77,7 +78,7 @@ public class BossFight_2 : MonoBehaviour
             case Stage.Stage1:
                 stage = Stage.Stage2;
                 indicatorDuration = 2f;
-                attackDuration = 2.5f;
+                attackDuration = 0.6f;
                 countOfRandomLaunches = 3;
                 StopBattle();
                 AttackSeparatelyProcess(0.5f);
@@ -86,7 +87,7 @@ public class BossFight_2 : MonoBehaviour
             case Stage.Stage2:
                 stage = Stage.Stage3;
                 indicatorDuration = 1.5f;
-                attackDuration = 3f;
+                attackDuration = 0.5f;
                 countOfRandomLaunches = 4;
                 //CancelInvoke("LineAttackProcess");
                 //InvokeRepeating("LineAttackProcess", 0f, timeBetweenAttacks);
@@ -125,7 +126,7 @@ public class BossFight_2 : MonoBehaviour
             // 2. 顯示指示器
             StartCoroutine(DisplayIndicator(pos));
             // 3. 攻擊的動畫與傷害機制 etc.
-            StartCoroutine(LaunchAttack());
+            StartCoroutine(LaunchAttack(pos));
             
             //TODO 增加隨機AOE指示器至Player附近By countOfRandomLaunches
 
@@ -136,16 +137,28 @@ public class BossFight_2 : MonoBehaviour
 
     private IEnumerator DisplayIndicator(Vector3 pos) {
         Debug.Log("AttackCoroutines: DisplayIndicator start");
-        indicatorCtrl.InstantiateIndicator(pos, indicatorDuration);
+        indicatorCtrl.InstantiateAreaIndicator(pos, indicatorDuration);
         
-        yield return null;
+        yield return new WaitForSeconds(indicatorDuration / 2);
+
+        //indicatorCtrl.InstantiateCurveLineIndicator(pos, indicatorDuration / 2);
+
+        // indicatorCtrl.InstantiateAreaIndicator(pos, indicatorDuration);
         Debug.Log("AttackCoroutines: DisplayIndicator end");
     }
 
-    private IEnumerator LaunchAttack() {
+    private IEnumerator LaunchAttack(Vector3 indicatorPos) {
         Debug.Log("AttackCoroutines: LaunchAttack start");
         yield return new WaitForSeconds(indicatorDuration);
         //TODO 攻擊
+        GameObject projectile = ProjectilePool.instance.GetPooledProjectile();
+        if(projectile != null) {
+            // projectile.GetComponent<IndirectProjectile>();
+            projectile.GetComponent<IndirectProjectile>().SetPositionOfBezierCurve(boss.m_Center, indicatorPos, 12f);
+            projectile.GetComponent<IndirectProjectile>().SetDuration(attackDuration);
+
+            projectile.SetActive(true);
+        }
         Debug.Log("AttackCoroutines: LaunchAttack end");
     }
 
@@ -191,7 +204,7 @@ public class BossFight_2 : MonoBehaviour
         Debug.Log("AttackCoroutines: DisplayMutipleIndicatorsSimultaneously start");
         yield return null;
 
-        indicatorCtrl.InstantiateIndicators(indicatorDuration);
+        indicatorCtrl.InstantiateAreaIndicators(indicatorDuration);
         Debug.Log("AttackCoroutines: DisplayMutipleIndicatorsSimultaneously end");
 
         // TODO 增加隨機AOE指示器至Player附近By countOfRandomLaunches
@@ -231,7 +244,7 @@ public class BossFight_2 : MonoBehaviour
 
             StartCoroutine(DisplayIndicator(pos));
             // 3. 攻擊的動畫與傷害機制 etc.
-            StartCoroutine(LaunchAttack());
+            StartCoroutine(LaunchAttack(pos));
             
             //TODO 增加隨機AOE指示器至Player附近By countOfRandomLaunches
 

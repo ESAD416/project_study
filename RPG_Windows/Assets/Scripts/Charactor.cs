@@ -195,7 +195,7 @@ public abstract class Charactor : MonoBehaviour
     {
         m_Animator = GetComponentInChildren<Animator>();
         m_Rigidbody = GetComponent<Rigidbody2D>();
-        m_Coordinate = Vector3.zero;
+        m_Coordinate = transform.position;
         healthSystem = new HealthSystemModel(maxHealth);
     }
 
