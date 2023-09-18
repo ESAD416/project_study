@@ -20,11 +20,8 @@ public abstract class Enemy_Abstract : Charactor
     // Update is called once per frame
     protected override void Update() {
         //Debug.Log("moveSpeed: "+moveSpeed);
-        var center = transform.Find(centerObjName).GetComponent<Transform>();
-        m_Center = center?.position ?? Vector3.zero;
-
-        var buttom = transform.Find(buttomObjName).GetComponent<Transform>();
-        m_Buttom = buttom?.position ?? Vector3.zero;
+        m_Center = centerObj?.position ?? Vector3.zero;
+        m_Buttom = buttomObj?.position ?? Vector3.zero;
 
         UpdateCoordinate();
 

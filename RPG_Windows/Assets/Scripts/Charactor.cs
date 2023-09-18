@@ -34,11 +34,11 @@ public abstract class Charactor : MonoBehaviour
     /// <summary>
     /// 角色中心物件名稱
     /// </summary>
-    public string centerObjName;
+    public Transform centerObj;
     /// <summary>
     /// 角色底部物件名稱
     /// </summary>
-    public string buttomObjName;
+    public Transform buttomObj;
     /// <summary>
     /// 角色相關資訊存取
     /// </summary>
@@ -204,11 +204,8 @@ public abstract class Charactor : MonoBehaviour
     {
         //Debug.Log("takeHitRoutine == null: "+(takeHitRoutine == null));
 
-        var center = transform.Find(centerObjName).GetComponent<Transform>();
-        m_Center = center?.position ?? Vector3.zero;
-
-        var buttom = transform.Find(buttomObjName).GetComponent<Transform>();
-        m_Buttom = buttom?.position ?? Vector3.zero;
+        m_Center = centerObj?.position ?? Vector3.zero;
+        m_Buttom = buttomObj?.position ?? Vector3.zero;
 
         UpdateCoordinate();
         //Debug.Log("coordinate: "+m_Coordinate);

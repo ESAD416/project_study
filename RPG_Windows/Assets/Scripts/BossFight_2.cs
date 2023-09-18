@@ -101,9 +101,18 @@ public class BossFight_2 : MonoBehaviour
     }
 
     private void StopBattle() {
-        StopSeparateAttack();
-        StopSimultaneousAttack();
+        StopAttack();
     }
+
+    private void StopAttack() {
+        StopAllCoroutines();
+
+        if(attackRoutine != null) {
+            StopCoroutine(attackRoutine);
+        }
+    }
+
+    #region 攻擊模式
 
     private void AttackSeparatelyProcess(float attackTimeSpan) {
         Debug.Log("stage: "+stage);
@@ -118,58 +127,13 @@ public class BossFight_2 : MonoBehaviour
         attackRoutine = StartCoroutine(SeparatelyAttackCoroutines(attackTimeSpan));
     }
 
-    private IEnumerator SeparatelyAttackCoroutines(float attackTimeSpan) {
-        // 每個AOE攻擊的時段需要不同時地進行
-        while(true) {
-            // 1. 動態生成攻擊點
-            Vector3 pos = indicatorCtrl.GetAOEPositionByStackCombination();
-            // 2. 顯示指示器
-            StartCoroutine(DisplayIndicator(pos));
-            // 3. 攻擊的動畫與傷害機制 etc.
-            StartCoroutine(LaunchAttack(pos));
-            
-            //TODO 增加隨機AOE指示器至Player附近By countOfRandomLaunches
-
-            yield return new WaitForSeconds(attackTimeSpan);
-            Debug.Log("SeparatelyAttackCoroutines: one round end");
-        }
-    }
-
-    private IEnumerator DisplayIndicator(Vector3 pos) {
-        Debug.Log("AttackCoroutines: DisplayIndicator start");
-        indicatorCtrl.InstantiateAreaIndicator(pos, indicatorDuration);
+    private void AttackByTrailProcess(float attackTimeSpan) {
+        Debug.Log("stage: "+stage);
+        Debug.Log("indicatorDuration: "+indicatorDuration);
+        Debug.Log("attackDuration: "+attackDuration);
+        Debug.Log("countOfRandomLaunches: "+countOfRandomLaunches);
         
-        yield return new WaitForSeconds(indicatorDuration / 2);
-
-        //indicatorCtrl.InstantiateCurveLineIndicator(pos, indicatorDuration / 2);
-
-        // indicatorCtrl.InstantiateAreaIndicator(pos, indicatorDuration);
-        Debug.Log("AttackCoroutines: DisplayIndicator end");
-    }
-
-    private IEnumerator LaunchAttack(Vector3 indicatorPos) {
-        Debug.Log("AttackCoroutines: LaunchAttack start");
-        yield return new WaitForSeconds(indicatorDuration);
-        //TODO 攻擊
-        GameObject projectile = ProjectilePool.instance.GetPooledProjectile();
-        if(projectile != null) {
-            // projectile.GetComponent<IndirectProjectile>();
-            projectile.GetComponent<IndirectProjectile>().SetPositionOfBezierCurve(boss.m_Center, indicatorPos, 12f);
-            projectile.GetComponent<IndirectProjectile>().SetDuration(attackDuration);
-
-            projectile.SetActive(true);
-        }
-        Debug.Log("AttackCoroutines: LaunchAttack end");
-    }
-
-    private void StopSeparateAttack() {
-        StopCoroutine("GenerateAttackAOEPositions");
-        StopCoroutine("DisplayIndicator");
-        StopCoroutine("LaunchAttack");
-
-        if(attackRoutine != null) {
-            StopCoroutine(attackRoutine);
-        }
+        attackRoutine = StartCoroutine(AttackByTrailCoroutines(attackTimeSpan));
     }
 
     private void AttackSimultaneouslyProcess() {
@@ -181,6 +145,44 @@ public class BossFight_2 : MonoBehaviour
         int count = indicatorCtrl.aoePositions.Count + countOfRandomLaunches;
         if(count > 0) {
             attackRoutine = StartCoroutine(SimultaneouslyAttackCoroutines());
+        }
+    }
+
+    #endregion
+
+    #region 攻擊模式的協程
+
+    private IEnumerator SeparatelyAttackCoroutines(float attackTimeSpan) {
+        // 每個AOE攻擊的時段需要不同時地進行
+        while(true) {
+            // 1. 動態生成攻擊點
+            Vector3 pos = indicatorCtrl.GetAOEPositionByStackCombination();
+            // 2. 顯示指示器
+            StartCoroutine(DisplayIndicator(pos));
+            // 3. 控制攻擊的動畫與傷害機制 etc.
+            StartCoroutine(LaunchAttack(pos));
+            
+            //TODO 增加隨機AOE指示器至Player附近By countOfRandomLaunches
+
+            yield return new WaitForSeconds(attackTimeSpan);
+            Debug.Log("SeparatelyAttackCoroutines: one round end");
+        }
+    }
+
+    private IEnumerator AttackByTrailCoroutines(float attackTimeSpan) {
+        // 每個AOE攻擊的時段需要不同時地進行
+        while(true) {
+            // 1. 動態生成攻擊點
+            Vector3 pos = indicatorCtrl.GetTrailedAOEPosition(player);
+
+            StartCoroutine(DisplayIndicator(pos));
+            // 3. 控制攻擊的動畫與傷害機制 etc.
+            StartCoroutine(LaunchAttack(pos));
+            
+            //TODO 增加隨機AOE指示器至Player附近By countOfRandomLaunches
+
+            yield return new WaitForSeconds(attackTimeSpan);
+            Debug.Log("SeparatelyAttackCoroutines: one round end");
         }
     }
 
@@ -200,6 +202,19 @@ public class BossFight_2 : MonoBehaviour
         }
     }
 
+    #endregion
+    
+    #region 顯示指示器
+    
+    private IEnumerator DisplayIndicator(Vector3 pos) {
+        Debug.Log("AttackCoroutines: DisplayIndicator start");
+
+        indicatorCtrl.InstantiateAreaIndicator(pos, indicatorDuration);
+        yield return null;
+
+        Debug.Log("AttackCoroutines: DisplayIndicator end");
+    }
+
     private IEnumerator DisplayMutipleIndicatorSimultaneously() {
         Debug.Log("AttackCoroutines: DisplayMutipleIndicatorsSimultaneously start");
         yield return null;
@@ -210,6 +225,25 @@ public class BossFight_2 : MonoBehaviour
         // TODO 增加隨機AOE指示器至Player附近By countOfRandomLaunches
     }
 
+    #endregion
+
+    #region 控制攻擊的動畫與傷害機制 etc.
+
+    private IEnumerator LaunchAttack(Vector3 indicatorPos) {
+        Debug.Log("AttackCoroutines: LaunchAttack start");
+        yield return new WaitForSeconds(indicatorDuration - attackDuration);
+        //TODO 攻擊
+        GameObject projectile = ProjectilePool.instance.GetPooledProjectile();
+        if(projectile != null) {
+            // projectile.GetComponent<IndirectProjectile>();
+            projectile.GetComponent<IndirectProjectile>().SetPositionOfBezierCurve(boss.m_Center, indicatorPos, 12f);
+            projectile.GetComponent<IndirectProjectile>().SetDuration(attackDuration);
+
+            projectile.SetActive(true);
+        }
+        Debug.Log("AttackCoroutines: LaunchAttack end");
+    }
+
     private IEnumerator LaunchAttackSimultaneously() {
         Debug.Log("AttackCoroutines: LaunchAttackSimultaneously start");
         yield return new WaitForSeconds(indicatorDuration);
@@ -217,39 +251,6 @@ public class BossFight_2 : MonoBehaviour
         Debug.Log("AttackCoroutines: LaunchAttackSimultaneously end");
     }
 
-    private void StopSimultaneousAttack() {
-        StopCoroutine("GenerateAttackAOEPositions");
-        StopCoroutine("DisplayMutipleIndicatorSimultaneously");
-        StopCoroutine("LaunchAttackSimultaneously");
+    #endregion
 
-        if(attackRoutine != null) {
-            StopCoroutine(attackRoutine);
-        }
-    }
-
-    private void AttackByTrailProcess(float attackTimeSpan) {
-        Debug.Log("stage: "+stage);
-        Debug.Log("indicatorDuration: "+indicatorDuration);
-        Debug.Log("attackDuration: "+attackDuration);
-        Debug.Log("countOfRandomLaunches: "+countOfRandomLaunches);
-        
-        attackRoutine = StartCoroutine(AttackByTrailCoroutines(attackTimeSpan));
-    }
-
-    private IEnumerator AttackByTrailCoroutines(float attackTimeSpan) {
-        // 每個AOE攻擊的時段需要不同時地進行
-        while(true) {
-            // 1. 動態生成攻擊點
-            Vector3 pos = indicatorCtrl.GetTrailedAOEPosition(player);
-
-            StartCoroutine(DisplayIndicator(pos));
-            // 3. 攻擊的動畫與傷害機制 etc.
-            StartCoroutine(LaunchAttack(pos));
-            
-            //TODO 增加隨機AOE指示器至Player附近By countOfRandomLaunches
-
-            yield return new WaitForSeconds(attackTimeSpan);
-            Debug.Log("SeparatelyAttackCoroutines: one round end");
-        }
-    }
 }
