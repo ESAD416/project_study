@@ -35,8 +35,8 @@ public class Player : Charactor
         rayCastEndPos = new Vector2(raycastPoint.position.x, raycastPoint.position.y) + new Vector2(0, -1) * 0.35f;   // 預設射線終點
         base.Start();
         attackClipTime = AnimeUtils.GetAnimateClipTime(m_Animator, "Attack_Down");
-        transform.position = new Vector3(infoStorage.initialPos.x, infoStorage.initialPos.y, infoStorage.initialHeight);
-        currHeight = infoStorage.initialHeight;
+        transform.position = new Vector3(m_infoStorage.initialPos.x, m_infoStorage.initialPos.y, m_infoStorage.initialHeight);
+        currHeight = m_infoStorage.initialHeight;
 
         movementActionReference.action.performed += content => {
             var inputVecter2 = content.ReadValue<Vector2>();
@@ -125,8 +125,8 @@ public class Player : Charactor
     public void OnMovement(InputAction.CallbackContext value)
     {
         Vector2 inputVecter2 = value.ReadValue<Vector2>();
-        // Debug.Log("OnMovement inputVecter2: "+inputVecter2);
-        movement = new Vector3(inputVecter2.x, inputVecter2.y);
+        //Debug.Log("OnMovement inputVecter2: "+inputVecter2);
+        SetMovement(new Vector3(inputVecter2.x, inputVecter2.y));
         // Debug.Log("movement x: "+movement.x);
         // Debug.Log("movement y: "+movement.y);
         // Debug.Log("movement normalized x: "+movement.normalized.x);
@@ -136,7 +136,7 @@ public class Player : Charactor
     public void OnAttack(InputAction.CallbackContext value) {
         if(value.started) {
             if(isMoving) {
-                facingDir = movement;
+                facingDir = Movement;
             }
             attackRoutine = StartCoroutine(Attack());
         }
@@ -200,28 +200,28 @@ public class Player : Charactor
         if(raycastPointName != null) {
             raycastPoint = GetComponentInChildren<Transform>().Find(raycastPointName);
         } else {
-            if(movement.x == 0 && movement.y > 0) {
+            if(Movement.x == 0 && Movement.y > 0) {
                 // Up
                 raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_Up");
-            } else if(movement.x == 0 && movement.y < 0) {
+            } else if(Movement.x == 0 && Movement.y < 0) {
                 // Down 
                 raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_Down");
-            } else if(movement.x < 0 && movement.y == 0) {
+            } else if(Movement.x < 0 && Movement.y == 0) {
                 // Left
                 raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_Left");
-            } else if(movement.x > 0 && movement.y == 0) {
+            } else if(Movement.x > 0 && Movement.y == 0) {
                 // Right
                 raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_Right");
-            } else if(movement.x > 0 && movement.y > 0) {
+            } else if(Movement.x > 0 && Movement.y > 0) {
                 // UpRight
                 raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_UpRight");
-            } else if(movement.x < 0 && movement.y > 0) {
+            } else if(Movement.x < 0 && Movement.y > 0) {
                 // UpLeft
                 raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_UpLeft");
-            } else if(movement.x > 0 && movement.y < 0) {
+            } else if(Movement.x > 0 && Movement.y < 0) {
                 // DownRight
                 raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_DownRight");
-            } else if(movement.x < 0 && movement.y < 0) {
+            } else if(Movement.x < 0 && Movement.y < 0) {
                 // DownLeft
                 raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_DownLeft");
             }
@@ -229,8 +229,8 @@ public class Player : Charactor
     }
 
     private bool IsObliqueRaycast() {
-        if(movement.x > 0 && movement.y > 0 || movement.x < 0 && movement.y > 0 ||
-           movement.x > 0 && movement.y < 0 || movement.x < 0 && movement.y < 0) {
+        if(Movement.x > 0 && Movement.y > 0 || Movement.x < 0 && Movement.y > 0 ||
+           Movement.x > 0 && Movement.y < 0 || Movement.x < 0 && Movement.y < 0) {
             return true;
         }
 
@@ -241,7 +241,7 @@ public class Player : Charactor
         if(isMoving) {
             SetRaycastPoint();
 
-            Vector2 distance = new Vector2(movement.x, movement.y) * 0.5f;
+            Vector2 distance = new Vector2(Movement.x, Movement.y) * 0.5f;
             rayCastEndPos = new Vector2(raycastPoint.position.x, raycastPoint.position.y) + distance;
             //Debug.Log("castEndPos: "+rayCastEndPos);
             Debug.DrawLine(raycastPoint.position, rayCastEndPos, Color.blue);
@@ -255,7 +255,7 @@ public class Player : Charactor
         if(isMoving) {
             SetRaycastPoint();
 
-            Vector2 distance = new Vector2(movement.x, movement.y) * 0.35f;
+            Vector2 distance = new Vector2(Movement.x, Movement.y) * 0.35f;
             rayCastEndPos = new Vector2(raycastPoint.position.x, raycastPoint.position.y) + distance;
             //Debug.Log("castEndPos: "+rayCastEndPos);
             Debug.DrawLine(raycastPoint.position, rayCastEndPos, Color.blue);
@@ -311,7 +311,7 @@ public class Player : Charactor
         if(isMoving) {
             SetRaycastPoint();
 
-            Vector2 distance = new Vector2(movement.x, movement.y) * 0.35f;
+            Vector2 distance = new Vector2(Movement.x, Movement.y) * 0.35f;
             rayCastEndPos = new Vector2(raycastPoint.position.x, raycastPoint.position.y) + distance;
             //Debug.Log("castEndPos: "+rayCastEndPos);
             Debug.DrawLine(raycastPoint.position, rayCastEndPos, Color.blue);
@@ -348,10 +348,10 @@ public class Player : Charactor
 
         RaycastHit2D[] hits = null;
         if(IsObliqueRaycast()) {
-            Vector2 distance1 = new Vector2(movement.x, 0) * 0.35f;
+            Vector2 distance1 = new Vector2(Movement.x, 0) * 0.35f;
             var rayCastEndPos1 = new Vector2(raycastPoint.position.x, raycastPoint.position.y) + distance1;
             Debug.DrawLine(raycastPoint.position, rayCastEndPos1, Color.red);
-            Vector2 distance2 = new Vector2(0, movement.y) * 0.35f;
+            Vector2 distance2 = new Vector2(0, Movement.y) * 0.35f;
             var rayCastEndPos2 = new Vector2(raycastPoint.position.x, raycastPoint.position.y) + distance2;
             Debug.DrawLine(raycastPoint.position, rayCastEndPos2, Color.red);
 
@@ -360,7 +360,7 @@ public class Player : Charactor
 
             hits = hits1.Concat(hits2).ToArray();
         } else {
-            Vector2 distance = new Vector2(movement.x, movement.y) * 0.35f;
+            Vector2 distance = new Vector2(Movement.x, Movement.y) * 0.35f;
             rayCastEndPos = new Vector2(raycastPoint.position.x, raycastPoint.position.y) + distance;
             //Debug.Log("castEndPos: "+rayCastEndPos);
             Debug.DrawLine(raycastPoint.position, rayCastEndPos, Color.red);
@@ -379,8 +379,8 @@ public class Player : Charactor
                          
                         //if(isHoldInteraction && facingDir.Equals(new Vector2(movement.x, movement.y))) {  
                         Debug.Log("isHoldInteraction: "+isHoldInteraction);
-                        Debug.Log("new Vector2(movement.x, movement.y): "+new Vector2(movement.x, movement.y));
-                        if(isHoldInteraction && facingDir.Equals(new Vector2(movement.x, movement.y))) {
+                        Debug.Log("new Vector2(movement.x, movement.y): "+new Vector2(Movement.x, Movement.y));
+                        if(isHoldInteraction && facingDir.Equals(new Vector2(Movement.x, Movement.y))) {
                             Debug.Log("TriggerToJumpDown prepareToJump = false");
                             prepareToJump = false;
         
@@ -399,9 +399,9 @@ public class Player : Charactor
                             Debug.Log("TriggerToJumpDown KnockbackFeedback");
                             Debug.Log("TriggerToJumpDown isHoldInteraction "+isHoldInteraction);
                             Debug.Log("TriggerToJumpDown facingDir "+facingDir);
-                            Debug.Log("TriggerToJumpDown new Vector2(movement.x, movement.y) "+new Vector2(movement.x, movement.y));
+                            Debug.Log("TriggerToJumpDown new Vector2(movement.x, movement.y) "+new Vector2(Movement.x, Movement.y));
                             KnockbackFeedback feedback = GetComponent<KnockbackFeedback>();
-                            feedback.ActiveFeedbackByDir(-new Vector2(movement.x, movement.y));
+                            feedback.ActiveFeedbackByDir(-new Vector2(Movement.x, Movement.y));
                             jumpPointTrigger = false;
                         }
                     }
@@ -430,7 +430,7 @@ public class Player : Charactor
         prepareToJump = true;
         SetRaycastPoint();
 
-        Vector2 distance = new Vector2(movement.x, movement.y) * 0.35f;
+        Vector2 distance = new Vector2(Movement.x, Movement.y) * 0.35f;
         rayCastEndPos = new Vector2(raycastPoint.position.x, raycastPoint.position.y) + distance;
         //Debug.Log("castEndPos: "+rayCastEndPos);
         Debug.DrawLine(raycastPoint.position, rayCastEndPos, Color.red);
@@ -550,10 +550,10 @@ public class Player : Charactor
                 Debug.Log("jumpPointColliderPoint3: "+jumpPointColliderPoint3);
                 Debug.Log("jumpPointColliderPoint4: "+jumpPointColliderPoint4);
 
-                Debug.Log("PredictNext jumpPointColliderPoint1: "+PredictNextJumpPointWorldPos(jumpPointColliderPoint1, currHeight, goalheight, movement));
-                Debug.Log("PredictNext jumpPointColliderPoint1: "+PredictNextJumpPointWorldPos(jumpPointColliderPoint2, currHeight, goalheight, movement));
-                Debug.Log("PredictNext jumpPointColliderPoint1: "+PredictNextJumpPointWorldPos(jumpPointColliderPoint3, currHeight, goalheight, movement));
-                Debug.Log("PredictNext jumpPointColliderPoint1: "+PredictNextJumpPointWorldPos(jumpPointColliderPoint4, currHeight, goalheight, movement));
+                Debug.Log("PredictNext jumpPointColliderPoint1: "+PredictNextJumpPointWorldPos(jumpPointColliderPoint1, currHeight, goalheight, Movement));
+                Debug.Log("PredictNext jumpPointColliderPoint1: "+PredictNextJumpPointWorldPos(jumpPointColliderPoint2, currHeight, goalheight, Movement));
+                Debug.Log("PredictNext jumpPointColliderPoint1: "+PredictNextJumpPointWorldPos(jumpPointColliderPoint3, currHeight, goalheight, Movement));
+                Debug.Log("PredictNext jumpPointColliderPoint1: "+PredictNextJumpPointWorldPos(jumpPointColliderPoint4, currHeight, goalheight, Movement));
 
                 if(Mathf.Floor(goalheight) >= 0) {
                     groundCheckHeight = Mathf.Floor(goalheight);
@@ -562,10 +562,10 @@ public class Player : Charactor
                 }
                 
 
-                if(hm.GroundableChecked(PredictNextJumpPointWorldPos(jumpPointColliderPoint1, currHeight, goalheight, movement), groundCheckHeight) || 
-                   hm.GroundableChecked(PredictNextJumpPointWorldPos(jumpPointColliderPoint2, currHeight, goalheight, movement), groundCheckHeight) ||
-                   hm.GroundableChecked(PredictNextJumpPointWorldPos(jumpPointColliderPoint3, currHeight, goalheight, movement), groundCheckHeight) || 
-                   hm.GroundableChecked(PredictNextJumpPointWorldPos(jumpPointColliderPoint4, currHeight, goalheight, movement), groundCheckHeight)) {
+                if(hm.GroundableChecked(PredictNextJumpPointWorldPos(jumpPointColliderPoint1, currHeight, goalheight, Movement), groundCheckHeight) || 
+                   hm.GroundableChecked(PredictNextJumpPointWorldPos(jumpPointColliderPoint2, currHeight, goalheight, Movement), groundCheckHeight) ||
+                   hm.GroundableChecked(PredictNextJumpPointWorldPos(jumpPointColliderPoint3, currHeight, goalheight, Movement), groundCheckHeight) || 
+                   hm.GroundableChecked(PredictNextJumpPointWorldPos(jumpPointColliderPoint4, currHeight, goalheight, Movement), groundCheckHeight)) {
 
                     Debug.Log("PredictNext Groundable true, groundCheckHeight: "+groundCheckHeight);
                     
@@ -592,10 +592,10 @@ public class Player : Charactor
 
                     if(Mathf.Ceil(currHeight) - currHeight <= 0.5f) {
                         groundCheckHeight = Mathf.Ceil(currHeight);
-                        if(hm.GroundableChecked(PredictNextJumpPointWorldPos(jumpPointColliderPoint1, currHeight, goalheight, movement), groundCheckHeight) || 
-                           hm.GroundableChecked(PredictNextJumpPointWorldPos(jumpPointColliderPoint2, currHeight, goalheight, movement), groundCheckHeight) ||
-                           hm.GroundableChecked(PredictNextJumpPointWorldPos(jumpPointColliderPoint3, currHeight, goalheight, movement), groundCheckHeight) || 
-                           hm.GroundableChecked(PredictNextJumpPointWorldPos(jumpPointColliderPoint4, currHeight, goalheight, movement), groundCheckHeight)) {
+                        if(hm.GroundableChecked(PredictNextJumpPointWorldPos(jumpPointColliderPoint1, currHeight, goalheight, Movement), groundCheckHeight) || 
+                           hm.GroundableChecked(PredictNextJumpPointWorldPos(jumpPointColliderPoint2, currHeight, goalheight, Movement), groundCheckHeight) ||
+                           hm.GroundableChecked(PredictNextJumpPointWorldPos(jumpPointColliderPoint3, currHeight, goalheight, Movement), groundCheckHeight) || 
+                           hm.GroundableChecked(PredictNextJumpPointWorldPos(jumpPointColliderPoint4, currHeight, goalheight, Movement), groundCheckHeight)) {
                             Debug.Log("After Ceil Groundable true");
                             lastHeight = currHeight;
                             currHeight = groundCheckHeight;
@@ -603,7 +603,7 @@ public class Player : Charactor
                             groundDelayRoutine = StartCoroutine(GroundDelay());
                         } else {
                             if(hits.Length >= 1) {
-                                var variableVector = PredictNextJumpPointWorldPos(jumpPointColliderPoint1, currHeight, goalheight, movement) - jumpPointColliderPoint1;
+                                var variableVector = PredictNextJumpPointWorldPos(jumpPointColliderPoint1, currHeight, goalheight, Movement) - jumpPointColliderPoint1;
 
                                 foreach(RaycastHit2D hit in hits) {
                                     Debug.Log("TriggerToJumpUp hits collider name: "+hit.collider.name);
@@ -624,7 +624,7 @@ public class Player : Charactor
                         }
                     } else {
                         if(hits.Length >= 1) {
-                            var variableVector = PredictNextJumpPointWorldPos(jumpPointColliderPoint1, currHeight, goalheight, movement) - jumpPointColliderPoint1;
+                            var variableVector = PredictNextJumpPointWorldPos(jumpPointColliderPoint1, currHeight, goalheight, Movement) - jumpPointColliderPoint1;
 
                             foreach(RaycastHit2D hit in hits) {
                                 Debug.Log("TriggerToJumpUp hits collider name: "+hit.collider.name);
@@ -747,7 +747,7 @@ public class Player : Charactor
         groundDelaying = false;
         jumpOffset = 0.3f;
         lastHeight = currHeight;
-        moveSpeed = 11f;
+        SetMoveSpeed(11f);
         jumpingMovementVariable = 0.5f;
         OnColliders.Clear();
 

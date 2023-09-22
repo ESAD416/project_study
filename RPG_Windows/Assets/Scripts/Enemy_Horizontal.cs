@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Enemy_Horizontal : Enemy_Abstract
 {
-    private SpriteRenderer m_SprtRenderer;
-
     [Header("Detector Parameters")]
     public bool moveRight;
 
@@ -46,22 +44,22 @@ public class Enemy_Horizontal : Enemy_Abstract
             if(isAttacking) {
                 //Debug.Log("attacking");
                 if(isMoving) {
-                    movementAfterAttack = movement;
+                    movementAfterAttack = Movement;
                     //Debug.Log("movementAfterAttack: "+movementAfterAttack);
                 }
-                movement = Vector3.zero;
+                SetMovement(Vector3.zero);
             } else {
                 if(isPatroling) {
                     if(moveRight) {
-                        movement = Vector3.right;
+                        SetMovement(Vector3.right);
                     } else {
-                        movement = Vector3.left;
+                        SetMovement(Vector3.left);
                     }
                 } else if(isChasing) {
                     // if(movement.Equals(Vector3.zero)) {
                     //     moveRight = AnimeUtils.isRightForHorizontalAnimation(movementAfterAttack);
                     // }
-                    moveRight = AnimeUtils.isRightForHorizontalAnimation(movement);
+                    moveRight = AnimeUtils.isRightForHorizontalAnimation(Movement);
                 }
 
                 if(detectorL != null) detectorL.gameObject.SetActive(!moveRight);
@@ -112,7 +110,7 @@ public class Enemy_Horizontal : Enemy_Abstract
     public override void OnAttack() {
         //Debug.Log("Enemy_Horizontal onAttack: ");
         if(isMoving) {
-            facingDir = movement;
+            facingDir = Movement;
         }
 
         if(detectorL != null) detectorL.gameObject.SetActive(false);
@@ -129,7 +127,7 @@ public class Enemy_Horizontal : Enemy_Abstract
         isAttacking = false;
         m_Animator.SetBool("attack", isAttacking);
 
-        movement = movementAfterAttack;
+        SetMovement(movementAfterAttack);
         movementAfterAttack = Vector3.zero;
         //Debug.Log("Enemy_Horizontal FinishAttack end");
     }

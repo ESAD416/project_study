@@ -20,29 +20,29 @@ public abstract class Enemy_Abstract : Charactor
     // Update is called once per frame
     protected override void Update() {
         //Debug.Log("moveSpeed: "+moveSpeed);
-        m_Center = centerObj?.position ?? Vector3.zero;
-        m_Buttom = buttomObj?.position ?? Vector3.zero;
+        m_Center = m_centerObj?.position ?? Vector3.zero;
+        m_Buttom = m_buttomObj?.position ?? Vector3.zero;
 
         UpdateCoordinate();
 
-        m_Animator?.SetFloat("moveSpeed", moveSpeed);
+        m_Animator?.SetFloat("moveSpeed", MoveSpeed);
     }
 
     protected override void FixedUpdate() {
         if(isDead) {
-            movement = Vector3.zero;
+            SetMovement(Vector3.zero);
         }
         Move();
     }
 
     public void SetDefaultMovement() {
-        movement = defaultMovement;
+        SetMovement(defaultMovement);
     }
 
     public virtual void OnAttack() {
         Debug.Log("Enemy_Abstract onAttack: ");
         if(isMoving) {
-            facingDir = movement;
+            facingDir = Movement;
         }
         attackRoutine = StartCoroutine(Attack());
     }

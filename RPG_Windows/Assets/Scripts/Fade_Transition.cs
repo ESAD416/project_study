@@ -16,9 +16,9 @@ public class Fade_Transition : Scene_Transition
 
     private void OnTriggerEnter2D(Collider2D other) {
         if(other.gameObject.tag == "Player" && !other.isTrigger) {
-            destinationPlayerStorage.initialPos = destinationPlayerPos;
-            destinationPlayerStorage.jumpCollidersName = destinationJumpCollidersName;
-            destinationPlayerStorage.initialHeight = destinationPlayerHeight;
+            destinationPlayerInfo.initialPos = destinationPlayerPos;
+            destinationPlayerInfo.jumpCollidersName = destinationJumpCollidersName;
+            destinationPlayerInfo.initialHeight = destinationPlayerHeight;
             transInfoStorage.fadeTransitionActive = true;
             LoadScene();
         }

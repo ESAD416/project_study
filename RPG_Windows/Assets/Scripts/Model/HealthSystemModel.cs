@@ -1,25 +1,28 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+[Serializable]
 public class HealthSystemModel
 {
     /// <summary>
     /// 當前血量
     /// </summary>
     [SerializeField] private int currHealth = 20;
+    public int CurrHealth => currHealth;
+
     /// <summary>
     /// 最大血量
     /// </summary>
     [SerializeField] private int maxHealth = 20;
-
-    public UnityAction OnHealthChange;
-
-    // Getter
-    public int CurrHealth => currHealth;
     public int MaxHealth => maxHealth;
 
+    /// <summary>
+    /// 血量變化觸發事件
+    /// </summary>
+    public UnityAction OnHealthChange;
     
 
     public HealthSystemModel(int currH, int maxH) {

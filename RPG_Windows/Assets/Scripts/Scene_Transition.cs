@@ -10,14 +10,14 @@ public class Scene_Transition : MonoBehaviour
 {
     public int sceneIndexToLoad;
     public string sceneNameToLoad;
-    public TransitionStorage transInfoStorage;
+    public TransitionData transInfoStorage;
     protected AsyncOperation asyncLoad;
 
     [Header("Destination Player Controls")]
     public Vector2 destinationPlayerPos;
     public float destinationPlayerHeight;
     public string destinationJumpCollidersName;
-    public PlayerStorage destinationPlayerStorage;
+    public CharactorData destinationPlayerInfo;
 
     [Header("Transition Animation Controls")]
     public Animator transitionAnimaCtrl;

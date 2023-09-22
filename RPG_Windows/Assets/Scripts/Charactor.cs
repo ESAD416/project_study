@@ -11,13 +11,18 @@ public abstract class Charactor : MonoBehaviour
     
     #region 角色物件
     /// <summary>
+    /// 角色物理剛體
+    /// </summary>
+    [SerializeField] protected Rigidbody2D m_Rigidbody;
+    /// <summary>
+    /// 角色圖片精靈
+    /// </summary>
+    [SerializeField] protected SpriteRenderer m_SprtRenderer;
+    /// <summary>
     /// 角色動畫控制器
     /// </summary>
-    protected Animator m_Animator;
-    /// <summary>
-    /// 角色物理物件
-    /// </summary>
-    protected Rigidbody2D m_Rigidbody;
+    [SerializeField] protected Animator m_Animator;
+
     /// <summary>
     /// 角色中心
     /// </summary>
@@ -32,37 +37,44 @@ public abstract class Charactor : MonoBehaviour
     /// </summary>
     public Vector3 m_Coordinate;
     /// <summary>
-    /// 角色中心物件名稱
+    /// 角色中心Transform
     /// </summary>
-    public Transform centerObj;
+    public Transform m_centerObj;
     /// <summary>
-    /// 角色底部物件名稱
+    /// 角色底部Transform
     /// </summary>
-    public Transform buttomObj;
+    public Transform m_buttomObj;
     /// <summary>
     /// 角色相關資訊存取
     /// </summary>
-    public PlayerStorage infoStorage;
+    public CharactorData m_infoStorage;
 
     #endregion
 
     #region 移動參數
     [Header("Movement Parameters")]
+    [SerializeField] protected float m_moveSpeed = 11f;
     /// <summary>
     /// 角色移速
     /// </summary>
-    [SerializeField] protected float moveSpeed = 5f;
-    public float MoveSpeed => moveSpeed;
+    public float MoveSpeed => m_moveSpeed;
+    /// <summary>
+    /// 更改角色移速
+    /// </summary>
     public void SetMoveSpeed(float speed) {
-        this.moveSpeed = speed;
+        this.m_moveSpeed = speed;
     }
+    
+    protected Vector3 m_movement = Vector3.zero;
     /// <summary>
     /// 角色移動向量
     /// </summary>
-    protected Vector3 movement = Vector3.zero;
-    public Vector3 Movement => movement;
+    public Vector3 Movement => m_movement;
+    /// <summary>
+    /// 更改角色向量
+    /// </summary>
     public void SetMovement(Vector3 vector3) {
-        this.movement = vector3;
+        this.m_movement = vector3;
     }
     /// <summary>
     /// 角色面向方向
@@ -74,7 +86,7 @@ public abstract class Charactor : MonoBehaviour
     /// </summary>
     public bool isMoving {
         get {
-            return movement.x != 0 || movement.y != 0;
+            return Movement.x != 0 || Movement.y != 0;
         }
     }
     /// <summary>
@@ -86,6 +98,27 @@ public abstract class Charactor : MonoBehaviour
             return jumpingUpButNotFinish || jumpHitColli || (isTakingHit && !hyperArmor);
         }
     }
+    #endregion
+
+    #region 攻擊參數
+    /// <summary>
+    /// 角色是否為正在攻擊中
+    /// </summary>
+    [Header("Attack Parameters")]
+    public bool isAttacking;
+    /// <summary>
+    /// 一次攻擊動畫所需的時間
+    /// </summary>
+    [SerializeField] protected float attackClipTime;
+    /// <summary>
+    /// 角色攻擊動作為即時觸發，故宣告一協程進行處理獨立的動作
+    /// </summary>
+    protected Coroutine attackRoutine;
+    /// <summary>
+    /// 記錄攻擊動作完成後的角色移動向量
+    /// </summary>
+    protected Vector3 movementAfterAttack;
+    
     #endregion
 
     #region 跳躍參數
@@ -116,38 +149,15 @@ public abstract class Charactor : MonoBehaviour
     
     #endregion
 
-    #region 攻擊參數
-    [Header("Attack Parameters")]
-    /// <summary>
-    /// 角色攻擊動作為即時觸發，故宣告一協程進行處理獨立的動作
-    /// </summary>
-    protected Coroutine attackRoutine;
-    /// <summary>
-    /// 角色正在攻擊
-    /// </summary>
-    public bool isAttacking;
-    /// <summary>
-    /// 記錄攻擊動作完成後的角色移動向量
-    /// </summary>
-    protected Vector3 movementAfterAttack;
-    /// <summary>
-    /// 一次攻擊動畫所需的時間
-    /// </summary>
-    protected float attackClipTime;
-    
-    #endregion
-
     #region 血量系統參數
-
+    /// <summary>
+    /// 血量系統
+    /// </summary>
     private HealthSystemModel healthSystem;
     // Getter
     public HealthSystemModel HealthSystem => healthSystem;
     /// <summary>
-    /// 血量
-    /// </summary>
-    // private int currHealth = 20;
-    /// <summary>
-    /// 血量
+    /// 最大血量
     /// </summary>
     private int maxHealth = 20;
     /// <summary>
@@ -193,8 +203,6 @@ public abstract class Charactor : MonoBehaviour
     // Start is called before the first frame update
     protected virtual void Start()
     {
-        m_Animator = GetComponentInChildren<Animator>();
-        m_Rigidbody = GetComponent<Rigidbody2D>();
         m_Coordinate = transform.position;
         healthSystem = new HealthSystemModel(maxHealth);
     }
@@ -203,15 +211,14 @@ public abstract class Charactor : MonoBehaviour
     protected virtual void Update()
     {
         //Debug.Log("takeHitRoutine == null: "+(takeHitRoutine == null));
-
-        m_Center = centerObj?.position ?? Vector3.zero;
-        m_Buttom = buttomObj?.position ?? Vector3.zero;
+        m_Center = m_centerObj?.position ?? Vector3.zero;
+        m_Buttom = m_buttomObj?.position ?? Vector3.zero;
 
         UpdateCoordinate();
         //Debug.Log("coordinate: "+m_Coordinate);
         HandleAnimatorLayers();
-        SetAnimateMovementPara(movement, facingDir);
-        if(!string.IsNullOrEmpty(infoStorage.jumpCollidersName)) {
+        SetAnimateMovementPara(Movement, facingDir);
+        if(!string.IsNullOrEmpty(m_infoStorage.jumpCollidersName)) {
             if(isJumping) {
             FocusCollidersWithHeightWhileJumping();
             } else {
@@ -226,10 +233,10 @@ public abstract class Charactor : MonoBehaviour
         if(isAttacking) {
             //Debug.Log("attacking");
             if(isMoving) {
-                movementAfterAttack = movement;
+                movementAfterAttack = Movement;
                 //Debug.Log("movementAfterAttack: "+movementAfterAttack);
             }
-            movement = Vector3.zero;
+            SetMovement(Vector3.zero);
         }
         // else if(isJumping) {
         //     transform.position = GetWorldPosByCoordinate(m_Coordinate) - new Vector3(0, 1.7f);   // 預設中心點是(x, y+1.7)
@@ -250,13 +257,14 @@ public abstract class Charactor : MonoBehaviour
 
     #region 位移控制
     public void Move() {
-        m_Rigidbody.velocity = movement.normalized * moveSpeed;
+        //Debug.Log("FixedUpdate movement.normalized: "+movement.normalized+", moveSpeed: "+moveSpeed );
+        m_Rigidbody.velocity = Movement.normalized * MoveSpeed;
         //m_Rigidbody.AddForce(movement.normalized* moveSpeed * Time.fixedDeltaTime, ForceMode2D.Force);
         // transform.Translate(movement*moveSpeed*Time.deltaTime);
     }
 
     public void MoveWhileJump() {
-        m_Rigidbody.velocity = movement.normalized * jumpingMovementVariable * moveSpeed;
+        m_Rigidbody.velocity = Movement.normalized * jumpingMovementVariable * MoveSpeed;
     }
 
     public void UpdateCoordinate() {
@@ -326,7 +334,7 @@ public abstract class Charactor : MonoBehaviour
         isAttacking = false;
         m_Animator?.SetBool("attack", isAttacking);
 
-        movement = movementAfterAttack;
+        SetMovement(movementAfterAttack);
         movementAfterAttack = Vector3.zero;
         Debug.Log("FinishAttack end");
     }
@@ -453,8 +461,7 @@ public abstract class Charactor : MonoBehaviour
     protected IEnumerator TakeHit() {
         Debug.Log("TakeHit");
         isTakingHit = true;
-        if(!hyperArmor)
-            moveSpeed = 0f;
+        if(!hyperArmor) SetMoveSpeed(0f);
         
         yield return new WaitForSeconds(hitRecoveryTime);  // hardcasted casted time for debugged
         FinishTakeHit();
@@ -466,7 +473,8 @@ public abstract class Charactor : MonoBehaviour
         }
 
         isTakingHit = false;
-        moveSpeed = 3f;
+        
+        SetMoveSpeed(3f);
         Debug.Log("FinishTakeHit");
     }
 
@@ -504,7 +512,7 @@ public abstract class Charactor : MonoBehaviour
     
     protected IEnumerator BeingStunned() {
         Debug.Log("BeingStunned");
-        moveSpeed = 0f;
+        SetMoveSpeed(0f);
         yield return new WaitForSeconds(stunRecoveryTime);  // hardcasted casted time for debugged
         FinishBeingStunned();
     }
@@ -516,14 +524,14 @@ public abstract class Charactor : MonoBehaviour
 
         isStunned = false;
         armorToStunned = 3;
-        moveSpeed = 3f;
+        SetMoveSpeed(3f);
         Debug.Log("FinishBeingStunned");
     }
     #endregion
 
     #region 碰撞控制
     private void FocusCollidersWithHeight() {
-        Collider2D[] jumpColls = GridUtils.GetColliders(infoStorage.jumpCollidersName);
+        Collider2D[] jumpColls = GridUtils.GetColliders(m_infoStorage.jumpCollidersName);
 
         if(jumpColls != null) {
             foreach(var collider2D in jumpColls) {
@@ -543,7 +551,7 @@ public abstract class Charactor : MonoBehaviour
     }
 
     private void FocusCollidersWithHeightWhileJumping() {
-        Collider2D[] jumpColls = GridUtils.GetColliders(infoStorage.jumpCollidersName);
+        Collider2D[] jumpColls = GridUtils.GetColliders(m_infoStorage.jumpCollidersName);
 
         if(jumpColls != null) {
             foreach(var collider2D in jumpColls) {

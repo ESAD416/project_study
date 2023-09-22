@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-[CreateAssetMenu(menuName = "Parameters Storage/Tile")]
+[CreateAssetMenu(menuName = "Parameter Storage/Tile")]
 public class TileData : ScriptableObject
 {
     public Tile[] tiles;

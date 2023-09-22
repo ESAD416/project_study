@@ -7,7 +7,7 @@ public class KnockbackFeedback : MonoBehaviour
 {
     [SerializeField] private Rigidbody2D rb2d;
 
-    [SerializeField] private Transform objectCenter;
+    [SerializeField] private Transform targetCenter;
 
     [SerializeField] private float thrust = 5;
 
@@ -18,7 +18,7 @@ public class KnockbackFeedback : MonoBehaviour
     public void ActiveFeedback(Vector3 senderPos) {
         StopAllCoroutines();
         OnBegin?.Invoke();
-        Vector3 dir = objectCenter.position - senderPos;
+        Vector3 dir = targetCenter.position - senderPos;
         Vector3 force = dir.normalized * thrust;
         rb2d.AddForce(force, ForceMode2D.Impulse);
         StartCoroutine(EndProcess());

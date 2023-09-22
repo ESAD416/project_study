@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public static class JumpMechanismUtils
@@ -27,7 +24,7 @@ public static class JumpMechanismUtils
                 if(heightObj != null) {
                     float correspondHeight = heightObj.GetCorrespondHeight();
                     float selfHeight = heightObj.GetSelfHeight();
-                    altitudeVariation = Math.Abs(currHeight - correspondHeight) ;
+                    altitudeVariation = Mathf.Abs(currHeight - correspondHeight) ;
                     Debug.Log("DetectedJumpState correspondHeight: "+correspondHeight);
                     Debug.Log("DetectedJumpState selfHeight: "+selfHeight);
                     Debug.Log("DetectedJumpState altitudeVariation: "+altitudeVariation);
