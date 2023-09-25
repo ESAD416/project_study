@@ -13,7 +13,7 @@ public abstract class Enemy_Abstract : Charactor
     // Start is called before the first frame update
     protected override void Start() {
         base.Start();
-        if(m_Animator != null) hitRecoveryTime = AnimeUtils.GetAnimateClipTime(m_Animator, "Hurt");
+        if(m_Animator != null) hitRecoveryTime = AnimeUtils.GetAnimateClipTimeInRuntime(m_Animator, "Hurt");
         isPatroling = true;
     }
 
@@ -42,7 +42,7 @@ public abstract class Enemy_Abstract : Charactor
     public virtual void OnAttack() {
         Debug.Log("Enemy_Abstract onAttack: ");
         if(isMoving) {
-            facingDir = Movement;
+            SetFacingDir(Movement);
         }
         attackRoutine = StartCoroutine(Attack());
     }

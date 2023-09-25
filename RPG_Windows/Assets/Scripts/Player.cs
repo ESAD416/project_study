@@ -34,13 +34,13 @@ public class Player : Charactor
     protected override void Start() {
         rayCastEndPos = new Vector2(raycastPoint.position.x, raycastPoint.position.y) + new Vector2(0, -1) * 0.35f;   // 預設射線終點
         base.Start();
-        attackClipTime = AnimeUtils.GetAnimateClipTime(m_Animator, "Attack_Down");
+        attackClipTime = AnimeUtils.GetAnimateClipTimeInRuntime(m_Animator, "Attack_Down");
         transform.position = new Vector3(m_infoStorage.initialPos.x, m_infoStorage.initialPos.y, m_infoStorage.initialHeight);
         currHeight = m_infoStorage.initialHeight;
 
         movementActionReference.action.performed += content => {
             var inputVecter2 = content.ReadValue<Vector2>();
-            facingDir = inputVecter2;
+            SetFacingDir(inputVecter2);
         };
 
         holdActionReference.action.started += content => {
@@ -136,7 +136,7 @@ public class Player : Charactor
     public void OnAttack(InputAction.CallbackContext value) {
         if(value.started) {
             if(isMoving) {
-                facingDir = Movement;
+                SetFacingDir(Movement);
             }
             attackRoutine = StartCoroutine(Attack());
         }
@@ -298,7 +298,7 @@ public class Player : Charactor
                 if(jumpUp || jumpDown) {
                     if(!isJumping) {
                         takeOffCoord = m_Coordinate;
-                        takeOffDir = facingDir;
+                        takeOffDir = FacingDir;
                         isJumping = true;
                         Debug.Log("takeOffPos: "+takeOffCoord);
                     }
@@ -380,13 +380,13 @@ public class Player : Charactor
                         //if(isHoldInteraction && facingDir.Equals(new Vector2(movement.x, movement.y))) {  
                         Debug.Log("isHoldInteraction: "+isHoldInteraction);
                         Debug.Log("new Vector2(movement.x, movement.y): "+new Vector2(Movement.x, Movement.y));
-                        if(isHoldInteraction && facingDir.Equals(new Vector2(Movement.x, Movement.y))) {
+                        if(isHoldInteraction && FacingDir.Equals(new Vector2(Movement.x, Movement.y))) {
                             Debug.Log("TriggerToJumpDown prepareToJump = false");
                             prepareToJump = false;
         
                             if(!isJumping) {
                                 takeOffCoord = m_Coordinate;
-                                takeOffDir = facingDir;
+                                takeOffDir = FacingDir;
                                 isJumping = true;
                                 maxJumpHeight = currHeight + 1.5f;
                                 RevertColliderFromJumpDown();
@@ -398,7 +398,7 @@ public class Player : Charactor
                         else {
                             Debug.Log("TriggerToJumpDown KnockbackFeedback");
                             Debug.Log("TriggerToJumpDown isHoldInteraction "+isHoldInteraction);
-                            Debug.Log("TriggerToJumpDown facingDir "+facingDir);
+                            Debug.Log("TriggerToJumpDown facingDir "+FacingDir);
                             Debug.Log("TriggerToJumpDown new Vector2(movement.x, movement.y) "+new Vector2(Movement.x, Movement.y));
                             KnockbackFeedback feedback = GetComponent<KnockbackFeedback>();
                             feedback.ActiveFeedbackByDir(-new Vector2(Movement.x, Movement.y));
@@ -448,7 +448,7 @@ public class Player : Charactor
                     Debug.Log("OnCollisioning: "+OnColliders.Contains(hit.collider));
                     if(angle >= 60f && 180f - angle >= 60f && OnColliders.Contains(hit.collider)) {
                         if(!jumpDelaying) {
-                            Vector2 faceDirAtJump = facingDir;
+                            Vector2 faceDirAtJump = FacingDir;
                             jumpDelayRoutine = StartCoroutine(JumpUpDelay(faceDirAtJump));
                             break;
                         }
@@ -705,7 +705,7 @@ public class Player : Charactor
         
         if(!isJumping) {
             takeOffCoord = m_Coordinate;
-            takeOffDir = facingDir;
+            takeOffDir = FacingDir;
             isJumping = true;
             maxJumpHeight = currHeight + 1.5f;
             RevertColliderFromJumpDown();
@@ -716,7 +716,7 @@ public class Player : Charactor
     protected IEnumerator JumpUpDelay(Vector2 faceDir) {
         jumpDelaying = true;
         // if button is change before delay time
-        if(facingDir != faceDir) {
+        if(FacingDir != faceDir) {
             jumpDelaying = false;
             yield break;
         }
@@ -727,7 +727,7 @@ public class Player : Charactor
         
         if(!isJumping) {
             takeOffCoord = m_Coordinate;
-            takeOffDir = facingDir;
+            takeOffDir = FacingDir;
             isJumping = true;
             maxJumpHeight = currHeight + 1.5f;
             Debug.Log("takeOffPos: "+takeOffCoord);

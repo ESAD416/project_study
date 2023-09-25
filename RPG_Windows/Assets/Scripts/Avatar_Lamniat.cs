@@ -8,9 +8,12 @@ using static JumpMechanismUtils;
 
 public class Avatar_Lamniat : Charactor
 {
-    [Header("Avatar Parameters")]
+    [Header("Raycast Parameters")]
+    [SerializeField] private List<Transform> m_raycastStartPosition = new List<Transform>();
     [SerializeField] private Transform m_raycastStart;
     public Vector2 m_raycastEnd;
+
+    [Header("Stairs Parameters")]
     public string onStairs;
     public string stair_start;
     public string stair_end ;
@@ -29,7 +32,7 @@ public class Avatar_Lamniat : Charactor
     protected override void Start() {
         m_raycastEnd = new Vector2(m_raycastStart.position.x, m_raycastStart.position.y) + new Vector2(0, -1) * 0.35f;   // 預設射線終點
         base.Start();
-        attackClipTime = AnimeUtils.GetAnimateClipTime(m_Animator, "Attack_Down");
+        //attackClipTime = AnimeUtils.GetAnimateClipTime(m_Animator, "Attack_Down");
         transform.position = new Vector3(m_infoStorage.initialPos.x, m_infoStorage.initialPos.y, m_infoStorage.initialHeight);
         currHeight = m_infoStorage.initialHeight;
     }
@@ -42,11 +45,16 @@ public class Avatar_Lamniat : Charactor
 
         inputControls.Lamniat_Land.Movement.performed += content => {
             var inputVecter2 = content.ReadValue<Vector2>();
-            facingDir = inputVecter2;
+            SetFacingDir(inputVecter2);
             SetMovement(new Vector3(inputVecter2.x, inputVecter2.y));
+
+            var faceLeft = m_SprtRenderer.flipX;
+            //Debug.Log("faceLeft = " + faceLeft);
+            if(m_SprtRenderer!= null) m_SprtRenderer.flipX = AnimeUtils.isLeftForHorizontalAnimation(Movement, faceLeft);
         };
 
         inputControls.Lamniat_Land.Movement.canceled += content => {
+            
             SetMovement(Vector3.zero);
         };
 
@@ -64,8 +72,10 @@ public class Avatar_Lamniat : Charactor
 
         inputControls.Lamniat_Land.Attack.started += content => {
             if(isMoving) {
-                facingDir = Movement;
+                SetFacingDir(Movement);
             }
+            Combat_Lamniat combat = GetComponent<Combat_Lamniat>();
+            combat.isAttacking = true;
             attackRoutine = StartCoroutine(Attack());
         };
 
@@ -126,12 +136,6 @@ public class Avatar_Lamniat : Charactor
         inputControls.Lamniat_Land.Enable();
     }
 
-    public void OnAttack(InputAction.CallbackContext value) {
-        if(value.started) {
-            
-        }
-    }
-
     #region 碰撞偵測
 
     private void OnCollisionEnter2D(Collision2D other) {
@@ -188,32 +192,41 @@ public class Avatar_Lamniat : Charactor
     
     private void SetRaycastPoint(string raycastPointName = null) {
         if(raycastPointName != null) {
-            m_raycastStart = GetComponentInChildren<Transform>().Find(raycastPointName);
+            //m_raycastStart = GetComponentInChildren<Transform>().Find(raycastPointName);
+            m_raycastStart = m_raycastStartPosition.Single(r => r.name.Equals(raycastPointName));
         } else {
             if(Movement.x == 0 && Movement.y > 0) {
                 // Up
-                m_raycastStart = GetComponentInChildren<Transform>().Find("RaycastPoint_Up");
+                //m_raycastStart = GetComponentInChildren<Transform>().Find("RaycastPoint_Up");
+                m_raycastStart = m_raycastStartPosition.Single(r => r.name.Equals("_Up"));
             } else if(Movement.x == 0 && Movement.y < 0) {
                 // Down 
-                m_raycastStart = GetComponentInChildren<Transform>().Find("RaycastPoint_Down");
+                //m_raycastStart = GetComponentInChildren<Transform>().Find("RaycastPoint_Down");
+                m_raycastStart = m_raycastStartPosition.Single(r => r.name.Equals("_Down"));
             } else if(Movement.x < 0 && Movement.y == 0) {
                 // Left
-                m_raycastStart = GetComponentInChildren<Transform>().Find("RaycastPoint_Left");
+                //m_raycastStart = GetComponentInChildren<Transform>().Find("RaycastPoint_Left");
+                m_raycastStart = m_raycastStartPosition.Single(r => r.name.Equals("_Left"));
             } else if(Movement.x > 0 && Movement.y == 0) {
                 // Right
-                m_raycastStart = GetComponentInChildren<Transform>().Find("RaycastPoint_Right");
+                //m_raycastStart = GetComponentInChildren<Transform>().Find("RaycastPoint_Right");
+                m_raycastStart = m_raycastStartPosition.Single(r => r.name.Equals("_Right"));
             } else if(Movement.x > 0 && Movement.y > 0) {
                 // UpRight
-                m_raycastStart = GetComponentInChildren<Transform>().Find("RaycastPoint_UpRight");
+                //m_raycastStart = GetComponentInChildren<Transform>().Find("RaycastPoint_UpRight");
+                m_raycastStart = m_raycastStartPosition.Single(r => r.name.Equals("_UpRight"));
             } else if(Movement.x < 0 && Movement.y > 0) {
                 // UpLeft
-                m_raycastStart = GetComponentInChildren<Transform>().Find("RaycastPoint_UpLeft");
+                //m_raycastStart = GetComponentInChildren<Transform>().Find("RaycastPoint_UpLeft");
+                m_raycastStart = m_raycastStartPosition.Single(r => r.name.Equals("_UpLeft"));
             } else if(Movement.x > 0 && Movement.y < 0) {
                 // DownRight
-                m_raycastStart = GetComponentInChildren<Transform>().Find("RaycastPoint_DownRight");
+                //m_raycastStart = GetComponentInChildren<Transform>().Find("RaycastPoint_DownRight");
+                m_raycastStart = m_raycastStartPosition.Single(r => r.name.Equals("_DownRight"));
             } else if(Movement.x < 0 && Movement.y < 0) {
                 // DownLeft
-                m_raycastStart = GetComponentInChildren<Transform>().Find("RaycastPoint_DownLeft");
+                //m_raycastStart = GetComponentInChildren<Transform>().Find("RaycastPoint_DownLeft");
+                m_raycastStart = m_raycastStartPosition.Single(r => r.name.Equals("_DownLeft"));
             }
         }
     }
@@ -288,7 +301,7 @@ public class Avatar_Lamniat : Charactor
                 if(jumpUp || jumpDown) {
                     if(!isJumping) {
                         takeOffCoord = m_Coordinate;
-                        takeOffDir = facingDir;
+                        takeOffDir = FacingDir;
                         isJumping = true;
                         Debug.Log("takeOffPos: "+takeOffCoord);
                     }
@@ -334,7 +347,7 @@ public class Avatar_Lamniat : Charactor
         Debug.Log("TriggerToJumpDown start");
         prepareToJump = true;
         ChangeColliderToJumpDown();
-        SetRaycastPoint("RaycastPoint_Down");
+        SetRaycastPoint("_Down");
 
         RaycastHit2D[] hits = null;
         if(IsObliqueRaycast()) {
@@ -370,13 +383,13 @@ public class Avatar_Lamniat : Charactor
                         //if(isHoldInteraction && facingDir.Equals(new Vector2(movement.x, movement.y))) {  
                         Debug.Log("isHoldInteraction: "+isHoldInteraction);
                         Debug.Log("new Vector2(movement.x, movement.y): "+new Vector2(Movement.x, Movement.y));
-                        if(isHoldInteraction && facingDir.Equals(new Vector2(Movement.x, Movement.y))) {
+                        if(isHoldInteraction && FacingDir.Equals(new Vector2(Movement.x, Movement.y))) {
                             Debug.Log("TriggerToJumpDown prepareToJump = false");
                             prepareToJump = false;
         
                             if(!isJumping) {
                                 takeOffCoord = m_Coordinate;
-                                takeOffDir = facingDir;
+                                takeOffDir = FacingDir;
                                 isJumping = true;
                                 maxJumpHeight = currHeight + 1.5f;
                                 RevertColliderFromJumpDown();
@@ -388,7 +401,7 @@ public class Avatar_Lamniat : Charactor
                         else {
                             Debug.Log("TriggerToJumpDown KnockbackFeedback");
                             Debug.Log("TriggerToJumpDown isHoldInteraction "+isHoldInteraction);
-                            Debug.Log("TriggerToJumpDown facingDir "+facingDir);
+                            Debug.Log("TriggerToJumpDown facingDir "+FacingDir);
                             Debug.Log("TriggerToJumpDown new Vector2(movement.x, movement.y) "+new Vector2(Movement.x, Movement.y));
                             KnockbackFeedback feedback = GetComponent<KnockbackFeedback>();
                             feedback.ActiveFeedbackByDir(-new Vector2(Movement.x, Movement.y));
@@ -438,7 +451,7 @@ public class Avatar_Lamniat : Charactor
                     Debug.Log("OnCollisioning: "+OnColliders.Contains(hit.collider));
                     if(angle >= 60f && 180f - angle >= 60f && OnColliders.Contains(hit.collider)) {
                         if(!jumpDelaying) {
-                            Vector2 faceDirAtJump = facingDir;
+                            Vector2 faceDirAtJump = FacingDir;
                             jumpDelayRoutine = StartCoroutine(JumpUpDelay(faceDirAtJump));
                             break;
                         }
@@ -695,7 +708,7 @@ public class Avatar_Lamniat : Charactor
         
         if(!isJumping) {
             takeOffCoord = m_Coordinate;
-            takeOffDir = facingDir;
+            takeOffDir = FacingDir;
             isJumping = true;
             maxJumpHeight = currHeight + 1.5f;
             RevertColliderFromJumpDown();
@@ -706,7 +719,7 @@ public class Avatar_Lamniat : Charactor
     protected IEnumerator JumpUpDelay(Vector2 faceDir) {
         jumpDelaying = true;
         // if button is change before delay time
-        if(facingDir != faceDir) {
+        if(FacingDir != faceDir) {
             jumpDelaying = false;
             yield break;
         }
@@ -717,7 +730,7 @@ public class Avatar_Lamniat : Charactor
         
         if(!isJumping) {
             takeOffCoord = m_Coordinate;
-            takeOffDir = facingDir;
+            takeOffDir = FacingDir;
             isJumping = true;
             maxJumpHeight = currHeight + 1.5f;
             Debug.Log("takeOffPos: "+takeOffCoord);

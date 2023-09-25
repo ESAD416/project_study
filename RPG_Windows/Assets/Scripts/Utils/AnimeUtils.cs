@@ -5,6 +5,7 @@ using UnityEngine;
 public static class AnimeUtils
 {
     #region 常數
+
     public const string PATH_UP = "PATH_UP";
     public const string PATH_DOWN = "PATH_DOWN";
     public const string PATH_LEFT = "PATH_LEFT";
@@ -13,9 +14,11 @@ public static class AnimeUtils
     public const string PATH_UP_RIGHT = "PATH_UP_RIGHT";
     public const string PATH_DOWN_LEFT = "PATH_DOWN_LEFT";
     public const string PATH_DOWN_RIGHT = "PATH_DOWN_RIGHT";
+    public const string NO_PATH = "NO_PATH";
+    
     #endregion
     
-    public static float GetAnimateClipTime(Animator animator, string animeClipName) {
+    public static float GetAnimateClipTimeInRuntime(Animator animator, string animeClipName) {
         float attackClipTime = 0f;
         RuntimeAnimatorController ac = animator.runtimeAnimatorController;
 
@@ -49,6 +52,7 @@ public static class AnimeUtils
 
     public static string DefineMovementPath(Vector3 movement) {
         Vector3 nomalizedMovement = movement.normalized;
+        //Debug.Log("DefineMovementPath movement: "+movement);
         if(movement.x == 0 && movement.y > 0) {
             // Up
             return PATH_UP;
@@ -75,15 +79,31 @@ public static class AnimeUtils
             return PATH_DOWN_LEFT;
         }
 
-        return null;
+        return NO_PATH;
     }
 
-    public static bool isRightForHorizontalAnimation(Vector3 movement) {
+    public static bool isRightForHorizontalAnimation(Vector3 movement, bool defaultIsRight = false) {
         string path = DefineMovementPath(movement);
         if(path.Equals(PATH_RIGHT) || path.Equals(PATH_UP_RIGHT) || path.Equals(PATH_DOWN_RIGHT)) {
             return true;
+        } else if(path.Equals(PATH_UP) || path.Equals(PATH_DOWN)) {
+            if(defaultIsRight) return true;
         }
+
         return false;
     }
+
+    public static bool isLeftForHorizontalAnimation(Vector3 movement, bool defaultIsLeft = false) {
+        string path = DefineMovementPath(movement);
+        if(path.Equals(PATH_LEFT) || path.Equals(PATH_UP_LEFT) || path.Equals(PATH_DOWN_LEFT)) {
+            return true;
+        } else if(path.Equals(PATH_UP) || path.Equals(PATH_DOWN)) {
+            if(defaultIsLeft) return true;
+        }
+
+        return false;
+    }
+
+
 
 }

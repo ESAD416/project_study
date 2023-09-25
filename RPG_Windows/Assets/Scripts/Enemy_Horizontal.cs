@@ -110,7 +110,7 @@ public class Enemy_Horizontal : Enemy_Abstract
     public override void OnAttack() {
         //Debug.Log("Enemy_Horizontal onAttack: ");
         if(isMoving) {
-            facingDir = Movement;
+            SetFacingDir(Movement);
         }
 
         if(detectorL != null) detectorL.gameObject.SetActive(false);

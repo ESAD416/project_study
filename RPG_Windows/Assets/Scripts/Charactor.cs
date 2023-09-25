@@ -79,8 +79,14 @@ public abstract class Charactor : MonoBehaviour
     /// <summary>
     /// 角色面向方向
     /// </summary>
-    [SerializeField] protected Vector2 facingDir = Vector2.down;
-    public Vector3 FacingDir => facingDir;
+    [SerializeField] protected Vector2 m_facingDir = Vector2.down;
+    public Vector2 FacingDir => m_facingDir;
+    /// <summary>
+    /// 更改角色面向方向
+    /// </summary>
+    public void SetFacingDir(Vector2 vector2) {
+        this.m_facingDir = vector2;
+    }
     /// <summary>
     /// 角色目前是否為移動中
     /// </summary>
@@ -98,6 +104,24 @@ public abstract class Charactor : MonoBehaviour
             return jumpingUpButNotFinish || jumpHitColli || (isTakingHit && !hyperArmor);
         }
     }
+    #endregion
+
+    #region 血量系統參數
+
+    /// <summary>
+    /// 最大血量
+    /// </summary>
+    [SerializeField] private int m_maxHealth = 20;
+    private HealthSystemModel m_healthSystem;
+    /// <summary>
+    /// 血量系統
+    /// </summary>
+    public HealthSystemModel HealthSystem => m_healthSystem;
+    /// <summary>
+    /// 判定是否死亡
+    /// </summary>
+    public bool isDead = false;
+
     #endregion
 
     #region 攻擊參數
@@ -148,25 +172,7 @@ public abstract class Charactor : MonoBehaviour
     protected bool groundDelaying = false;
     
     #endregion
-
-    #region 血量系統參數
-    /// <summary>
-    /// 血量系統
-    /// </summary>
-    private HealthSystemModel healthSystem;
-    // Getter
-    public HealthSystemModel HealthSystem => healthSystem;
-    /// <summary>
-    /// 最大血量
-    /// </summary>
-    private int maxHealth = 20;
-    /// <summary>
-    /// 已死亡
-    /// </summary>
-    public bool isDead = false;
-
-    #endregion
-
+    
     #region 受擊參數
     [Header("TakingHit Parameters")]
     /// <summary>
@@ -204,7 +210,7 @@ public abstract class Charactor : MonoBehaviour
     protected virtual void Start()
     {
         m_Coordinate = transform.position;
-        healthSystem = new HealthSystemModel(maxHealth);
+        m_healthSystem = new HealthSystemModel(m_maxHealth);
     }
 
     // Update is called once per frame
@@ -217,7 +223,7 @@ public abstract class Charactor : MonoBehaviour
         UpdateCoordinate();
         //Debug.Log("coordinate: "+m_Coordinate);
         HandleAnimatorLayers();
-        SetAnimateMovementPara(Movement, facingDir);
+        SetAnimateMovementPara(Movement, FacingDir);
         if(!string.IsNullOrEmpty(m_infoStorage.jumpCollidersName)) {
             if(isJumping) {
             FocusCollidersWithHeightWhileJumping();
@@ -497,7 +503,7 @@ public abstract class Charactor : MonoBehaviour
             takeHitRoutine = StartCoroutine(TakeHit());
         }
 
-        if(healthSystem.CurrHealth <= 0) {
+        if(m_healthSystem.CurrHealth <= 0) {
             Die();
         }
     }

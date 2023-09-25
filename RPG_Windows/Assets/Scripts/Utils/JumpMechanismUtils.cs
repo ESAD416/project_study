@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public static class JumpMechanismUtils
+public class JumpMechanismUtils
 {
     public enum JumpState {
         Ground,
