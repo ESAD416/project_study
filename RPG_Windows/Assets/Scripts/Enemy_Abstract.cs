@@ -20,8 +20,8 @@ public abstract class Enemy_Abstract : Charactor
     // Update is called once per frame
     protected override void Update() {
         //Debug.Log("moveSpeed: "+moveSpeed);
-        m_Center = m_centerObj?.position ?? Vector3.zero;
-        m_Buttom = m_buttomObj?.position ?? Vector3.zero;
+        m_Center = m_CenterObj?.position ?? Vector3.zero;
+        m_Buttom = m_ButtomObj?.position ?? Vector3.zero;
 
         UpdateCoordinate();
 
@@ -44,7 +44,7 @@ public abstract class Enemy_Abstract : Charactor
         if(isMoving) {
             SetFacingDir(Movement);
         }
-        attackRoutine = StartCoroutine(Attack());
+        //attackRoutine = StartCoroutine(Attack());
     }
 
     // public override void DmgCalculate(int damage)

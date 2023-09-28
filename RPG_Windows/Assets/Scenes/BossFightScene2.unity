@@ -13015,15 +13015,14 @@ MonoBehaviour:
   m_Center: {x: 0, y: 0, z: 0}
   m_Buttom: {x: 0, y: 0, z: 0}
   m_Coordinate: {x: 0, y: 0, z: 0}
-  m_centerObj: {fileID: 360557935}
-  m_buttomObj: {fileID: 1357943332}
-  m_infoStorage: {fileID: 11400000, guid: 3ae3bf2d2a7c3414195d3c4008e13f25, type: 2}
+  m_CenterObj: {fileID: 0}
+  m_ButtomObj: {fileID: 0}
+  m_InfoStorage: {fileID: 0}
   m_moveSpeed: 5
   m_facingDir: {x: 0, y: -1}
   m_maxHealth: 20
   isDead: 0
   isAttacking: 0
-  attackClipTime: 0
   currHeight: 0
   isTakingHit: 0
   knockOffThrust: 0
@@ -21397,9 +21396,9 @@ GameObject:
   - component: {fileID: 1065227029}
   - component: {fileID: 1065227028}
   - component: {fileID: 1065227027}
+  - component: {fileID: 1065227031}
   - component: {fileID: 1065227026}
   - component: {fileID: 1065227025}
-  - component: {fileID: 1065227031}
   m_Layer: 6
   m_Name: Avatar_Lamniat
   m_TagString: Player
@@ -21502,15 +21501,14 @@ MonoBehaviour:
   m_Center: {x: 0, y: 0, z: 0}
   m_Buttom: {x: 0, y: 0, z: 0}
   m_Coordinate: {x: 0, y: 0, z: 0}
-  m_centerObj: {fileID: 2135325528}
-  m_buttomObj: {fileID: 660398510}
-  m_infoStorage: {fileID: 11400000, guid: 3ae3bf2d2a7c3414195d3c4008e13f25, type: 2}
+  m_CenterObj: {fileID: 2135325528}
+  m_ButtomObj: {fileID: 660398510}
+  m_InfoStorage: {fileID: 11400000, guid: 3ae3bf2d2a7c3414195d3c4008e13f25, type: 2}
   m_moveSpeed: 11
   m_facingDir: {x: 0, y: -1}
   m_maxHealth: 20
   isDead: 0
   isAttacking: 0
-  attackClipTime: 0
   currHeight: 0
   isTakingHit: 0
   knockOffThrust: 0
@@ -21636,7 +21634,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b05ba1a97b1ee144fbf40cedd642c722, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_charactor: {fileID: 1065227027}
+  m_avatar: {fileID: 1065227027}
   m_targetAnimator: {fileID: 672725956}
   isAttacking: 0
   attackClipTime: 0.3
@@ -22041,15 +22039,14 @@ MonoBehaviour:
   m_Center: {x: 0, y: 0, z: 0}
   m_Buttom: {x: 0, y: 0, z: 0}
   m_Coordinate: {x: 0, y: 0, z: 0}
-  m_centerObj: {fileID: 0}
-  m_buttomObj: {fileID: 0}
-  m_infoStorage: {fileID: 0}
+  m_CenterObj: {fileID: 0}
+  m_ButtomObj: {fileID: 0}
+  m_InfoStorage: {fileID: 0}
   m_moveSpeed: 5
   m_facingDir: {x: 0, y: -1}
   m_maxHealth: 20
   isDead: 0
   isAttacking: 0
-  attackClipTime: 0
   currHeight: 0
   isTakingHit: 0
   knockOffThrust: 5

@@ -23,6 +23,7 @@ public static class AnimeUtils
         RuntimeAnimatorController ac = animator.runtimeAnimatorController;
 
         for(int i = 0; i < ac.animationClips.Length; i++) {
+            Debug.Log("GetAnimateClipTimeInRuntime ac.animationClips[i].name: "+ac.animationClips[i].name);
             if( ac.animationClips[i].name == animeClipName)        //If it has the same name as your clip
             {
                 attackClipTime = ac.animationClips[i].length;
@@ -30,7 +31,7 @@ public static class AnimeUtils
             }
         }
 
-        Debug.Log("SetAnimateClipTime attackClipTime: "+attackClipTime);
+        
         return attackClipTime;
     }
 

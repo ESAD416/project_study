@@ -82,7 +82,7 @@ public class AIChaser : MonoBehaviour
             var charactor = col.GetComponent<Charactor>() as Charactor;
             if(charactor != null) {
                 //Debug.Log("Target m_Center: "+charactor.m_Center);
-                TargetModel = charactor.m_centerObj;
+                TargetModel = charactor.m_CenterObj;
             }
             else {
                 TargetModel = col.transform;

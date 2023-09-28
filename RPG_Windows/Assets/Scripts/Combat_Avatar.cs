@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Combat_Charactor : MonoBehaviour
+public class Combat_Avatar : MonoBehaviour
 {
-    [SerializeField] protected Charactor m_charactor;
+    [SerializeField] protected Avatar m_avatar;
     [SerializeField] protected Animator m_targetAnimator;
 
     /// <summary>
@@ -38,25 +38,25 @@ public abstract class Combat_Charactor : MonoBehaviour
 
     #region 攻擊控制
     protected IEnumerator Attack() {
-        Debug.Log("Combat_Charactor attack start");
+        Debug.Log("Combat_Avatar attack start");
         isAttacking = true;
-        m_targetAnimator?.SetBool("attack", isAttacking);
+        m_targetAnimator?.SetTrigger("attack");
         yield return new WaitForSeconds(attackClipTime);  // hardcasted casted time for debugged
         FinishAttack();
     }
 
     public virtual void FinishAttack() {
-        Debug.Log("Combat_Charactor FinishAttack start");
+        Debug.Log("Combat_Avatar FinishAttack start");
         if(attackRoutine != null) {
             StopCoroutine(attackRoutine);
         }
 
         isAttacking = false;
-        m_targetAnimator?.SetBool("attack", isAttacking);
 
-        m_charactor.SetMovement(movementAfterAttack);
+        m_avatar.SetMovement(movementAfterAttack);
+        m_avatar.SetStatus(Charactor.CharactorStatus.Idle);
         movementAfterAttack = Vector3.zero;
-        Debug.Log("FinishAttack end");
+        Debug.Log("Combat_Avatar FinishAttack end");
     }
     #endregion
 }

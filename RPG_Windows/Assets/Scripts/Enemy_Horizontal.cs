@@ -18,7 +18,7 @@ public class Enemy_Horizontal : Enemy_Abstract
 
     protected override void Start() {
         //attackClipTime = AnimeUtils.GetAnimateClipTime(m_Animator, "Attack_Down");
-        attackClipTime = 1f;
+        //attackClipTime = 1f;
 
         detectorL = leftDetector ?? null;
         detectorR = rightDetector ?? null;
@@ -43,10 +43,10 @@ public class Enemy_Horizontal : Enemy_Abstract
             // Debug.Log("FixedUpdate movementAfterAttack: "+movementAfterAttack);
             if(isAttacking) {
                 //Debug.Log("attacking");
-                if(isMoving) {
-                    movementAfterAttack = Movement;
-                    //Debug.Log("movementAfterAttack: "+movementAfterAttack);
-                }
+                // if(isMoving) {
+                //     movementAfterAttack = Movement;
+                //     //Debug.Log("movementAfterAttack: "+movementAfterAttack);
+                // }
                 SetMovement(Vector3.zero);
             } else {
                 if(isPatroling) {
@@ -115,20 +115,20 @@ public class Enemy_Horizontal : Enemy_Abstract
 
         if(detectorL != null) detectorL.gameObject.SetActive(false);
         if(detectorR != null) detectorR.gameObject.SetActive(false);
-        attackRoutine = StartCoroutine(Attack());
+        //attackRoutine = StartCoroutine(Attack());
     }
 
-    public override void FinishAttack() {
-        //Debug.Log("Enemy_Horizontal FinishAttack start");
-        if(attackRoutine != null) {
-            StopCoroutine(attackRoutine);
-        }
+    // public override void FinishAttack() {
+    //     //Debug.Log("Enemy_Horizontal FinishAttack start");
+    //     if(attackRoutine != null) {
+    //         StopCoroutine(attackRoutine);
+    //     }
 
-        isAttacking = false;
-        m_Animator.SetBool("attack", isAttacking);
+    //     isAttacking = false;
+    //     m_Animator.SetBool("attack", isAttacking);
 
-        SetMovement(movementAfterAttack);
-        movementAfterAttack = Vector3.zero;
-        //Debug.Log("Enemy_Horizontal FinishAttack end");
-    }
+    //     SetMovement(movementAfterAttack);
+    //     movementAfterAttack = Vector3.zero;
+    //     //Debug.Log("Enemy_Horizontal FinishAttack end");
+    // }
 }

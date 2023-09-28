@@ -1,81 +1,86 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Tilemaps;
-using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Interactions;
 using static JumpMechanismUtils;
 
-public class Player : Charactor
+public class Avatar : Charactor
 {
-    [Header("Player Parameters")]
-    [SerializeField] private Transform raycastPoint;
-    public Vector2 rayCastEndPos;
+    [Header("Raycast Parameters")]
+    [SerializeField] private List<Transform> m_raycastStartPosition = new List<Transform>();
+    [SerializeField] private Transform m_raycastStart;
+    public Vector2 m_raycastEnd;
+
+    [Header("Input Settings")]
+    private AvatarInputActionsControls m_inputControls;
+    public AvatarInputActionsControls InputCtrl => m_inputControls;
+    private bool isHoldInteraction = false;
+
+    [Header("Stairs Parameters")]
     public string onStairs;
     public string stair_start;
     public string stair_end ;
 
-    [Header(" Parameters")]
     private bool prepareToJump = false;
     //private bool OnCollisioning = false;
     private List<Collider2D> OnColliders = new List<Collider2D>();
     private bool processingPushback = false;
     [SerializeField] private ColliderTrigger jumpPoint;
     private bool jumpPointTrigger = false;
-    
-    [Header("Input Settings")]
-    [SerializeField] private InputActionReference movementActionReference;
 
-    [SerializeField] private InputActionReference holdActionReference;
-    private bool isHoldInteraction = false;
-    
-    protected override void Start() {
-        rayCastEndPos = new Vector2(raycastPoint.position.x, raycastPoint.position.y) + new Vector2(0, -1) * 0.35f;   // 預設射線終點
-        base.Start();
-        //attackClipTime = AnimeUtils.GetAnimateClipTimeInRuntime(m_Animator, "Attack_Down");
+    protected override void Awake() {
+        base.Awake();
+
+        m_raycastEnd = new Vector2(m_raycastStart.position.x, m_raycastStart.position.y) + new Vector2(0, -1) * 0.35f;   // 預設射線終點
         transform.position = new Vector3(m_InfoStorage.initialPos.x, m_InfoStorage.initialPos.y, m_InfoStorage.initialHeight);
         currHeight = m_InfoStorage.initialHeight;
 
-        movementActionReference.action.performed += content => {
+        m_inputControls = new AvatarInputActionsControls();
+        Debug.Log("Avatar Awake");
+    }
+
+    protected override void Start() {
+        #region InputSystem事件設定
+
+        m_inputControls.Lamniat_Land.Movement.performed += content => {
             var inputVecter2 = content.ReadValue<Vector2>();
             SetFacingDir(inputVecter2);
+            SetMovement(new Vector3(inputVecter2.x, inputVecter2.y));
+
+            var faceLeft = m_SprtRenderer.flipX;
+            //Debug.Log("faceLeft = " + faceLeft);
+            if(m_SprtRenderer!= null) m_SprtRenderer.flipX = AnimeUtils.isLeftForHorizontalAnimation(Movement, faceLeft);
         };
 
-        holdActionReference.action.started += content => {
-            var inputVecter2 = content.ReadValue<Vector2>();
-            if(content.interaction is HoldInteraction) {
-                // Debug.Log("HoldInteraction started");
-                // Debug.Log("inputVecter2: "+inputVecter2);
-            }
+        m_inputControls.Lamniat_Land.Movement.canceled += content => {
+            
+            SetMovement(Vector3.zero);
         };
 
-        holdActionReference.action.performed += content => {
-            var inputVecter2 = content.ReadValue<Vector2>();
+        m_inputControls.Lamniat_Land.Hold.performed += content => {
             if(content.interaction is HoldInteraction) {
-                // Debug.Log("HoldInteraction performed");
-                // Debug.Log("inputVecter2: "+inputVecter2);
-                // Debug.Log("facingDir: "+facingDir);
                 isHoldInteraction = true;
             }
         };
-        
-        holdActionReference.action.canceled += content => {
-            var inputVecter2 = content.ReadValue<Vector2>();
+
+        m_inputControls.Lamniat_Land.Hold.canceled += content => {
             if(content.interaction is HoldInteraction) {
-                // Debug.Log("HoldInteraction canceled");
-                // Debug.Log("inputVecter2: "+inputVecter2);
-                // Debug.Log("facingDir: "+facingDir);
                 isHoldInteraction = false;
             }
         };
+
+        #endregion
 
         jumpPoint.OnPlayerEnterTriggerEvent.AddListener(() => {
             //Debug.Log("ColliderTrigger jumpPointTrigger = true");
             jumpPointTrigger = true;
         });
+
+        base.Start();
     }
+
+    
 
     protected override void Update()
     {
@@ -114,7 +119,7 @@ public class Player : Charactor
     }
 
     protected override void FixedUpdate() {
-        if(isJumping && !isAttacking) {
+        if(isJumping && !Status.Equals(CharactorStatus.Attack)) {
             transform.position = GetWorldPosByCoordinate(m_Coordinate) - new Vector3(0, 1.7f);   // 預設中心點是(x, y+1.7)
             HandleJumpingProcess(jumpState);
         }
@@ -122,24 +127,8 @@ public class Player : Charactor
         base.FixedUpdate();
     }
 
-    public void OnMovement(InputAction.CallbackContext value)
-    {
-        Vector2 inputVecter2 = value.ReadValue<Vector2>();
-        //Debug.Log("OnMovement inputVecter2: "+inputVecter2);
-        SetMovement(new Vector3(inputVecter2.x, inputVecter2.y));
-        // Debug.Log("movement x: "+movement.x);
-        // Debug.Log("movement y: "+movement.y);
-        // Debug.Log("movement normalized x: "+movement.normalized.x);
-        // Debug.Log("movement normalized y: "+movement.normalized.y); 
-    }
-
-    public void OnAttack(InputAction.CallbackContext value) {
-        if(value.started) {
-            if(isMoving) {
-                SetFacingDir(Movement);
-            }
-            //attackRoutine = StartCoroutine(Attack());
-        }
+    private void OnEnable() {
+        m_inputControls.Lamniat_Land.Enable();
     }
 
     #region 碰撞偵測
@@ -198,32 +187,41 @@ public class Player : Charactor
     
     private void SetRaycastPoint(string raycastPointName = null) {
         if(raycastPointName != null) {
-            raycastPoint = GetComponentInChildren<Transform>().Find(raycastPointName);
+            //m_raycastStart = GetComponentInChildren<Transform>().Find(raycastPointName);
+            m_raycastStart = m_raycastStartPosition.Single(r => r.name.Equals(raycastPointName));
         } else {
             if(Movement.x == 0 && Movement.y > 0) {
                 // Up
-                raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_Up");
+                //m_raycastStart = GetComponentInChildren<Transform>().Find("RaycastPoint_Up");
+                m_raycastStart = m_raycastStartPosition.Single(r => r.name.Equals("_Up"));
             } else if(Movement.x == 0 && Movement.y < 0) {
                 // Down 
-                raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_Down");
+                //m_raycastStart = GetComponentInChildren<Transform>().Find("RaycastPoint_Down");
+                m_raycastStart = m_raycastStartPosition.Single(r => r.name.Equals("_Down"));
             } else if(Movement.x < 0 && Movement.y == 0) {
                 // Left
-                raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_Left");
+                //m_raycastStart = GetComponentInChildren<Transform>().Find("RaycastPoint_Left");
+                m_raycastStart = m_raycastStartPosition.Single(r => r.name.Equals("_Left"));
             } else if(Movement.x > 0 && Movement.y == 0) {
                 // Right
-                raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_Right");
+                //m_raycastStart = GetComponentInChildren<Transform>().Find("RaycastPoint_Right");
+                m_raycastStart = m_raycastStartPosition.Single(r => r.name.Equals("_Right"));
             } else if(Movement.x > 0 && Movement.y > 0) {
                 // UpRight
-                raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_UpRight");
+                //m_raycastStart = GetComponentInChildren<Transform>().Find("RaycastPoint_UpRight");
+                m_raycastStart = m_raycastStartPosition.Single(r => r.name.Equals("_UpRight"));
             } else if(Movement.x < 0 && Movement.y > 0) {
                 // UpLeft
-                raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_UpLeft");
+                //m_raycastStart = GetComponentInChildren<Transform>().Find("RaycastPoint_UpLeft");
+                m_raycastStart = m_raycastStartPosition.Single(r => r.name.Equals("_UpLeft"));
             } else if(Movement.x > 0 && Movement.y < 0) {
                 // DownRight
-                raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_DownRight");
+                //m_raycastStart = GetComponentInChildren<Transform>().Find("RaycastPoint_DownRight");
+                m_raycastStart = m_raycastStartPosition.Single(r => r.name.Equals("_DownRight"));
             } else if(Movement.x < 0 && Movement.y < 0) {
                 // DownLeft
-                raycastPoint = GetComponentInChildren<Transform>().Find("RaycastPoint_DownLeft");
+                //m_raycastStart = GetComponentInChildren<Transform>().Find("RaycastPoint_DownLeft");
+                m_raycastStart = m_raycastStartPosition.Single(r => r.name.Equals("_DownLeft"));
             }
         }
     }
@@ -242,11 +240,11 @@ public class Player : Charactor
             SetRaycastPoint();
 
             Vector2 distance = new Vector2(Movement.x, Movement.y) * 0.5f;
-            rayCastEndPos = new Vector2(raycastPoint.position.x, raycastPoint.position.y) + distance;
+            m_raycastEnd = new Vector2(m_raycastStart.position.x, m_raycastStart.position.y) + distance;
             //Debug.Log("castEndPos: "+rayCastEndPos);
-            Debug.DrawLine(raycastPoint.position, rayCastEndPos, Color.blue);
+            Debug.DrawLine(m_raycastStart.position, m_raycastEnd, Color.blue);
 
-            return JumpMechanismUtils.DetectedJumpState(raycastPoint.position, rayCastEndPos, distance, currHeight, isMoving);
+            return JumpMechanismUtils.DetectedJumpState(m_raycastStart.position, m_raycastEnd, distance, currHeight, isMoving);
         }
         return JumpState.Ground;
     }
@@ -256,12 +254,12 @@ public class Player : Charactor
             SetRaycastPoint();
 
             Vector2 distance = new Vector2(Movement.x, Movement.y) * 0.35f;
-            rayCastEndPos = new Vector2(raycastPoint.position.x, raycastPoint.position.y) + distance;
+            m_raycastEnd = new Vector2(m_raycastStart.position.x, m_raycastStart.position.y) + distance;
             //Debug.Log("castEndPos: "+rayCastEndPos);
-            Debug.DrawLine(raycastPoint.position, rayCastEndPos, Color.blue);
+            Debug.DrawLine(m_raycastStart.position, m_raycastEnd, Color.blue);
 
             // 偵測跳躍Edge ver.3
-            RaycastHit2D[] hits = Physics2D.LinecastAll(raycastPoint.position, rayCastEndPos, 1 << LayerMask.NameToLayer("HeightObj"));
+            RaycastHit2D[] hits = Physics2D.LinecastAll(m_raycastStart.position, m_raycastEnd, 1 << LayerMask.NameToLayer("HeightObj"));
             if(hits.Length > 0) {
                 var heightManager = GameObject.FindObjectOfType(typeof(HeightManager)) as HeightManager; 
                 float altitudeVariation = 0f;
@@ -276,8 +274,8 @@ public class Player : Charactor
                         if(heightObj != null) {
                             float correspondHeight = heightObj.GetCorrespondHeight();
                             float selfHeight = heightObj.GetSelfHeight();
-                            altitudeVariation = Math.Abs(currHeight - correspondHeight) ;
-                            var angle = Vector2.Angle((Vector2)raycastPoint.position - rayCastEndPos, hit.normal);
+                            altitudeVariation = Mathf.Abs(currHeight - correspondHeight) ;
+                            var angle = Vector2.Angle((Vector2)m_raycastStart.position - m_raycastEnd, hit.normal);
                             angle = 90.0f - Mathf.Abs(angle);
                             Debug.Log("DetectedToJump linecast angle:"+angle);
 
@@ -312,11 +310,11 @@ public class Player : Charactor
             SetRaycastPoint();
 
             Vector2 distance = new Vector2(Movement.x, Movement.y) * 0.35f;
-            rayCastEndPos = new Vector2(raycastPoint.position.x, raycastPoint.position.y) + distance;
+            m_raycastEnd = new Vector2(m_raycastStart.position.x, m_raycastStart.position.y) + distance;
             //Debug.Log("castEndPos: "+rayCastEndPos);
-            Debug.DrawLine(raycastPoint.position, rayCastEndPos, Color.blue);
+            Debug.DrawLine(m_raycastStart.position, m_raycastEnd, Color.blue);
 
-            RaycastHit2D[] hits = Physics2D.LinecastAll(raycastPoint.position, rayCastEndPos, 1 << LayerMask.NameToLayer("HeightObj"));
+            RaycastHit2D[] hits = Physics2D.LinecastAll(m_raycastStart.position, m_raycastEnd, 1 << LayerMask.NameToLayer("HeightObj"));
             if(hits.Length > 0) {
                 var heightManager = GameObject.FindObjectOfType(typeof(HeightManager)) as HeightManager;
                 if(hits.Length >= 1) {
@@ -344,28 +342,28 @@ public class Player : Charactor
         Debug.Log("TriggerToJumpDown start");
         prepareToJump = true;
         ChangeColliderToJumpDown();
-        SetRaycastPoint("RaycastPoint_Down");
+        SetRaycastPoint("_Down");
 
         RaycastHit2D[] hits = null;
         if(IsObliqueRaycast()) {
             Vector2 distance1 = new Vector2(Movement.x, 0) * 0.35f;
-            var rayCastEndPos1 = new Vector2(raycastPoint.position.x, raycastPoint.position.y) + distance1;
-            Debug.DrawLine(raycastPoint.position, rayCastEndPos1, Color.red);
+            var rayCastEndPos1 = new Vector2(m_raycastStart.position.x, m_raycastStart.position.y) + distance1;
+            Debug.DrawLine(m_raycastStart.position, rayCastEndPos1, Color.red);
             Vector2 distance2 = new Vector2(0, Movement.y) * 0.35f;
-            var rayCastEndPos2 = new Vector2(raycastPoint.position.x, raycastPoint.position.y) + distance2;
-            Debug.DrawLine(raycastPoint.position, rayCastEndPos2, Color.red);
+            var rayCastEndPos2 = new Vector2(m_raycastStart.position.x, m_raycastStart.position.y) + distance2;
+            Debug.DrawLine(m_raycastStart.position, rayCastEndPos2, Color.red);
 
-            RaycastHit2D[] hits1 = Physics2D.LinecastAll(raycastPoint.position, rayCastEndPos1, 1 << LayerMask.NameToLayer("HeightObj"));
-            RaycastHit2D[] hits2 = Physics2D.LinecastAll(raycastPoint.position, rayCastEndPos2, 1 << LayerMask.NameToLayer("HeightObj"));
+            RaycastHit2D[] hits1 = Physics2D.LinecastAll(m_raycastStart.position, rayCastEndPos1, 1 << LayerMask.NameToLayer("HeightObj"));
+            RaycastHit2D[] hits2 = Physics2D.LinecastAll(m_raycastStart.position, rayCastEndPos2, 1 << LayerMask.NameToLayer("HeightObj"));
 
             hits = hits1.Concat(hits2).ToArray();
         } else {
             Vector2 distance = new Vector2(Movement.x, Movement.y) * 0.35f;
-            rayCastEndPos = new Vector2(raycastPoint.position.x, raycastPoint.position.y) + distance;
+            m_raycastEnd = new Vector2(m_raycastStart.position.x, m_raycastStart.position.y) + distance;
             //Debug.Log("castEndPos: "+rayCastEndPos);
-            Debug.DrawLine(raycastPoint.position, rayCastEndPos, Color.red);
+            Debug.DrawLine(m_raycastStart.position, m_raycastEnd, Color.red);
 
-            hits = Physics2D.LinecastAll(raycastPoint.position, rayCastEndPos, 1 << LayerMask.NameToLayer("HeightObj"));
+            hits = Physics2D.LinecastAll(m_raycastStart.position, m_raycastEnd, 1 << LayerMask.NameToLayer("HeightObj"));
         }
 
         if(hits.Length >= 1) {
@@ -431,18 +429,18 @@ public class Player : Charactor
         SetRaycastPoint();
 
         Vector2 distance = new Vector2(Movement.x, Movement.y) * 0.35f;
-        rayCastEndPos = new Vector2(raycastPoint.position.x, raycastPoint.position.y) + distance;
+        m_raycastEnd = new Vector2(m_raycastStart.position.x, m_raycastStart.position.y) + distance;
         //Debug.Log("castEndPos: "+rayCastEndPos);
-        Debug.DrawLine(raycastPoint.position, rayCastEndPos, Color.red);
+        Debug.DrawLine(m_raycastStart.position, m_raycastEnd, Color.red);
 
-        RaycastHit2D[] hits = Physics2D.LinecastAll(raycastPoint.position, rayCastEndPos, 1 << LayerMask.NameToLayer("HeightObj"));
+        RaycastHit2D[] hits = Physics2D.LinecastAll(m_raycastStart.position, m_raycastEnd, 1 << LayerMask.NameToLayer("HeightObj"));
         if(hits.Length >= 1) {
             Debug.Log("TriggerToJumpUp hits.Length > 1");
             foreach(RaycastHit2D hit in hits) {
                 Debug.Log("TriggerToJumpUp hits collider name: "+hit.collider.name);
                 var heightObj = hit.collider.GetComponent<HeightOfObject>() as HeightOfObject;
                 if(heightObj != null) {
-                    var angle = Vector2.Angle((Vector2)raycastPoint.position - rayCastEndPos, hit.normal);
+                    var angle = Vector2.Angle((Vector2)m_raycastStart.position - m_raycastEnd, hit.normal);
                     angle = 90.0f - Mathf.Abs(angle);
                     Debug.Log("DetectedJumpState linecast angle:"+angle);
                     Debug.Log("OnCollisioning: "+OnColliders.Contains(hit.collider));
@@ -588,7 +586,7 @@ public class Player : Charactor
                     }
                 } else {
                     Debug.Log("PredictNext Groundable false");
-                    RaycastHit2D[] hits = Physics2D.LinecastAll(raycastPoint.position, rayCastEndPos, 1 << LayerMask.NameToLayer("HeightObj"));
+                    RaycastHit2D[] hits = Physics2D.LinecastAll(m_raycastStart.position, m_raycastEnd, 1 << LayerMask.NameToLayer("HeightObj"));
 
                     if(Mathf.Ceil(currHeight) - currHeight <= 0.5f) {
                         groundCheckHeight = Mathf.Ceil(currHeight);

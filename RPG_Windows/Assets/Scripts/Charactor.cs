@@ -39,15 +39,25 @@ public abstract class Charactor : MonoBehaviour
     /// <summary>
     /// 角色中心Transform
     /// </summary>
-    public Transform m_centerObj;
+    public Transform m_CenterObj;
     /// <summary>
     /// 角色底部Transform
     /// </summary>
-    public Transform m_buttomObj;
+    public Transform m_ButtomObj;
     /// <summary>
     /// 角色相關資訊存取
     /// </summary>
-    public CharactorData m_infoStorage;
+    public CharactorData m_InfoStorage;
+
+    #endregion
+
+    #region 角色狀態
+    public enum CharactorStatus {
+        Idle, Move, Jump, Fall, Staircase, Attack, Dead,
+    }
+    protected CharactorStatus m_Status;
+    public CharactorStatus Status => m_Status;
+    public void SetStatus(CharactorStatus status) => this.m_Status = status;
 
     #endregion
 
@@ -130,18 +140,6 @@ public abstract class Charactor : MonoBehaviour
     /// </summary>
     [Header("Attack Parameters")]
     public bool isAttacking;
-    /// <summary>
-    /// 一次攻擊動畫所需的時間
-    /// </summary>
-    [SerializeField] protected float attackClipTime;
-    /// <summary>
-    /// 角色攻擊動作為即時觸發，故宣告一協程進行處理獨立的動作
-    /// </summary>
-    protected Coroutine attackRoutine;
-    /// <summary>
-    /// 記錄攻擊動作完成後的角色移動向量
-    /// </summary>
-    protected Vector3 movementAfterAttack;
     
     #endregion
 
@@ -206,10 +204,14 @@ public abstract class Charactor : MonoBehaviour
 
     #endregion
 
+    protected virtual void Awake() {
+        m_Coordinate = transform.position;
+        m_Status = CharactorStatus.Idle;
+    }
+
     // Start is called before the first frame update
     protected virtual void Start()
     {
-        m_Coordinate = transform.position;
         m_healthSystem = new HealthSystemModel(m_maxHealth);
     }
 
@@ -217,14 +219,14 @@ public abstract class Charactor : MonoBehaviour
     protected virtual void Update()
     {
         //Debug.Log("takeHitRoutine == null: "+(takeHitRoutine == null));
-        m_Center = m_centerObj?.position ?? Vector3.zero;
-        m_Buttom = m_buttomObj?.position ?? Vector3.zero;
+        m_Center = m_CenterObj?.position ?? Vector3.zero;
+        m_Buttom = m_ButtomObj?.position ?? Vector3.zero;
 
         UpdateCoordinate();
         //Debug.Log("coordinate: "+m_Coordinate);
         HandleAnimatorLayers();
         SetAnimateMovementPara(Movement, FacingDir);
-        if(!string.IsNullOrEmpty(m_infoStorage.jumpCollidersName)) {
+        if(!string.IsNullOrEmpty(m_InfoStorage.jumpCollidersName)) {
             if(isJumping) {
             FocusCollidersWithHeightWhileJumping();
             } else {
@@ -236,20 +238,11 @@ public abstract class Charactor : MonoBehaviour
     protected virtual void FixedUpdate() {
         // Debug.Log("FixedUpdate start player height: "+height);
         // Debug.Log("FixedUpdate start player jumpOffset: "+jumpOffset);
-        if(isAttacking) {
+        if(Status.Equals(CharactorStatus.Attack)) {
             //Debug.Log("attacking");
-            if(isMoving) {
-                movementAfterAttack = Movement;
-                //Debug.Log("movementAfterAttack: "+movementAfterAttack);
-            }
             SetMovement(Vector3.zero);
         }
-        // else if(isJumping) {
-        //     transform.position = GetWorldPosByCoordinate(m_Coordinate) - new Vector3(0, 1.7f);   // 預設中心點是(x, y+1.7)
-        //     HandleJumpingProcess();
-        // }
-        // Debug.Log("FixedUpdate end player height: "+height);
-        // Debug.Log("FixedUpdate end player jumpOffset: "+jumpOffset);
+        
 
         //Debug.Log("cantMove: "+cantMove);
         if(!cantMove) {
@@ -297,10 +290,10 @@ public abstract class Charactor : MonoBehaviour
 
     #region 動畫控制
     public void HandleAnimatorLayers() {
-        if(isAttacking) {
-            if(m_Animator != null) AnimeUtils.ActivateAnimatorLayer(m_Animator, "AttackLayer");
-        }
-        else if(isMoving) {
+        // if(isAttacking) {
+        //     if(m_Animator != null) AnimeUtils.ActivateAnimatorLayer(m_Animator, "AttackLayer");
+        // }
+        if(isMoving) {
             if(m_Animator != null) AnimeUtils.ActivateAnimatorLayer(m_Animator, "MoveLayer");
         }
         else {
@@ -323,27 +316,27 @@ public abstract class Charactor : MonoBehaviour
     #endregion
 
     #region 攻擊控制
-    protected IEnumerator Attack() {
-        //Debug.Log("attack start");
-        isAttacking = true;
-        m_Animator?.SetBool("attack", isAttacking);
-        yield return new WaitForSeconds(attackClipTime);  // hardcasted casted time for debugged
-        FinishAttack();
-    }
+    // protected IEnumerator Attack() {
+    //     //Debug.Log("attack start");
+    //     isAttacking = true;
+    //     m_Animator?.SetBool("attack", isAttacking);
+    //     yield return new WaitForSeconds(attackClipTime);  // hardcasted casted time for debugged
+    //     FinishAttack();
+    // }
 
-    public virtual void FinishAttack() {
-        Debug.Log("FinishAttack start");
-        if(attackRoutine != null) {
-            StopCoroutine(attackRoutine);
-        }
+    // public virtual void FinishAttack() {
+    //     Debug.Log("FinishAttack start");
+    //     if(attackRoutine != null) {
+    //         StopCoroutine(attackRoutine);
+    //     }
 
-        isAttacking = false;
-        m_Animator?.SetBool("attack", isAttacking);
+    //     isAttacking = false;
+    //     m_Animator?.SetBool("attack", isAttacking);
 
-        SetMovement(movementAfterAttack);
-        movementAfterAttack = Vector3.zero;
-        Debug.Log("FinishAttack end");
-    }
+    //     SetMovement(movementAfterAttack);
+    //     movementAfterAttack = Vector3.zero;
+    //     Debug.Log("FinishAttack end");
+    // }
     #endregion
     
     #region 跳躍控制
@@ -537,7 +530,7 @@ public abstract class Charactor : MonoBehaviour
 
     #region 碰撞控制
     private void FocusCollidersWithHeight() {
-        Collider2D[] jumpColls = GridUtils.GetColliders(m_infoStorage.jumpCollidersName);
+        Collider2D[] jumpColls = GridUtils.GetColliders(m_InfoStorage.jumpCollidersName);
 
         if(jumpColls != null) {
             foreach(var collider2D in jumpColls) {
@@ -557,7 +550,7 @@ public abstract class Charactor : MonoBehaviour
     }
 
     private void FocusCollidersWithHeightWhileJumping() {
-        Collider2D[] jumpColls = GridUtils.GetColliders(m_infoStorage.jumpCollidersName);
+        Collider2D[] jumpColls = GridUtils.GetColliders(m_InfoStorage.jumpCollidersName);
 
         if(jumpColls != null) {
             foreach(var collider2D in jumpColls) {
