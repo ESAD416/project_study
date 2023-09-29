@@ -24,7 +24,6 @@ public class Combat_Lamniat : Combat_Avatar
             }
 
             isAttacking = true;
-            m_avatar.SetStatus(Charactor.CharactorStatus.Attack);
             attackRoutine = StartCoroutine(Attack());
         };
         
@@ -33,7 +32,7 @@ public class Combat_Lamniat : Combat_Avatar
     }
 
     protected override void Update() {
-        if(isAttacking) AnimeUtils.ActivateAnimatorLayer(m_targetAnimator, "AttackLayer");
+        if(m_avatar.Status.Equals(Charactor.CharactorStatus.Attack)) AnimeUtils.ActivateAnimatorLayer(m_targetAnimator, "AttackLayer");
     }
 
     

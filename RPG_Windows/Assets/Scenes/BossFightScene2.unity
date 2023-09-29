@@ -12914,12 +12914,12 @@ GameObject:
   - component: {fileID: 472787581}
   - component: {fileID: 472787580}
   m_Layer: 0
-  m_Name: Melee_HitBox_Right
+  m_Name: Melee_Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &472787579
 Transform:
   m_ObjectHideFlags: 0
@@ -12928,12 +12928,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 472787578}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.74, y: 1.7, z: 0}
+  m_LocalPosition: {x: 0.74, y: 1.6999998, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1958934329}
-  m_Father: {fileID: 672725955}
-  m_RootOrder: 5
+  m_Father: {fileID: 1768644574}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &472787580
 MonoBehaviour:
@@ -13263,12 +13263,12 @@ GameObject:
   - component: {fileID: 481726529}
   - component: {fileID: 481726528}
   m_Layer: 0
-  m_Name: Melee_HitBox_Left
+  m_Name: Melee_Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &481726527
 Transform:
   m_ObjectHideFlags: 0
@@ -13277,12 +13277,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 481726526}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.97, y: 1.7, z: 0}
+  m_LocalPosition: {x: -0.97, y: 1.6999998, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1384412637}
-  m_Father: {fileID: 672725955}
-  m_RootOrder: 4
+  m_Father: {fileID: 1768644574}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &481726528
 MonoBehaviour:
@@ -13620,10 +13620,7 @@ Transform:
   m_Children:
   - {fileID: 2135325528}
   - {fileID: 660398510}
-  - {fileID: 715133364}
-  - {fileID: 1424627079}
-  - {fileID: 481726527}
-  - {fileID: 472787579}
+  - {fileID: 1768644574}
   m_Father: {fileID: 1065227024}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -13711,12 +13708,12 @@ GameObject:
   - component: {fileID: 715133366}
   - component: {fileID: 715133365}
   m_Layer: 0
-  m_Name: Melee_HitBox_Down
+  m_Name: Melee_Down
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &715133364
 Transform:
   m_ObjectHideFlags: 0
@@ -13725,12 +13722,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 715133363}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.059, y: 0.907, z: 0}
+  m_LocalPosition: {x: -0.06, y: 0.9, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2024508003}
-  m_Father: {fileID: 672725955}
-  m_RootOrder: 2
+  m_Father: {fileID: 1768644574}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &715133365
 MonoBehaviour:
@@ -27208,12 +27205,12 @@ GameObject:
   - component: {fileID: 1424627081}
   - component: {fileID: 1424627080}
   m_Layer: 0
-  m_Name: Melee_HitBox_Up
+  m_Name: Melee_Up
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1424627079
 Transform:
   m_ObjectHideFlags: 0
@@ -27222,12 +27219,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1424627078}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.059, y: 2.52, z: 0}
+  m_LocalPosition: {x: -0.06, y: 2.52, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1038018991}
-  m_Father: {fileID: 672725955}
-  m_RootOrder: 3
+  m_Father: {fileID: 1768644574}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1424627080
 MonoBehaviour:
@@ -32632,6 +32629,40 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1373304457}
   m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1768644573
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1768644574}
+  m_Layer: 6
+  m_Name: _HitBox
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1768644574
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1768644573}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 715133364}
+  - {fileID: 1424627079}
+  - {fileID: 481726527}
+  - {fileID: 472787579}
+  m_Father: {fileID: 672725955}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1791242195
 GameObject:

@@ -40,7 +40,8 @@ public abstract class Combat_Charactor : MonoBehaviour
     protected IEnumerator Attack() {
         Debug.Log("Combat_Charactor attack start");
         isAttacking = true;
-        m_targetAnimator?.SetBool("attack", isAttacking);
+        m_targetAnimator?.SetTrigger("attack");
+        m_charactor.SetStatus(Charactor.CharactorStatus.Attack);
         yield return new WaitForSeconds(attackClipTime);  // hardcasted casted time for debugged
         FinishAttack();
     }
@@ -52,9 +53,9 @@ public abstract class Combat_Charactor : MonoBehaviour
         }
 
         isAttacking = false;
-        m_targetAnimator?.SetBool("attack", isAttacking);
 
         m_charactor.SetMovement(movementAfterAttack);
+        m_charactor.SetStatus(Charactor.CharactorStatus.Idle);
         movementAfterAttack = Vector3.zero;
         Debug.Log("FinishAttack end");
     }

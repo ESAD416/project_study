@@ -41,6 +41,7 @@ public class Combat_Avatar : MonoBehaviour
         Debug.Log("Combat_Avatar attack start");
         isAttacking = true;
         m_targetAnimator?.SetTrigger("attack");
+        m_avatar.SetStatus(Charactor.CharactorStatus.Attack);
         yield return new WaitForSeconds(attackClipTime);  // hardcasted casted time for debugged
         FinishAttack();
     }
