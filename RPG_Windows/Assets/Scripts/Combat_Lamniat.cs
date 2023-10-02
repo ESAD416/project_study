@@ -18,9 +18,10 @@ public class Combat_Lamniat : Combat_Avatar
 
         inputControls.Lamniat_Land.Attack.started += content => {
             Debug.Log("Lamniat_Land.Attack.started");
-            if(m_avatar.isMoving) {
-                m_avatar.SetFacingDir(m_avatar.Movement);
-                movementAfterAttack = m_avatar.Movement;
+            if(m_avatar.Status.Equals(Charactor.CharactorStatus.Move)) {
+                m_targetMovement.SetFacingDir(m_targetMovement.Movement);
+                //m_avatar.SetFacingDir(m_avatar.Movement);
+                movementAfterAttack = m_targetMovement.Movement;
             }
 
             isAttacking = true;
@@ -32,7 +33,9 @@ public class Combat_Lamniat : Combat_Avatar
     }
 
     protected override void Update() {
-        if(m_avatar.Status.Equals(Charactor.CharactorStatus.Attack)) AnimeUtils.ActivateAnimatorLayer(m_targetAnimator, "AttackLayer");
+        base.Update();
+        // if(m_avatar.Status.Equals(Charactor.CharactorStatus.Attack)) AnimeUtils.ActivateAnimatorLayer(m_targetAnimator, "AttackLayer");
+        // else AnimeUtils.ActivateAnimatorLayer(m_targetAnimator, "IdleLayer");
     }
 
     

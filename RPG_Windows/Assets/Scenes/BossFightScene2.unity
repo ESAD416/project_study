@@ -13018,11 +13018,8 @@ MonoBehaviour:
   m_CenterObj: {fileID: 0}
   m_ButtomObj: {fileID: 0}
   m_InfoStorage: {fileID: 0}
-  m_moveSpeed: 5
-  m_facingDir: {x: 0, y: -1}
   m_maxHealth: 20
   isDead: 0
-  isAttacking: 0
   currHeight: 0
   isTakingHit: 0
   knockOffThrust: 0
@@ -21393,6 +21390,7 @@ GameObject:
   - component: {fileID: 1065227029}
   - component: {fileID: 1065227028}
   - component: {fileID: 1065227027}
+  - component: {fileID: 1065227032}
   - component: {fileID: 1065227031}
   - component: {fileID: 1065227026}
   - component: {fileID: 1065227025}
@@ -21501,16 +21499,14 @@ MonoBehaviour:
   m_CenterObj: {fileID: 2135325528}
   m_ButtomObj: {fileID: 660398510}
   m_InfoStorage: {fileID: 11400000, guid: 3ae3bf2d2a7c3414195d3c4008e13f25, type: 2}
-  m_moveSpeed: 11
-  m_facingDir: {x: 0, y: -1}
   m_maxHealth: 20
   isDead: 0
-  isAttacking: 0
   currHeight: 0
   isTakingHit: 0
   knockOffThrust: 0
   hyperArmor: 0
   stunnable: 0
+  m_targetMovement: {fileID: 1065227032}
   m_raycastStartPosition:
   - {fileID: 1224246047}
   - {fileID: 1197875711}
@@ -21633,8 +21629,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_avatar: {fileID: 1065227027}
   m_targetAnimator: {fileID: 672725956}
+  m_targetMovement: {fileID: 1065227032}
   isAttacking: 0
   attackClipTime: 0.3
+--- !u!114 &1065227032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1065227023}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51056361f997c1b4295724d870241d9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_avatar: {fileID: 1065227027}
+  m_targetRdbd: {fileID: 1065227030}
+  m_targetSprtRenderer: {fileID: 672725957}
+  m_targetAnimator: {fileID: 672725956}
+  m_moveSpeed: 11
+  m_facingDir: {x: 0, y: -1}
 --- !u!1 &1169631400
 GameObject:
   m_ObjectHideFlags: 0
@@ -22039,11 +22054,8 @@ MonoBehaviour:
   m_CenterObj: {fileID: 0}
   m_ButtomObj: {fileID: 0}
   m_InfoStorage: {fileID: 0}
-  m_moveSpeed: 5
-  m_facingDir: {x: 0, y: -1}
   m_maxHealth: 20
   isDead: 0
-  isAttacking: 0
   currHeight: 0
   isTakingHit: 0
   knockOffThrust: 5
@@ -32645,7 +32657,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1768644574
 Transform:
   m_ObjectHideFlags: 0

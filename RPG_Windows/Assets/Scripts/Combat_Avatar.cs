@@ -6,6 +6,7 @@ public class Combat_Avatar : MonoBehaviour
 {
     [SerializeField] protected Avatar m_avatar;
     [SerializeField] protected Animator m_targetAnimator;
+    [SerializeField] protected Movement_Avatar m_targetMovement;
 
     /// <summary>
     /// 角色是否為正在攻擊中
@@ -46,7 +47,7 @@ public class Combat_Avatar : MonoBehaviour
         FinishAttack();
     }
 
-    public virtual void FinishAttack() {
+    protected virtual void FinishAttack() {
         Debug.Log("Combat_Avatar FinishAttack start");
         if(attackRoutine != null) {
             StopCoroutine(attackRoutine);
@@ -54,8 +55,11 @@ public class Combat_Avatar : MonoBehaviour
 
         isAttacking = false;
 
-        m_avatar.SetMovement(movementAfterAttack);
-        m_avatar.SetStatus(Charactor.CharactorStatus.Idle);
+        m_targetMovement.SetMovement(movementAfterAttack);
+        
+        if(m_targetMovement.isMoving) m_avatar.SetStatus(Charactor.CharactorStatus.Move);
+        else m_avatar.SetStatus(Charactor.CharactorStatus.Idle);
+
         movementAfterAttack = Vector3.zero;
         Debug.Log("Combat_Avatar FinishAttack end");
     }

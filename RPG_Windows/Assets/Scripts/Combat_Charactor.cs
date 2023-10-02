@@ -6,6 +6,7 @@ public abstract class Combat_Charactor : MonoBehaviour
 {
     [SerializeField] protected Charactor m_charactor;
     [SerializeField] protected Animator m_targetAnimator;
+    [SerializeField] protected Movement_Charactor m_targetMovement;
 
     /// <summary>
     /// 角色是否為正在攻擊中
@@ -39,6 +40,8 @@ public abstract class Combat_Charactor : MonoBehaviour
     #region 攻擊控制
     protected IEnumerator Attack() {
         Debug.Log("Combat_Charactor attack start");
+        if(m_charactor.Status.Equals(Charactor.CharactorStatus.Move)) movementAfterAttack = m_targetMovement.Movement;
+
         isAttacking = true;
         m_targetAnimator?.SetTrigger("attack");
         m_charactor.SetStatus(Charactor.CharactorStatus.Attack);
@@ -46,7 +49,7 @@ public abstract class Combat_Charactor : MonoBehaviour
         FinishAttack();
     }
 
-    public virtual void FinishAttack() {
+    protected virtual void FinishAttack() {
         Debug.Log("Combat_Charactor FinishAttack start");
         if(attackRoutine != null) {
             StopCoroutine(attackRoutine);
@@ -54,8 +57,12 @@ public abstract class Combat_Charactor : MonoBehaviour
 
         isAttacking = false;
 
-        m_charactor.SetMovement(movementAfterAttack);
-        m_charactor.SetStatus(Charactor.CharactorStatus.Idle);
+
+        m_targetMovement.SetMovement(movementAfterAttack);
+
+        if(m_targetMovement.isMoving) m_charactor.SetStatus(Charactor.CharactorStatus.Move);
+        else m_charactor.SetStatus(Charactor.CharactorStatus.Idle);
+
         movementAfterAttack = Vector3.zero;
         Debug.Log("FinishAttack end");
     }

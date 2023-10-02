@@ -7,15 +7,17 @@ using static JumpMechanismUtils;
 
 public class Avatar : Charactor
 {
+    [SerializeField] protected Movement_Avatar m_targetMovement;
+    private AvatarInputActionsControls m_inputControls;
+    public AvatarInputActionsControls InputCtrl => m_inputControls;
+    private bool isHoldInteraction = false;
+
+
     [Header("Raycast Parameters")]
     [SerializeField] private List<Transform> m_raycastStartPosition = new List<Transform>();
     [SerializeField] private Transform m_raycastStart;
     public Vector2 m_raycastEnd;
 
-    [Header("Input Settings")]
-    private AvatarInputActionsControls m_inputControls;
-    public AvatarInputActionsControls InputCtrl => m_inputControls;
-    private bool isHoldInteraction = false;
 
     [Header("Stairs Parameters")]
     public string onStairs;
@@ -41,37 +43,6 @@ public class Avatar : Charactor
     }
 
     protected override void Start() {
-        #region InputSystem事件設定
-
-        m_inputControls.Lamniat_Land.Movement.performed += content => {
-            var inputVecter2 = content.ReadValue<Vector2>();
-            SetFacingDir(inputVecter2);
-            SetMovement(new Vector3(inputVecter2.x, inputVecter2.y));
-
-            var faceLeft = m_SprtRenderer.flipX;
-            //Debug.Log("faceLeft = " + faceLeft);
-            if(m_SprtRenderer!= null) m_SprtRenderer.flipX = AnimeUtils.isLeftForHorizontalAnimation(Movement, faceLeft);
-        };
-
-        m_inputControls.Lamniat_Land.Movement.canceled += content => {
-            
-            SetMovement(Vector3.zero);
-        };
-
-        m_inputControls.Lamniat_Land.Hold.performed += content => {
-            if(content.interaction is HoldInteraction) {
-                isHoldInteraction = true;
-            }
-        };
-
-        m_inputControls.Lamniat_Land.Hold.canceled += content => {
-            if(content.interaction is HoldInteraction) {
-                isHoldInteraction = false;
-            }
-        };
-
-        #endregion
-
         jumpPoint.OnPlayerEnterTriggerEvent.AddListener(() => {
             //Debug.Log("ColliderTrigger jumpPointTrigger = true");
             jumpPointTrigger = true;
@@ -190,35 +161,35 @@ public class Avatar : Charactor
             //m_raycastStart = GetComponentInChildren<Transform>().Find(raycastPointName);
             m_raycastStart = m_raycastStartPosition.Single(r => r.name.Equals(raycastPointName));
         } else {
-            if(Movement.x == 0 && Movement.y > 0) {
+            if(m_targetMovement.Movement.x == 0 && m_targetMovement.Movement.y > 0) {
                 // Up
                 //m_raycastStart = GetComponentInChildren<Transform>().Find("RaycastPoint_Up");
                 m_raycastStart = m_raycastStartPosition.Single(r => r.name.Equals("_Up"));
-            } else if(Movement.x == 0 && Movement.y < 0) {
+            } else if(m_targetMovement.Movement.x == 0 && m_targetMovement.Movement.y < 0) {
                 // Down 
                 //m_raycastStart = GetComponentInChildren<Transform>().Find("RaycastPoint_Down");
                 m_raycastStart = m_raycastStartPosition.Single(r => r.name.Equals("_Down"));
-            } else if(Movement.x < 0 && Movement.y == 0) {
+            } else if(m_targetMovement.Movement.x < 0 && m_targetMovement.Movement.y == 0) {
                 // Left
                 //m_raycastStart = GetComponentInChildren<Transform>().Find("RaycastPoint_Left");
                 m_raycastStart = m_raycastStartPosition.Single(r => r.name.Equals("_Left"));
-            } else if(Movement.x > 0 && Movement.y == 0) {
+            } else if(m_targetMovement.Movement.x > 0 && m_targetMovement.Movement.y == 0) {
                 // Right
                 //m_raycastStart = GetComponentInChildren<Transform>().Find("RaycastPoint_Right");
                 m_raycastStart = m_raycastStartPosition.Single(r => r.name.Equals("_Right"));
-            } else if(Movement.x > 0 && Movement.y > 0) {
+            } else if(m_targetMovement.Movement.x > 0 && m_targetMovement.Movement.y > 0) {
                 // UpRight
                 //m_raycastStart = GetComponentInChildren<Transform>().Find("RaycastPoint_UpRight");
                 m_raycastStart = m_raycastStartPosition.Single(r => r.name.Equals("_UpRight"));
-            } else if(Movement.x < 0 && Movement.y > 0) {
+            } else if(m_targetMovement.Movement.x < 0 && m_targetMovement.Movement.y > 0) {
                 // UpLeft
                 //m_raycastStart = GetComponentInChildren<Transform>().Find("RaycastPoint_UpLeft");
                 m_raycastStart = m_raycastStartPosition.Single(r => r.name.Equals("_UpLeft"));
-            } else if(Movement.x > 0 && Movement.y < 0) {
+            } else if(m_targetMovement.Movement.x > 0 && m_targetMovement.Movement.y < 0) {
                 // DownRight
                 //m_raycastStart = GetComponentInChildren<Transform>().Find("RaycastPoint_DownRight");
                 m_raycastStart = m_raycastStartPosition.Single(r => r.name.Equals("_DownRight"));
-            } else if(Movement.x < 0 && Movement.y < 0) {
+            } else if(m_targetMovement.Movement.x < 0 && m_targetMovement.Movement.y < 0) {
                 // DownLeft
                 //m_raycastStart = GetComponentInChildren<Transform>().Find("RaycastPoint_DownLeft");
                 m_raycastStart = m_raycastStartPosition.Single(r => r.name.Equals("_DownLeft"));
@@ -227,8 +198,8 @@ public class Avatar : Charactor
     }
 
     private bool IsObliqueRaycast() {
-        if(Movement.x > 0 && Movement.y > 0 || Movement.x < 0 && Movement.y > 0 ||
-           Movement.x > 0 && Movement.y < 0 || Movement.x < 0 && Movement.y < 0) {
+        if(m_targetMovement.Movement.x > 0 && m_targetMovement.Movement.y > 0 || m_targetMovement.Movement.x < 0 && m_targetMovement.Movement.y > 0 ||
+           m_targetMovement.Movement.x > 0 && m_targetMovement.Movement.y < 0 || m_targetMovement.Movement.x < 0 && m_targetMovement.Movement.y < 0) {
             return true;
         }
 
@@ -236,24 +207,24 @@ public class Avatar : Charactor
     }
 
     private JumpState DetectedWhetherNeedToJump() {
-        if(isMoving) {
+        if(m_targetMovement.isMoving) {
             SetRaycastPoint();
 
-            Vector2 distance = new Vector2(Movement.x, Movement.y) * 0.5f;
+            Vector2 distance = new Vector2(m_targetMovement.Movement.x, m_targetMovement.Movement.y) * 0.5f;
             m_raycastEnd = new Vector2(m_raycastStart.position.x, m_raycastStart.position.y) + distance;
             //Debug.Log("castEndPos: "+rayCastEndPos);
             Debug.DrawLine(m_raycastStart.position, m_raycastEnd, Color.blue);
 
-            return JumpMechanismUtils.DetectedJumpState(m_raycastStart.position, m_raycastEnd, distance, currHeight, isMoving);
+            return JumpMechanismUtils.DetectedJumpState(m_raycastStart.position, m_raycastEnd, distance, currHeight, m_targetMovement.isMoving);
         }
         return JumpState.Ground;
     }
 
     private void DetectedToJump() {
-        if(isMoving) {
+        if(m_targetMovement.isMoving) {
             SetRaycastPoint();
 
-            Vector2 distance = new Vector2(Movement.x, Movement.y) * 0.35f;
+            Vector2 distance = new Vector2(m_targetMovement.Movement.x, m_targetMovement.Movement.y) * 0.35f;
             m_raycastEnd = new Vector2(m_raycastStart.position.x, m_raycastStart.position.y) + distance;
             //Debug.Log("castEndPos: "+rayCastEndPos);
             Debug.DrawLine(m_raycastStart.position, m_raycastEnd, Color.blue);
@@ -296,7 +267,7 @@ public class Avatar : Charactor
                 if(jumpUp || jumpDown) {
                     if(!isJumping) {
                         takeOffCoord = m_Coordinate;
-                        takeOffDir = FacingDir;
+                        takeOffDir = m_targetMovement.FacingDir;
                         isJumping = true;
                         Debug.Log("takeOffPos: "+takeOffCoord);
                     }
@@ -306,10 +277,10 @@ public class Avatar : Charactor
     }
 
     private void DetectedWhileJump() {
-        if(isMoving) {
+        if(m_targetMovement.isMoving) {
             SetRaycastPoint();
 
-            Vector2 distance = new Vector2(Movement.x, Movement.y) * 0.35f;
+            Vector2 distance = new Vector2(m_targetMovement.Movement.x, m_targetMovement.Movement.y) * 0.35f;
             m_raycastEnd = new Vector2(m_raycastStart.position.x, m_raycastStart.position.y) + distance;
             //Debug.Log("castEndPos: "+rayCastEndPos);
             Debug.DrawLine(m_raycastStart.position, m_raycastEnd, Color.blue);
@@ -346,10 +317,10 @@ public class Avatar : Charactor
 
         RaycastHit2D[] hits = null;
         if(IsObliqueRaycast()) {
-            Vector2 distance1 = new Vector2(Movement.x, 0) * 0.35f;
+            Vector2 distance1 = new Vector2(m_targetMovement.Movement.x, 0) * 0.35f;
             var rayCastEndPos1 = new Vector2(m_raycastStart.position.x, m_raycastStart.position.y) + distance1;
             Debug.DrawLine(m_raycastStart.position, rayCastEndPos1, Color.red);
-            Vector2 distance2 = new Vector2(0, Movement.y) * 0.35f;
+            Vector2 distance2 = new Vector2(0, m_targetMovement.Movement.y) * 0.35f;
             var rayCastEndPos2 = new Vector2(m_raycastStart.position.x, m_raycastStart.position.y) + distance2;
             Debug.DrawLine(m_raycastStart.position, rayCastEndPos2, Color.red);
 
@@ -358,7 +329,7 @@ public class Avatar : Charactor
 
             hits = hits1.Concat(hits2).ToArray();
         } else {
-            Vector2 distance = new Vector2(Movement.x, Movement.y) * 0.35f;
+            Vector2 distance = new Vector2(m_targetMovement.Movement.x, m_targetMovement.Movement.y) * 0.35f;
             m_raycastEnd = new Vector2(m_raycastStart.position.x, m_raycastStart.position.y) + distance;
             //Debug.Log("castEndPos: "+rayCastEndPos);
             Debug.DrawLine(m_raycastStart.position, m_raycastEnd, Color.red);
@@ -377,14 +348,14 @@ public class Avatar : Charactor
                          
                         //if(isHoldInteraction && facingDir.Equals(new Vector2(movement.x, movement.y))) {  
                         Debug.Log("isHoldInteraction: "+isHoldInteraction);
-                        Debug.Log("new Vector2(movement.x, movement.y): "+new Vector2(Movement.x, Movement.y));
-                        if(isHoldInteraction && FacingDir.Equals(new Vector2(Movement.x, Movement.y))) {
+                        Debug.Log("new Vector2(movement.x, movement.y): "+new Vector2(m_targetMovement.Movement.x, m_targetMovement.Movement.y));
+                        if(isHoldInteraction && m_targetMovement.FacingDir.Equals(new Vector2(m_targetMovement.Movement.x, m_targetMovement.Movement.y))) {
                             Debug.Log("TriggerToJumpDown prepareToJump = false");
                             prepareToJump = false;
         
                             if(!isJumping) {
                                 takeOffCoord = m_Coordinate;
-                                takeOffDir = FacingDir;
+                                takeOffDir = m_targetMovement.FacingDir;
                                 isJumping = true;
                                 maxJumpHeight = currHeight + 1.5f;
                                 RevertColliderFromJumpDown();
@@ -396,10 +367,10 @@ public class Avatar : Charactor
                         else {
                             Debug.Log("TriggerToJumpDown KnockbackFeedback");
                             Debug.Log("TriggerToJumpDown isHoldInteraction "+isHoldInteraction);
-                            Debug.Log("TriggerToJumpDown facingDir "+FacingDir);
-                            Debug.Log("TriggerToJumpDown new Vector2(movement.x, movement.y) "+new Vector2(Movement.x, Movement.y));
+                            Debug.Log("TriggerToJumpDown facingDir "+m_targetMovement.FacingDir);
+                            Debug.Log("TriggerToJumpDown new Vector2(movement.x, movement.y) "+new Vector2(m_targetMovement.Movement.x, m_targetMovement.Movement.y));
                             KnockbackFeedback feedback = GetComponent<KnockbackFeedback>();
-                            feedback.ActiveFeedbackByDir(-new Vector2(Movement.x, Movement.y));
+                            feedback.ActiveFeedbackByDir(-new Vector2(m_targetMovement.Movement.x, m_targetMovement.Movement.y));
                             jumpPointTrigger = false;
                         }
                     }
@@ -428,7 +399,7 @@ public class Avatar : Charactor
         prepareToJump = true;
         SetRaycastPoint();
 
-        Vector2 distance = new Vector2(Movement.x, Movement.y) * 0.35f;
+        Vector2 distance = new Vector2(m_targetMovement.Movement.x, m_targetMovement.Movement.y) * 0.35f;
         m_raycastEnd = new Vector2(m_raycastStart.position.x, m_raycastStart.position.y) + distance;
         //Debug.Log("castEndPos: "+rayCastEndPos);
         Debug.DrawLine(m_raycastStart.position, m_raycastEnd, Color.red);
@@ -446,7 +417,7 @@ public class Avatar : Charactor
                     Debug.Log("OnCollisioning: "+OnColliders.Contains(hit.collider));
                     if(angle >= 60f && 180f - angle >= 60f && OnColliders.Contains(hit.collider)) {
                         if(!jumpDelaying) {
-                            Vector2 faceDirAtJump = FacingDir;
+                            Vector2 faceDirAtJump = m_targetMovement.FacingDir;
                             jumpDelayRoutine = StartCoroutine(JumpUpDelay(faceDirAtJump));
                             break;
                         }
@@ -548,10 +519,10 @@ public class Avatar : Charactor
                 Debug.Log("jumpPointColliderPoint3: "+jumpPointColliderPoint3);
                 Debug.Log("jumpPointColliderPoint4: "+jumpPointColliderPoint4);
 
-                Debug.Log("PredictNext jumpPointColliderPoint1: "+PredictNextJumpPointWorldPos(jumpPointColliderPoint1, currHeight, goalheight, Movement));
-                Debug.Log("PredictNext jumpPointColliderPoint1: "+PredictNextJumpPointWorldPos(jumpPointColliderPoint2, currHeight, goalheight, Movement));
-                Debug.Log("PredictNext jumpPointColliderPoint1: "+PredictNextJumpPointWorldPos(jumpPointColliderPoint3, currHeight, goalheight, Movement));
-                Debug.Log("PredictNext jumpPointColliderPoint1: "+PredictNextJumpPointWorldPos(jumpPointColliderPoint4, currHeight, goalheight, Movement));
+                Debug.Log("PredictNext jumpPointColliderPoint1: "+PredictNextJumpPointWorldPos(jumpPointColliderPoint1, currHeight, goalheight, m_targetMovement.Movement));
+                Debug.Log("PredictNext jumpPointColliderPoint1: "+PredictNextJumpPointWorldPos(jumpPointColliderPoint2, currHeight, goalheight, m_targetMovement.Movement));
+                Debug.Log("PredictNext jumpPointColliderPoint1: "+PredictNextJumpPointWorldPos(jumpPointColliderPoint3, currHeight, goalheight, m_targetMovement.Movement));
+                Debug.Log("PredictNext jumpPointColliderPoint1: "+PredictNextJumpPointWorldPos(jumpPointColliderPoint4, currHeight, goalheight, m_targetMovement.Movement));
 
                 if(Mathf.Floor(goalheight) >= 0) {
                     groundCheckHeight = Mathf.Floor(goalheight);
@@ -560,10 +531,10 @@ public class Avatar : Charactor
                 }
                 
 
-                if(hm.GroundableChecked(PredictNextJumpPointWorldPos(jumpPointColliderPoint1, currHeight, goalheight, Movement), groundCheckHeight) || 
-                   hm.GroundableChecked(PredictNextJumpPointWorldPos(jumpPointColliderPoint2, currHeight, goalheight, Movement), groundCheckHeight) ||
-                   hm.GroundableChecked(PredictNextJumpPointWorldPos(jumpPointColliderPoint3, currHeight, goalheight, Movement), groundCheckHeight) || 
-                   hm.GroundableChecked(PredictNextJumpPointWorldPos(jumpPointColliderPoint4, currHeight, goalheight, Movement), groundCheckHeight)) {
+                if(hm.GroundableChecked(PredictNextJumpPointWorldPos(jumpPointColliderPoint1, currHeight, goalheight, m_targetMovement.Movement), groundCheckHeight) || 
+                   hm.GroundableChecked(PredictNextJumpPointWorldPos(jumpPointColliderPoint2, currHeight, goalheight, m_targetMovement.Movement), groundCheckHeight) ||
+                   hm.GroundableChecked(PredictNextJumpPointWorldPos(jumpPointColliderPoint3, currHeight, goalheight, m_targetMovement.Movement), groundCheckHeight) || 
+                   hm.GroundableChecked(PredictNextJumpPointWorldPos(jumpPointColliderPoint4, currHeight, goalheight, m_targetMovement.Movement), groundCheckHeight)) {
 
                     Debug.Log("PredictNext Groundable true, groundCheckHeight: "+groundCheckHeight);
                     
@@ -590,10 +561,10 @@ public class Avatar : Charactor
 
                     if(Mathf.Ceil(currHeight) - currHeight <= 0.5f) {
                         groundCheckHeight = Mathf.Ceil(currHeight);
-                        if(hm.GroundableChecked(PredictNextJumpPointWorldPos(jumpPointColliderPoint1, currHeight, goalheight, Movement), groundCheckHeight) || 
-                           hm.GroundableChecked(PredictNextJumpPointWorldPos(jumpPointColliderPoint2, currHeight, goalheight, Movement), groundCheckHeight) ||
-                           hm.GroundableChecked(PredictNextJumpPointWorldPos(jumpPointColliderPoint3, currHeight, goalheight, Movement), groundCheckHeight) || 
-                           hm.GroundableChecked(PredictNextJumpPointWorldPos(jumpPointColliderPoint4, currHeight, goalheight, Movement), groundCheckHeight)) {
+                        if(hm.GroundableChecked(PredictNextJumpPointWorldPos(jumpPointColliderPoint1, currHeight, goalheight, m_targetMovement.Movement), groundCheckHeight) || 
+                           hm.GroundableChecked(PredictNextJumpPointWorldPos(jumpPointColliderPoint2, currHeight, goalheight, m_targetMovement.Movement), groundCheckHeight) ||
+                           hm.GroundableChecked(PredictNextJumpPointWorldPos(jumpPointColliderPoint3, currHeight, goalheight, m_targetMovement.Movement), groundCheckHeight) || 
+                           hm.GroundableChecked(PredictNextJumpPointWorldPos(jumpPointColliderPoint4, currHeight, goalheight, m_targetMovement.Movement), groundCheckHeight)) {
                             Debug.Log("After Ceil Groundable true");
                             lastHeight = currHeight;
                             currHeight = groundCheckHeight;
@@ -601,7 +572,7 @@ public class Avatar : Charactor
                             groundDelayRoutine = StartCoroutine(GroundDelay());
                         } else {
                             if(hits.Length >= 1) {
-                                var variableVector = PredictNextJumpPointWorldPos(jumpPointColliderPoint1, currHeight, goalheight, Movement) - jumpPointColliderPoint1;
+                                var variableVector = PredictNextJumpPointWorldPos(jumpPointColliderPoint1, currHeight, goalheight, m_targetMovement.Movement) - jumpPointColliderPoint1;
 
                                 foreach(RaycastHit2D hit in hits) {
                                     Debug.Log("TriggerToJumpUp hits collider name: "+hit.collider.name);
@@ -622,7 +593,7 @@ public class Avatar : Charactor
                         }
                     } else {
                         if(hits.Length >= 1) {
-                            var variableVector = PredictNextJumpPointWorldPos(jumpPointColliderPoint1, currHeight, goalheight, Movement) - jumpPointColliderPoint1;
+                            var variableVector = PredictNextJumpPointWorldPos(jumpPointColliderPoint1, currHeight, goalheight, m_targetMovement.Movement) - jumpPointColliderPoint1;
 
                             foreach(RaycastHit2D hit in hits) {
                                 Debug.Log("TriggerToJumpUp hits collider name: "+hit.collider.name);
@@ -703,7 +674,7 @@ public class Avatar : Charactor
         
         if(!isJumping) {
             takeOffCoord = m_Coordinate;
-            takeOffDir = FacingDir;
+            takeOffDir = m_targetMovement.FacingDir;
             isJumping = true;
             maxJumpHeight = currHeight + 1.5f;
             RevertColliderFromJumpDown();
@@ -714,7 +685,7 @@ public class Avatar : Charactor
     protected IEnumerator JumpUpDelay(Vector2 faceDir) {
         jumpDelaying = true;
         // if button is change before delay time
-        if(FacingDir != faceDir) {
+        if(m_targetMovement.FacingDir != faceDir) {
             jumpDelaying = false;
             yield break;
         }
@@ -725,7 +696,7 @@ public class Avatar : Charactor
         
         if(!isJumping) {
             takeOffCoord = m_Coordinate;
-            takeOffDir = FacingDir;
+            takeOffDir = m_targetMovement.FacingDir;
             isJumping = true;
             maxJumpHeight = currHeight + 1.5f;
             Debug.Log("takeOffPos: "+takeOffCoord);
@@ -745,7 +716,7 @@ public class Avatar : Charactor
         groundDelaying = false;
         jumpOffset = 0.3f;
         lastHeight = currHeight;
-        SetMoveSpeed(11f);
+        m_targetMovement.SetMoveSpeed(11f);
         jumpingMovementVariable = 0.5f;
         OnColliders.Clear();
 

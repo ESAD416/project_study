@@ -62,49 +62,6 @@ public abstract class Charactor : MonoBehaviour
     #endregion
 
     #region 移動參數
-    [Header("Movement Parameters")]
-    [SerializeField] protected float m_moveSpeed = 11f;
-    /// <summary>
-    /// 角色移速
-    /// </summary>
-    public float MoveSpeed => m_moveSpeed;
-    /// <summary>
-    /// 更改角色移速
-    /// </summary>
-    public void SetMoveSpeed(float speed) {
-        this.m_moveSpeed = speed;
-    }
-    
-    protected Vector3 m_movement = Vector3.zero;
-    /// <summary>
-    /// 角色移動向量
-    /// </summary>
-    public Vector3 Movement => m_movement;
-    /// <summary>
-    /// 更改角色向量
-    /// </summary>
-    public void SetMovement(Vector3 vector3) {
-        this.m_movement = vector3;
-    }
-    /// <summary>
-    /// 角色面向方向
-    /// </summary>
-    [SerializeField] protected Vector2 m_facingDir = Vector2.down;
-    public Vector2 FacingDir => m_facingDir;
-    /// <summary>
-    /// 更改角色面向方向
-    /// </summary>
-    public void SetFacingDir(Vector2 vector2) {
-        this.m_facingDir = vector2;
-    }
-    /// <summary>
-    /// 角色目前是否為移動中
-    /// </summary>
-    public bool isMoving {
-        get {
-            return Movement.x != 0 || Movement.y != 0;
-        }
-    }
     /// <summary>
     /// 角色目前是否能移動
     /// </summary>
@@ -132,15 +89,6 @@ public abstract class Charactor : MonoBehaviour
     /// </summary>
     public bool isDead = false;
 
-    #endregion
-
-    #region 攻擊參數
-    /// <summary>
-    /// 角色是否為正在攻擊中
-    /// </summary>
-    [Header("Attack Parameters")]
-    public bool isAttacking;
-    
     #endregion
 
     #region 跳躍參數
@@ -223,9 +171,8 @@ public abstract class Charactor : MonoBehaviour
         m_Buttom = m_ButtomObj?.position ?? Vector3.zero;
 
         UpdateCoordinate();
-        //Debug.Log("coordinate: "+m_Coordinate);
         HandleAnimatorLayers();
-        SetAnimateMovementPara(Movement, FacingDir);
+        //SetAnimateMovementPara(Movement, FacingDir);
         if(!string.IsNullOrEmpty(m_InfoStorage.jumpCollidersName)) {
             if(isJumping) {
             FocusCollidersWithHeightWhileJumping();
@@ -236,36 +183,17 @@ public abstract class Charactor : MonoBehaviour
     }
 
     protected virtual void FixedUpdate() {
-        // Debug.Log("FixedUpdate start player height: "+height);
-        // Debug.Log("FixedUpdate start player jumpOffset: "+jumpOffset);
-        if(Status.Equals(CharactorStatus.Attack)) {
-            //Debug.Log("attacking");
-            SetMovement(Vector3.zero);
-        }
-        
-
         //Debug.Log("cantMove: "+cantMove);
-        if(!cantMove) {
-            if(isJumping && jumpState == JumpState.JumpUp) {
-                MoveWhileJump();
-            } else {
-                Move();
-            }
-        }
+        // if(!cantMove) {
+        //     if(isJumping && jumpState == JumpState.JumpUp) {
+        //         MoveWhileJump();
+        //     } else {
+        //         Move();
+        //     }
+        // }
     }
 
     #region 位移控制
-    public void Move() {
-        //Debug.Log("FixedUpdate movement.normalized: "+movement.normalized+", moveSpeed: "+moveSpeed );
-        m_Rigidbody.velocity = Movement.normalized * MoveSpeed;
-        //m_Rigidbody.AddForce(movement.normalized* moveSpeed * Time.fixedDeltaTime, ForceMode2D.Force);
-        // transform.Translate(movement*moveSpeed*Time.deltaTime);
-    }
-
-    public void MoveWhileJump() {
-        m_Rigidbody.velocity = Movement.normalized * jumpingMovementVariable * MoveSpeed;
-    }
-
     public void UpdateCoordinate() {
         Vector3 result = Vector3.zero;
         result.x = m_Center.x;
@@ -290,53 +218,10 @@ public abstract class Charactor : MonoBehaviour
 
     #region 動畫控制
     public void HandleAnimatorLayers() {
-        // if(isAttacking) {
-        //     if(m_Animator != null) AnimeUtils.ActivateAnimatorLayer(m_Animator, "AttackLayer");
-        // }
-        if(isMoving) {
-            if(m_Animator != null) AnimeUtils.ActivateAnimatorLayer(m_Animator, "MoveLayer");
-        }
-        else {
-            if(m_Animator != null) AnimeUtils.ActivateAnimatorLayer(m_Animator, "IdleLayer");
-        }
+        if(Status.Equals(Charactor.CharactorStatus.Attack)) AnimeUtils.ActivateAnimatorLayer(m_Animator, "AttackLayer");
+        else if(Status.Equals(Charactor.CharactorStatus.Move)) AnimeUtils.ActivateAnimatorLayer(m_Animator, "MoveLayer");
+        else AnimeUtils.ActivateAnimatorLayer(m_Animator, "IdleLayer");
     }
-
-    public void SetAnimateMovementPara(Vector3 movement, Vector2 facingDir) {
-        // Debug.Log("movement.x: "+movement.x + "movement.y: "+movement.y);
-        // Debug.Log("facingDir.x: "+facingDir.x + "facingDir.y: "+facingDir.y);
-        Dictionary<string, float> dict = new Dictionary<string, float>();
-        dict.Add("movementX", movement.x);
-        dict.Add("movementY", movement.y);
-        dict.Add("facingDirX", facingDir.x);
-        dict.Add("facingDirY", facingDir.y);
-
-        if(m_Animator != null) AnimeUtils.SetAnimateFloatPara(m_Animator, dict);
-    }
-
-    #endregion
-
-    #region 攻擊控制
-    // protected IEnumerator Attack() {
-    //     //Debug.Log("attack start");
-    //     isAttacking = true;
-    //     m_Animator?.SetBool("attack", isAttacking);
-    //     yield return new WaitForSeconds(attackClipTime);  // hardcasted casted time for debugged
-    //     FinishAttack();
-    // }
-
-    // public virtual void FinishAttack() {
-    //     Debug.Log("FinishAttack start");
-    //     if(attackRoutine != null) {
-    //         StopCoroutine(attackRoutine);
-    //     }
-
-    //     isAttacking = false;
-    //     m_Animator?.SetBool("attack", isAttacking);
-
-    //     SetMovement(movementAfterAttack);
-    //     movementAfterAttack = Vector3.zero;
-    //     Debug.Log("FinishAttack end");
-    // }
     #endregion
     
     #region 跳躍控制
@@ -460,7 +345,7 @@ public abstract class Charactor : MonoBehaviour
     protected IEnumerator TakeHit() {
         Debug.Log("TakeHit");
         isTakingHit = true;
-        if(!hyperArmor) SetMoveSpeed(0f);
+        //if(!hyperArmor) SetMoveSpeed(0f);
         
         yield return new WaitForSeconds(hitRecoveryTime);  // hardcasted casted time for debugged
         FinishTakeHit();
@@ -473,7 +358,7 @@ public abstract class Charactor : MonoBehaviour
 
         isTakingHit = false;
         
-        SetMoveSpeed(3f);
+        //SetMoveSpeed(3f);
         Debug.Log("FinishTakeHit");
     }
 
@@ -511,7 +396,7 @@ public abstract class Charactor : MonoBehaviour
     
     protected IEnumerator BeingStunned() {
         Debug.Log("BeingStunned");
-        SetMoveSpeed(0f);
+        //SetMoveSpeed(0f);
         yield return new WaitForSeconds(stunRecoveryTime);  // hardcasted casted time for debugged
         FinishBeingStunned();
     }
@@ -523,7 +408,7 @@ public abstract class Charactor : MonoBehaviour
 
         isStunned = false;
         armorToStunned = 3;
-        SetMoveSpeed(3f);
+        //SetMoveSpeed(3f);
         Debug.Log("FinishBeingStunned");
     }
     #endregion
