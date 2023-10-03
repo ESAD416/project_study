@@ -5,8 +5,8 @@ using UnityEngine;
 public class Combat_Avatar : MonoBehaviour
 {
     [SerializeField] protected Avatar m_avatar;
-    [SerializeField] protected Animator m_targetAnimator;
     [SerializeField] protected Movement_Avatar m_targetMovement;
+    protected Animator m_targetAnimator;
 
     /// <summary>
     /// 角色是否為正在攻擊中
@@ -25,6 +25,9 @@ public class Combat_Avatar : MonoBehaviour
     /// </summary>
     protected Vector3 movementAfterAttack;
 
+    protected virtual void Awake() {
+        m_targetAnimator = m_avatar.Animator;
+    }
 
     // Start is called before the first frame update
     protected virtual void Start()

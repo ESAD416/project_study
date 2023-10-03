@@ -5,9 +5,9 @@ using UnityEngine;
 public class Movement_Avatar : MonoBehaviour
 {
     [SerializeField] protected Avatar m_avatar;
-    [SerializeField] protected Rigidbody2D m_targetRdbd;
-    [SerializeField] protected SpriteRenderer m_targetSprtRenderer;
-    [SerializeField] protected Animator m_targetAnimator;
+    protected Rigidbody2D m_targetRdbd;
+    protected SpriteRenderer m_targetSprtRenderer;
+    protected Animator m_targetAnimator;
     
 
     [Header("Movement Parameters")]
@@ -63,6 +63,12 @@ public class Movement_Avatar : MonoBehaviour
     //     }
     // }
 
+    protected virtual void Awake() {
+        m_targetRdbd = m_avatar.Rigidbody;
+        m_targetSprtRenderer = m_avatar.SprtRenderer;
+        m_targetAnimator = m_avatar.Animator;
+    }
+
     // Start is called before the first frame update
     protected virtual void Start()
     {
@@ -76,7 +82,7 @@ public class Movement_Avatar : MonoBehaviour
     }
 
     protected virtual void FixedUpdate() {
-        if(m_avatar.Status.Equals(Charactor.CharactorStatus.Attack)) {
+        if(m_avatar.CharStatus.Equals(Charactor.CharactorStatus.Attack)) {
             //Debug.Log("attacking");
             SetMovement(Vector3.zero);
         }

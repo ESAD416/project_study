@@ -7,7 +7,8 @@ public class Combat_Lamniat : Combat_Avatar
 {
     private AvatarInputActionsControls inputControls;
 
-    protected void Awake() {
+    protected override void Awake() {
+        base.Awake();
         attackClipTime = AnimeUtils.GetAnimateClipTimeInRuntime(m_targetAnimator, "Lamniat_attack_1_chop_clockwise");
         Debug.Log("Combat_Lamniat Start SetAnimateClipTime attackClipTime: "+attackClipTime);
     }
@@ -18,7 +19,7 @@ public class Combat_Lamniat : Combat_Avatar
 
         inputControls.Lamniat_Land.Attack.started += content => {
             Debug.Log("Lamniat_Land.Attack.started");
-            if(m_avatar.Status.Equals(Charactor.CharactorStatus.Move)) {
+            if(m_avatar.CharStatus.Equals(Charactor.CharactorStatus.Move)) {
                 m_targetMovement.SetFacingDir(m_targetMovement.Movement);
                 //m_avatar.SetFacingDir(m_avatar.Movement);
                 movementAfterAttack = m_targetMovement.Movement;

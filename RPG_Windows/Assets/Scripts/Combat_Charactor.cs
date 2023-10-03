@@ -5,8 +5,8 @@ using UnityEngine;
 public abstract class Combat_Charactor : MonoBehaviour
 {
     [SerializeField] protected Charactor m_charactor;
-    [SerializeField] protected Animator m_targetAnimator;
     [SerializeField] protected Movement_Charactor m_targetMovement;
+    protected Animator m_targetAnimator;
 
     /// <summary>
     /// 角色是否為正在攻擊中
@@ -25,6 +25,9 @@ public abstract class Combat_Charactor : MonoBehaviour
     /// </summary>
     protected Vector3 movementAfterAttack;
 
+    protected virtual void Awake() {
+        m_targetAnimator = m_charactor.Animator;
+    }
 
     // Start is called before the first frame update
     protected virtual void Start()
@@ -40,7 +43,7 @@ public abstract class Combat_Charactor : MonoBehaviour
     #region 攻擊控制
     protected IEnumerator Attack() {
         Debug.Log("Combat_Charactor attack start");
-        if(m_charactor.Status.Equals(Charactor.CharactorStatus.Move)) movementAfterAttack = m_targetMovement.Movement;
+        if(m_charactor.CharStatus.Equals(Charactor.CharactorStatus.Move)) movementAfterAttack = m_targetMovement.Movement;
 
         isAttacking = true;
         m_targetAnimator?.SetTrigger("attack");

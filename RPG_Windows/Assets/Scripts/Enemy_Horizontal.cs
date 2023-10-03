@@ -22,7 +22,7 @@ public class Enemy_Horizontal : Enemy_Abstract
 
         detectorL = leftDetector ?? null;
         detectorR = rightDetector ?? null;
-        m_SprtRenderer = GetComponentInChildren<SpriteRenderer>();
+       SetSpriteRenderer(GetComponentInChildren<SpriteRenderer>());
         base.Start();
     }
 
@@ -41,32 +41,32 @@ public class Enemy_Horizontal : Enemy_Abstract
             // Debug.Log("FixedUpdate isAttacking: "+isAttacking);
             // Debug.Log("FixedUpdate movement: "+movement);
             // Debug.Log("FixedUpdate movementAfterAttack: "+movementAfterAttack);
-            if(isAttacking) {
+            if(CharStatus.Equals(CharactorStatus.Attack)) {
                 //Debug.Log("attacking");
                 // if(isMoving) {
                 //     movementAfterAttack = Movement;
                 //     //Debug.Log("movementAfterAttack: "+movementAfterAttack);
                 // }
-                SetMovement(Vector3.zero);
+                //SetMovement(Vector3.zero);
             } else {
                 if(isPatroling) {
                     if(moveRight) {
-                        SetMovement(Vector3.right);
+                        //SetMovement(Vector3.right);
                     } else {
-                        SetMovement(Vector3.left);
+                        //SetMovement(Vector3.left);
                     }
                 } else if(isChasing) {
                     // if(movement.Equals(Vector3.zero)) {
                     //     moveRight = AnimeUtils.isRightForHorizontalAnimation(movementAfterAttack);
                     // }
-                    moveRight = AnimeUtils.isRightForHorizontalAnimation(Movement);
+                    //moveRight = AnimeUtils.isRightForHorizontalAnimation(Movement);
                 }
 
                 if(detectorL != null) detectorL.gameObject.SetActive(!moveRight);
                 if(detectorR != null) detectorR.gameObject.SetActive(moveRight);
             }
             
-            if(m_SprtRenderer!= null) m_SprtRenderer.flipX = moveRight;
+            if(SprtRenderer!= null) SprtRenderer.flipX = moveRight;
         } else {
             if(detectorL != null) detectorL.gameObject.SetActive(false);
             if(detectorR != null) detectorR.gameObject.SetActive(false);
@@ -109,9 +109,9 @@ public class Enemy_Horizontal : Enemy_Abstract
     
     public override void OnAttack() {
         //Debug.Log("Enemy_Horizontal onAttack: ");
-        if(isMoving) {
-            SetFacingDir(Movement);
-        }
+        // if(isMoving) {
+        //     SetFacingDir(Movement);
+        // }
 
         if(detectorL != null) detectorL.gameObject.SetActive(false);
         if(detectorR != null) detectorR.gameObject.SetActive(false);

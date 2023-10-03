@@ -10,18 +10,24 @@ public abstract class Charactor : MonoBehaviour
 {
     
     #region 角色物件
+    [SerializeField] protected Rigidbody2D m_Rigidbody;
     /// <summary>
     /// 角色物理剛體
     /// </summary>
-    [SerializeField] protected Rigidbody2D m_Rigidbody;
+    public Rigidbody2D Rigidbody => m_Rigidbody;
+    
+    [SerializeField] protected SpriteRenderer m_SprtRenderer;
     /// <summary>
     /// 角色圖片精靈
     /// </summary>
-    [SerializeField] protected SpriteRenderer m_SprtRenderer;
+    public SpriteRenderer SprtRenderer => m_SprtRenderer;
+    public void SetSpriteRenderer(SpriteRenderer sprtR) => this.m_SprtRenderer = sprtR;
+    
+    [SerializeField] protected Animator m_Animator;
     /// <summary>
     /// 角色動畫控制器
     /// </summary>
-    [SerializeField] protected Animator m_Animator;
+    public Animator Animator => m_Animator;
 
     /// <summary>
     /// 角色中心
@@ -56,7 +62,7 @@ public abstract class Charactor : MonoBehaviour
         Idle, Move, Jump, Fall, Staircase, Attack, Dead,
     }
     protected CharactorStatus m_Status;
-    public CharactorStatus Status => m_Status;
+    public CharactorStatus CharStatus => m_Status;
     public void SetStatus(CharactorStatus status) => this.m_Status = status;
 
     #endregion
@@ -218,9 +224,9 @@ public abstract class Charactor : MonoBehaviour
 
     #region 動畫控制
     public void HandleAnimatorLayers() {
-        if(Status.Equals(Charactor.CharactorStatus.Attack)) AnimeUtils.ActivateAnimatorLayer(m_Animator, "AttackLayer");
-        else if(Status.Equals(Charactor.CharactorStatus.Move)) AnimeUtils.ActivateAnimatorLayer(m_Animator, "MoveLayer");
-        else AnimeUtils.ActivateAnimatorLayer(m_Animator, "IdleLayer");
+        if(CharStatus.Equals(Charactor.CharactorStatus.Attack)) AnimeUtils.ActivateAnimatorLayer(Animator, "AttackLayer");
+        else if(CharStatus.Equals(Charactor.CharactorStatus.Move)) AnimeUtils.ActivateAnimatorLayer(Animator, "MoveLayer");
+        else AnimeUtils.ActivateAnimatorLayer(Animator, "IdleLayer");
     }
     #endregion
     
@@ -373,7 +379,7 @@ public abstract class Charactor : MonoBehaviour
             //TODO set stunned animation
             takeHitRoutine = StartCoroutine(BeingStunned());
         } else {
-            m_Animator?.SetTrigger("hurt");
+            Animator?.SetTrigger("hurt");
             if(!hyperArmor) {
                 KnockbackFeedback feedback = GetComponent<KnockbackFeedback>();
                 feedback.ActiveFeedback(senderPos);
@@ -389,7 +395,7 @@ public abstract class Charactor : MonoBehaviour
     public void Die() {
         Debug.Log("Enemy Die");
         isDead = true;
-        m_Animator?.SetBool("isDead", isDead); 
+        Animator?.SetBool("isDead", isDead); 
         GetComponent<Collider2D>().enabled = false;
     }
 

@@ -37,13 +37,13 @@ public class AIChaser : MonoBehaviour
         if(EnemyAI.isDead) {
             transform.gameObject.SetActive(false);
         } else {
-            if(!EnemyAI.isAttacking) {
+            if(!EnemyAI.CharStatus.Equals(Charactor.CharactorStatus.Attack)) {
                 if(TargetModel != null) {
                     //Debug.Log("TargetModel != null)");
                     targetVisable = CheckTargetVisible();
                     
                     if(targetVisable) {
-                        EnemyAI.SetMovement(TargetModel.position - transform.position);
+                        //EnemyAI.SetMovement(TargetModel.position - transform.position);
                     }
                     else {
                         StartCoroutine(ChaseModeEndingProcess());
@@ -126,7 +126,7 @@ public class AIChaser : MonoBehaviour
             EnemyAI.isPatroling = true;
             EnemyAI.isChasing = false;
             targetVisable = false;
-            EnemyAI.SetDefaultMovement();
+            //EnemyAI.SetDefaultMovement();
             transform.gameObject.SetActive(false);
         }
     }

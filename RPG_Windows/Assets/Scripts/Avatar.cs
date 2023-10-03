@@ -90,7 +90,7 @@ public class Avatar : Charactor
     }
 
     protected override void FixedUpdate() {
-        if(isJumping && !Status.Equals(CharactorStatus.Attack)) {
+        if(isJumping && !CharStatus.Equals(CharactorStatus.Attack)) {
             transform.position = GetWorldPosByCoordinate(m_Coordinate) - new Vector3(0, 1.7f);   // 預設中心點是(x, y+1.7)
             HandleJumpingProcess(jumpState);
         }
@@ -643,10 +643,10 @@ public class Avatar : Charactor
         result.z = coord.z;
 
         Debug.Log("PredictNextJumpPoint before add velocity result: "+result);
-        Debug.Log("PredictNextJumpPoint before add velocity: "+m_Rigidbody.velocity);
+        Debug.Log("PredictNextJumpPoint before add velocity: "+Rigidbody.velocity);
         Debug.Log("PredictNextJumpPoint before add Time.deltaTime: "+Time.deltaTime);
 
-        result = result + (Vector3)(m_Rigidbody.velocity * Time.deltaTime);
+        result = result + (Vector3)(Rigidbody.velocity * Time.deltaTime);
 
         return result;
     }
