@@ -15,7 +15,7 @@ public class BossFight_1 : MonoBehaviour
 
     [SerializeField] private ColliderTrigger colliderTrigger;
     private Stage stage;
-    private Enemy_Abstract boss;
+    private Enemy boss;
     private float timeToStartBattle = 3f;
     private float indicatorDuration = 3f;
     private float projectileDuration = 2.5f;

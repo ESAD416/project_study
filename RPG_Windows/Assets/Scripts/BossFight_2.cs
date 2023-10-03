@@ -19,7 +19,7 @@ public class BossFight_2 : MonoBehaviour
     private int countOfRandomLaunches = 2;
     private Coroutine attackRoutine;
 
-    [SerializeField] private Enemy_Abstract boss;
+    [SerializeField] private Enemy boss;
     [SerializeField] private Player player;
 
     [SerializeField] private AOEIndicatorCtrl indicatorCtrl;

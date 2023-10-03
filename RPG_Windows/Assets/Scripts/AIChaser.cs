@@ -7,7 +7,7 @@ public class AIChaser : MonoBehaviour
     [Header("Chaser Parameters")]
     [Range(.1f, 5)]
     public float chaseRadius;
-    [SerializeField] private Enemy_Abstract EnemyAI;
+    [SerializeField] private Enemy EnemyAI;
     [SerializeField] private LayerMask targetLayer;
     [SerializeField] private LayerMask visibilityLayer;
     public bool targetVisable;

@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 public class AIAttackDetection : MonoBehaviour
 {
-    public Enemy_Abstract enemyAI;
+    public Enemy enemyAI;
 
     [Header("Detector Parameters")]
     [Range(.1f, 1)]

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy_Horizontal : Enemy_Abstract
+public class Enemy_Horizontal : Enemy
 {
     [Header("Detector Parameters")]
     public bool moveRight;

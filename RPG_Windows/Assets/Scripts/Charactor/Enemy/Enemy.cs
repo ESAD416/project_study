@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Enemy_Abstract : Charactor
+public class Enemy : Charactor
 {
     [SerializeField] protected HealthBar healthBar;
 

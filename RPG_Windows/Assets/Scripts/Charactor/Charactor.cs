@@ -59,7 +59,7 @@ public abstract class Charactor : MonoBehaviour
 
     #region 角色狀態
     public enum CharactorStatus {
-        Idle, Move, Jump, Fall, Staircase, Attack, Dead,
+        Idle, Move, Attack, Dead,
     }
     protected CharactorStatus m_Status;
     public CharactorStatus CharStatus => m_Status;

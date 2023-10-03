@@ -2,15 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Movement_Charactor : MonoBehaviour
+public class Movement_Enemy : MonoBehaviour
 {
-    [SerializeField] protected Charactor m_charactor;
+    [SerializeField] protected Enemy m_enemy;
     protected Rigidbody2D m_targetRdbd;
     protected SpriteRenderer m_targetSprtRenderer;
     protected Animator m_targetAnimator;
-    
 
     [Header("Movement Parameters")]
+    [SerializeField] protected Vector3 defaultMovement = Vector3.left;
     [SerializeField] protected float m_moveSpeed = 11f;
     /// <summary>
     /// 角色移速
@@ -53,21 +53,11 @@ public class Movement_Charactor : MonoBehaviour
             return Movement.x != 0 || Movement.y != 0;
         }
     }
-    /// <summary>
-    /// 角色目前是否能移動
-    /// </summary>
-    // public bool cantMove {
-    //     get {
-    //         false;
-            // bool jumpingUpButNotFinish = isJumping && jumpState == JumpState.JumpUp && jumpIncrement < 1f;
-            // return jumpingUpButNotFinish || jumpHitColli || (isTakingHit && !hyperArmor);
-    //     }
-    // }
 
     protected virtual void Awake() {
-        m_targetRdbd = m_charactor.Rigidbody;
-        m_targetSprtRenderer = m_charactor.SprtRenderer;
-        m_targetAnimator = m_charactor.Animator;
+        m_targetRdbd = m_enemy.Rigidbody;
+        m_targetSprtRenderer = m_enemy.SprtRenderer;
+        m_targetAnimator = m_enemy.Animator;
     }
 
     // Start is called before the first frame update
@@ -79,14 +69,17 @@ public class Movement_Charactor : MonoBehaviour
     // Update is called once per frame
     protected virtual void Update()
     {
-        SetAnimateMovementPara(Movement, FacingDir);
+        
     }
 
     protected virtual void FixedUpdate() {
-        if(m_charactor.CharStatus.Equals(Charactor.CharactorStatus.Attack)) {
+        if(m_enemy.CharStatus.Equals(Charactor.CharactorStatus.Attack)) {
             //Debug.Log("attacking");
             SetMovement(Vector3.zero);
+        } else if(m_enemy.CharStatus.Equals(Charactor.CharactorStatus.Dead)) {
+            //SetMovement(Vector3.zero);
         }
+        // Move();
 
         // if(!cantMove) {
         //     if(isJumping && jumpState == JumpState.JumpUp) {
@@ -104,19 +97,7 @@ public class Movement_Charactor : MonoBehaviour
         // transform.Translate(movement*moveSpeed*Time.deltaTime);
     }
 
-    public void MoveWhileJump() {
-        //m_targetRdbd.velocity = Movement.normalized * jumpingMovementVariable * MoveSpeed;
-    }
-
-    protected void SetAnimateMovementPara(Vector3 movement, Vector2 facingDir) {
-        // Debug.Log("movement.x: "+movement.x + "movement.y: "+movement.y);
-        // Debug.Log("facingDir.x: "+facingDir.x + "facingDir.y: "+facingDir.y);
-        Dictionary<string, float> dict = new Dictionary<string, float>();
-        dict.Add("movementX", movement.x);
-        dict.Add("movementY", movement.y);
-        dict.Add("facingDirX", facingDir.x);
-        dict.Add("facingDirY", facingDir.y);
-
-        if(m_targetAnimator != null) AnimeUtils.SetAnimateFloatPara(m_targetAnimator, dict);
+    public void SetDefaultMovement() {
+        SetMovement(defaultMovement);
     }
 }

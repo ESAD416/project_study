@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyPathController : MonoBehaviour
 {
-    [SerializeField] private Enemy_Abstract Enemy;
+    [SerializeField] private Enemy Enemy;
     [SerializeField] private AIChaser AIChaser;
     [SerializeField] private bool isHorizontal;
 
