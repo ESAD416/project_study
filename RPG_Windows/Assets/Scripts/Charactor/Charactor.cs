@@ -160,6 +160,9 @@ public abstract class Charactor : MonoBehaviour
 
     protected virtual void Awake() {
         m_Coordinate = transform.position;
+    }
+
+    protected virtual void OnEnable() {
         m_Status = CharactorStatus.Idle;
     }
 
@@ -181,7 +184,7 @@ public abstract class Charactor : MonoBehaviour
         //SetAnimateMovementPara(Movement, FacingDir);
         if(!string.IsNullOrEmpty(m_InfoStorage.jumpCollidersName)) {
             if(isJumping) {
-            FocusCollidersWithHeightWhileJumping();
+                FocusCollidersWithHeightWhileJumping();
             } else {
                 FocusCollidersWithHeight();
             }

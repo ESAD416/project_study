@@ -8,9 +8,9 @@ using static JumpMechanismUtils;
 public class Avatar : Charactor
 {
     [SerializeField] protected Movement_Avatar m_targetMovement;
-    private AvatarInputActionsControls m_inputControls;
+    protected AvatarInputActionsControls m_inputControls;
     public AvatarInputActionsControls InputCtrl => m_inputControls;
-    private bool isHoldInteraction = false;
+    protected bool isHoldInteraction = false;
 
 
     [Header("Raycast Parameters")]
@@ -34,12 +34,13 @@ public class Avatar : Charactor
     protected override void Awake() {
         base.Awake();
 
+        currHeight = m_InfoStorage.initialHeight;
+        m_inputControls = new AvatarInputActionsControls();
+    }
+
+    protected override void OnEnable() {
         m_raycastEnd = new Vector2(m_raycastStart.position.x, m_raycastStart.position.y) + new Vector2(0, -1) * 0.35f;   // 預設射線終點
         transform.position = new Vector3(m_InfoStorage.initialPos.x, m_InfoStorage.initialPos.y, m_InfoStorage.initialHeight);
-        currHeight = m_InfoStorage.initialHeight;
-
-        m_inputControls = new AvatarInputActionsControls();
-        Debug.Log("Avatar Awake");
     }
 
     protected override void Start() {
@@ -50,8 +51,6 @@ public class Avatar : Charactor
 
         base.Start();
     }
-
-    
 
     protected override void Update()
     {
@@ -98,9 +97,7 @@ public class Avatar : Charactor
         base.FixedUpdate();
     }
 
-    private void OnEnable() {
-        m_inputControls.Lamniat_Land.Enable();
-    }
+    
 
     #region 碰撞偵測
 

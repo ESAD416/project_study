@@ -5,9 +5,9 @@ using UnityEngine;
 public class Movement_Avatar : MonoBehaviour
 {
     [SerializeField] protected Avatar m_avatar;
-    protected Rigidbody2D m_targetRdbd;
-    protected SpriteRenderer m_targetSprtRenderer;
-    protected Animator m_targetAnimator;
+    protected Rigidbody2D m_avatarRdbd;
+    protected SpriteRenderer m_avatarSprtRenderer;
+    protected Animator m_avatarAnimator;
     
 
     [Header("Movement Parameters")]
@@ -64,9 +64,9 @@ public class Movement_Avatar : MonoBehaviour
     // }
 
     protected virtual void Awake() {
-        m_targetRdbd = m_avatar.Rigidbody;
-        m_targetSprtRenderer = m_avatar.SprtRenderer;
-        m_targetAnimator = m_avatar.Animator;
+        m_avatarRdbd = m_avatar.Rigidbody;
+        m_avatarSprtRenderer = m_avatar.SprtRenderer;
+        m_avatarAnimator = m_avatar.Animator;
     }
 
     // Start is called before the first frame update
@@ -98,7 +98,7 @@ public class Movement_Avatar : MonoBehaviour
 
     public void Move() {
         //Debug.Log("FixedUpdate movement.normalized: "+movement.normalized+", moveSpeed: "+moveSpeed );
-        m_targetRdbd.velocity = Movement.normalized * MoveSpeed;
+        m_avatarRdbd.velocity = Movement.normalized * MoveSpeed;
         //m_Rigidbody.AddForce(movement.normalized* moveSpeed * Time.fixedDeltaTime, ForceMode2D.Force);
         // transform.Translate(movement*moveSpeed*Time.deltaTime);
     }
@@ -116,6 +116,6 @@ public class Movement_Avatar : MonoBehaviour
         dict.Add("facingDirX", facingDir.x);
         dict.Add("facingDirY", facingDir.y);
 
-        if(m_targetAnimator != null) AnimeUtils.SetAnimateFloatPara(m_targetAnimator, dict);
+        if(m_avatarAnimator != null) AnimeUtils.SetAnimateFloatPara(m_avatarAnimator, dict);
     }
 }

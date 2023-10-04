@@ -8,6 +8,9 @@ using static JumpMechanismUtils;
 
 public class Avatar_Lamniat : Avatar
 {
-
+    protected override void OnEnable() {
+        base.OnEnable();
+        m_inputControls.Lamniat_Land.Enable();
+    }
 
 }

@@ -20,9 +20,9 @@ public class Movement_Lamniat : Movement_Avatar
             SetMovement(new Vector3(inputVecter2.x, inputVecter2.y));
             m_avatar.SetStatus(Charactor.CharactorStatus.Move);
 
-            var faceLeft = m_targetSprtRenderer.flipX;
+            var faceLeft = m_avatarSprtRenderer.flipX;
             //Debug.Log("faceLeft = " + faceLeft);
-            if(m_targetSprtRenderer!= null) m_targetSprtRenderer.flipX = AnimeUtils.isLeftForHorizontalAnimation(Movement, faceLeft);
+            if(m_avatarSprtRenderer!= null) m_avatarSprtRenderer.flipX = AnimeUtils.isLeftForHorizontalAnimation(Movement, faceLeft);
         };
 
         inputControls.Lamniat_Land.Movement.canceled += content => {

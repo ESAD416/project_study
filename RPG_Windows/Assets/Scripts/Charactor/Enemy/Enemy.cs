@@ -4,9 +4,14 @@ using UnityEngine;
 
 public class Enemy : Charactor
 {
+    [SerializeField] protected Movement_Enemy m_targetMovement;
     [SerializeField] protected HealthBar healthBar;
 
     #region 敵人狀態
+
+    private EnemyState currentState;
+    protected EnemyState patrolState;
+    protected EnemyState chaseState;
 
     public enum EnemyStatus {
         Patrol, Chase, 
@@ -23,7 +28,12 @@ public class Enemy : Charactor
     protected override void Awake()
     {
         base.Awake();
+    }
+
+    protected override void OnEnable() {
         e_Status = EnemyStatus.Patrol;
+        currentState = patrolState;
+        currentState.OnEnter(this);
     }
 
     // Start is called before the first frame update
@@ -42,11 +52,16 @@ public class Enemy : Charactor
 
         UpdateCoordinate();
 
+        currentState.OnUpdate();
         //m_Animator?.SetFloat("moveSpeed", MoveSpeed);
     }
 
     protected override void FixedUpdate() {
-        
+        currentState.OnFixedUpdate();
+    }
+
+    protected virtual void OnDisable() {
+        currentState.OnExit();
     }
 
     public virtual void OnAttack() {

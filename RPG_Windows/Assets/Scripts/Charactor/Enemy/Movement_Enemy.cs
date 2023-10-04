@@ -4,10 +4,16 @@ using UnityEngine;
 
 public class Movement_Enemy : MonoBehaviour
 {
+    #region 基本物件
+
     [SerializeField] protected Enemy m_enemy;
-    protected Rigidbody2D m_targetRdbd;
-    protected SpriteRenderer m_targetSprtRenderer;
-    protected Animator m_targetAnimator;
+    protected Rigidbody2D m_enemyRdbd;
+    protected SpriteRenderer m_enemySprtRenderer;
+    protected Animator m_enemyAnimator;
+
+    #endregion
+
+    #region 基本參數
 
     [Header("Movement Parameters")]
     [SerializeField] protected Vector3 defaultMovement = Vector3.left;
@@ -54,16 +60,18 @@ public class Movement_Enemy : MonoBehaviour
         }
     }
 
+    # endregion
+
     protected virtual void Awake() {
-        m_targetRdbd = m_enemy.Rigidbody;
-        m_targetSprtRenderer = m_enemy.SprtRenderer;
-        m_targetAnimator = m_enemy.Animator;
+        m_enemyRdbd = m_enemy.Rigidbody;
+        m_enemySprtRenderer = m_enemy.SprtRenderer;
+        m_enemyAnimator = m_enemy.Animator;
     }
 
     // Start is called before the first frame update
     protected virtual void Start()
     {
-        
+        SetDefaultMovement();
     }
 
     // Update is called once per frame
@@ -73,28 +81,23 @@ public class Movement_Enemy : MonoBehaviour
     }
 
     protected virtual void FixedUpdate() {
-        if(m_enemy.CharStatus.Equals(Charactor.CharactorStatus.Attack)) {
-            //Debug.Log("attacking");
+        if(m_enemy.CharStatus.Equals(Charactor.CharactorStatus.Dead) || 
+           m_enemy.CharStatus.Equals(Charactor.CharactorStatus.Attack)) {
             SetMovement(Vector3.zero);
-        } else if(m_enemy.CharStatus.Equals(Charactor.CharactorStatus.Dead)) {
-            //SetMovement(Vector3.zero);
         }
-        // Move();
+        Move();
 
         // if(!cantMove) {
         //     if(isJumping && jumpState == JumpState.JumpUp) {
         //         MoveWhileJump();
         //     } else {
-        Move();
+        //Move();
         //     }
         // }
     }
 
     public void Move() {
-        //Debug.Log("FixedUpdate movement.normalized: "+movement.normalized+", moveSpeed: "+moveSpeed );
-        m_targetRdbd.velocity = Movement.normalized * MoveSpeed;
-        //m_Rigidbody.AddForce(movement.normalized* moveSpeed * Time.fixedDeltaTime, ForceMode2D.Force);
-        // transform.Translate(movement*moveSpeed*Time.deltaTime);
+        m_enemyRdbd.velocity = Movement.normalized * MoveSpeed;
     }
 
     public void SetDefaultMovement() {

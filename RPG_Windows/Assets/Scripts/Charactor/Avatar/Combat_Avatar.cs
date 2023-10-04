@@ -5,8 +5,8 @@ using UnityEngine;
 public class Combat_Avatar : MonoBehaviour
 {
     [SerializeField] protected Avatar m_avatar;
-    [SerializeField] protected Movement_Avatar m_targetMovement;
-    protected Animator m_targetAnimator;
+    [SerializeField] protected Movement_Avatar m_avatarMovement;
+    protected Animator m_avatarAnimator;
 
     /// <summary>
     /// 角色是否為正在攻擊中
@@ -26,7 +26,7 @@ public class Combat_Avatar : MonoBehaviour
     protected Vector3 movementAfterAttack;
 
     protected virtual void Awake() {
-        m_targetAnimator = m_avatar.Animator;
+        m_avatarAnimator = m_avatar.Animator;
     }
 
     // Start is called before the first frame update
@@ -44,7 +44,7 @@ public class Combat_Avatar : MonoBehaviour
     protected IEnumerator Attack() {
         Debug.Log("Combat_Avatar attack start");
         isAttacking = true;
-        m_targetAnimator?.SetTrigger("attack");
+        m_avatarAnimator?.SetTrigger("attack");
         m_avatar.SetStatus(Charactor.CharactorStatus.Attack);
         yield return new WaitForSeconds(attackClipTime);  // hardcasted casted time for debugged
         FinishAttack();
@@ -58,9 +58,9 @@ public class Combat_Avatar : MonoBehaviour
 
         isAttacking = false;
 
-        m_targetMovement.SetMovement(movementAfterAttack);
+        m_avatarMovement.SetMovement(movementAfterAttack);
         
-        if(m_targetMovement.isMoving) m_avatar.SetStatus(Charactor.CharactorStatus.Move);
+        if(m_avatarMovement.isMoving) m_avatar.SetStatus(Charactor.CharactorStatus.Move);
         else m_avatar.SetStatus(Charactor.CharactorStatus.Idle);
 
         movementAfterAttack = Vector3.zero;

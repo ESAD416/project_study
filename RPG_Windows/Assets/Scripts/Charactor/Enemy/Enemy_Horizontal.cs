@@ -22,7 +22,7 @@ public class Enemy_Horizontal : Enemy
 
         detectorL = leftDetector ?? null;
         detectorR = rightDetector ?? null;
-       SetSpriteRenderer(GetComponentInChildren<SpriteRenderer>());
+        SetSpriteRenderer(GetComponentInChildren<SpriteRenderer>());
         base.Start();
     }
 
@@ -30,14 +30,10 @@ public class Enemy_Horizontal : Enemy
         //Debug.Log("Update movement: "+movement);
         base.Update();
         UpdateDetector();
-        // Debug.Log("Enemy_Horizontal movement" + movement);
-        // Debug.Log("Enemy_Horizontal moveRight" + moveRight);
-        // Debug.Log("Enemy_Horizontal movement" + movement);
-        // Debug.Log("Enemy_Horizontal moveRight" + moveRight);
     }
 
     protected override void FixedUpdate() {
-        if(!isDead) {
+        if(!CharStatus.Equals(CharactorStatus.Dead)) {
             // Debug.Log("FixedUpdate isAttacking: "+isAttacking);
             // Debug.Log("FixedUpdate movement: "+movement);
             // Debug.Log("FixedUpdate movementAfterAttack: "+movementAfterAttack);
