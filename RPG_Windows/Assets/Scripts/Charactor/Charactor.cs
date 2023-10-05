@@ -10,6 +10,7 @@ public abstract class Charactor : MonoBehaviour
 {
     
     #region 角色物件
+    [Header("角色基本物件")]
     [SerializeField] protected Rigidbody2D m_Rigidbody;
     /// <summary>
     /// 角色物理剛體
@@ -32,7 +33,6 @@ public abstract class Charactor : MonoBehaviour
     /// <summary>
     /// 角色中心
     /// </summary>
-    [Header("Basic Parameters")]
     public Vector3 m_Center;
     /// <summary>
     /// 角色底部
@@ -58,6 +58,8 @@ public abstract class Charactor : MonoBehaviour
     #endregion
 
     #region 角色狀態
+    private BaseStateMachine_Charactor m_currentState;
+
     public enum CharactorStatus {
         Idle, Move, Attack, Dead,
     }
@@ -80,7 +82,7 @@ public abstract class Charactor : MonoBehaviour
     #endregion
 
     #region 血量系統參數
-
+    [Header("角色參數")]
     /// <summary>
     /// 最大血量
     /// </summary>
@@ -98,7 +100,6 @@ public abstract class Charactor : MonoBehaviour
     #endregion
 
     #region 跳躍參數
-    [Header("Jumping Parameters")]
     public float currHeight = 0f;
     public float CurrentHeight => currHeight;
     public void SetCurrentHeight(float height) {
@@ -126,7 +127,6 @@ public abstract class Charactor : MonoBehaviour
     #endregion
     
     #region 受擊參數
-    [Header("TakingHit Parameters")]
     /// <summary>
     /// 正在受擊
     /// </summary>
@@ -147,7 +147,6 @@ public abstract class Charactor : MonoBehaviour
     #endregion
 
     #region 眩暈參數
-    [Header("Stunned Parameters")]
     public bool stunnable;
 
     protected bool isStunned = false;
@@ -163,7 +162,6 @@ public abstract class Charactor : MonoBehaviour
     }
 
     protected virtual void OnEnable() {
-        m_Status = CharactorStatus.Idle;
     }
 
     // Start is called before the first frame update
@@ -180,15 +178,17 @@ public abstract class Charactor : MonoBehaviour
         m_Buttom = m_ButtomObj?.position ?? Vector3.zero;
 
         UpdateCoordinate();
-        HandleAnimatorLayers();
-        //SetAnimateMovementPara(Movement, FacingDir);
-        if(!string.IsNullOrEmpty(m_InfoStorage.jumpCollidersName)) {
-            if(isJumping) {
-                FocusCollidersWithHeightWhileJumping();
-            } else {
-                FocusCollidersWithHeight();
+        
+        if(m_InfoStorage != null) {
+            if(!string.IsNullOrEmpty(m_InfoStorage.jumpCollidersName)) {
+                if(isJumping) {
+                    FocusCollidersWithHeightWhileJumping();
+                } else {
+                    FocusCollidersWithHeight();
+                }
             }
         }
+        
     }
 
     protected virtual void FixedUpdate() {
@@ -223,14 +223,6 @@ public abstract class Charactor : MonoBehaviour
         return result;
     }
 
-    #endregion
-
-    #region 動畫控制
-    public void HandleAnimatorLayers() {
-        if(CharStatus.Equals(Charactor.CharactorStatus.Attack)) AnimeUtils.ActivateAnimatorLayer(Animator, "AttackLayer");
-        else if(CharStatus.Equals(Charactor.CharactorStatus.Move)) AnimeUtils.ActivateAnimatorLayer(Animator, "MoveLayer");
-        else AnimeUtils.ActivateAnimatorLayer(Animator, "IdleLayer");
-    }
     #endregion
     
     #region 跳躍控制

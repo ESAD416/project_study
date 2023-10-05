@@ -19,7 +19,7 @@ public class Combat_Lamniat : Combat_Avatar
 
         inputControls.Lamniat_Land.Attack.started += content => {
             Debug.Log("Lamniat_Land.Attack.started");
-            if(m_avatar.CharStatus.Equals(Charactor.CharactorStatus.Move)) {
+            if(m_avatar.CurrentBaseState.State.Equals(BaseStateMachine_Charactor.BaseState.Move)) {
                 m_avatarMovement.SetFacingDir(m_avatarMovement.Movement);
                 //m_avatar.SetFacingDir(m_avatar.Movement);
                 movementAfterAttack = m_avatarMovement.Movement;

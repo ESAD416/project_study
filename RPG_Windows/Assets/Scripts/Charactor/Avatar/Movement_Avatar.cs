@@ -82,10 +82,10 @@ public class Movement_Avatar : MonoBehaviour
     }
 
     protected virtual void FixedUpdate() {
-        if(m_avatar.CharStatus.Equals(Charactor.CharactorStatus.Attack)) {
-            //Debug.Log("attacking");
-            SetMovement(Vector3.zero);
-        }
+        // if(m_avatar.CharStatus.Equals(Charactor.CharactorStatus.Attack)) {
+        //     //Debug.Log("attacking");
+        //     SetMovement(Vector3.zero);
+        // }
 
         // if(!cantMove) {
         //     if(isJumping && jumpState == JumpState.JumpUp) {

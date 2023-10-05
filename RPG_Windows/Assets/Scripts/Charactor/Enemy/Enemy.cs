@@ -4,14 +4,26 @@ using UnityEngine;
 
 public class Enemy : Charactor
 {
-    [SerializeField] protected Movement_Enemy m_targetMovement;
+    [SerializeField] protected Movement_Enemy m_enemyMovement;
     [SerializeField] protected HealthBar healthBar;
 
     #region 敵人狀態
+    private BaseStateMachine_Enemy m_currentBaseState;
+    public BaseStateMachine_Enemy CurrentBaseState => m_currentBaseState;
+    protected BaseStateMachine_Enemy m_idle;
+    public BaseStateMachine_Enemy Idle => m_idle;
+    protected BaseStateMachine_Enemy m_move;
+    public BaseStateMachine_Enemy Move => m_move;
+    protected BaseStateMachine_Enemy m_dead;
+    public BaseStateMachine_Enemy Dead => m_dead;
 
-    private EnemyState currentState;
-    protected EnemyState patrolState;
-    protected EnemyState chaseState;
+
+    private EnemyStateMachine m_currentEnemyState;
+    public EnemyStateMachine CurrentEnemyState => m_currentEnemyState;
+    protected EnemyStateMachine m_patrol;
+    protected EnemyStateMachine Patrol => m_patrol;
+    protected EnemyStateMachine m_chase;
+    protected EnemyStateMachine Chase => m_chase;
 
     public enum EnemyStatus {
         Patrol, Chase, 
@@ -31,9 +43,10 @@ public class Enemy : Charactor
     }
 
     protected override void OnEnable() {
-        e_Status = EnemyStatus.Patrol;
-        currentState = patrolState;
-        currentState.OnEnter(this);
+        m_currentBaseState = m_idle;
+        m_currentBaseState.OnEnter(this);
+
+        base.OnEnable();
     }
 
     // Start is called before the first frame update
@@ -47,21 +60,18 @@ public class Enemy : Charactor
     // Update is called once per frame
     protected override void Update() {
         //Debug.Log("moveSpeed: "+moveSpeed);
-        m_Center = m_CenterObj?.position ?? Vector3.zero;
-        m_Buttom = m_ButtomObj?.position ?? Vector3.zero;
+        base.Update();
 
-        UpdateCoordinate();
-
-        currentState.OnUpdate();
+        m_currentBaseState.OnUpdate();
         //m_Animator?.SetFloat("moveSpeed", MoveSpeed);
     }
 
     protected override void FixedUpdate() {
-        currentState.OnFixedUpdate();
+        m_currentBaseState.OnFixedUpdate();
     }
 
     protected virtual void OnDisable() {
-        currentState.OnExit();
+        m_currentBaseState.OnExit();
     }
 
     public virtual void OnAttack() {

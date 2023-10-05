@@ -21497,7 +21497,19 @@ MonoBehaviour:
   OnBegin:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1065227027}
+      - m_Target: {fileID: 1065227032}
+        m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1065227031}
         m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
         m_MethodName: set_enabled
         m_Mode: 6
@@ -21512,7 +21524,19 @@ MonoBehaviour:
   OnDone:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1065227027}
+      - m_Target: {fileID: 1065227032}
+        m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 1065227031}
         m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
         m_MethodName: set_enabled
         m_Mode: 6
@@ -21552,7 +21576,7 @@ MonoBehaviour:
   knockOffThrust: 0
   hyperArmor: 0
   stunnable: 0
-  m_targetMovement: {fileID: 1065227032}
+  m_avatarMovement: {fileID: 1065227032}
   m_raycastStartPosition:
   - {fileID: 1224246047}
   - {fileID: 1197875711}
@@ -21674,7 +21698,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_avatar: {fileID: 1065227027}
-  m_avatarMovement: {fileID: 0}
+  m_avatarMovement: {fileID: 1065227032}
   isAttacking: 0
   attackClipTime: 0.3
 --- !u!114 &1065227032
@@ -32347,7 +32371,7 @@ MonoBehaviour:
   knockOffThrust: 0
   hyperArmor: 0
   stunnable: 0
-  m_targetMovement: {fileID: 0}
+  m_enemyMovement: {fileID: 1460614680}
   healthBar: {fileID: 0}
   isPatroling: 0
   isChasing: 0

@@ -2,12 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy_Boss2 : Enemy
+public class Boss2 : Enemy
 {
+    protected BossStateMachine m_beforeStart;
+    protected BossStateMachine m_duringBattle;
+    protected BossStateMachine m_bossPerformance;
+    protected BossStateMachine m_battleFinish;
 
     protected override void Awake() {
         base.Awake();
-        patrolState = new EnemyPatrolState();
+        m_idle = new IdleState_Boss2(this);
+        m_move = new MoveState_Boss2(this);
+        m_dead = new DeadState_Boss2(this);
+
+
     }
     protected override void OnEnable() {
         base.OnEnable();

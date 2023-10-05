@@ -2,7 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class EnemyState {
+public abstract class EnemyStateMachine
+{
+    public enum EnemyState {
+        Patrol, Chase, 
+    }
+    protected EnemyState m_eState;
+    public EnemyState State => m_eState;
 
     protected Enemy currentEnemy;
 
