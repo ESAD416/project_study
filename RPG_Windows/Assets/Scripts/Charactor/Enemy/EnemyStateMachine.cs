@@ -12,6 +12,7 @@ public abstract class EnemyStateMachine
 
     protected Enemy currentEnemy;
 
+    public abstract void OnEnter();
     public abstract void OnEnter(Enemy enemy);
     public abstract void OnUpdate();
     public abstract void OnFixedUpdate();

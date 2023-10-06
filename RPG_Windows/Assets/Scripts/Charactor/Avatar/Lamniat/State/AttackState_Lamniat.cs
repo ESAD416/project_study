@@ -18,6 +18,7 @@ public class AttackState_Lamniat : BaseStateMachine_Avatar
     public override void OnEnter(Avatar avatar)
     {
         this.currentAvatar = avatar;
+        OnEnter();
     }
 
     public override void OnUpdate()

@@ -16,7 +16,7 @@ public class Avatar : Charactor
     /// </summary>
     public Movement_Avatar AvatarMovement => m_avatarMovement;
     protected AvatarInputActionsControls m_inputControls;
-    public AvatarInputActionsControls InputCtrl => m_inputControls;
+    public AvatarInputActionsControls InputCtrl => this.m_inputControls;
     protected bool isHoldInteraction = false;
 
     [SerializeField] private List<Transform> m_raycastStartPosition = new List<Transform>();
@@ -40,8 +40,12 @@ public class Avatar : Charactor
     #region 可操作角色狀態
 
     private BaseStateMachine_Avatar m_currentBaseState;
-    public BaseStateMachine_Avatar CurrentBaseState => m_currentBaseState;
-    public void SetCurrentState(BaseStateMachine_Avatar state) => m_currentBaseState = state;
+    public BaseStateMachine_Avatar CurrentBaseState => this.m_currentBaseState;
+    public void SetCurrentBaseState(BaseStateMachine_Avatar state) {
+        this.m_currentBaseState.OnExit();
+        this.m_currentBaseState = state;
+        this.m_currentBaseState.OnEnter(this);
+    }
 
     protected BaseStateMachine_Avatar m_idle;
     public BaseStateMachine_Avatar Idle => m_idle;
@@ -68,16 +72,16 @@ public class Avatar : Charactor
         transform.position = new Vector3(m_InfoStorage.initialPos.x, m_InfoStorage.initialPos.y, m_InfoStorage.initialHeight);
 
         m_currentBaseState = m_idle;
-        m_currentBaseState.OnEnter(this);
+        m_currentBaseState.OnEnter();
     }
 
     protected override void Start() {
+        base.Start();
+
         jumpPoint.OnPlayerEnterTriggerEvent.AddListener(() => {
             //Debug.Log("ColliderTrigger jumpPointTrigger = true");
             jumpPointTrigger = true;
         });
-
-        base.Start();
     }
 
     protected override void Update()
@@ -115,6 +119,7 @@ public class Avatar : Charactor
         //Debug.Log("GetCoordinate: "+GetCoordinate());
 
         m_currentBaseState.OnUpdate();
+
         base.Update();
     }
 

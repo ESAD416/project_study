@@ -6,7 +6,7 @@ using UnityEngine;
 [RequireComponent(typeof(LineRenderer))]
 public class Indicator_CurveLine : MonoBehaviour
 {
-    public Enemy_Horizontal enemy;
+    public Enemy enemy;
     public Vector3 endPos;
     public LineRenderer Line;
     public bool isQuadratic;

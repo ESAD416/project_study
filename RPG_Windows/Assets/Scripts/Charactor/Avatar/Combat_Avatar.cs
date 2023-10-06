@@ -46,7 +46,7 @@ public class Combat_Avatar : MonoBehaviour
         isAttacking = true;
         m_avatarAnimator?.SetTrigger("attack");
         //m_avatar.SetStatus(Charactor.CharactorStatus.Attack);
-        m_avatar.SetCurrentState(m_avatar.Attack);
+        m_avatar.SetCurrentBaseState(m_avatar.Attack);
         yield return new WaitForSeconds(attackClipTime);  // hardcasted casted time for debugged
         FinishAttack();
     }
@@ -61,8 +61,8 @@ public class Combat_Avatar : MonoBehaviour
 
         m_avatarMovement.SetMovement(movementAfterAttack);
         
-        if(m_avatarMovement.isMoving) m_avatar.SetCurrentState(m_avatar.Move);
-        else m_avatar.SetCurrentState(m_avatar.Idle);
+        if(m_avatarMovement.isMoving) m_avatar.SetCurrentBaseState(m_avatar.Move);
+        else m_avatar.SetCurrentBaseState(m_avatar.Idle);
 
         movementAfterAttack = Vector3.zero;
         Debug.Log("Combat_Avatar FinishAttack end");

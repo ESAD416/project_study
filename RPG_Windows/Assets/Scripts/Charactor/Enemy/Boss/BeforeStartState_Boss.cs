@@ -2,21 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MoveState_Boss2 : BaseStateMachine_Enemy
+public class BeforeStartState_Boss : BossStateMachine
 {
-    public MoveState_Boss2(Enemy enemy) 
+
+    public BeforeStartState_Boss(Enemy boss2)
     {
-        this.currentEnemy = enemy;
-        this.m_bState = BaseState.Move;
+        this.m_stage = BossState.BeforeStart;
+        this.currentEnemy = boss2;
     }
 
     public override void OnEnter()
     {
         // OnEnter
     }
-    public override void OnEnter(Enemy enemy)
+    public override void OnEnter(Enemy boss2)
     {
-        this.currentEnemy = enemy;
+        this.currentEnemy = boss2;
+        OnEnter();
     }
 
     public override void OnUpdate()

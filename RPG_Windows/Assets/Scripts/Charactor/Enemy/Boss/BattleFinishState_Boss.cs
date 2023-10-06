@@ -2,21 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IdleState_Boss2 : BaseStateMachine_Enemy
+public class BattleFinishState_Boss : BossStateMachine
 {
-    public IdleState_Boss2(Enemy enemy) 
+    public BattleFinishState_Boss(Enemy boss2)
     {
-        this.currentEnemy = enemy;
-        this.m_bState = BaseState.Idle;
+        this.m_stage = BossState.BattleFinish;
+        this.currentEnemy = boss2;
     }
 
     public override void OnEnter()
     {
         // OnEnter
     }
-    public override void OnEnter(Enemy enemy)
+    public override void OnEnter(Enemy boss2)
     {
-        this.currentEnemy = enemy;
+        this.currentEnemy = boss2;
+        OnEnter();
     }
 
     public override void OnUpdate()
@@ -33,4 +34,6 @@ public class IdleState_Boss2 : BaseStateMachine_Enemy
     {
         // OnExit
     }
+
+    
 }

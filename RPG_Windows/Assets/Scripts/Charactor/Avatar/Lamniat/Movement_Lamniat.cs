@@ -19,7 +19,7 @@ public class Movement_Lamniat : Movement_Avatar
             SetFacingDir(inputVecter2);
             SetMovement(new Vector3(inputVecter2.x, inputVecter2.y));
             //m_avatar.SetStatus(Charactor.CharactorStatus.Move);
-            m_avatar.SetCurrentState(m_avatar.Move);
+            m_avatar.SetCurrentBaseState(m_avatar.Move);
 
             var faceLeft = m_avatarSprtRenderer.flipX;
             //Debug.Log("faceLeft = " + faceLeft);
@@ -29,7 +29,7 @@ public class Movement_Lamniat : Movement_Avatar
         inputControls.Lamniat_Land.Movement.canceled += content => {
             SetMovement(Vector3.zero);
             //m_avatar.SetStatus(Charactor.CharactorStatus.Idle);
-            m_avatar.SetCurrentState(m_avatar.Idle);
+            m_avatar.SetCurrentBaseState(m_avatar.Idle);
         };
 
         inputControls.Lamniat_Land.Hold.performed += content => {

@@ -10,6 +10,12 @@ public class Enemy : Charactor
     #region 敵人狀態
     private BaseStateMachine_Enemy m_currentBaseState;
     public BaseStateMachine_Enemy CurrentBaseState => m_currentBaseState;
+    public void SetCurrentBaseState(BaseStateMachine_Enemy state) {
+        this.m_currentBaseState.OnExit();
+        this.m_currentBaseState = state;
+        this.m_currentBaseState.OnEnter(this);
+    }
+
     protected BaseStateMachine_Enemy m_idle;
     public BaseStateMachine_Enemy Idle => m_idle;
     protected BaseStateMachine_Enemy m_move;
@@ -20,17 +26,16 @@ public class Enemy : Charactor
 
     private EnemyStateMachine m_currentEnemyState;
     public EnemyStateMachine CurrentEnemyState => m_currentEnemyState;
+    public void SetCurrentEnemyState(EnemyStateMachine state) {
+        this.m_currentEnemyState.OnExit();
+        this.m_currentEnemyState = state;
+        this.m_currentEnemyState.OnEnter(this);
+    }
+
     protected EnemyStateMachine m_patrol;
     protected EnemyStateMachine Patrol => m_patrol;
     protected EnemyStateMachine m_chase;
     protected EnemyStateMachine Chase => m_chase;
-
-    public enum EnemyStatus {
-        Patrol, Chase, 
-    }
-    protected EnemyStatus e_Status;
-    public EnemyStatus EneStatus => e_Status;
-    public void SetStatus(EnemyStatus status) => this.e_Status = status;
 
     #endregion
 
@@ -43,10 +48,11 @@ public class Enemy : Charactor
     }
 
     protected override void OnEnable() {
-        m_currentBaseState = m_idle;
-        m_currentBaseState.OnEnter(this);
-
         base.OnEnable();
+
+        m_currentBaseState = m_idle;
+        m_currentBaseState.OnEnter();
+
     }
 
     // Start is called before the first frame update
@@ -60,14 +66,16 @@ public class Enemy : Charactor
     // Update is called once per frame
     protected override void Update() {
         //Debug.Log("moveSpeed: "+moveSpeed);
-        base.Update();
-
         m_currentBaseState.OnUpdate();
+
+        base.Update();
         //m_Animator?.SetFloat("moveSpeed", MoveSpeed);
     }
 
     protected override void FixedUpdate() {
         m_currentBaseState.OnFixedUpdate();
+
+        base.FixedUpdate();
     }
 
     protected virtual void OnDisable() {

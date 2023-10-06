@@ -6,7 +6,7 @@ using Cinemachine;
 
 public class AOEIndicatorCtrl : MonoBehaviour
 {
-    [SerializeField] private Enemy_Horizontal boss;
+    [SerializeField] private Enemy boss;
     [SerializeField] private GameObject areaIndicatorPrefab;
     [SerializeField] private GameObject curveLineIndicatorPrefab;
     [SerializeField] private int aoeCount = 4;
@@ -209,7 +209,7 @@ public class AOEIndicatorCtrl : MonoBehaviour
         }
 
     }
-    public Vector3 GetTrailedAOEPosition(Player target) {
+    public Vector3 GetTrailedAOEPosition(Avatar target) {
         if(trailedPos.Equals(Vector3.zero)) {
             // 第一次的生成
             trailedPos = new Vector3(0, -3);

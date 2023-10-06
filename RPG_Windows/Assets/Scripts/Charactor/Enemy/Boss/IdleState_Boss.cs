@@ -2,31 +2,32 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PatrolState_Enemy : EnemyStateMachine
+public class IdleState_Boss : BaseStateMachine_Enemy
 {
-    public PatrolState_Enemy(Enemy enemy) {
-        this.currentEnemy = enemy;
-        this.m_eState = EnemyState.Patrol;
+    public IdleState_Boss(Enemy boss2) 
+    {
+        this.currentEnemy = boss2;
+        this.m_bState = BaseState.Idle;
     }
 
     public override void OnEnter()
     {
         // OnEnter
     }
-    public override void OnEnter(Enemy enemy)
+    public override void OnEnter(Enemy boss2)
     {
-        this.currentEnemy = enemy;
+        this.currentEnemy = boss2;
         OnEnter();
     }
 
     public override void OnUpdate()
     {
-        // 發現Player(Avatar)就轉移至ChaseState
+        // OnUpdate
     }
 
     public override void OnFixedUpdate()
     {
-        // 物理引擎相關的Update
+        // OnFixedUpdate
     }
 
     public override void OnExit()

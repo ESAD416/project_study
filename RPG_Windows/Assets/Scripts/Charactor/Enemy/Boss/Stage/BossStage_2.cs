@@ -2,16 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BossFight_2 : MonoBehaviour
+public class BossStage_2 : MonoBehaviour
 {
-    public enum Stage {
-        WaitingToStart,
-        Stage1,
-        Stage2,
-        Stage3
-    }
+    [SerializeField] private Boss boss;
+    [SerializeField] private Avatar player;
+    [SerializeField] private AOEIndicatorCtrl indicatorCtrl;
 
-    private Stage stage;
     private float timeToStartBattle = 3f;
     private float indicatorDuration = 3f;
     private float attackDuration = 0.65f;
@@ -19,85 +15,46 @@ public class BossFight_2 : MonoBehaviour
     private int countOfRandomLaunches = 2;
     private Coroutine attackRoutine;
 
-    [SerializeField] private Enemy boss;
-    [SerializeField] private Player player;
-
-    [SerializeField] private AOEIndicatorCtrl indicatorCtrl;
-    
-
-
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         Invoke("StartBattle", timeToStartBattle);
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         
     }
 
-    private void BossFight_1_OnDead() {
-        Debug.Log("Boss Battle Over");
-    }
-
-    private void BossFight_1_OnDamaged() {
-        // Area took damage
-        switch(stage) {
-            case Stage.Stage1:
-                if(boss.HealthSystem.GetCurrHealthNormalized() <= 0.7f) {
-                    // if under 70% health
-                    StartNextStage();
-                }
-                break;
-            case Stage.Stage2:
-                if(boss.HealthSystem.GetCurrHealthNormalized() <= 0.5f) {
-                    // if under 50% health
-                    StartNextStage();
-                }
-                break;
-            case Stage.Stage3:
-                if(boss.HealthSystem.GetCurrHealthNormalized() <= 0.2f) {
-                    // if under 20% health
-                    StartNextStage();
-                }
-                break;
-        }
-    }
-
-    private void StartNextStage() {
-        switch(stage) {
-            case Stage.WaitingToStart: 
-                stage = Stage.Stage1;
+    private void NextBossState() {
+        switch(boss.CurrentBossState.Stage) {
+            case BossStateMachine.BossState.BeforeStart: 
+                boss.SetCurrentBossState(boss.DuringBattle);
                 StopBattle();
                 //AttackSimultaneouslyProcess();
                 //AttackSeparatelyProcess(0.5f);
                 AttackByTrailProcess(0.5f);
                 break;
-            case Stage.Stage1:
-                stage = Stage.Stage2;
-                indicatorDuration = 2f;
-                attackDuration = 0.6f;
-                countOfRandomLaunches = 3;
+            case BossStateMachine.BossState.DuringBattle:
                 StopBattle();
-                AttackSeparatelyProcess(0.5f);
-                //InvokeRepeating("LineAttackProcess", 0f, timeBetweenAttacks);
-                break;
-            case Stage.Stage2:
-                stage = Stage.Stage3;
-                indicatorDuration = 1.5f;
-                attackDuration = 0.5f;
-                countOfRandomLaunches = 4;
-                //CancelInvoke("LineAttackProcess");
+                //AttackSeparatelyProcess(0.5f);
                 //InvokeRepeating("LineAttackProcess", 0f, timeBetweenAttacks);
                 break;
         }
     }
 
+    private void UpdateStageMode(float id, float ad, int corl) {
+        this.indicatorDuration = id;
+        this.attackDuration = ad;
+        this.countOfRandomLaunches = corl;
+    }
+
+    #region 攻擊 啟動/關閉
+
     private void StartBattle() {
         Debug.Log("StartBattle");
-        StartNextStage();
+        NextBossState();
     }
 
     private void StopBattle() {
@@ -112,10 +69,11 @@ public class BossFight_2 : MonoBehaviour
         }
     }
 
+    #endregion
+
     #region 攻擊模式
 
-    private void AttackSeparatelyProcess(float attackTimeSpan) {
-        Debug.Log("stage: "+stage);
+    public void AttackSeparatelyProcess(float attackTimeSpan) {
         Debug.Log("indicatorDuration: "+indicatorDuration);
         Debug.Log("attackDuration: "+attackDuration);
         Debug.Log("countOfRandomLaunches: "+countOfRandomLaunches);
@@ -124,27 +82,25 @@ public class BossFight_2 : MonoBehaviour
         //     attackRoutine = StartCoroutine(SeparatelyAttackCoroutines(attackTimeSpan));
         // }
 
-        attackRoutine = StartCoroutine(SeparatelyAttackCoroutines(attackTimeSpan));
+        attackRoutine = StartCoroutine(AttackCoroutines_Separately(attackTimeSpan));
     }
 
-    private void AttackByTrailProcess(float attackTimeSpan) {
-        Debug.Log("stage: "+stage);
+    public void AttackByTrailProcess(float attackTimeSpan) {
         Debug.Log("indicatorDuration: "+indicatorDuration);
         Debug.Log("attackDuration: "+attackDuration);
         Debug.Log("countOfRandomLaunches: "+countOfRandomLaunches);
         
-        attackRoutine = StartCoroutine(AttackByTrailCoroutines(attackTimeSpan));
+        attackRoutine = StartCoroutine(AttackCoroutines_ByTrail(attackTimeSpan));
     }
 
-    private void AttackSimultaneouslyProcess() {
-        Debug.Log("stage: "+stage);
+    public void AttackSimultaneouslyProcess() {
         Debug.Log("indicatorDuration: "+indicatorDuration);
         Debug.Log("attackDuration: "+attackDuration);
         Debug.Log("countOfRandomLaunches: "+countOfRandomLaunches);
 
         int count = indicatorCtrl.aoePositions.Count + countOfRandomLaunches;
         if(count > 0) {
-            attackRoutine = StartCoroutine(SimultaneouslyAttackCoroutines());
+            attackRoutine = StartCoroutine(AttackCoroutines_Simultaneously());
         }
     }
 
@@ -152,7 +108,7 @@ public class BossFight_2 : MonoBehaviour
 
     #region 攻擊模式的協程
 
-    private IEnumerator SeparatelyAttackCoroutines(float attackTimeSpan) {
+    private IEnumerator AttackCoroutines_Separately(float attackTimeSpan) {
         // 每個AOE攻擊的時段需要不同時地進行
         while(true) {
             // 1. 動態生成攻擊點
@@ -169,7 +125,7 @@ public class BossFight_2 : MonoBehaviour
         }
     }
 
-    private IEnumerator AttackByTrailCoroutines(float attackTimeSpan) {
+    private IEnumerator AttackCoroutines_ByTrail(float attackTimeSpan) {
         // 每個AOE攻擊的時段需要不同時地進行
         while(true) {
             // 1. 動態生成攻擊點
@@ -186,16 +142,16 @@ public class BossFight_2 : MonoBehaviour
         }
     }
 
-    private IEnumerator SimultaneouslyAttackCoroutines() {
+    private IEnumerator AttackCoroutines_Simultaneously() {
         // 所有的aoe攻擊*count是同時發動的
 
         while(true) {
             // 1. 動態生成攻擊點
             indicatorCtrl.UpdateCombination();
             // 2. 同時顯示指示器
-            StartCoroutine(DisplayMutipleIndicatorSimultaneously());
+            StartCoroutine(DisplayIndicators_Simultaneously());
             // 3. 同時控制攻擊的動畫與傷害機制 etc.
-            StartCoroutine(LaunchAttackSimultaneously());
+            StartCoroutine(LaunchAttack_Simultaneously());
 
             // 等待下一輪攻擊
             yield return new WaitForSeconds(indicatorDuration + attackDuration - delayTime);
@@ -215,7 +171,7 @@ public class BossFight_2 : MonoBehaviour
         Debug.Log("AttackCoroutines: DisplayIndicator end");
     }
 
-    private IEnumerator DisplayMutipleIndicatorSimultaneously() {
+    private IEnumerator DisplayIndicators_Simultaneously() {
         Debug.Log("AttackCoroutines: DisplayMutipleIndicatorsSimultaneously start");
         yield return null;
 
@@ -244,7 +200,7 @@ public class BossFight_2 : MonoBehaviour
         Debug.Log("AttackCoroutines: LaunchAttack end");
     }
 
-    private IEnumerator LaunchAttackSimultaneously() {
+    private IEnumerator LaunchAttack_Simultaneously() {
         Debug.Log("AttackCoroutines: LaunchAttackSimultaneously start");
         yield return new WaitForSeconds(indicatorDuration);
         //TODO 攻擊

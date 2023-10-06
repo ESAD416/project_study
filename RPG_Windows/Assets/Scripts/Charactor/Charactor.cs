@@ -15,20 +15,20 @@ public abstract class Charactor : MonoBehaviour
     /// <summary>
     /// 角色物理剛體
     /// </summary>
-    public Rigidbody2D Rigidbody => m_Rigidbody;
+    public Rigidbody2D Rigidbody => this.m_Rigidbody;
     
     [SerializeField] protected SpriteRenderer m_SprtRenderer;
     /// <summary>
     /// 角色圖片精靈
     /// </summary>
-    public SpriteRenderer SprtRenderer => m_SprtRenderer;
+    public SpriteRenderer SprtRenderer => this.m_SprtRenderer;
     public void SetSpriteRenderer(SpriteRenderer sprtR) => this.m_SprtRenderer = sprtR;
     
     [SerializeField] protected Animator m_Animator;
     /// <summary>
     /// 角色動畫控制器
     /// </summary>
-    public Animator Animator => m_Animator;
+    public Animator Animator => this.m_Animator;
 
     /// <summary>
     /// 角色中心

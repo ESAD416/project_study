@@ -19,9 +19,7 @@ public class Movement_Avatar : MonoBehaviour
     /// <summary>
     /// 更改角色移速
     /// </summary>
-    public void SetMoveSpeed(float speed) {
-        this.m_moveSpeed = speed;
-    }
+    public void SetMoveSpeed(float speed) => this.m_moveSpeed = speed;
     
     protected Vector3 m_movement = Vector3.zero;
     /// <summary>
@@ -31,9 +29,7 @@ public class Movement_Avatar : MonoBehaviour
     /// <summary>
     /// 更改角色向量
     /// </summary>
-    public void SetMovement(Vector3 vector3) {
-        this.m_movement = vector3;
-    }
+    public void SetMovement(Vector3 vector3) => this.m_movement = vector3;
     /// <summary>
     /// 角色面向方向
     /// </summary>
@@ -42,9 +38,7 @@ public class Movement_Avatar : MonoBehaviour
     /// <summary>
     /// 更改角色面向方向
     /// </summary>
-    public void SetFacingDir(Vector2 vector2) {
-        this.m_facingDir = vector2;
-    }
+    public void SetFacingDir(Vector2 vector2) => this.m_facingDir = vector2;
     /// <summary>
     /// 角色目前是否為移動中
     /// </summary>
@@ -63,7 +57,8 @@ public class Movement_Avatar : MonoBehaviour
     //     }
     // }
 
-    protected virtual void Awake() {
+    protected virtual void Awake() 
+    {
         m_avatarRdbd = m_avatar.Rigidbody;
         m_avatarSprtRenderer = m_avatar.SprtRenderer;
         m_avatarAnimator = m_avatar.Animator;
@@ -81,7 +76,8 @@ public class Movement_Avatar : MonoBehaviour
         SetAnimateMovementPara(Movement, FacingDir);
     }
 
-    protected virtual void FixedUpdate() {
+    protected virtual void FixedUpdate() 
+    {
         // if(m_avatar.CharStatus.Equals(Charactor.CharactorStatus.Attack)) {
         //     //Debug.Log("attacking");
         //     SetMovement(Vector3.zero);
@@ -96,18 +92,21 @@ public class Movement_Avatar : MonoBehaviour
         // }
     }
 
-    public void Move() {
+    public void Move() 
+    {
         //Debug.Log("FixedUpdate movement.normalized: "+movement.normalized+", moveSpeed: "+moveSpeed );
         m_avatarRdbd.velocity = Movement.normalized * MoveSpeed;
         //m_Rigidbody.AddForce(movement.normalized* moveSpeed * Time.fixedDeltaTime, ForceMode2D.Force);
         // transform.Translate(movement*moveSpeed*Time.deltaTime);
     }
 
-    public void MoveWhileJump() {
+    public void MoveWhileJump() 
+    {
         //m_targetRdbd.velocity = Movement.normalized * jumpingMovementVariable * MoveSpeed;
     }
 
-    protected void SetAnimateMovementPara(Vector3 movement, Vector2 facingDir) {
+    protected void SetAnimateMovementPara(Vector3 movement, Vector2 facingDir) 
+    {
         // Debug.Log("movement.x: "+movement.x + "movement.y: "+movement.y);
         // Debug.Log("facingDir.x: "+facingDir.x + "facingDir.y: "+facingDir.y);
         Dictionary<string, float> dict = new Dictionary<string, float>();
