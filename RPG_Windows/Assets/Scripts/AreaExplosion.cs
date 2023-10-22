@@ -4,37 +4,42 @@ using UnityEngine;
 
 public class AreaExplosion : MonoBehaviour
 {
-    public float explosionRadius = 5f;
-    [SerializeField] private LayerMask targetLayer;
+    [SerializeField] private float duration = 5;
+    [SerializeField] private float timeElapsed;
 
-    [Header("Gizmo Parameters")]
-    public Color gizmoColor = Color.black;
-    public bool showGizmos = true;
+    private void OnEnable() {
+        timeElapsed = 0f;
+        Invoke("DestoryExplosion", duration);
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (timeElapsed >= duration)
+        {
+            timeElapsed = duration;
+        } 
+        timeElapsed += Time.deltaTime;
     }
 
-    private void Explosion() {
-        var collider = Physics2D.OverlapCircle(transform.position, explosionRadius, targetLayer);
-        bool targetDetected = collider != null;
-        if(targetDetected) {
-            Debug.Log("target Detected");
-        }
+    public void SetDuration(float duration) {
+        this.duration = duration;
     }
 
-    private void OnDrawGizmos() {
-        if(showGizmos) {
-            Gizmos.color = gizmoColor;
-            Gizmos.DrawWireSphere(transform.position, explosionRadius);
-        }
+    public void SetPosition(Vector3 targetPos) {
+        transform.position = targetPos;
     }
+
+    private void OnDisable() {
+        CancelInvoke();
+    }
+    private void DestoryExplosion() {
+        gameObject.SetActive(false);
+    }
+
 }

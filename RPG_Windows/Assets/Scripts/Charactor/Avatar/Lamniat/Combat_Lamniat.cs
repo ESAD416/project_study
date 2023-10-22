@@ -5,12 +5,10 @@ using UnityEngine;
 
 public class Combat_Lamniat : Combat_Avatar
 {
-    private AvatarInputActionsControls inputControls;
-
     protected override void Awake() {
         base.Awake();
         attackClipTime = AnimeUtils.GetAnimateClipTimeInRuntime(m_avatarAnimator, "Lamniat_attack_1_chop_clockwise");
-        Debug.Log("Combat_Lamniat Start SetAnimateClipTime attackClipTime: "+attackClipTime);
+        // Debug.Log("Combat_Lamniat Start SetAnimateClipTime attackClipTime: "+attackClipTime);
     }
 
     protected override void Start() {
@@ -18,7 +16,7 @@ public class Combat_Lamniat : Combat_Avatar
         inputControls = m_avatar.InputCtrl;
 
         inputControls.Lamniat_Land.Attack.started += content => {
-            Debug.Log("Lamniat_Land.Attack.started");
+            // Debug.Log("Lamniat_Land.Attack.started");
             if(m_avatar.CurrentBaseState.State.Equals(BaseStateMachine_Charactor.BaseState.Move)) {
                 m_avatarMovement.SetFacingDir(m_avatarMovement.Movement);
                 //m_avatar.SetFacingDir(m_avatar.Movement);
@@ -32,12 +30,4 @@ public class Combat_Lamniat : Combat_Avatar
 
         #endregion
     }
-
-    protected override void Update() {
-        base.Update();
-        // if(m_avatar.Status.Equals(Charactor.CharactorStatus.Attack)) AnimeUtils.ActivateAnimatorLayer(m_targetAnimator, "AttackLayer");
-        // else AnimeUtils.ActivateAnimatorLayer(m_targetAnimator, "IdleLayer");
-    }
-
-    
 }

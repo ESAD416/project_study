@@ -55,7 +55,7 @@ public class OffScreenIndicatorCtrl : MonoBehaviour
 
         var indicatorPos = activeCam.WorldToScreenPoint(indicator.target.position);
         //Debug.Log("UpdatePosition before indicatorPos: "+targetScreenPos);
-        Vector3 dir = (indicator.target.position - player.m_Center).normalized;
+        Vector3 dir = (indicator.target.position - player.Center).normalized;
         //Debug.Log("UpdatePosition dir: "+dir);
 
         indicatorPos.x = Mathf.Clamp(indicatorPos.x, rect.width / 2, Screen.width - rect.width / 2) + offset.x;

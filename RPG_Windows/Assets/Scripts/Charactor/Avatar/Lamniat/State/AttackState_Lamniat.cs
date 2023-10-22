@@ -23,12 +23,12 @@ public class AttackState_Lamniat : BaseStateMachine_Avatar
 
     public override void OnUpdate()
     {
-        AnimeUtils.ActivateAnimatorLayer(currentAvatar.Animator, "AttackLayer");
+        AnimeUtils.ActivateAnimatorLayer(this.currentAvatar.Animator, "TriggerLayer");
     }
 
     public override void OnFixedUpdate()
     {
-       currentAvatar.AvatarMovement.SetMovement(Vector3.zero);
+       this.currentAvatar.AvatarMovement.SetMovement(Vector3.zero);
     }
 
     public override void OnExit()

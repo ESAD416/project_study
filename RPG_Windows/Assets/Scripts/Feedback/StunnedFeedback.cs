@@ -7,7 +7,9 @@ public class StunnedFeedback : MonoBehaviour
 {
     [SerializeField] private Rigidbody2D rb2d;
 
-    [SerializeField] private float stunRecoveryTime;
+    private bool isStunned = false;
+    private int armorToStunned = 3;
+    [SerializeField] private float stunRecoveryTime = 1.5f;
 
     public UnityEvent OnBegin, OnDone;
 
@@ -17,12 +19,22 @@ public class StunnedFeedback : MonoBehaviour
         
         //TODO
 
-        StartCoroutine(EndProcess());
+        StartCoroutine(BeingStunned());
     }
 
-    private IEnumerator EndProcess() {
+    protected IEnumerator BeingStunned() {
+        Debug.Log("BeingStunned");
+        //SetMoveSpeed(0f);
+        //SetAnimation stunned
         yield return new WaitForSeconds(stunRecoveryTime);  // hardcasted casted time for debugged
-
-        OnDone?.Invoke();
+        FinishBeingStunned();
     }
+
+    public void FinishBeingStunned() {
+        isStunned = false;
+        armorToStunned = 3;
+        
+        Debug.Log("FinishBeingStunned");
+    }
+
 }

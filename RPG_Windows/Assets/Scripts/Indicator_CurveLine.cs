@@ -6,8 +6,15 @@ using UnityEngine;
 [RequireComponent(typeof(LineRenderer))]
 public class Indicator_CurveLine : MonoBehaviour
 {
-    public Enemy enemy;
-    public Vector3 endPos;
+    private Vector3 m_StartPos;
+    public Vector3 StartPos => this.m_StartPos;
+    public void SetStartPos(Vector3 pos) => this.m_StartPos = pos;
+
+    private Vector3 m_EndPos;
+    public Vector3 EndPos => this.m_EndPos;
+    public void SetEndPos(Vector3 pos) => this.m_EndPos = pos;
+
+
     public LineRenderer Line;
     public bool isQuadratic;
     public Vector3[] InitialState;
@@ -27,13 +34,12 @@ public class Indicator_CurveLine : MonoBehaviour
     }
 
     private void UpdateInitialState(float height = 10f) {
-        Vector3 startPos = enemy.transform.position;
-        Vector3 mid = (startPos + endPos) * 0.5f+(Vector3.up * height);
+        Vector3 mid = (m_StartPos + m_EndPos) * 0.5f+(Vector3.up * height);
 
         var temp = new Vector3[3];
-        temp[0] = startPos;
+        temp[0] = m_StartPos;
         temp[1] = mid;
-        temp[2] = endPos;
+        temp[2] = m_EndPos;
 
         InitialState = temp;
     }

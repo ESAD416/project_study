@@ -45,9 +45,9 @@ public class EnemyPathController : MonoBehaviour
                 }
             } 
         }
-        else if(Enemy.isTakingHit){
-            UpdatePathParaForHorizontal();
-        }
+        // else if(Enemy.isTakingHit){
+        //     UpdatePathParaForHorizontal();
+        // }
     }
 
     private IEnumerator UpdatePathParaEndingDelay() {

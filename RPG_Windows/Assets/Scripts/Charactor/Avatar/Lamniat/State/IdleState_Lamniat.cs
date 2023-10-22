@@ -23,7 +23,7 @@ public class IdleState_Lamniat : BaseStateMachine_Avatar
 
     public override void OnUpdate()
     {
-        AnimeUtils.ActivateAnimatorLayer(currentAvatar.Animator, "IdleLayer");
+        AnimeUtils.ActivateAnimatorLayer(this.currentAvatar.Animator, "IdleLayer");
     }
 
     public override void OnFixedUpdate()

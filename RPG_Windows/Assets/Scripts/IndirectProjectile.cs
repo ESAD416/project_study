@@ -5,7 +5,7 @@ using UnityEngine;
 public class IndirectProjectile : MonoBehaviour
 {
     public Collider2D projectileHitBox;
-    [SerializeField] float duration = 5;
+    [SerializeField] private float duration = 5;
     private float delayTime = 0.1f;
     [SerializeField] private Vector3 startPos;
     [SerializeField] private Vector3 destinationPos;
@@ -15,15 +15,18 @@ public class IndirectProjectile : MonoBehaviour
     private Vector3[] path;
     [SerializeField] private float timeElapsed;
 
+    private void OnEnable() {
+        timeElapsed = 0f;
+        Invoke("DestoryProjectile", duration);
+    }
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        timeElapsed = 0f;
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         if (timeElapsed >= duration)
         {
@@ -70,16 +73,11 @@ public class IndirectProjectile : MonoBehaviour
         this.duration = duration;
     }
 
+    private void OnDisable() {
+        CancelInvoke();
+    }
     private void DestoryProjectile() {
         gameObject.SetActive(false);
     }
 
-    private void OnEnable() {
-        timeElapsed = 0f;
-        Invoke("DestoryProjectile", duration);
-    }
-
-    private void OnDisable() {
-        CancelInvoke();
-    }
 }

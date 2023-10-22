@@ -15,7 +15,11 @@ public class Avatar : Charactor
     /// 可操作角色的移動控制
     /// </summary>
     public Movement_Avatar AvatarMovement => m_avatarMovement;
+    
     protected AvatarInputActionsControls m_inputControls;
+    /// <summary>
+    /// 可操作角色的使用者輸入
+    /// </summary>
     public AvatarInputActionsControls InputCtrl => this.m_inputControls;
     protected bool isHoldInteraction = false;
 
@@ -51,6 +55,8 @@ public class Avatar : Charactor
     public BaseStateMachine_Avatar Idle => m_idle;
     protected BaseStateMachine_Avatar m_move;
     public BaseStateMachine_Avatar Move => m_move;
+    protected BaseStateMachine_Avatar m_dodge;
+    public BaseStateMachine_Avatar Dodge => m_dodge;
     protected BaseStateMachine_Avatar m_attack;
     public BaseStateMachine_Avatar Attack => m_attack;
     protected BaseStateMachine_Avatar m_dead;
@@ -61,13 +67,13 @@ public class Avatar : Charactor
     protected override void Awake() {
         base.Awake();
 
-        currHeight = m_InfoStorage.initialHeight;
         m_inputControls = new AvatarInputActionsControls();
     }
 
     protected override void OnEnable() {
         base.OnEnable();
         
+        currHeight = m_InfoStorage.initialHeight;
         m_raycastEnd = new Vector2(m_raycastStart.position.x, m_raycastStart.position.y) + new Vector2(0, -1) * 0.35f;   // 預設射線終點
         transform.position = new Vector3(m_InfoStorage.initialPos.x, m_InfoStorage.initialPos.y, m_InfoStorage.initialHeight);
 

@@ -8,7 +8,7 @@ public class Movement_HorizontalOscillation : Movement_Enemy
     
 
     protected override void FixedUpdate() {
-        if(!m_enemy.CharStatus.Equals(Charactor.CharactorStatus.Dead)) {
+        if(!m_enemy.CurrentBaseState.Equals(BaseStateMachine_Enemy.BaseState.Dead)) {
             if(moveRight) SetMovement(Vector3.right);
             else SetMovement(Vector3.left);
             // if(m_enemy.CurrentEnemyState.State.Equals(EnemyStateMachine.EnemyState.Patrol)) {

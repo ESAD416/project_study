@@ -4,13 +4,20 @@ using UnityEngine;
 
 public class Movement_Avatar : MonoBehaviour
 {
+    #region 基本物件
+
+    [Header("基本物件")]
     [SerializeField] protected Avatar m_avatar;
     protected Rigidbody2D m_avatarRdbd;
     protected SpriteRenderer m_avatarSprtRenderer;
     protected Animator m_avatarAnimator;
-    
+    protected AvatarInputActionsControls inputControls;
 
-    [Header("Movement Parameters")]
+    #endregion
+    
+    #region 基本參數
+
+    [Header("基本參數")]
     [SerializeField] protected float m_moveSpeed = 11f;
     /// <summary>
     /// 角色移速
@@ -30,6 +37,8 @@ public class Movement_Avatar : MonoBehaviour
     /// 更改角色向量
     /// </summary>
     public void SetMovement(Vector3 vector3) => this.m_movement = vector3;
+
+
     /// <summary>
     /// 角色面向方向
     /// </summary>
@@ -39,6 +48,7 @@ public class Movement_Avatar : MonoBehaviour
     /// 更改角色面向方向
     /// </summary>
     public void SetFacingDir(Vector2 vector2) => this.m_facingDir = vector2;
+
     /// <summary>
     /// 角色目前是否為移動中
     /// </summary>
@@ -47,6 +57,10 @@ public class Movement_Avatar : MonoBehaviour
             return Movement.x != 0 || Movement.y != 0;
         }
     }
+
+    
+
+
     /// <summary>
     /// 角色目前是否能移動
     /// </summary>
@@ -56,6 +70,8 @@ public class Movement_Avatar : MonoBehaviour
     //         return jumpingUpButNotFinish || jumpHitColli || (isTakingHit && !hyperArmor);
     //     }
     // }
+
+    #endregion
 
     protected virtual void Awake() 
     {

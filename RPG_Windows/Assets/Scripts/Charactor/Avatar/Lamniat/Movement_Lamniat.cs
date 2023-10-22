@@ -5,7 +5,6 @@ using UnityEngine.InputSystem.Interactions;
 
 public class Movement_Lamniat : Movement_Avatar
 {
-    private AvatarInputActionsControls inputControls;
     private bool isHoldInteraction = false;
 
     // Start is called before the first frame update
@@ -14,7 +13,7 @@ public class Movement_Lamniat : Movement_Avatar
          #region InputSystem事件設定
         inputControls = m_avatar.InputCtrl;
 
-        inputControls.Lamniat_Land.Movement.performed += content => {
+        inputControls.Lamniat_Land.Move.performed += content => {
             var inputVecter2 = content.ReadValue<Vector2>();
             SetFacingDir(inputVecter2);
             SetMovement(new Vector3(inputVecter2.x, inputVecter2.y));
@@ -22,13 +21,11 @@ public class Movement_Lamniat : Movement_Avatar
             m_avatar.SetCurrentBaseState(m_avatar.Move);
 
             var faceLeft = m_avatarSprtRenderer.flipX;
-            //Debug.Log("faceLeft = " + faceLeft);
             if(m_avatarSprtRenderer!= null) m_avatarSprtRenderer.flipX = AnimeUtils.isLeftForHorizontalAnimation(Movement, faceLeft);
         };
 
-        inputControls.Lamniat_Land.Movement.canceled += content => {
+        inputControls.Lamniat_Land.Move.canceled += content => {
             SetMovement(Vector3.zero);
-            //m_avatar.SetStatus(Charactor.CharactorStatus.Idle);
             m_avatar.SetCurrentBaseState(m_avatar.Idle);
         };
 
@@ -46,14 +43,5 @@ public class Movement_Lamniat : Movement_Avatar
         
 
         #endregion
-    }
-
-    // Update is called once per frame
-    protected override void Update() 
-    {
-        base.Update();
-        // Debug.Log("m_avatar.Status = " + m_avatar.Status);
-        // if(m_avatar.Status.Equals(Charactor.CharactorStatus.Move))  AnimeUtils.ActivateAnimatorLayer(m_targetAnimator, "MoveLayer");
-        // else AnimeUtils.ActivateAnimatorLayer(m_targetAnimator, "IdleLayer");
     }
 }

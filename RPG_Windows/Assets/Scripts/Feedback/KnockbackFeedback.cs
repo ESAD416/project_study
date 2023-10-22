@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 public class KnockbackFeedback : MonoBehaviour
 {
-    [SerializeField] private Rigidbody2D rb2d;
+    [SerializeField] private Rigidbody2D target_rb2d;
 
     [SerializeField] private Transform targetCenter;
 
@@ -20,7 +20,7 @@ public class KnockbackFeedback : MonoBehaviour
         OnBegin?.Invoke();
         Vector3 dir = targetCenter.position - senderPos;
         Vector3 force = dir.normalized * thrust;
-        rb2d.AddForce(force, ForceMode2D.Impulse);
+        target_rb2d.AddForce(force, ForceMode2D.Impulse);
         StartCoroutine(EndProcess());
     }
 
@@ -29,13 +29,13 @@ public class KnockbackFeedback : MonoBehaviour
         StopAllCoroutines();
         OnBegin?.Invoke();
         Vector3 force = dir.normalized * thrust;
-        rb2d.AddForce(force, ForceMode2D.Impulse);
+        target_rb2d.AddForce(force, ForceMode2D.Impulse);
         StartCoroutine(EndProcess());
     }
 
     private IEnumerator EndProcess() {
         yield return new WaitForSeconds(hitRecoveryTime);  // hardcasted casted time for debugged
-        rb2d.velocity = Vector3.zero;
+        target_rb2d.velocity = Vector3.zero;
         OnDone?.Invoke();
     }
 }

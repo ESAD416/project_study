@@ -59,26 +59,26 @@ public class BossFight_1 : MonoBehaviour
 
     private void BossFight_1_OnDamaged() {
         // Area took damage
-        switch(stage) {
-            case Stage.Stage1:
-                if(boss.HealthSystem.GetCurrHealthNormalized() <= 0.7f) {
-                    // if under 70% health
-                    StartNextStage();
-                }
-                break;
-            case Stage.Stage2:
-                if(boss.HealthSystem.GetCurrHealthNormalized() <= 0.5f) {
-                    // if under 50% health
-                    StartNextStage();
-                }
-                break;
-            case Stage.Stage3:
-                if(boss.HealthSystem.GetCurrHealthNormalized() <= 0.2f) {
-                    // if under 20% health
-                    StartNextStage();
-                }
-                break;
-        }
+        // switch(stage) {
+        //     case Stage.Stage1:
+        //         if(boss.HealthSystem.GetCurrHealthNormalized() <= 0.7f) {
+        //             // if under 70% health
+        //             StartNextStage();
+        //         }
+        //         break;
+        //     case Stage.Stage2:
+        //         if(boss.HealthSystem.GetCurrHealthNormalized() <= 0.5f) {
+        //             // if under 50% health
+        //             StartNextStage();
+        //         }
+        //         break;
+        //     case Stage.Stage3:
+        //         if(boss.HealthSystem.GetCurrHealthNormalized() <= 0.2f) {
+        //             // if under 20% health
+        //             StartNextStage();
+        //         }
+        //         break;
+        // }
     }
 
     private void StartNextStage() {
@@ -181,12 +181,12 @@ public class BossFight_1 : MonoBehaviour
         yield return new WaitForSeconds(indicatorDuration);
         foreach(int randomNum in randomNums) {
             var attackOffset = attackOffsets.offsets[randomNum];
-            Vector3 dir = player.m_Center - attackOffset.position;
+            Vector3 dir = player.Center - attackOffset.position;
 
             //Debug.Log("LunchProjectile player.m_Center: "+player.m_Center);
             //Debug.Log("LunchProjectile attackOffset: "+attackOffset.position);
             //Debug.Log("LunchProjectile dir: "+dir);
-            GameObject projectile = ProjectilePool.instance.GetPooledProjectile();
+            GameObject projectile = ProjectilePool.instance.GetPooledGameObject();
             if(projectile != null) {
                 projectile.GetComponent<DirectProjectile>().SetDirection(dir.normalized);
                 

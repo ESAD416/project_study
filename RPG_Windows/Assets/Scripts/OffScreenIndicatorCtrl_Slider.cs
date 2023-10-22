@@ -43,10 +43,10 @@ public class OffScreenIndicatorCtrl_Slider : OffScreenIndicatorCtrl
 
         var attackOffSet = activeCam.WorldToScreenPoint(indicator.target.position);
         // Debug.Log("UpdatePosition attackOffSet: "+targetScreenPos);
-        Vector3 dir = (indicator.target.position - player.m_Center).normalized;
+        Vector3 dir = (indicator.target.position - player.Center).normalized;
         // Debug.Log("UpdatePosition dir: "+dir);
 
-        var camCenter = activeCam.WorldToScreenPoint(player.m_Center);
+        var camCenter = activeCam.WorldToScreenPoint(player.Center);
         Vector2 anchoredPos;
         RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, camCenter, null, out anchoredPos);
 

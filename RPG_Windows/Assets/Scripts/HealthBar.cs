@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class HealthBar : MonoBehaviour
 {
-    private HealthSystemModel healthSystem;
+    private HealthSystem healthSystem;
     
     [SerializeField] private Slider slider;
     [SerializeField] Color high = Color.green;

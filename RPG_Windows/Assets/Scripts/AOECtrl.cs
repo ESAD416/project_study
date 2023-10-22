@@ -4,19 +4,24 @@ using System.Linq;
 using UnityEngine;
 using Cinemachine;
 
-public class AOEIndicatorCtrl : MonoBehaviour
+public class AOECtrl : MonoBehaviour
 {
+    [Header("基本物件")]
     [SerializeField] private Enemy boss;
     [SerializeField] private GameObject areaIndicatorPrefab;
-    [SerializeField] private GameObject curveLineIndicatorPrefab;
+    //[SerializeField] private GameObject areaHitBoxPrefab;
+    // [SerializeField] private GameObject curveLineIndicatorPrefab;
+
+    [Header("基本參數")]
     [SerializeField] private int aoeCount = 4;
     [SerializeField] private Vector2 areaMin;
     [SerializeField] private Vector2 areaMax;
     [SerializeField] private float checkFrequency = 0.1f;
     [SerializeField] private float offsetDistance = 1f;
+    public List<Vector3> aoePositions;
 
-    [SerializeField] private Vector3 trailedPos = Vector3.zero;
-    [SerializeField] private float trailOffset = 3f;
+    private Vector3 trailedPos = Vector3.zero;
+    private float trailOffset = 3f;
     private float aC = 0.1f;
     private float randomAngleRangeOfDir = 45f;
     private Vector3 trailDir = Vector3.right;
@@ -28,10 +33,7 @@ public class AOEIndicatorCtrl : MonoBehaviour
 
     private List<Area> areas = Area.GetValues(typeof(Area)).Cast<Area>().ToList();
     private List<Area> combinedAreas;
-
     public List<Area> stackAreas;
-    public List<Vector3> aoePositions;
-    
     
     protected void Start()
     {
@@ -54,17 +56,6 @@ public class AOEIndicatorCtrl : MonoBehaviour
         }
     }
 
-    public void InstantiateCurveLineIndicator(Vector3 pos, float duration = 0) {
-        GameObject offsetObject = Instantiate(curveLineIndicatorPrefab);
-        offsetObject.transform.parent = transform;
-        offsetObject.GetComponent<Indicator_CurveLine>().enemy = boss;
-        offsetObject.GetComponent<Indicator_CurveLine>().endPos = pos;
-
-        if(duration > 0) {
-            StartCoroutine(DestoryIndicator(offsetObject, duration));
-        }
-    }
-
     public void InstantiateAreaIndicators(float duration = 0) {
         foreach(var pos in aoePositions)
         {
@@ -77,6 +68,18 @@ public class AOEIndicatorCtrl : MonoBehaviour
             Invoke("DestoryIndicators", duration);
         }
     }
+
+    // public void InstantiateCurveLineIndicator(Vector3 pos, float duration = 0) {
+    //     GameObject offsetObject = Instantiate(curveLineIndicatorPrefab);
+    //     offsetObject.transform.parent = transform;
+    //     offsetObject.GetComponent<Indicator_CurveLine>()?.SetStartPos(boss.Center);
+    //     offsetObject.GetComponent<Indicator_CurveLine>()?.SetEndPos(pos);
+
+    //     if(duration > 0) {
+    //         StartCoroutine(DestoryIndicator(offsetObject, duration));
+    //     }
+    // }
+
 
     private List<Area> GenerateRandomCombination(int size) {
         List<Area> combination = new List<Area>();
@@ -200,7 +203,7 @@ public class AOEIndicatorCtrl : MonoBehaviour
         if(stackAreas.Any()) stackAreas.RemoveAt(0);
     }
 
-    protected virtual void DestoryIndicators() {
+    protected void DestoryIndicators() {
         var indicators = GetComponentsInChildren<Transform>();
         foreach(var indicator in indicators) {
             if(indicator != transform) {
@@ -209,23 +212,26 @@ public class AOEIndicatorCtrl : MonoBehaviour
         }
 
     }
+
+    
+
     public Vector3 GetTrailedAOEPosition(Avatar target) {
         if(trailedPos.Equals(Vector3.zero)) {
             // 第一次的生成
             trailedPos = new Vector3(0, -3);
-            Debug.Log("First trailedPos: "+trailedPos);
+            //Debug.Log("First trailedPos: "+trailedPos);
         } else {
             Vector3 lastTrailedPos = trailedPos;
             // 4. 根據trailDir與trailOffset與lastTrailedPos進行計算，得出新的位置
             
             float amplitudeY = 2.5f;      // Y 軸振幅
             float frequencyY = 16f;      // Y 軸頻率
-            Debug.Log("Mathf.Sin: "+Mathf.Sin(aC * frequencyY));
+            //Debug.Log("Mathf.Sin: "+Mathf.Sin(aC * frequencyY));
             float yOffset = amplitudeY * Mathf.Sin(aC * frequencyY);
-            Debug.Log("lastTrailedPos: "+lastTrailedPos);
-            Debug.Log("offset: "+new Vector3(trailOffset * trailDir.x, yOffset, 0f));
+            //Debug.Log("lastTrailedPos: "+lastTrailedPos);
+            //Debug.Log("offset: "+new Vector3(trailOffset * trailDir.x, yOffset, 0f));
             trailedPos = new Vector3(lastTrailedPos.x + (trailOffset * trailDir.x), -3 + yOffset);
-            Debug.Log("trailedPos: "+trailedPos);
+           // Debug.Log("trailedPos: "+trailedPos);
 
             // 5. 新的位置需確認是否在areaRange內，如果不在則須進行再計算得新的位置
             if(trailedPos.y < areaMin.y) {
@@ -251,11 +257,11 @@ public class AOEIndicatorCtrl : MonoBehaviour
             } 
             
 
-            Debug.Log("Non-First trailedPos: "+trailedPos);
+            //Debug.Log("Non-First trailedPos: "+trailedPos);
         }           
 
         //trailDir = UpdateTrailDirection(trailedPos, target);
-        Debug.Log("trailDir: "+trailDir);
+        //Debug.Log("trailDir: "+trailDir);
         // 6. 上述都府和後變回傳
         return trailedPos;
     }

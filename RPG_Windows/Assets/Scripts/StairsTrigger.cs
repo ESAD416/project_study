@@ -80,14 +80,14 @@ public class StairsTrigger : MonoBehaviour
         float limitedHeight = playerOrginHeight + altitudeVariation * dir;
         Debug.Log("height var dir: "+dir);
         Debug.Log("stair startPos: "+startPos);
-        Debug.Log("player curr centerPos: "+player.m_Center);
+        Debug.Log("player curr centerPos: "+player.Center);
         Debug.Log("limitedHeight: "+limitedHeight);
 
         float playerMoveDist;
         if(isVertical) {
-            playerMoveDist = Math.Abs(startPos.y - player.m_Center.y);
+            playerMoveDist = Math.Abs(startPos.y - player.Center.y);
         } else {
-            playerMoveDist = Math.Abs(startPos.x - player.m_Center.x);
+            playerMoveDist = Math.Abs(startPos.x - player.Center.x);
         }
         Debug.Log("playerMoveDist: "+playerMoveDist);
         Debug.Log("( playerMoveDist / stairDistance ) : "+( playerMoveDist / stairDistance ));

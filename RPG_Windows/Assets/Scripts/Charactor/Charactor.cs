@@ -29,19 +29,6 @@ public abstract class Charactor : MonoBehaviour
     /// 角色動畫控制器
     /// </summary>
     public Animator Animator => this.m_Animator;
-
-    /// <summary>
-    /// 角色中心
-    /// </summary>
-    public Vector3 m_Center;
-    /// <summary>
-    /// 角色底部
-    /// </summary>
-    public Vector3 m_Buttom;
-    /// <summary>
-    /// 角色橫縱高座標
-    /// </summary>
-    public Vector3 m_Coordinate;
     /// <summary>
     /// 角色中心Transform
     /// </summary>
@@ -56,16 +43,26 @@ public abstract class Charactor : MonoBehaviour
     public CharactorData m_InfoStorage;
 
     #endregion
-
-    #region 角色狀態
-    private BaseStateMachine_Charactor m_currentState;
-
-    public enum CharactorStatus {
-        Idle, Move, Attack, Dead,
-    }
-    protected CharactorStatus m_Status;
-    public CharactorStatus CharStatus => m_Status;
-    public void SetStatus(CharactorStatus status) => this.m_Status = status;
+    
+    #region 角色物件
+    [Header("角色基本參數")]
+    [SerializeField] protected Vector3 m_Center;
+    /// <summary>
+    /// 角色中心
+    /// </summary>
+    public Vector3 Center => this.m_Center;
+    
+    [SerializeField] protected Vector3 m_Buttom;
+    /// <summary>
+    /// 角色底部
+    /// </summary>
+    public Vector3 Buttom => this.m_Buttom;
+    
+    [SerializeField] protected Vector3 m_Coordinate;
+    /// <summary>
+    /// 角色橫縱高座標
+    /// </summary>
+    public Vector3 Coordinate => this.m_Coordinate;
 
     #endregion
 
@@ -73,30 +70,12 @@ public abstract class Charactor : MonoBehaviour
     /// <summary>
     /// 角色目前是否能移動
     /// </summary>
-    public bool cantMove {
-        get {
-            bool jumpingUpButNotFinish = isJumping && jumpState == JumpState.JumpUp && jumpIncrement < 1f;
-            return jumpingUpButNotFinish || jumpHitColli || (isTakingHit && !hyperArmor);
-        }
-    }
-    #endregion
-
-    #region 血量系統參數
-    [Header("角色參數")]
-    /// <summary>
-    /// 最大血量
-    /// </summary>
-    [SerializeField] private int m_maxHealth = 20;
-    private HealthSystemModel m_healthSystem;
-    /// <summary>
-    /// 血量系統
-    /// </summary>
-    public HealthSystemModel HealthSystem => m_healthSystem;
-    /// <summary>
-    /// 判定是否死亡
-    /// </summary>
-    public bool isDead = false;
-
+    // public bool cantMove {
+    //     get {
+    //         bool jumpingUpButNotFinish = isJumping && jumpState == JumpState.JumpUp && jumpIncrement < 1f;
+    //         return jumpingUpButNotFinish || jumpHitColli || (isTakingHit && !hyperArmor);
+    //     }
+    // }
     #endregion
 
     #region 跳躍參數
@@ -131,29 +110,6 @@ public abstract class Charactor : MonoBehaviour
     /// 正在受擊
     /// </summary>
     public bool isTakingHit = false;
-    /// <summary>
-    /// 受擊動作為即時觸發，故宣告一協程進行處理獨立的動作
-    /// </summary>
-    protected Coroutine takeHitRoutine = null;
-    /// <summary>
-    /// 一次受擊動畫所需的時間
-    /// </summary>
-    protected float hitRecoveryTime;
-
-    public int knockOffThrust ;
-
-    public bool hyperArmor;
-
-    #endregion
-
-    #region 眩暈參數
-    public bool stunnable;
-
-    protected bool isStunned = false;
-
-    protected int armorToStunned = 3;
-
-    protected float stunRecoveryTime = 1.5f;
 
     #endregion
 
@@ -167,7 +123,6 @@ public abstract class Charactor : MonoBehaviour
     // Start is called before the first frame update
     protected virtual void Start()
     {
-        m_healthSystem = new HealthSystemModel(m_maxHealth);
     }
 
     // Update is called once per frame
@@ -343,75 +298,11 @@ public abstract class Charactor : MonoBehaviour
     #endregion
 
     #region 受擊控制
-    protected IEnumerator TakeHit() {
-        Debug.Log("TakeHit");
-        isTakingHit = true;
-        //if(!hyperArmor) SetMoveSpeed(0f);
-        
-        yield return new WaitForSeconds(hitRecoveryTime);  // hardcasted casted time for debugged
-        FinishTakeHit();
-    }
-
-    public void FinishTakeHit() {
-        if(takeHitRoutine != null) {
-            StopCoroutine(takeHitRoutine);
-        }
-
-        isTakingHit = false;
-        
-        //SetMoveSpeed(3f);
-        Debug.Log("FinishTakeHit");
-    }
-
-    public void TakeHitProcess(Vector3 senderPos) {
-        if(stunnable && !isStunned) {
-            armorToStunned--;
-            if(armorToStunned <= 0 ) isStunned = true;
-        }
-        
-        Debug.Log("TakeDamage isStunned: "+isStunned);
-        if(isStunned) {
-            //TODO set stunned animation
-            takeHitRoutine = StartCoroutine(BeingStunned());
-        } else {
-            Animator?.SetTrigger("hurt");
-            if(!hyperArmor) {
-                KnockbackFeedback feedback = GetComponent<KnockbackFeedback>();
-                feedback.ActiveFeedback(senderPos);
-            } 
-            takeHitRoutine = StartCoroutine(TakeHit());
-        }
-
-        if(m_healthSystem.CurrHealth <= 0) {
-            Die();
-        }
-    }
-
-    public void Die() {
-        Debug.Log("Enemy Die");
-        isDead = true;
-        Animator?.SetBool("isDead", isDead); 
-        GetComponent<Collider2D>().enabled = false;
-    }
+    
 
     
-    protected IEnumerator BeingStunned() {
-        Debug.Log("BeingStunned");
-        //SetMoveSpeed(0f);
-        yield return new WaitForSeconds(stunRecoveryTime);  // hardcasted casted time for debugged
-        FinishBeingStunned();
-    }
-
-    public void FinishBeingStunned() {
-        if(takeHitRoutine != null) {
-            StopCoroutine(takeHitRoutine);
-        }
-
-        isStunned = false;
-        armorToStunned = 3;
-        //SetMoveSpeed(3f);
-        Debug.Log("FinishBeingStunned");
-    }
+    
+    
     #endregion
 
     #region 碰撞控制

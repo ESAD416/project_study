@@ -2,12 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Combat_Avatar : MonoBehaviour
+public class Combat_Avatar : Attack
 {
+    #region 基本物件
+
+    [Header("可操作角色戰鬥物件")]
     [SerializeField] protected Avatar m_avatar;
     [SerializeField] protected Movement_Avatar m_avatarMovement;
     protected Animator m_avatarAnimator;
+    protected AvatarInputActionsControls inputControls;
 
+    #endregion
+
+    #region 基本參數
+
+    [Header("可操作角色戰鬥參數")]
     /// <summary>
     /// 角色是否為正在攻擊中
     /// </summary>
@@ -25,6 +34,8 @@ public class Combat_Avatar : MonoBehaviour
     /// </summary>
     protected Vector3 movementAfterAttack;
 
+    #endregion
+
     protected virtual void Awake() {
         m_avatarAnimator = m_avatar.Animator;
     }
@@ -36,16 +47,17 @@ public class Combat_Avatar : MonoBehaviour
     }
 
     // Update is called once per frame
-    protected virtual void Update()
+    protected override void Update()
     {
+        base.Update();
     }
 
     #region 攻擊控制
+
     protected IEnumerator Attack() {
         Debug.Log("Combat_Avatar attack start");
         isAttacking = true;
         m_avatarAnimator?.SetTrigger("attack");
-        //m_avatar.SetStatus(Charactor.CharactorStatus.Attack);
         m_avatar.SetCurrentBaseState(m_avatar.Attack);
         yield return new WaitForSeconds(attackClipTime);  // hardcasted casted time for debugged
         FinishAttack();
@@ -67,5 +79,6 @@ public class Combat_Avatar : MonoBehaviour
         movementAfterAttack = Vector3.zero;
         Debug.Log("Combat_Avatar FinishAttack end");
     }
+
     #endregion
 }

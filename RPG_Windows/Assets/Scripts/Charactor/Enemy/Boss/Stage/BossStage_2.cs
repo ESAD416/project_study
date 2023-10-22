@@ -2,29 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BossStage_2 : MonoBehaviour
+public class BossStage_2 : Attack
 {
+    [Header("關卡物件")]
     [SerializeField] private Boss boss;
     [SerializeField] private Avatar player;
-    [SerializeField] private AOEIndicatorCtrl indicatorCtrl;
+    [SerializeField] private AOECtrl indicatorCtrl;
 
-    private float timeToStartBattle = 3f;
-    private float indicatorDuration = 3f;
-    private float attackDuration = 0.65f;
-    private float delayTime = 1f;
-    private int countOfRandomLaunches = 2;
-    private Coroutine attackRoutine;
+    [Header("關卡參數")]
+    [SerializeField] private float m_indicatorDuration = 3f;
+    [SerializeField] private float m_attackDuration = 0.65f;
+    [SerializeField] private int m_countOfRandomLaunches = 2;
+    private float m_delayTime = 1f;
+    private Coroutine m_attackRoutine;
+    private float m_timeToStartBattle = 3f;
 
     // Start is called before the first frame update
     private void Start()
     {
-        Invoke("StartBattle", timeToStartBattle);
-    }
-
-    // Update is called once per frame
-    private void Update()
-    {
-        
+        Invoke("StartBattle", m_timeToStartBattle);
     }
 
     private void NextBossState() {
@@ -34,7 +30,7 @@ public class BossStage_2 : MonoBehaviour
                 StopBattle();
                 //AttackSimultaneouslyProcess();
                 //AttackSeparatelyProcess(0.5f);
-                AttackByTrailProcess(0.5f);
+                AttackByTrailProcess(m_attackRate);
                 break;
             case BossStateMachine.BossState.DuringBattle:
                 StopBattle();
@@ -45,9 +41,9 @@ public class BossStage_2 : MonoBehaviour
     }
 
     private void UpdateStageMode(float id, float ad, int corl) {
-        this.indicatorDuration = id;
-        this.attackDuration = ad;
-        this.countOfRandomLaunches = corl;
+        this.m_indicatorDuration = id;
+        this.m_attackDuration = ad;
+        this.m_countOfRandomLaunches = corl;
     }
 
     #region 攻擊 啟動/關閉
@@ -64,8 +60,8 @@ public class BossStage_2 : MonoBehaviour
     private void StopAttack() {
         StopAllCoroutines();
 
-        if(attackRoutine != null) {
-            StopCoroutine(attackRoutine);
+        if(m_attackRoutine != null) {
+            StopCoroutine(m_attackRoutine);
         }
     }
 
@@ -74,33 +70,33 @@ public class BossStage_2 : MonoBehaviour
     #region 攻擊模式
 
     public void AttackSeparatelyProcess(float attackTimeSpan) {
-        Debug.Log("indicatorDuration: "+indicatorDuration);
-        Debug.Log("attackDuration: "+attackDuration);
-        Debug.Log("countOfRandomLaunches: "+countOfRandomLaunches);
+        Debug.Log("indicatorDuration: "+m_indicatorDuration);
+        Debug.Log("attackDuration: "+m_attackDuration);
+        Debug.Log("countOfRandomLaunches: "+m_countOfRandomLaunches);
         // int count = indicatorCtrl.aoePositions.Count + countOfRandomLaunches;
         // if(count > 0) {
         //     attackRoutine = StartCoroutine(SeparatelyAttackCoroutines(attackTimeSpan));
         // }
 
-        attackRoutine = StartCoroutine(AttackCoroutines_Separately(attackTimeSpan));
+        m_attackRoutine = StartCoroutine(AttackCoroutines_Separately(attackTimeSpan));
     }
 
     public void AttackByTrailProcess(float attackTimeSpan) {
-        Debug.Log("indicatorDuration: "+indicatorDuration);
-        Debug.Log("attackDuration: "+attackDuration);
-        Debug.Log("countOfRandomLaunches: "+countOfRandomLaunches);
+        Debug.Log("indicatorDuration: "+m_indicatorDuration);
+        Debug.Log("attackDuration: "+m_attackDuration);
+        Debug.Log("countOfRandomLaunches: "+m_countOfRandomLaunches);
         
-        attackRoutine = StartCoroutine(AttackCoroutines_ByTrail(attackTimeSpan));
+        m_attackRoutine = StartCoroutine(AttackCoroutines_ByTrail(attackTimeSpan));
     }
 
     public void AttackSimultaneouslyProcess() {
-        Debug.Log("indicatorDuration: "+indicatorDuration);
-        Debug.Log("attackDuration: "+attackDuration);
-        Debug.Log("countOfRandomLaunches: "+countOfRandomLaunches);
+        Debug.Log("indicatorDuration: "+m_indicatorDuration);
+        Debug.Log("attackDuration: "+m_attackDuration);
+        Debug.Log("countOfRandomLaunches: "+m_countOfRandomLaunches);
 
-        int count = indicatorCtrl.aoePositions.Count + countOfRandomLaunches;
+        int count = indicatorCtrl.aoePositions.Count + m_countOfRandomLaunches;
         if(count > 0) {
-            attackRoutine = StartCoroutine(AttackCoroutines_Simultaneously());
+            m_attackRoutine = StartCoroutine(AttackCoroutines_Simultaneously());
         }
     }
 
@@ -134,6 +130,7 @@ public class BossStage_2 : MonoBehaviour
             StartCoroutine(DisplayIndicator(pos));
             // 3. 控制攻擊的動畫與傷害機制 etc.
             StartCoroutine(LaunchAttack(pos));
+            StartCoroutine(SetAttackHitBox(pos));
             
             //TODO 增加隨機AOE指示器至Player附近By countOfRandomLaunches
 
@@ -154,7 +151,7 @@ public class BossStage_2 : MonoBehaviour
             StartCoroutine(LaunchAttack_Simultaneously());
 
             // 等待下一輪攻擊
-            yield return new WaitForSeconds(indicatorDuration + attackDuration - delayTime);
+            yield return new WaitForSeconds(m_indicatorDuration + m_attackDuration - m_delayTime);
         }
     }
 
@@ -165,7 +162,7 @@ public class BossStage_2 : MonoBehaviour
     private IEnumerator DisplayIndicator(Vector3 pos) {
         Debug.Log("AttackCoroutines: DisplayIndicator start");
 
-        indicatorCtrl.InstantiateAreaIndicator(pos, indicatorDuration);
+        indicatorCtrl.InstantiateAreaIndicator(pos, m_indicatorDuration);
         yield return null;
 
         Debug.Log("AttackCoroutines: DisplayIndicator end");
@@ -175,7 +172,7 @@ public class BossStage_2 : MonoBehaviour
         Debug.Log("AttackCoroutines: DisplayMutipleIndicatorsSimultaneously start");
         yield return null;
 
-        indicatorCtrl.InstantiateAreaIndicators(indicatorDuration);
+        indicatorCtrl.InstantiateAreaIndicators(m_indicatorDuration);
         Debug.Log("AttackCoroutines: DisplayMutipleIndicatorsSimultaneously end");
 
         // TODO 增加隨機AOE指示器至Player附近By countOfRandomLaunches
@@ -187,22 +184,36 @@ public class BossStage_2 : MonoBehaviour
 
     private IEnumerator LaunchAttack(Vector3 indicatorPos) {
         Debug.Log("AttackCoroutines: LaunchAttack start");
-        yield return new WaitForSeconds(indicatorDuration - attackDuration);
-        //TODO 攻擊
-        GameObject projectile = ProjectilePool.instance.GetPooledProjectile();
+        yield return new WaitForSeconds(m_indicatorDuration - m_attackDuration);
+
+        GameObject projectile = ProjectilePool.instance.GetPooledGameObject();
         if(projectile != null) {
             // projectile.GetComponent<IndirectProjectile>();
-            projectile.GetComponent<IndirectProjectile>().SetPositionOfBezierCurve(boss.m_Center, indicatorPos, 12f);
-            projectile.GetComponent<IndirectProjectile>().SetDuration(attackDuration);
+            projectile.GetComponent<IndirectProjectile>().SetPositionOfBezierCurve(boss.Center, indicatorPos, 12f);
+            projectile.GetComponent<IndirectProjectile>().SetDuration(m_attackDuration);
 
             projectile.SetActive(true);
         }
         Debug.Log("AttackCoroutines: LaunchAttack end");
     }
 
+    private IEnumerator SetAttackHitBox(Vector3 indicatorPos) {
+        Debug.Log("AttackCoroutines: SetAttackHitBox start");
+        yield return new WaitForSeconds(m_indicatorDuration);
+
+        GameObject explosion = HitBoxPool.instance.GetPooledGameObject();
+        if(explosion != null) {
+            explosion.GetComponent<AreaExplosion>().SetPosition(indicatorPos);
+            explosion.GetComponent<AreaExplosion>().SetDuration(1f);
+            
+            explosion.SetActive(true);
+        }
+        Debug.Log("AttackCoroutines: SetAttackHitBox end");
+    }
+
     private IEnumerator LaunchAttack_Simultaneously() {
         Debug.Log("AttackCoroutines: LaunchAttackSimultaneously start");
-        yield return new WaitForSeconds(indicatorDuration);
+        yield return new WaitForSeconds(m_indicatorDuration);
         //TODO 攻擊
         Debug.Log("AttackCoroutines: LaunchAttackSimultaneously end");
     }

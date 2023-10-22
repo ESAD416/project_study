@@ -37,7 +37,7 @@ public partial class @AvatarInputActionsControls: IInputActionCollection2, IDisp
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Movement"",
+                    ""name"": ""Move"",
                     ""type"": ""Value"",
                     ""id"": ""d7dae9ef-466c-4c54-b9af-aa3128023eb4"",
                     ""expectedControlType"": ""Vector2"",
@@ -46,7 +46,7 @@ public partial class @AvatarInputActionsControls: IInputActionCollection2, IDisp
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""Jump"",
+                    ""name"": ""Dodge"",
                     ""type"": ""Button"",
                     ""id"": ""cfaf3ca6-4058-4326-adc1-b9b6d097ef6a"",
                     ""expectedControlType"": ""Button"",
@@ -94,7 +94,7 @@ public partial class @AvatarInputActionsControls: IInputActionCollection2, IDisp
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Movement"",
+                    ""action"": ""Move"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -105,7 +105,7 @@ public partial class @AvatarInputActionsControls: IInputActionCollection2, IDisp
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard & Mouse"",
-                    ""action"": ""Movement"",
+                    ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -116,7 +116,7 @@ public partial class @AvatarInputActionsControls: IInputActionCollection2, IDisp
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard & Mouse"",
-                    ""action"": ""Movement"",
+                    ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -127,7 +127,7 @@ public partial class @AvatarInputActionsControls: IInputActionCollection2, IDisp
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard & Mouse"",
-                    ""action"": ""Movement"",
+                    ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -138,7 +138,7 @@ public partial class @AvatarInputActionsControls: IInputActionCollection2, IDisp
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard & Mouse"",
-                    ""action"": ""Movement"",
+                    ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -149,7 +149,7 @@ public partial class @AvatarInputActionsControls: IInputActionCollection2, IDisp
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Movement"",
+                    ""action"": ""Move"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -160,7 +160,7 @@ public partial class @AvatarInputActionsControls: IInputActionCollection2, IDisp
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
-                    ""action"": ""Movement"",
+                    ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -171,7 +171,7 @@ public partial class @AvatarInputActionsControls: IInputActionCollection2, IDisp
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
-                    ""action"": ""Movement"",
+                    ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -182,7 +182,7 @@ public partial class @AvatarInputActionsControls: IInputActionCollection2, IDisp
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
-                    ""action"": ""Movement"",
+                    ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -193,18 +193,29 @@ public partial class @AvatarInputActionsControls: IInputActionCollection2, IDisp
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
-                    ""action"": ""Movement"",
+                    ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
                     ""name"": """",
                     ""id"": ""9be91d66-dae0-4dec-9803-d644b656f66a"",
-                    ""path"": ""<Keyboard>/space"",
-                    ""interactions"": """",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": ""Hold"",
                     ""processors"": """",
                     ""groups"": ""Keyboard & Mouse"",
-                    ""action"": ""Jump"",
+                    ""action"": ""Dodge"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7ebe0b2a-7f7f-49b7-abd9-982a6bdaed62"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": ""Hold"",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Dodge"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -354,8 +365,8 @@ public partial class @AvatarInputActionsControls: IInputActionCollection2, IDisp
         // Lamniat_Land
         m_Lamniat_Land = asset.FindActionMap("Lamniat_Land", throwIfNotFound: true);
         m_Lamniat_Land_Attack = m_Lamniat_Land.FindAction("Attack", throwIfNotFound: true);
-        m_Lamniat_Land_Movement = m_Lamniat_Land.FindAction("Movement", throwIfNotFound: true);
-        m_Lamniat_Land_Jump = m_Lamniat_Land.FindAction("Jump", throwIfNotFound: true);
+        m_Lamniat_Land_Move = m_Lamniat_Land.FindAction("Move", throwIfNotFound: true);
+        m_Lamniat_Land_Dodge = m_Lamniat_Land.FindAction("Dodge", throwIfNotFound: true);
         m_Lamniat_Land_Hold = m_Lamniat_Land.FindAction("Hold", throwIfNotFound: true);
     }
 
@@ -419,16 +430,16 @@ public partial class @AvatarInputActionsControls: IInputActionCollection2, IDisp
     private readonly InputActionMap m_Lamniat_Land;
     private List<ILamniat_LandActions> m_Lamniat_LandActionsCallbackInterfaces = new List<ILamniat_LandActions>();
     private readonly InputAction m_Lamniat_Land_Attack;
-    private readonly InputAction m_Lamniat_Land_Movement;
-    private readonly InputAction m_Lamniat_Land_Jump;
+    private readonly InputAction m_Lamniat_Land_Move;
+    private readonly InputAction m_Lamniat_Land_Dodge;
     private readonly InputAction m_Lamniat_Land_Hold;
     public struct Lamniat_LandActions
     {
         private @AvatarInputActionsControls m_Wrapper;
         public Lamniat_LandActions(@AvatarInputActionsControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Attack => m_Wrapper.m_Lamniat_Land_Attack;
-        public InputAction @Movement => m_Wrapper.m_Lamniat_Land_Movement;
-        public InputAction @Jump => m_Wrapper.m_Lamniat_Land_Jump;
+        public InputAction @Move => m_Wrapper.m_Lamniat_Land_Move;
+        public InputAction @Dodge => m_Wrapper.m_Lamniat_Land_Dodge;
         public InputAction @Hold => m_Wrapper.m_Lamniat_Land_Hold;
         public InputActionMap Get() { return m_Wrapper.m_Lamniat_Land; }
         public void Enable() { Get().Enable(); }
@@ -442,12 +453,12 @@ public partial class @AvatarInputActionsControls: IInputActionCollection2, IDisp
             @Attack.started += instance.OnAttack;
             @Attack.performed += instance.OnAttack;
             @Attack.canceled += instance.OnAttack;
-            @Movement.started += instance.OnMovement;
-            @Movement.performed += instance.OnMovement;
-            @Movement.canceled += instance.OnMovement;
-            @Jump.started += instance.OnJump;
-            @Jump.performed += instance.OnJump;
-            @Jump.canceled += instance.OnJump;
+            @Move.started += instance.OnMove;
+            @Move.performed += instance.OnMove;
+            @Move.canceled += instance.OnMove;
+            @Dodge.started += instance.OnDodge;
+            @Dodge.performed += instance.OnDodge;
+            @Dodge.canceled += instance.OnDodge;
             @Hold.started += instance.OnHold;
             @Hold.performed += instance.OnHold;
             @Hold.canceled += instance.OnHold;
@@ -458,12 +469,12 @@ public partial class @AvatarInputActionsControls: IInputActionCollection2, IDisp
             @Attack.started -= instance.OnAttack;
             @Attack.performed -= instance.OnAttack;
             @Attack.canceled -= instance.OnAttack;
-            @Movement.started -= instance.OnMovement;
-            @Movement.performed -= instance.OnMovement;
-            @Movement.canceled -= instance.OnMovement;
-            @Jump.started -= instance.OnJump;
-            @Jump.performed -= instance.OnJump;
-            @Jump.canceled -= instance.OnJump;
+            @Move.started -= instance.OnMove;
+            @Move.performed -= instance.OnMove;
+            @Move.canceled -= instance.OnMove;
+            @Dodge.started -= instance.OnDodge;
+            @Dodge.performed -= instance.OnDodge;
+            @Dodge.canceled -= instance.OnDodge;
             @Hold.started -= instance.OnHold;
             @Hold.performed -= instance.OnHold;
             @Hold.canceled -= instance.OnHold;
@@ -505,8 +516,8 @@ public partial class @AvatarInputActionsControls: IInputActionCollection2, IDisp
     public interface ILamniat_LandActions
     {
         void OnAttack(InputAction.CallbackContext context);
-        void OnMovement(InputAction.CallbackContext context);
-        void OnJump(InputAction.CallbackContext context);
+        void OnMove(InputAction.CallbackContext context);
+        void OnDodge(InputAction.CallbackContext context);
         void OnHold(InputAction.CallbackContext context);
     }
 }

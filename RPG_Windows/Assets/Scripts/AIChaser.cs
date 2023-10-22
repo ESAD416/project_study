@@ -34,10 +34,10 @@ public class AIChaser : MonoBehaviour
     }
 
     private void Update() {
-        if(EnemyAI.isDead) {
-            transform.gameObject.SetActive(false);
-        } else {
-            if(!EnemyAI.CharStatus.Equals(Charactor.CharactorStatus.Attack)) {
+        // if(EnemyAI.isDead) {
+        //     transform.gameObject.SetActive(false);
+        // } else {
+            if(!EnemyAI.CurrentBaseState.Equals(BaseStateMachine_Enemy.BaseState.Attack)) {
                 if(TargetModel != null) {
                     //Debug.Log("TargetModel != null)");
                     targetVisable = CheckTargetVisible();
@@ -53,7 +53,7 @@ public class AIChaser : MonoBehaviour
                     StartCoroutine(ChaseModeEndingProcess());
                 }
             }
-        }
+        // }
     }
 
     private void OnDrawGizmos() {
