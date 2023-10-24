@@ -29,9 +29,8 @@ public class HealthSystem : MonoBehaviour
     /// </summary>
     [SerializeField] private bool isDead = false;
 
-    /// <summary>
-    /// 血量變化觸發事件
-    /// </summary>
+
+    [Header("血量變化觸發事件")]
     public UnityEvent OnTakenDamage;
     public UnityEvent OnGetHeal;
 
@@ -68,6 +67,8 @@ public class HealthSystem : MonoBehaviour
     public void OnDamage(float dmgAmount) {
         Debug.Log("TakeDamage: "+dmgAmount);
         m_currHealth -= dmgAmount;
+
+
         if(m_currHealth < 0) m_currHealth = 0;
         OnTakenDamage?.Invoke();
     }

@@ -5,7 +5,7 @@ using UnityEngine;
 public abstract class BaseStateMachine_Charactor
 {
     public enum BaseState {
-        Idle, Move, Dodge, Attack, Dead,
+        Idle, Move, Dodge, Attack, Hurt, Dead,
     }
     protected BaseState m_bState;
     public BaseState State => m_bState;

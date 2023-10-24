@@ -105,14 +105,6 @@ public abstract class Charactor : MonoBehaviour
     
     #endregion
     
-    #region 受擊參數
-    /// <summary>
-    /// 正在受擊
-    /// </summary>
-    public bool isTakingHit = false;
-
-    #endregion
-
     protected virtual void Awake() {
         m_Coordinate = transform.position;
     }

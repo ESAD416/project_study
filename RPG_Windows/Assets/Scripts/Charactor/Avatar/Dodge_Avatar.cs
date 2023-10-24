@@ -15,6 +15,8 @@ public class Dodge_Avatar : MonoBehaviour
     #endregion
 
     #region 基本參數
+
+    [Header("基本參數")]
     public bool isDodging;
     /// <summary>
     /// 一次閃避動畫所需的時間

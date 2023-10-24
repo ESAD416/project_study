@@ -23,6 +23,19 @@ public class BossStage_2 : Attack
         Invoke("StartBattle", m_timeToStartBattle);
     }
 
+    protected override void Update()
+    {
+        bool targetAttacked = m_OnHit != null && m_OnHit.Length > 0;
+        if (targetAttacked) {
+            Debug.Log("targetAttacked");
+            foreach (Collider2D col in m_OnHit) {
+                if (col.GetComponent<HitSystem>() != null) {
+                    col.GetComponent<HitSystem>().TakeHiProcess(this.Damage, this.transform);
+                }
+            }
+        }
+    }
+
     private void NextBossState() {
         switch(boss.CurrentBossState.Stage) {
             case BossStateMachine.BossState.BeforeStart: 
@@ -205,6 +218,8 @@ public class BossStage_2 : Attack
         if(explosion != null) {
             explosion.GetComponent<AreaExplosion>().SetPosition(indicatorPos);
             explosion.GetComponent<AreaExplosion>().SetDuration(1f);
+
+            explosion.GetComponent<HitBox_Overlap2D>().SetAttacker(this);
             
             explosion.SetActive(true);
         }

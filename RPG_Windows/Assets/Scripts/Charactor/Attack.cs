@@ -26,11 +26,11 @@ public abstract class Attack : MonoBehaviour
         bool targetAttacked = m_OnHit != null && m_OnHit.Length > 0;
         if (targetAttacked) {
             Debug.Log("targetAttacked");
-            // foreach (Collider2D col in m_OnHit) {
-            //     if (col.GetComponent<HitSystem>() != null) {
-            //         col.GetComponent<HitSystem>().TakeHiProcess(this);
-            //     }
-            // }
+            foreach (Collider2D col in m_OnHit) {
+                if (col.GetComponent<HitSystem>() != null) {
+                    col.GetComponent<HitSystem>().TakeHiProcess(this);
+                }
+            }
         }
     }
 }

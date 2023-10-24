@@ -19,7 +19,6 @@ public class DetectorEditor : Editor
     private SerializedProperty AreaSelectedIndex;
 
     private string[] detectOptions = new string[] { "Single", "Mutiple" };
-    // private int areaSelectedIndex = 0;
     private string[] areaOptions = new string[] { "Circular", "Box", "Rectangular", "Point"};
 
     private void OnEnable() {
@@ -129,7 +128,6 @@ public class HitboxEditor : Editor {
     private SerializedProperty AreaSelectedIndex;
     
     private string[] detectOptions = new string[] { "Single", "Mutiple" };
-    // private int areaSelectedIndex = 0;
     private string[] areaOptions = new string[] { "Circular", "Box", "Rectangular", "Point"};
 
     private void OnEnable() {
