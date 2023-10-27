@@ -64,18 +64,18 @@ public class HealthSystem : MonoBehaviour
         return result;
     }
 
-    public void OnDamage(float dmgAmount) {
-        Debug.Log("TakeDamage: "+dmgAmount);
-        m_currHealth -= dmgAmount;
+    public void Decrease(float amount) {
+        Debug.Log("TakeDamage: "+amount);
+        m_currHealth -= amount;
 
 
         if(m_currHealth < 0) m_currHealth = 0;
         OnTakenDamage?.Invoke();
     }
 
-    public void OnHeal(float healAmount) {
-        Debug.Log("GetHeal: "+healAmount);
-        m_currHealth += healAmount;
+    public void Increase(float amount) {
+        Debug.Log("GetHeal: "+amount);
+        m_currHealth += amount;
         if(m_currHealth > 0) m_currHealth = MaxHealth;
         OnGetHeal?.Invoke();
     }

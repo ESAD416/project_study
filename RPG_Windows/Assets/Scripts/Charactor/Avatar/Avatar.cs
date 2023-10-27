@@ -9,7 +9,7 @@ public class Avatar : Charactor
 {
     #region 可操作角色物件
 
-    [Header("可操作角色基本物件")]
+    [Header("Avatar基本物件")]
     [SerializeField] protected Movement_Avatar m_avatarMovement;
     /// <summary>
     /// 可操作角色的移動控制
@@ -59,6 +59,8 @@ public class Avatar : Charactor
     public BaseStateMachine_Avatar Dodge => m_dodge;
     protected BaseStateMachine_Avatar m_attack;
     public BaseStateMachine_Avatar Attack => m_attack;
+    protected BaseStateMachine_Avatar m_hurt;
+    public BaseStateMachine_Avatar Hurt => m_hurt;
     protected BaseStateMachine_Avatar m_dead;
     public BaseStateMachine_Avatar Dead => m_dead;
 

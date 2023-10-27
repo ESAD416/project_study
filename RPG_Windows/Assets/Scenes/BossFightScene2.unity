@@ -8172,10 +8172,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef64173f5e1691245a279fdef620bba1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target_rb2d: {fileID: 0}
-  targetCenter: {fileID: 0}
-  thrust: 14
-  hitRecoveryTime: 0.1
+  m_target_rb2d: {fileID: 0}
+  m_targetCenter: {fileID: 0}
+  m_thrust: 5
+  m_hitRecoveryTime: 0.2
   OnBegin:
     m_PersistentCalls:
       m_Calls:
@@ -16374,8 +16374,8 @@ GameObject:
   - component: {fileID: 1065227032}
   - component: {fileID: 1065227033}
   - component: {fileID: 1065227031}
-  - component: {fileID: 1065227034}
   - component: {fileID: 1065227035}
+  - component: {fileID: 1065227034}
   - component: {fileID: 1065227026}
   - component: {fileID: 1065227025}
   m_Layer: 6
@@ -16428,10 +16428,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef64173f5e1691245a279fdef620bba1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target_rb2d: {fileID: 1065227030}
-  targetCenter: {fileID: 2135325528}
-  thrust: 6
-  hitRecoveryTime: 0.1
+  m_target_rb2d: {fileID: 1065227030}
+  m_targetCenter: {fileID: 2135325528}
+  m_thrust: 5
+  m_hitRecoveryTime: 0.2
   OnBegin:
     m_PersistentCalls:
       m_Calls:
@@ -16629,8 +16629,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b05ba1a97b1ee144fbf40cedd642c722, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_damage: 10
   m_attackRate: 0
+  m_damageSystem: {fileID: 0}
   m_OnHit: []
   m_avatar: {fileID: 1065227027}
   m_avatarMovement: {fileID: 1065227032}
@@ -16697,53 +16697,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 1065227023}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 016d2e56b82890a42825b59e45fc92c4, type: 3}
+  m_Script: {fileID: 11500000, guid: 78082d910246d0549a275cdb44eadb8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_HealthSystem: {fileID: 1065227034}
   m_KnockbackFeedback: {fileID: 1065227026}
   isTakingHit: 0
-  onHitDelay: 0
+  onHitDelay: 0.1
   isInvulnerable: 0
   invulnerableDuration: 1.5
   isHyperArmor: 0
-  TargetSelectedIndex: 0
-  AvatarOnHitEventBegin:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1065227027}
-        m_TargetAssemblyTypeName: Avatar, Assembly-CSharp
-        m_MethodName: SetCurrentBaseState
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  AvatarOnHitEventEnd:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1065227027}
-        m_TargetAssemblyTypeName: Avatar, Assembly-CSharp
-        m_MethodName: SetCurrentBaseState
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  EnemyOnHitEventBegin:
-    m_PersistentCalls:
-      m_Calls: []
-  EnemyOnHitEventEnd:
-    m_PersistentCalls:
-      m_Calls: []
+  m_target: {fileID: 1065227027}
+  m_targetMovement: {fileID: 1065227032}
 --- !u!1 &1068894816
 GameObject:
   m_ObjectHideFlags: 0
@@ -17409,6 +17374,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1446191129}
   - component: {fileID: 1446191130}
+  - component: {fileID: 1446191131}
   m_Layer: 0
   m_Name: BossBattle
   m_TagString: Untagged
@@ -17448,8 +17414,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fcc97cbd49cb4674bb9e9af3b2f8d55b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_damage: 10
   m_attackRate: 0.5
+  m_damageSystem: {fileID: 1446191131}
   m_OnHit: []
   boss: {fileID: 1460614681}
   player: {fileID: 1065227027}
@@ -17457,6 +17423,24 @@ MonoBehaviour:
   m_indicatorDuration: 3
   m_attackDuration: 0.65
   m_countOfRandomLaunches: 2
+--- !u!114 &1446191131
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1446191128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed2db3b11b1265f4cbb37487656e1b22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_damage: 10
+  m_damageByOverTime: 5
+  isDOT: 0
+  m_initialCounter: 1
+  m_damageCounter: 0
+  m_OnDamageDelay: 0.3
 --- !u!1 &1458559468
 GameObject:
   m_ObjectHideFlags: 0

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Enemy : Charactor
 {
+    [Header("Avatar基本物件")]
     [SerializeField] protected Movement_Enemy m_enemyMovement;
     [SerializeField] protected HealthBar healthBar;
 
@@ -20,6 +21,8 @@ public class Enemy : Charactor
     public BaseStateMachine_Enemy Idle => m_idle;
     protected BaseStateMachine_Enemy m_move;
     public BaseStateMachine_Enemy Move => m_move;
+    protected BaseStateMachine_Enemy m_hurt;
+    public BaseStateMachine_Enemy Hurt => m_hurt;
     protected BaseStateMachine_Enemy m_dead;
     public BaseStateMachine_Enemy Dead => m_dead;
 

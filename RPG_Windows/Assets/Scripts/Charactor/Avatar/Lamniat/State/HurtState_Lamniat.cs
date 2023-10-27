@@ -21,7 +21,7 @@ public class HurtState_Lamniat : BaseStateMachine_Avatar
 
     public override void OnUpdate()
     {
-        AnimeUtils.ActivateAnimatorLayer(this.currentAvatar.Animator, "AdditiveLayer");
+        //AnimeUtils.ActivateAnimatorLayer(this.currentAvatar.Animator, "AdditiveLayer");
     }
 
     public override void OnFixedUpdate()

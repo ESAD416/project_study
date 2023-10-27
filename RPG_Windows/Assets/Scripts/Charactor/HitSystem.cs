@@ -6,9 +6,8 @@ using UnityEngine.Events;
 public class HitSystem : MonoBehaviour
 {
     [Header("基本物件")]
-    [SerializeField] private HealthSystem m_HealthSystem;
-    [SerializeField] private KnockbackFeedback m_KnockbackFeedback;
-
+    [SerializeField] protected HealthSystem m_HealthSystem;
+    [SerializeField] protected KnockbackFeedback m_KnockbackFeedback;
 
     #region 受擊參數
 
@@ -18,33 +17,23 @@ public class HitSystem : MonoBehaviour
     /// </summary>
     public bool isTakingHit = false;
 
-    [SerializeField] private float onHitDelay;
+    [SerializeField] protected float onHitDelay;
+    public float OnHitDelay => onHitDelay;
 
 
     [Header("無敵參數")]
     /// <summary>
     /// 是否無敵狀態
     /// </summary>
-    [SerializeField] private bool isInvulnerable = false;
+    [SerializeField] protected bool isInvulnerable = false;
     /// <summary>
     /// 無敵持續時間
     /// </summary>
-    [SerializeField] private float invulnerableDuration;
+    [SerializeField] protected float invulnerableDuration;
 
 
     [Header("霸體參數")]
-    [SerializeField] private bool isHyperArmor = false;
-
-    [HideInInspector] public int TargetSelectedIndex = 0;
-
-    [Header("Avatar受擊觸發事件")]
-    [HideInInspector] public UnityEvent<BaseStateMachine_Avatar> AvatarOnHitEventBegin;
-    [HideInInspector] public UnityEvent<BaseStateMachine_Avatar> AvatarOnHitEventEnd;
-
-    [Header("Enemy受擊觸發事件")]
-    [HideInInspector] public UnityEvent<BaseStateMachine_Enemy> EnemyOnHitEventBegin;
-    [HideInInspector] public UnityEvent<BaseStateMachine_Enemy> EnemyOnHitEventEnd;
-
+    [SerializeField] protected bool isHyperArmor = false;
 
     /// <summary>
     /// 受擊動作為即時觸發，故宣告一協程進行處理獨立的動作
@@ -53,31 +42,19 @@ public class HitSystem : MonoBehaviour
 
     #endregion
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    private void Update()
-    {
-        
-    }
-
-    public void TakeHiProcess(Attack attacker) {
+    public virtual void TakeHiProcess(Attack attacker) {
         Debug.Log("TakeHit attacker: "+attacker.name);
         takeHitRoutine = StartCoroutine(TakeHit(attacker));
         
     }
 
-    public void TakeHiProcess(float damage, Transform attackedLocation) {
-        Debug.Log("TakeHit damage: "+damage+", attackedLocation: "+attackedLocation.position);
-        takeHitRoutine = StartCoroutine(TakeHit(damage, attackedLocation));
+    public virtual void TakeHiProcess(DamageSystem damageSystem, Transform attackedLocation, int damageCounter = 1) {
+        Debug.Log("TakeHit damage: "+damageSystem.Damage+", attackedLocation: "+attackedLocation.position);
+        takeHitRoutine = StartCoroutine(TakeHit(damageSystem, attackedLocation, damageCounter));
     }
 
-    protected IEnumerator TakeHit(Attack attacker) {
-        
+    protected virtual IEnumerator TakeHit(Attack attacker) 
+    {
         isTakingHit = true;
 
         var charactorTakenHit = GetComponent<Charactor>();
@@ -94,7 +71,7 @@ public class HitSystem : MonoBehaviour
                 m_KnockbackFeedback.ActiveFeedback(attacker.transform.position);
             }
 
-            m_HealthSystem.OnDamage(attacker.Damage);
+            attacker.DamageSystem.OnDamage(m_HealthSystem);
             
             yield return new WaitForSeconds(invulnerableDuration);  // hardcasted casted time for debugged
 
@@ -105,8 +82,8 @@ public class HitSystem : MonoBehaviour
         FinishTakeHit();
     }
 
-    protected IEnumerator TakeHit(float damage, Transform attackedLocation) {
-        
+    protected virtual IEnumerator TakeHit(DamageSystem damageSystem, Transform attackedLocation, int damageCounter = 1) 
+    {
         isTakingHit = true;
 
         var charactorTakenHit = GetComponent<Charactor>();
@@ -122,7 +99,7 @@ public class HitSystem : MonoBehaviour
                 m_KnockbackFeedback.ActiveFeedback(attackedLocation.position);
             }
 
-            m_HealthSystem.OnDamage(damage);
+            damageSystem.OnDamage(m_HealthSystem);
             
             yield return new WaitForSeconds(invulnerableDuration);  // hardcasted casted time for debugged
 
@@ -133,7 +110,7 @@ public class HitSystem : MonoBehaviour
         FinishTakeHit();
     }
 
-    protected void FinishTakeHit() {
+    protected virtual void FinishTakeHit() {
         if(takeHitRoutine != null) {
             StopCoroutine(takeHitRoutine);
         }
@@ -145,8 +122,4 @@ public class HitSystem : MonoBehaviour
         
         Debug.Log("FinishTakeHit");
     }
-
-    
-
-
 }

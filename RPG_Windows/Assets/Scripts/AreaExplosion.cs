@@ -4,8 +4,12 @@ using UnityEngine;
 
 public class AreaExplosion : MonoBehaviour
 {
+    [SerializeField] private Attack byWhom;
+    public void SetByWhom(Attack attacker) => this.byWhom = attacker;
+
     [SerializeField] private float duration = 5;
-    [SerializeField] private float timeElapsed;
+    public void SetDuration(float duration) => this.duration = duration;
+    private float timeElapsed;
 
     private void OnEnable() {
         timeElapsed = 0f;
@@ -25,10 +29,6 @@ public class AreaExplosion : MonoBehaviour
             timeElapsed = duration;
         } 
         timeElapsed += Time.deltaTime;
-    }
-
-    public void SetDuration(float duration) {
-        this.duration = duration;
     }
 
     public void SetPosition(Vector3 targetPos) {

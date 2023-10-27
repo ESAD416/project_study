@@ -30,7 +30,7 @@ public class BossStage_2 : Attack
             Debug.Log("targetAttacked");
             foreach (Collider2D col in m_OnHit) {
                 if (col.GetComponent<HitSystem>() != null) {
-                    col.GetComponent<HitSystem>().TakeHiProcess(this.Damage, this.transform);
+                    col.GetComponent<HitSystem>().TakeHiProcess(this.DamageSystem, this.transform);
                 }
             }
         }
@@ -143,7 +143,7 @@ public class BossStage_2 : Attack
             StartCoroutine(DisplayIndicator(pos));
             // 3. 控制攻擊的動畫與傷害機制 etc.
             StartCoroutine(LaunchAttack(pos));
-            StartCoroutine(SetAttackHitBox(pos));
+            StartCoroutine(SetExplosion(pos));
             
             //TODO 增加隨機AOE指示器至Player附近By countOfRandomLaunches
 
@@ -210,12 +210,13 @@ public class BossStage_2 : Attack
         Debug.Log("AttackCoroutines: LaunchAttack end");
     }
 
-    private IEnumerator SetAttackHitBox(Vector3 indicatorPos) {
+    private IEnumerator SetExplosion(Vector3 indicatorPos) {
         Debug.Log("AttackCoroutines: SetAttackHitBox start");
         yield return new WaitForSeconds(m_indicatorDuration);
 
         GameObject explosion = HitBoxPool.instance.GetPooledGameObject();
         if(explosion != null) {
+            explosion.GetComponent<AreaExplosion>().SetByWhom(this);
             explosion.GetComponent<AreaExplosion>().SetPosition(indicatorPos);
             explosion.GetComponent<AreaExplosion>().SetDuration(1f);
 
