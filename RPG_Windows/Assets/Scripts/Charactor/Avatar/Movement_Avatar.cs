@@ -11,7 +11,7 @@ public class Movement_Avatar : MonoBehaviour
     protected Rigidbody2D m_avatarRdbd;
     protected SpriteRenderer m_avatarSprtRenderer;
     protected Animator m_avatarAnimator;
-    protected AvatarInputActionsControls inputControls;
+    protected AvatarInputActionsControls m_inputControls;
 
     #endregion
     
@@ -22,7 +22,7 @@ public class Movement_Avatar : MonoBehaviour
     /// <summary>
     /// 角色移速
     /// </summary>
-    public float MoveSpeed => m_moveSpeed;
+    public float MoveSpeed => this.m_moveSpeed;
     /// <summary>
     /// 更改角色移速
     /// </summary>
@@ -37,6 +37,12 @@ public class Movement_Avatar : MonoBehaviour
     /// 更改角色向量
     /// </summary>
     public void SetMovement(Vector3 vector3) => this.m_movement = vector3;
+    [SerializeField] protected Vector3 m_movementAfterTrigger = Vector3.zero;
+    /// <summary>
+    /// 記錄當下角色攻擊動作時的移動向量並於攻擊動作完成後復原
+    /// </summary>
+    public Vector3 MovementAfterTrigger => this.m_movementAfterTrigger;
+    public void SetMovementAfterTrigger(Vector3 vector3) => this.m_movementAfterTrigger = vector3;
 
 
     /// <summary>
@@ -52,7 +58,7 @@ public class Movement_Avatar : MonoBehaviour
     /// <summary>
     /// 角色目前是否為移動中
     /// </summary>
-    public bool isMoving {
+    public bool IsMoving {
         get {
             return Movement.x != 0 || Movement.y != 0;
         }

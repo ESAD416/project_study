@@ -64,9 +64,7 @@ public class HitSystem : MonoBehaviour
                 yield break;
             else if(!isInvulnerable) isInvulnerable = true;
 
-            
             //OnHitEventBegin?.Invoke();
-
             if(!isHyperArmor && m_KnockbackFeedback != null) {
                 m_KnockbackFeedback.ActiveFeedback(attacker.transform.position);
             }
@@ -111,6 +109,7 @@ public class HitSystem : MonoBehaviour
     }
 
     protected virtual void FinishTakeHit() {
+        Debug.Log("HitSystem FinishTakeHit");
         if(takeHitRoutine != null) {
             StopCoroutine(takeHitRoutine);
         }
@@ -120,6 +119,6 @@ public class HitSystem : MonoBehaviour
         
         //OnHitEventEnd?.Invoke();
         
-        Debug.Log("FinishTakeHit");
+        Debug.Log("HitSystem FinishTakeHit");
     }
 }

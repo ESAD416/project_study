@@ -24,8 +24,10 @@ public class HitBox_Overlap2D : Detector_Overlap2D
 
     protected override void Update() {
         base.Update();
-        if(counterElapsed > OnHitCheckCount)
+        if(counterElapsed >= OnHitCheckCount) {
+            m_attacker.SetOverlapDetected(new Collider2D[0]);
             return;
+        }
 
         if(OverlapDetected != null && OverlapDetected.Length > 0) {
             m_attacker.SetOverlapDetected(OverlapDetected);
@@ -35,7 +37,6 @@ public class HitBox_Overlap2D : Detector_Overlap2D
 
         if(counterElapsed > 0) UpdateTimer();
         if(delaytimeElapsed >= OnHitCheckDelay) ResetTimer();
-        
     }
     
     protected void UpdateTimer() {

@@ -14,6 +14,9 @@ public class AttackState_Lamniat : BaseStateMachine_Avatar
     public override void OnEnter()
     {
         // OnEnter
+        
+
+        this.currentAvatar.Animator?.SetTrigger("attack");
     }
     public override void OnEnter(Avatar avatar)
     {

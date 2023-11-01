@@ -10,7 +10,7 @@ public class Combat_Avatar : Attack
     [SerializeField] protected Avatar m_avatar;
     [SerializeField] protected Movement_Avatar m_avatarMovement;
     protected Animator m_avatarAnimator;
-    protected AvatarInputActionsControls inputControls;
+    protected AvatarInputActionsControls m_inputControls;
 
     #endregion
 
@@ -20,19 +20,15 @@ public class Combat_Avatar : Attack
     /// <summary>
     /// 角色是否為正在攻擊中
     /// </summary>
-    public bool isAttacking;
+    public bool IsAttacking;
     /// <summary>
     /// 一次攻擊動畫所需的時間
     /// </summary>
-    [SerializeField] protected float attackClipTime;
+    [SerializeField] protected float m_attackClipTime;
     /// <summary>
     /// 角色攻擊動作為即時觸發，故宣告一協程進行處理獨立的動作
     /// </summary>
-    protected Coroutine attackRoutine;
-    /// <summary>
-    /// 記錄當下角色攻擊動作時的移動向量並於攻擊動作完成後復原
-    /// </summary>
-    protected Vector3 movementAfterAttack;
+    protected Coroutine m_attackRoutine;
 
     #endregion
 
@@ -56,27 +52,26 @@ public class Combat_Avatar : Attack
 
     protected IEnumerator Attack() {
         Debug.Log("Combat_Avatar attack start");
-        isAttacking = true;
-        m_avatarAnimator?.SetTrigger("attack");
+        IsAttacking = true;
+        
         m_avatar.SetCurrentBaseState(m_avatar.Attack);
-        yield return new WaitForSeconds(attackClipTime);  // hardcasted casted time for debugged
+        yield return new WaitForSeconds(m_attackClipTime);  // hardcasted casted time for debugged
         FinishAttack();
     }
 
     protected virtual void FinishAttack() {
         Debug.Log("Combat_Avatar FinishAttack start");
-        if(attackRoutine != null) {
-            StopCoroutine(attackRoutine);
+        if(m_attackRoutine != null) {
+            StopCoroutine(m_attackRoutine);
         }
 
-        isAttacking = false;
-
-        m_avatarMovement.SetMovement(movementAfterAttack);
+        IsAttacking = false;
+        m_avatarMovement.SetMovement(m_avatarMovement.MovementAfterTrigger);
+        m_avatarMovement.SetMovementAfterTrigger(Vector3.zero);
         
-        if(m_avatarMovement.isMoving) m_avatar.SetCurrentBaseState(m_avatar.Move);
+        if(m_avatarMovement.IsMoving) m_avatar.SetCurrentBaseState(m_avatar.Move);
         else m_avatar.SetCurrentBaseState(m_avatar.Idle);
 
-        movementAfterAttack = Vector3.zero;
         Debug.Log("Combat_Avatar FinishAttack end");
     }
 

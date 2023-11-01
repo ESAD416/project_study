@@ -129,6 +129,8 @@ public class Avatar : Charactor
         m_currentBaseState.OnUpdate();
 
         base.Update();
+
+        //Debug.Log("m_currentBaseState: "+m_currentBaseState.State);
     }
 
     protected override void FixedUpdate() {
@@ -250,7 +252,7 @@ public class Avatar : Charactor
     }
 
     private JumpState DetectedWhetherNeedToJump() {
-        if(AvatarMovement.isMoving) {
+        if(AvatarMovement.IsMoving) {
             SetRaycastPoint();
 
             Vector2 distance = new Vector2(AvatarMovement.Movement.x, AvatarMovement.Movement.y) * 0.5f;
@@ -258,13 +260,13 @@ public class Avatar : Charactor
             //Debug.Log("castEndPos: "+rayCastEndPos);
             Debug.DrawLine(m_raycastStart.position, m_raycastEnd, Color.blue);
 
-            return JumpMechanismUtils.DetectedJumpState(m_raycastStart.position, m_raycastEnd, distance, currHeight, AvatarMovement.isMoving);
+            return JumpMechanismUtils.DetectedJumpState(m_raycastStart.position, m_raycastEnd, distance, currHeight, AvatarMovement.IsMoving);
         }
         return JumpState.Ground;
     }
 
     private void DetectedToJump() {
-        if(AvatarMovement.isMoving) {
+        if(AvatarMovement.IsMoving) {
             SetRaycastPoint();
 
             Vector2 distance = new Vector2(AvatarMovement.Movement.x, AvatarMovement.Movement.y) * 0.35f;
@@ -320,7 +322,7 @@ public class Avatar : Charactor
     }
 
     private void DetectedWhileJump() {
-        if(AvatarMovement.isMoving) {
+        if(AvatarMovement.IsMoving) {
             SetRaycastPoint();
 
             Vector2 distance = new Vector2(AvatarMovement.Movement.x, AvatarMovement.Movement.y) * 0.35f;

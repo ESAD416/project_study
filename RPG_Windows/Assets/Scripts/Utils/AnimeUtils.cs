@@ -31,7 +31,6 @@ public static class AnimeUtils
                 break;
             }
         }
-
         
         return attackClipTime;
     }

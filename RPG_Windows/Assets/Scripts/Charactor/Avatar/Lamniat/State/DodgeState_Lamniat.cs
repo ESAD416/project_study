@@ -13,6 +13,7 @@ public class DodgeState_Lamniat : BaseStateMachine_Avatar
     public override void OnEnter()
     {
         // OnEnter
+        this.currentAvatar.Animator?.SetTrigger("dodge");
     }
 
     public override void OnEnter(Avatar avatar)
@@ -28,9 +29,7 @@ public class DodgeState_Lamniat : BaseStateMachine_Avatar
 
     public override void OnFixedUpdate()
     {
-        // OnFixedUpdate
-        // this.currentAvatar.AvatarMovement.SetMovement(this.currentAvatar.AvatarMovement.FacingDir);
-        // this.currentAvatar.AvatarMovement.SetMoveSpeed(dodgeSpeed);
+        this.currentAvatar.AvatarMovement.SetMovement(Vector3.zero);
     }
 
     public override void OnExit()

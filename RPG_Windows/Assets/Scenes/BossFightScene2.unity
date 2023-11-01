@@ -16634,8 +16634,8 @@ MonoBehaviour:
   m_OnHit: []
   m_avatar: {fileID: 1065227027}
   m_avatarMovement: {fileID: 1065227032}
-  isAttacking: 0
-  attackClipTime: 0.3
+  IsAttacking: 0
+  m_attackClipTime: 0
 --- !u!114 &1065227032
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16665,8 +16665,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_avatar: {fileID: 1065227027}
   m_avatarMovement: {fileID: 1065227032}
-  isDodging: 0
-  dodgeClipTime: 0
+  IsDodging: 0
 --- !u!114 &1065227034
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16709,6 +16708,7 @@ MonoBehaviour:
   isHyperArmor: 0
   m_target: {fileID: 1065227027}
   m_targetMovement: {fileID: 1065227032}
+  m_targetDodge: {fileID: 1065227033}
 --- !u!1 &1068894816
 GameObject:
   m_ObjectHideFlags: 0
@@ -17439,7 +17439,6 @@ MonoBehaviour:
   m_damageByOverTime: 5
   isDOT: 0
   m_initialCounter: 1
-  m_damageCounter: 0
   m_OnDamageDelay: 0.3
 --- !u!1 &1458559468
 GameObject:

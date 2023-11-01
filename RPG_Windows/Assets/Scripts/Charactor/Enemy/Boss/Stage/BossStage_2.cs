@@ -29,8 +29,8 @@ public class BossStage_2 : Attack
         if (targetAttacked) {
             Debug.Log("targetAttacked");
             foreach (Collider2D col in m_OnHit) {
-                if (col.GetComponent<HitSystem>() != null) {
-                    col.GetComponent<HitSystem>().TakeHiProcess(this.DamageSystem, this.transform);
+                if (col.GetComponent<HitSystem_Avatar>() != null) {
+                    col.GetComponent<HitSystem_Avatar>().TakeHiProcess(this.DamageSystem, this.transform);
                 }
             }
         }
@@ -130,7 +130,7 @@ public class BossStage_2 : Attack
             //TODO 增加隨機AOE指示器至Player附近By countOfRandomLaunches
 
             yield return new WaitForSeconds(attackTimeSpan);
-            Debug.Log("SeparatelyAttackCoroutines: one round end");
+            //Debug.Log("SeparatelyAttackCoroutines: one round end");
         }
     }
 
@@ -148,7 +148,7 @@ public class BossStage_2 : Attack
             //TODO 增加隨機AOE指示器至Player附近By countOfRandomLaunches
 
             yield return new WaitForSeconds(attackTimeSpan);
-            Debug.Log("SeparatelyAttackCoroutines: one round end");
+            //Debug.Log("SeparatelyAttackCoroutines: one round end");
         }
     }
 
@@ -173,20 +173,20 @@ public class BossStage_2 : Attack
     #region 顯示指示器
     
     private IEnumerator DisplayIndicator(Vector3 pos) {
-        Debug.Log("AttackCoroutines: DisplayIndicator start");
+        //Debug.Log("AttackCoroutines: DisplayIndicator start");
 
         indicatorCtrl.InstantiateAreaIndicator(pos, m_indicatorDuration);
         yield return null;
 
-        Debug.Log("AttackCoroutines: DisplayIndicator end");
+        //Debug.Log("AttackCoroutines: DisplayIndicator end");
     }
 
     private IEnumerator DisplayIndicators_Simultaneously() {
-        Debug.Log("AttackCoroutines: DisplayMutipleIndicatorsSimultaneously start");
+        //Debug.Log("AttackCoroutines: DisplayMutipleIndicatorsSimultaneously start");
         yield return null;
 
         indicatorCtrl.InstantiateAreaIndicators(m_indicatorDuration);
-        Debug.Log("AttackCoroutines: DisplayMutipleIndicatorsSimultaneously end");
+        //Debug.Log("AttackCoroutines: DisplayMutipleIndicatorsSimultaneously end");
 
         // TODO 增加隨機AOE指示器至Player附近By countOfRandomLaunches
     }
@@ -196,7 +196,7 @@ public class BossStage_2 : Attack
     #region 控制攻擊的動畫與傷害機制 etc.
 
     private IEnumerator LaunchAttack(Vector3 indicatorPos) {
-        Debug.Log("AttackCoroutines: LaunchAttack start");
+        //Debug.Log("AttackCoroutines: LaunchAttack start");
         yield return new WaitForSeconds(m_indicatorDuration - m_attackDuration);
 
         GameObject projectile = ProjectilePool.instance.GetPooledGameObject();
@@ -207,11 +207,11 @@ public class BossStage_2 : Attack
 
             projectile.SetActive(true);
         }
-        Debug.Log("AttackCoroutines: LaunchAttack end");
+        //Debug.Log("AttackCoroutines: LaunchAttack end");
     }
 
     private IEnumerator SetExplosion(Vector3 indicatorPos) {
-        Debug.Log("AttackCoroutines: SetAttackHitBox start");
+        //Debug.Log("AttackCoroutines: SetAttackHitBox start");
         yield return new WaitForSeconds(m_indicatorDuration);
 
         GameObject explosion = HitBoxPool.instance.GetPooledGameObject();
@@ -224,14 +224,14 @@ public class BossStage_2 : Attack
             
             explosion.SetActive(true);
         }
-        Debug.Log("AttackCoroutines: SetAttackHitBox end");
+        //Debug.Log("AttackCoroutines: SetAttackHitBox end");
     }
 
     private IEnumerator LaunchAttack_Simultaneously() {
-        Debug.Log("AttackCoroutines: LaunchAttackSimultaneously start");
+        //Debug.Log("AttackCoroutines: LaunchAttackSimultaneously start");
         yield return new WaitForSeconds(m_indicatorDuration);
         //TODO 攻擊
-        Debug.Log("AttackCoroutines: LaunchAttackSimultaneously end");
+        //Debug.Log("AttackCoroutines: LaunchAttackSimultaneously end");
     }
 
     #endregion
