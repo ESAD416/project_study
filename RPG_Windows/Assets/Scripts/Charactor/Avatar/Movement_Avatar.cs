@@ -95,7 +95,7 @@ public class Movement_Avatar : MonoBehaviour
     // Update is called once per frame
     protected virtual void Update()
     {
-        SetAnimateMovementPara(Movement, FacingDir);
+        SetAnimateMovementPara();
     }
 
     protected virtual void FixedUpdate() 
@@ -127,15 +127,15 @@ public class Movement_Avatar : MonoBehaviour
         //m_targetRdbd.velocity = Movement.normalized * jumpingMovementVariable * MoveSpeed;
     }
 
-    protected void SetAnimateMovementPara(Vector3 movement, Vector2 facingDir) 
+    protected void SetAnimateMovementPara() 
     {
         // Debug.Log("movement.x: "+movement.x + "movement.y: "+movement.y);
         // Debug.Log("facingDir.x: "+facingDir.x + "facingDir.y: "+facingDir.y);
         Dictionary<string, float> dict = new Dictionary<string, float>();
-        dict.Add("movementX", movement.x);
-        dict.Add("movementY", movement.y);
-        dict.Add("facingDirX", facingDir.x);
-        dict.Add("facingDirY", facingDir.y);
+        dict.Add("movementX", m_movement.x);
+        dict.Add("movementY", m_movement.y);
+        dict.Add("facingDirX", m_facingDir.x);
+        dict.Add("facingDirY", m_facingDir.y);
 
         if(m_avatarAnimator != null) AnimeUtils.SetAnimateFloatPara(m_avatarAnimator, dict);
     }

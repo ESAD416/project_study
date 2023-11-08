@@ -130,7 +130,7 @@ public class Avatar : Charactor
 
         base.Update();
 
-        //Debug.Log("m_currentBaseState: "+m_currentBaseState.State);
+        // Debug.Log("m_currentBaseState: "+m_currentBaseState.State);
     }
 
     protected override void FixedUpdate() {

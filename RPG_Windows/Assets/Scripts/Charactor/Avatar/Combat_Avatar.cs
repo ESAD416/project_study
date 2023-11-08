@@ -9,6 +9,7 @@ public class Combat_Avatar : Attack
     [Header("可操作角色戰鬥物件")]
     [SerializeField] protected Avatar m_avatar;
     [SerializeField] protected Movement_Avatar m_avatarMovement;
+    [SerializeField] protected Dodge_Avatar m_avatarDodge;
     protected Animator m_avatarAnimator;
     protected AvatarInputActionsControls m_inputControls;
 
@@ -22,8 +23,13 @@ public class Combat_Avatar : Attack
     /// </summary>
     public bool IsAttacking;
     /// <summary>
-    /// 一次攻擊動畫所需的時間
+    /// 角色是否為正在攻擊前搖中
     /// </summary>
+    public bool IsPreAttacking;
+    /// <summary>
+    /// 角色是否為正在攻擊後搖中
+    /// </summary>
+    public bool IsPostAttacking;
     [SerializeField] protected float m_attackClipTime;
     /// <summary>
     /// 角色攻擊動作為即時觸發，故宣告一協程進行處理獨立的動作
@@ -46,11 +52,14 @@ public class Combat_Avatar : Attack
     protected override void Update()
     {
         base.Update();
+        // Debug.Log("Combat_Avatar IsAttacking: "+IsAttacking);
+        // Debug.Log("Combat_Avatar IsPreAttacking: "+IsPreAttacking);
+        // Debug.Log("Combat_Avatar IsPostAttacking: "+IsPostAttacking);
     }
 
     #region 攻擊控制
 
-    protected IEnumerator Attack() {
+    protected virtual IEnumerator Attack() {
         Debug.Log("Combat_Avatar attack start");
         IsAttacking = true;
         
@@ -66,6 +75,9 @@ public class Combat_Avatar : Attack
         }
 
         IsAttacking = false;
+        IsPreAttacking = false;
+        IsPostAttacking = false;
+        
         m_avatarMovement.SetMovement(m_avatarMovement.MovementAfterTrigger);
         m_avatarMovement.SetMovementAfterTrigger(Vector3.zero);
         
@@ -76,4 +88,5 @@ public class Combat_Avatar : Attack
     }
 
     #endregion
+
 }

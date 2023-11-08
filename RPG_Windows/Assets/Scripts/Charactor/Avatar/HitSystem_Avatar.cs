@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Fungus;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -8,9 +9,11 @@ public class HitSystem_Avatar : HitSystem
     [Header("Avatar基本物件")]
     [SerializeField] protected Avatar m_target;
     [SerializeField] protected Movement_Avatar m_targetMovement;
+    [SerializeField] protected Combat_Avatar m_targetCombat;
     [SerializeField] protected Dodge_Avatar m_targetDodge;
 
     private Animator m_targetAnimator;
+    
 
     protected virtual void Awake() {
         m_targetAnimator = m_target.Animator;
@@ -23,7 +26,8 @@ public class HitSystem_Avatar : HitSystem
 
         var avatarTakenHit = GetComponent<Avatar>();
         if(avatarTakenHit != null) {
-            if(m_targetDodge.IsDodging) {
+            bool dodged = DodgedTheHit();
+            if(dodged) {
                 if(m_target.CurrentBaseState.State.Equals(BaseStateMachine_Charactor.BaseState.Move)) {
                     m_targetMovement.SetMovementAfterTrigger(m_targetMovement.Movement);
                 }
@@ -60,7 +64,8 @@ public class HitSystem_Avatar : HitSystem
 
         var avatarTakenHit = GetComponent<Avatar>();
         if(avatarTakenHit != null) {
-            if(m_targetDodge.IsDodging) {
+            bool dodged = DodgedTheHit();
+            if(dodged) {
                 if(m_target.CurrentBaseState.State.Equals(BaseStateMachine_Charactor.BaseState.Move)) {
                     //m_avatar.SetFacingDir(m_avatar.Movement);
                     m_targetMovement.SetMovementAfterTrigger(m_targetMovement.Movement);
@@ -109,6 +114,21 @@ public class HitSystem_Avatar : HitSystem
         else m_target.SetCurrentBaseState(m_target.Idle);
         
         // Debug.Log("HitSystem_Avatar FinishTakeHit end");
+    }
+
+    private bool DodgedTheHit() 
+    {
+        bool result = true;
+        if(m_targetDodge.IsDodging) {
+            if(m_targetCombat.IsPreAttacking || m_targetCombat.IsPostAttacking) {
+                // 攻擊前後搖
+                result = false;
+            }
+        } else {
+            result = false;
+        }
+
+        return result;
     }
 
     private void SetHurtTrigger()

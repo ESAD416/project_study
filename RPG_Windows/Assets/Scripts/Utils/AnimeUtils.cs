@@ -24,7 +24,7 @@ public static class AnimeUtils
         RuntimeAnimatorController ac = animator.runtimeAnimatorController;
 
         for(int i = 0; i < ac.animationClips.Length; i++) {
-            Debug.Log("GetAnimateClipTimeInRuntime ac.animationClips[i].name: "+ac.animationClips[i].name);
+            // Debug.Log("GetAnimateClipTimeInRuntime ac.animationClips[i].name: "+ac.animationClips[i].name);
             if( ac.animationClips[i].name == animeClipName)        //If it has the same name as your clip
             {
                 attackClipTime = ac.animationClips[i].length;
@@ -54,6 +54,15 @@ public static class AnimeUtils
                 animator.SetFloat(entry.Key, entry.Value);
             }
         }
+    }
+
+    public static void GetAnimatorClipInfo(Animator animator, string layerName, string animeClipName) 
+    {
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(animator.GetLayerIndex(layerName));
+
+        Debug.Log("stateInfo: "+stateInfo.length);
+        Debug.Log("tagHash: "+stateInfo.tagHash);
+        
     }
 
     public static string DefineMovementPath(Vector3 movement) {
