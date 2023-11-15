@@ -17,22 +17,31 @@ public class AnimationEvents_Lamniat : MonoBehaviour
         //AnimeUtils.GetAnimatorClipInfo(m_avatarAnimator, "TriggerLayer", "Lamniat_attack_1_chop_clockwise");
     }
 
-    public void OnPreAttackInterruption() 
+    #region 戰鬥相關動畫事件
+    public void OnPreAttack() 
     {
         if(!m_combat.IsPreAttacking) m_combat.IsPreAttacking = true;
         if(m_combat.IsPostAttacking) m_combat.IsPostAttacking = false;
     }
 
-    public void OnAttackNonInterruption() 
+    public void OnAttackHitBox() 
     {
         if(m_combat.IsPreAttacking) m_combat.IsPreAttacking = false;
         if(m_combat.IsPostAttacking) m_combat.IsPostAttacking = false;
     }
 
-    public void OnPostAttackInterruption() 
+    public void OnPostAttack() 
     {
         if(m_combat.IsPreAttacking) m_combat.IsPreAttacking = false;
         if(!m_combat.IsPostAttacking) m_combat.IsPostAttacking = true;
     }
 
+    public void CanCancelRecovery() {
+        m_combat.CancelRecovery = true;
+    }
+
+    public void CantCancelRecovery() {
+        m_combat.CancelRecovery = false;
+    }
+    #endregion
 }

@@ -10,6 +10,7 @@ public class Combat_Avatar : Attack
     [SerializeField] protected Avatar m_avatar;
     [SerializeField] protected Movement_Avatar m_avatarMovement;
     [SerializeField] protected Dodge_Avatar m_avatarDodge;
+    [SerializeField] protected List<HitBox_Overlap2D> m_hitBoxs;
     protected Animator m_avatarAnimator;
     protected AvatarInputActionsControls m_inputControls;
 
@@ -21,15 +22,19 @@ public class Combat_Avatar : Attack
     /// <summary>
     /// 角色是否為正在攻擊中
     /// </summary>
-    public bool IsAttacking;
+    public bool IsAttacking = false;
     /// <summary>
     /// 角色是否為正在攻擊前搖中
     /// </summary>
-    public bool IsPreAttacking;
+    public bool IsPreAttacking = false;
     /// <summary>
     /// 角色是否為正在攻擊後搖中
     /// </summary>
-    public bool IsPostAttacking;
+    public bool IsPostAttacking = false;
+    /// <summary>
+    /// 角色是否可以取消硬直(前/後搖)
+    /// </summary>
+    public bool CancelRecovery = false;
     [SerializeField] protected float m_attackClipTime;
     /// <summary>
     /// 角色攻擊動作為即時觸發，故宣告一協程進行處理獨立的動作
