@@ -303,7 +303,7 @@ TextureImporter:
       213: 4108149699986069424
     second: cliff_tileset_116
   externalObjects: {}
-  serializedVersion: 11
+  serializedVersion: 12
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -320,10 +320,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMipmapLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -362,6 +364,8 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -373,6 +377,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -385,6 +390,20 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
@@ -2500,9 +2519,109 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-  spritePackingTag: 
+    nameFileIdTable:
+      cliff_tileset_0: 1093242951069988106
+      cliff_tileset_1: 9188984204304803680
+      cliff_tileset_10: 1263553988089227198
+      cliff_tileset_100: 4994315689257656135
+      cliff_tileset_101: -3646050677997632225
+      cliff_tileset_102: 792589125639094541
+      cliff_tileset_103: 3409724546964652264
+      cliff_tileset_104: 4766264451034131140
+      cliff_tileset_105: 6473912220943781325
+      cliff_tileset_106: -5715294878359927978
+      cliff_tileset_107: -354026011311012539
+      cliff_tileset_108: -2429394286647885169
+      cliff_tileset_109: 4362060809659155644
+      cliff_tileset_11: -773550985151477063
+      cliff_tileset_110: -5750459956724737235
+      cliff_tileset_111: -1905692175324538180
+      cliff_tileset_112: -5928762035709427694
+      cliff_tileset_115: 1000058541956715135
+      cliff_tileset_116: 4108149699986069424
+      cliff_tileset_12: -4180888493173244686
+      cliff_tileset_13: -5580921340538770282
+      cliff_tileset_14: 7875196590931367473
+      cliff_tileset_15: 3318166561980434752
+      cliff_tileset_16: -651872717757069870
+      cliff_tileset_17: -3884384465961557386
+      cliff_tileset_18: 513013047012963998
+      cliff_tileset_19: 2740034100299229973
+      cliff_tileset_2: -3076011080097641386
+      cliff_tileset_20: -2807419762186630948
+      cliff_tileset_21: -8485574475962042249
+      cliff_tileset_22: 1627134623575422400
+      cliff_tileset_23: -5135684633291455333
+      cliff_tileset_24: -894087320323092286
+      cliff_tileset_25: -8595533276600640334
+      cliff_tileset_26: -3676651269392395702
+      cliff_tileset_27: -635022853150698241
+      cliff_tileset_28: 2189714390364325631
+      cliff_tileset_29: -4675094271268995398
+      cliff_tileset_3: -8178562212835472666
+      cliff_tileset_30: 6216399603340947497
+      cliff_tileset_31: -5956093092820746371
+      cliff_tileset_32: -5230496456535957058
+      cliff_tileset_33: -2033027479549582025
+      cliff_tileset_34: 3023892701494717366
+      cliff_tileset_35: -3523785139217221964
+      cliff_tileset_36: 1707467739200958294
+      cliff_tileset_37: 8868789145081366752
+      cliff_tileset_38: 432204068286507836
+      cliff_tileset_39: 567619380686167476
+      cliff_tileset_4: -8307648673874764351
+      cliff_tileset_40: -347547092357913913
+      cliff_tileset_41: -5812486397860806740
+      cliff_tileset_42: 8991611044244333686
+      cliff_tileset_43: 7047786868055091241
+      cliff_tileset_44: 5309533207363911699
+      cliff_tileset_45: -4118467856021348123
+      cliff_tileset_46: 3474735122653048261
+      cliff_tileset_47: -2528883491130853493
+      cliff_tileset_48: 5410496610996349602
+      cliff_tileset_49: -2391855885388294890
+      cliff_tileset_5: 675942047043026235
+      cliff_tileset_50: 1383380519215149526
+      cliff_tileset_51: 7885466811948316609
+      cliff_tileset_52: 2148236390224762901
+      cliff_tileset_53: 6487247589467514303
+      cliff_tileset_54: 7208833520816890353
+      cliff_tileset_55: 2629738235115842782
+      cliff_tileset_56: 4687793883879885973
+      cliff_tileset_6: -7026464048429681802
+      cliff_tileset_7: -542494968133118205
+      cliff_tileset_72: 1805255074669577535
+      cliff_tileset_73: 8293882709170321326
+      cliff_tileset_74: -8257203869923211180
+      cliff_tileset_75: 7850563548859196318
+      cliff_tileset_76: -5465667399852342577
+      cliff_tileset_77: 4723170629575827440
+      cliff_tileset_78: -9127185275969208879
+      cliff_tileset_79: 991469429417164809
+      cliff_tileset_8: 1777053747337071888
+      cliff_tileset_80: -2057630774491880823
+      cliff_tileset_81: -2235010598923486957
+      cliff_tileset_82: -374655214646917082
+      cliff_tileset_83: 3779965978551462090
+      cliff_tileset_84: 6920375479381461376
+      cliff_tileset_85: -7305511171152663108
+      cliff_tileset_86: -3750761720492823264
+      cliff_tileset_87: 2595458794757033500
+      cliff_tileset_88: -1369584319191588796
+      cliff_tileset_89: 1330447800896109203
+      cliff_tileset_9: 2704160193419343778
+      cliff_tileset_90: -1664122353157701388
+      cliff_tileset_91: 6291167387415689455
+      cliff_tileset_92: 2269617006395536376
+      cliff_tileset_93: 8578158450657634662
+      cliff_tileset_94: -2808851374728239455
+      cliff_tileset_95: -8744592572089660123
+      cliff_tileset_96: 8484414068049997004
+      cliff_tileset_97: -4965278808293544864
+      cliff_tileset_98: 4096475474359850134
+      cliff_tileset_99: 4285383249609463293
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

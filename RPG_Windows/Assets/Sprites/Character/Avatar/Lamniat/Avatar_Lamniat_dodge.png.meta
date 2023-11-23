@@ -110,10 +110,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMipmapLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -152,6 +154,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
   cookieLightType: 0
   platformSettings:
   - serializedVersion: 3
@@ -164,6 +167,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -176,6 +180,20 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
@@ -821,9 +839,39 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-  spritePackingTag: 
+    nameFileIdTable:
+      Avatar_Lamniat_dodge_0: -1897756424181486450
+      Avatar_Lamniat_dodge_1: -5954215060107971608
+      Avatar_Lamniat_dodge_10: 595697101378876688
+      Avatar_Lamniat_dodge_11: -293831177457094237
+      Avatar_Lamniat_dodge_12: 6800768142818682508
+      Avatar_Lamniat_dodge_13: 6446875006842606701
+      Avatar_Lamniat_dodge_14: -8082165572764352794
+      Avatar_Lamniat_dodge_15: 1982369836335106225
+      Avatar_Lamniat_dodge_16: -2241074100507260363
+      Avatar_Lamniat_dodge_17: 2212093718439007761
+      Avatar_Lamniat_dodge_18: -9067044497717354846
+      Avatar_Lamniat_dodge_19: -6360438446795111626
+      Avatar_Lamniat_dodge_2: 8158306215374777536
+      Avatar_Lamniat_dodge_20: 7810508425189281545
+      Avatar_Lamniat_dodge_21: 535383461179932415
+      Avatar_Lamniat_dodge_22: -2765387302355050021
+      Avatar_Lamniat_dodge_23: 2389013930012547210
+      Avatar_Lamniat_dodge_24: 6139907314796452576
+      Avatar_Lamniat_dodge_25: 3209455229252873541
+      Avatar_Lamniat_dodge_26: -6910909908255142858
+      Avatar_Lamniat_dodge_27: 8082571651937997469
+      Avatar_Lamniat_dodge_28: -2419914158595589783
+      Avatar_Lamniat_dodge_29: -718655790611721438
+      Avatar_Lamniat_dodge_3: -2715537701307793827
+      Avatar_Lamniat_dodge_4: -4480907262271032661
+      Avatar_Lamniat_dodge_5: -150672610737588769
+      Avatar_Lamniat_dodge_6: -3803829233377653645
+      Avatar_Lamniat_dodge_7: -7734064209547792517
+      Avatar_Lamniat_dodge_8: -1775016984326792210
+      Avatar_Lamniat_dodge_9: -3418678558482210944
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

@@ -6,11 +6,11 @@ using UnityEngine;
 
 public class Combat_Lamniat : Combat_Avatar
 {
-    protected int maximumMeleeComboCount = 3;
-    protected int meleeComboCounter = 0;
-
-    bool nextAttack2 = false;
-    bool nextAttack3 = false;
+    protected int m_maximumMeleeComboCount = 3;
+    protected int m_meleeComboCounter = 0;
+    public int MeleeComboCounter => this.m_meleeComboCounter;
+    public void SetMeleeComboCounter(int value) => this.m_meleeComboCounter = value;
+    [SerializeField] protected GameObject slashEffectPrefeb;
     
 
     protected override void Awake() {
@@ -32,6 +32,8 @@ public class Combat_Lamniat : Combat_Avatar
             }
 
             MeleeAttack();
+            if(m_meleeComboCounter >= m_maximumMeleeComboCount) m_meleeComboCounter = 0;
+            m_meleeComboCounter++;
         };
 
         #endregion
@@ -77,27 +79,50 @@ public class Combat_Lamniat : Combat_Avatar
     }
 
     private void SetHitboxDir() {
+        Quaternion quaternion = Quaternion.identity;
         if(m_avatarMovement.FacingDir.x == 0 && m_avatarMovement.FacingDir.y > 0) {
             // Up
-            UpdateHitboxsEnabled("Melee_Up");
+            if(MeleeComboCounter == 2) quaternion = Quaternion.Euler(0f , 0f , 90f);
+            else quaternion = Quaternion.Euler(0f , 180f , 90f);
+            UpdateHitboxsEnabled("Melee_Up", quaternion);
         } else if(m_avatarMovement.FacingDir.x == 0 && m_avatarMovement.FacingDir.y < 0) {
             // Down 
-            UpdateHitboxsEnabled("Melee_Down");
+            if(m_meleeComboCounter == 2) quaternion = Quaternion.Euler(0f , 0f , -90f);
+            else quaternion = Quaternion.Euler(0f , 180f , -90f);
+            UpdateHitboxsEnabled("Melee_Down", quaternion);
         } else if(m_avatarMovement.FacingDir.x < 0 && m_avatarMovement.FacingDir.y == 0) {
             // Left
-            UpdateHitboxsEnabled("Melee_Left");
+            if(m_meleeComboCounter == 2) quaternion = Quaternion.Euler(0f , 180f , 0f);
+            else quaternion = Quaternion.Euler(180f , 180f , 0f);
+            UpdateHitboxsEnabled("Melee_Left", quaternion);
         } else if(m_avatarMovement.FacingDir.x > 0 && m_avatarMovement.FacingDir.y == 0) {
             // Right
-            UpdateHitboxsEnabled("Melee_Right");
+            if(m_meleeComboCounter == 2) quaternion = Quaternion.Euler(0f , 0f , 0f);
+            else quaternion = Quaternion.Euler(180f , 0f , 0f);
+            UpdateHitboxsEnabled("Melee_Right", quaternion);
         } 
     }
+
+
     
-    private void UpdateHitboxsEnabled(string gameObjectName) {
+    private void UpdateHitboxsEnabled(string gameObjectName, Quaternion quaternion) 
+    {
         m_hitBoxs.ForEach(h => 
         {
-            if(h.name.Equals(gameObjectName)) h.gameObject.SetActive(true);
+            if(h.name.Equals(gameObjectName)) {
+                h.gameObject.SetActive(true);
+
+                var existingSlashEffect = h.gameObject.transform.Find("VFXGraph_slash");
+                if(existingSlashEffect != null) {
+                    existingSlashEffect.transform.rotation = quaternion;
+                }
+            }
             else h.gameObject.SetActive(false);
         });
+    }
+
+    private void UpdateSlashEffect() {
+
     }
     
 }

@@ -170,10 +170,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMipmapLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -212,6 +214,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
   cookieLightType: 0
   platformSettings:
   - serializedVersion: 3
@@ -224,6 +227,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -236,6 +240,20 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
@@ -1301,9 +1319,59 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-  spritePackingTag: 
+    nameFileIdTable:
+      Avatar_Lamniat_attack_2_chop_counterClockwise_0: 181631192680459045
+      Avatar_Lamniat_attack_2_chop_counterClockwise_1: 5673054734615495612
+      Avatar_Lamniat_attack_2_chop_counterClockwise_10: 4309641005017078693
+      Avatar_Lamniat_attack_2_chop_counterClockwise_11: 5268077645869286117
+      Avatar_Lamniat_attack_2_chop_counterClockwise_12: 3629535725042544966
+      Avatar_Lamniat_attack_2_chop_counterClockwise_13: 3997484937134438477
+      Avatar_Lamniat_attack_2_chop_counterClockwise_14: -5452629382969665685
+      Avatar_Lamniat_attack_2_chop_counterClockwise_15: 9044546988006249254
+      Avatar_Lamniat_attack_2_chop_counterClockwise_16: -802821653346745234
+      Avatar_Lamniat_attack_2_chop_counterClockwise_17: -1088333486212329261
+      Avatar_Lamniat_attack_2_chop_counterClockwise_18: 6898566183251088437
+      Avatar_Lamniat_attack_2_chop_counterClockwise_19: -6388549117588641582
+      Avatar_Lamniat_attack_2_chop_counterClockwise_2: 1041286776702481678
+      Avatar_Lamniat_attack_2_chop_counterClockwise_20: 84588727450691890
+      Avatar_Lamniat_attack_2_chop_counterClockwise_21: 185495541657764891
+      Avatar_Lamniat_attack_2_chop_counterClockwise_22: 8868356505838336739
+      Avatar_Lamniat_attack_2_chop_counterClockwise_23: -3413479754840955090
+      Avatar_Lamniat_attack_2_chop_counterClockwise_24: 2474044554090411390
+      Avatar_Lamniat_attack_2_chop_counterClockwise_25: 5001119667086554587
+      Avatar_Lamniat_attack_2_chop_counterClockwise_26: -1984833823521367894
+      Avatar_Lamniat_attack_2_chop_counterClockwise_27: -3944644271562980647
+      Avatar_Lamniat_attack_2_chop_counterClockwise_28: -7474823425788505541
+      Avatar_Lamniat_attack_2_chop_counterClockwise_29: 5068990959525765696
+      Avatar_Lamniat_attack_2_chop_counterClockwise_3: -4235643535572248538
+      Avatar_Lamniat_attack_2_chop_counterClockwise_30: 7836481587874226662
+      Avatar_Lamniat_attack_2_chop_counterClockwise_31: -6912524820807750558
+      Avatar_Lamniat_attack_2_chop_counterClockwise_32: -486267236403761076
+      Avatar_Lamniat_attack_2_chop_counterClockwise_33: 6789887735094488093
+      Avatar_Lamniat_attack_2_chop_counterClockwise_34: 7617618117646467354
+      Avatar_Lamniat_attack_2_chop_counterClockwise_35: 6750435037278919662
+      Avatar_Lamniat_attack_2_chop_counterClockwise_36: 8825085658336073121
+      Avatar_Lamniat_attack_2_chop_counterClockwise_37: 2531485042923285046
+      Avatar_Lamniat_attack_2_chop_counterClockwise_38: 328289069203954978
+      Avatar_Lamniat_attack_2_chop_counterClockwise_39: 3791872409186811716
+      Avatar_Lamniat_attack_2_chop_counterClockwise_4: -2435334305092907023
+      Avatar_Lamniat_attack_2_chop_counterClockwise_40: -6347571361556295258
+      Avatar_Lamniat_attack_2_chop_counterClockwise_41: -3227423573986874728
+      Avatar_Lamniat_attack_2_chop_counterClockwise_42: -1763469524313923238
+      Avatar_Lamniat_attack_2_chop_counterClockwise_43: 5997067285420854114
+      Avatar_Lamniat_attack_2_chop_counterClockwise_44: 7975399458671874943
+      Avatar_Lamniat_attack_2_chop_counterClockwise_45: -129479192876225021
+      Avatar_Lamniat_attack_2_chop_counterClockwise_46: -8042455357200627479
+      Avatar_Lamniat_attack_2_chop_counterClockwise_47: 69939366095149710
+      Avatar_Lamniat_attack_2_chop_counterClockwise_48: 9088949258078505440
+      Avatar_Lamniat_attack_2_chop_counterClockwise_49: -5869437848797027313
+      Avatar_Lamniat_attack_2_chop_counterClockwise_5: 7628999884553414262
+      Avatar_Lamniat_attack_2_chop_counterClockwise_6: -4085401207931698497
+      Avatar_Lamniat_attack_2_chop_counterClockwise_7: 2801887854588568451
+      Avatar_Lamniat_attack_2_chop_counterClockwise_8: 7650797596982999787
+      Avatar_Lamniat_attack_2_chop_counterClockwise_9: 2253149729128773784
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

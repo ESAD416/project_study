@@ -140,10 +140,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMipmapLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -182,6 +184,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
   cookieLightType: 0
   platformSettings:
   - serializedVersion: 3
@@ -194,6 +197,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -206,6 +210,20 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
@@ -1061,9 +1079,49 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-  spritePackingTag: 
+    nameFileIdTable:
+      Avatar_Lamniat_attack_1_chop_clockwise_0: 6396835718504180583
+      Avatar_Lamniat_attack_1_chop_clockwise_1: -8355168776221422262
+      Avatar_Lamniat_attack_1_chop_clockwise_10: -7597028868895718802
+      Avatar_Lamniat_attack_1_chop_clockwise_11: -1774701582099347915
+      Avatar_Lamniat_attack_1_chop_clockwise_12: -9088161296441148558
+      Avatar_Lamniat_attack_1_chop_clockwise_13: 3919991340448643772
+      Avatar_Lamniat_attack_1_chop_clockwise_14: -8591880292955277026
+      Avatar_Lamniat_attack_1_chop_clockwise_15: -2766099720638559975
+      Avatar_Lamniat_attack_1_chop_clockwise_16: -1964610424267665478
+      Avatar_Lamniat_attack_1_chop_clockwise_17: -2600154378591574465
+      Avatar_Lamniat_attack_1_chop_clockwise_18: -891547167021659340
+      Avatar_Lamniat_attack_1_chop_clockwise_19: -250752975370476358
+      Avatar_Lamniat_attack_1_chop_clockwise_2: -7304949064957054278
+      Avatar_Lamniat_attack_1_chop_clockwise_20: 5800465862650299773
+      Avatar_Lamniat_attack_1_chop_clockwise_21: 4891707049444190021
+      Avatar_Lamniat_attack_1_chop_clockwise_22: -8283102836715385476
+      Avatar_Lamniat_attack_1_chop_clockwise_23: -7262392567959027883
+      Avatar_Lamniat_attack_1_chop_clockwise_24: 4799324017082703270
+      Avatar_Lamniat_attack_1_chop_clockwise_25: 1958309885221838403
+      Avatar_Lamniat_attack_1_chop_clockwise_26: -1522540767564465751
+      Avatar_Lamniat_attack_1_chop_clockwise_27: 6954183939644670755
+      Avatar_Lamniat_attack_1_chop_clockwise_28: -7372493654744512820
+      Avatar_Lamniat_attack_1_chop_clockwise_29: -2367853027385516093
+      Avatar_Lamniat_attack_1_chop_clockwise_3: -5543870382550205643
+      Avatar_Lamniat_attack_1_chop_clockwise_30: -5073423639128332728
+      Avatar_Lamniat_attack_1_chop_clockwise_31: 4117999406127986356
+      Avatar_Lamniat_attack_1_chop_clockwise_32: 6854717352556617411
+      Avatar_Lamniat_attack_1_chop_clockwise_33: 4942400942328651694
+      Avatar_Lamniat_attack_1_chop_clockwise_34: -2874804486948982771
+      Avatar_Lamniat_attack_1_chop_clockwise_35: 4414296669357965607
+      Avatar_Lamniat_attack_1_chop_clockwise_36: -6075590779382272178
+      Avatar_Lamniat_attack_1_chop_clockwise_37: -8684621259094276815
+      Avatar_Lamniat_attack_1_chop_clockwise_38: -6101213068557420199
+      Avatar_Lamniat_attack_1_chop_clockwise_39: -2160945913561181018
+      Avatar_Lamniat_attack_1_chop_clockwise_4: -3369860524112613996
+      Avatar_Lamniat_attack_1_chop_clockwise_5: 4566324505598760420
+      Avatar_Lamniat_attack_1_chop_clockwise_6: 5201449397290435547
+      Avatar_Lamniat_attack_1_chop_clockwise_7: -7581341320986186805
+      Avatar_Lamniat_attack_1_chop_clockwise_8: -6731201360661267050
+      Avatar_Lamniat_attack_1_chop_clockwise_9: -8872808200697945636
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

@@ -620,10 +620,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMipmapLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -662,6 +664,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
   cookieLightType: 0
   platformSettings:
   - serializedVersion: 3
@@ -674,6 +677,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -686,6 +690,20 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 8192
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
@@ -4901,9 +4919,209 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-  spritePackingTag: 
+    nameFileIdTable:
+      Avatar_Lamniat_idle_0: 2511161899264942679
+      Avatar_Lamniat_idle_1: -8988944994706620958
+      Avatar_Lamniat_idle_10: -3131282080591911759
+      Avatar_Lamniat_idle_100: 3977923302539218213
+      Avatar_Lamniat_idle_101: -7705193031340368482
+      Avatar_Lamniat_idle_102: -3736947718022554012
+      Avatar_Lamniat_idle_103: 2744747072248477272
+      Avatar_Lamniat_idle_104: -8303251077248105320
+      Avatar_Lamniat_idle_105: -968401124808921050
+      Avatar_Lamniat_idle_106: -6698415297492068150
+      Avatar_Lamniat_idle_107: -4945218699118242804
+      Avatar_Lamniat_idle_108: -6512553109524731390
+      Avatar_Lamniat_idle_109: 4692364930048765727
+      Avatar_Lamniat_idle_11: -4426992408136511999
+      Avatar_Lamniat_idle_110: 971468920693807677
+      Avatar_Lamniat_idle_111: -925967912223993745
+      Avatar_Lamniat_idle_112: 708304122623692041
+      Avatar_Lamniat_idle_113: -8907454029163926075
+      Avatar_Lamniat_idle_114: 8074666579643389169
+      Avatar_Lamniat_idle_115: -8374472821072707693
+      Avatar_Lamniat_idle_116: -5577001966632794987
+      Avatar_Lamniat_idle_117: -2327423118089727525
+      Avatar_Lamniat_idle_118: 4870095632134793074
+      Avatar_Lamniat_idle_119: -2882991093642592265
+      Avatar_Lamniat_idle_12: 8300016274080143528
+      Avatar_Lamniat_idle_120: -2902193766016432580
+      Avatar_Lamniat_idle_121: 8118456778673778126
+      Avatar_Lamniat_idle_122: -3271462080222650369
+      Avatar_Lamniat_idle_123: 7926989761147234935
+      Avatar_Lamniat_idle_124: -4480231304726990691
+      Avatar_Lamniat_idle_125: -9027833336649654753
+      Avatar_Lamniat_idle_126: 1033953091198856314
+      Avatar_Lamniat_idle_127: -1522115144764417148
+      Avatar_Lamniat_idle_128: 687072555948349560
+      Avatar_Lamniat_idle_129: -3349807017412372755
+      Avatar_Lamniat_idle_13: -1917891004451200757
+      Avatar_Lamniat_idle_130: -5370836370008169352
+      Avatar_Lamniat_idle_131: -3498891104982036899
+      Avatar_Lamniat_idle_132: -3120660842256491525
+      Avatar_Lamniat_idle_133: 1360029080305023942
+      Avatar_Lamniat_idle_134: 1531291028561311543
+      Avatar_Lamniat_idle_135: 7062846293423789788
+      Avatar_Lamniat_idle_136: -4303012579535893517
+      Avatar_Lamniat_idle_137: -8222182614881869730
+      Avatar_Lamniat_idle_138: -2934216235323516246
+      Avatar_Lamniat_idle_139: -5018641573188420529
+      Avatar_Lamniat_idle_14: 5221726687884760658
+      Avatar_Lamniat_idle_140: 8178453722279174339
+      Avatar_Lamniat_idle_141: -2015640132546767414
+      Avatar_Lamniat_idle_142: 1802692145259524456
+      Avatar_Lamniat_idle_143: -3465659409220304211
+      Avatar_Lamniat_idle_144: 3598602205490452636
+      Avatar_Lamniat_idle_145: 2908605733151162044
+      Avatar_Lamniat_idle_146: -3082532790481173791
+      Avatar_Lamniat_idle_147: -6665755071854004207
+      Avatar_Lamniat_idle_148: 6867387631629139076
+      Avatar_Lamniat_idle_149: -126884605686293624
+      Avatar_Lamniat_idle_15: 6681614853464807867
+      Avatar_Lamniat_idle_150: -7311214676256883842
+      Avatar_Lamniat_idle_151: -7157770610476385735
+      Avatar_Lamniat_idle_152: 6185316615592249463
+      Avatar_Lamniat_idle_153: 2197463598984236794
+      Avatar_Lamniat_idle_154: 992457922013246293
+      Avatar_Lamniat_idle_155: 5027586973570551778
+      Avatar_Lamniat_idle_156: -8405209594066790635
+      Avatar_Lamniat_idle_157: 521683929096077004
+      Avatar_Lamniat_idle_158: 8135223586365529810
+      Avatar_Lamniat_idle_159: 8752887288195049108
+      Avatar_Lamniat_idle_16: 6716431345817691106
+      Avatar_Lamniat_idle_160: -931344539522603178
+      Avatar_Lamniat_idle_161: 8756698510151836203
+      Avatar_Lamniat_idle_162: -8062302507023601088
+      Avatar_Lamniat_idle_163: -8067866845333715048
+      Avatar_Lamniat_idle_164: -3246411424605843393
+      Avatar_Lamniat_idle_165: -1678351789268524944
+      Avatar_Lamniat_idle_166: -6824284913633244970
+      Avatar_Lamniat_idle_167: -8440039133878631807
+      Avatar_Lamniat_idle_168: 3126362648918615171
+      Avatar_Lamniat_idle_169: -7332875649833036067
+      Avatar_Lamniat_idle_17: 7983261832790020340
+      Avatar_Lamniat_idle_170: -5142851698717383535
+      Avatar_Lamniat_idle_171: 1681960497674656028
+      Avatar_Lamniat_idle_172: -6451426646035376853
+      Avatar_Lamniat_idle_173: 4652780397374255881
+      Avatar_Lamniat_idle_174: 5460765710214361650
+      Avatar_Lamniat_idle_175: 2476422238285221857
+      Avatar_Lamniat_idle_176: -4756632179920156012
+      Avatar_Lamniat_idle_177: -2116580573949120212
+      Avatar_Lamniat_idle_178: 4683027333128320333
+      Avatar_Lamniat_idle_179: 7244791641090236448
+      Avatar_Lamniat_idle_18: -5897655147527763217
+      Avatar_Lamniat_idle_180: -6952950933692928879
+      Avatar_Lamniat_idle_181: -5088773882934166391
+      Avatar_Lamniat_idle_182: 4321957677408163399
+      Avatar_Lamniat_idle_183: -4779421900082803136
+      Avatar_Lamniat_idle_184: -8121306585482396410
+      Avatar_Lamniat_idle_185: 8054863660673017803
+      Avatar_Lamniat_idle_186: -2897787335237139624
+      Avatar_Lamniat_idle_187: -4528203641774977705
+      Avatar_Lamniat_idle_188: 2170492365931905202
+      Avatar_Lamniat_idle_189: 4562103735833716204
+      Avatar_Lamniat_idle_19: 3248091259363897673
+      Avatar_Lamniat_idle_190: 7608951154183804118
+      Avatar_Lamniat_idle_191: -4777455882641459113
+      Avatar_Lamniat_idle_192: -5770668339816574604
+      Avatar_Lamniat_idle_193: -1903533567051076752
+      Avatar_Lamniat_idle_194: -3627927531913339837
+      Avatar_Lamniat_idle_195: -2202826125339786809
+      Avatar_Lamniat_idle_196: 6275432543243768716
+      Avatar_Lamniat_idle_197: 1078710733271128666
+      Avatar_Lamniat_idle_198: -1922859321253116775
+      Avatar_Lamniat_idle_199: -407650755877020141
+      Avatar_Lamniat_idle_2: -4873069810551872716
+      Avatar_Lamniat_idle_20: -7990247743955974891
+      Avatar_Lamniat_idle_21: -6500051192960736962
+      Avatar_Lamniat_idle_22: 3754496495841421582
+      Avatar_Lamniat_idle_23: -3075338246505232883
+      Avatar_Lamniat_idle_24: -7032677061222735870
+      Avatar_Lamniat_idle_25: 7188940024530560206
+      Avatar_Lamniat_idle_26: -5287406873715168860
+      Avatar_Lamniat_idle_27: 3998814262761552009
+      Avatar_Lamniat_idle_28: -5900287330182827521
+      Avatar_Lamniat_idle_29: 8585697428584502958
+      Avatar_Lamniat_idle_3: -1839656185134460862
+      Avatar_Lamniat_idle_30: 402458576508227223
+      Avatar_Lamniat_idle_31: -4569913059577911068
+      Avatar_Lamniat_idle_32: 7448947279611470627
+      Avatar_Lamniat_idle_33: 949754290722860732
+      Avatar_Lamniat_idle_34: -7848525869633130068
+      Avatar_Lamniat_idle_35: 4777272108918982286
+      Avatar_Lamniat_idle_36: 6763757830403493635
+      Avatar_Lamniat_idle_37: -8728051954026841498
+      Avatar_Lamniat_idle_38: 4607233429433254276
+      Avatar_Lamniat_idle_39: -394363454672231210
+      Avatar_Lamniat_idle_4: -1084813742860005830
+      Avatar_Lamniat_idle_40: -6702851231953992642
+      Avatar_Lamniat_idle_41: 2386449619954928602
+      Avatar_Lamniat_idle_42: -3194373375455670469
+      Avatar_Lamniat_idle_43: -1450141553140322990
+      Avatar_Lamniat_idle_44: 2855901512069259765
+      Avatar_Lamniat_idle_45: -4680021703019330831
+      Avatar_Lamniat_idle_46: 1265484207117168261
+      Avatar_Lamniat_idle_47: -7555098305643753367
+      Avatar_Lamniat_idle_48: -145584571978224006
+      Avatar_Lamniat_idle_49: -6805769739560106371
+      Avatar_Lamniat_idle_5: -1585938221085993466
+      Avatar_Lamniat_idle_50: 2366156813340536024
+      Avatar_Lamniat_idle_51: 9141472277875891567
+      Avatar_Lamniat_idle_52: 2312784522111863826
+      Avatar_Lamniat_idle_53: -1912577570664097534
+      Avatar_Lamniat_idle_54: 6547186542296069327
+      Avatar_Lamniat_idle_55: -4160398098111238558
+      Avatar_Lamniat_idle_56: -955844087147174510
+      Avatar_Lamniat_idle_57: 2581129074901072292
+      Avatar_Lamniat_idle_58: -2021049658178657082
+      Avatar_Lamniat_idle_59: 2879885830295921018
+      Avatar_Lamniat_idle_6: -7588485719756748448
+      Avatar_Lamniat_idle_60: -5122448083175291885
+      Avatar_Lamniat_idle_61: -4088818695308192441
+      Avatar_Lamniat_idle_62: -1523697954926330365
+      Avatar_Lamniat_idle_63: 8574923645789274473
+      Avatar_Lamniat_idle_64: -3576931857715491582
+      Avatar_Lamniat_idle_65: -7777812609177021513
+      Avatar_Lamniat_idle_66: -1536820682093190166
+      Avatar_Lamniat_idle_67: -8822634453602456531
+      Avatar_Lamniat_idle_68: 6568804259581244343
+      Avatar_Lamniat_idle_69: 352948942702829703
+      Avatar_Lamniat_idle_7: 4078731168475333413
+      Avatar_Lamniat_idle_70: -4086215117765432928
+      Avatar_Lamniat_idle_71: -3275863665760454154
+      Avatar_Lamniat_idle_72: -5257731754893345568
+      Avatar_Lamniat_idle_73: 8222144628961839540
+      Avatar_Lamniat_idle_74: -1318819371990527116
+      Avatar_Lamniat_idle_75: -2516016227018952932
+      Avatar_Lamniat_idle_76: 3938830552469555209
+      Avatar_Lamniat_idle_77: -6427557109617765615
+      Avatar_Lamniat_idle_78: -1278127437646723714
+      Avatar_Lamniat_idle_79: -1782317471134469364
+      Avatar_Lamniat_idle_8: -3338665003075855122
+      Avatar_Lamniat_idle_80: -523346746363382807
+      Avatar_Lamniat_idle_81: -5123327680015382594
+      Avatar_Lamniat_idle_82: -900931464632492390
+      Avatar_Lamniat_idle_83: 264988490457946557
+      Avatar_Lamniat_idle_84: -8049406655750848027
+      Avatar_Lamniat_idle_85: -1243329170141726617
+      Avatar_Lamniat_idle_86: 5379136070586623332
+      Avatar_Lamniat_idle_87: -198464957911191746
+      Avatar_Lamniat_idle_88: -5883511589620113589
+      Avatar_Lamniat_idle_89: 5588042807888163968
+      Avatar_Lamniat_idle_9: 3236640161541038504
+      Avatar_Lamniat_idle_90: 3364548009817550120
+      Avatar_Lamniat_idle_91: -7884162015349467782
+      Avatar_Lamniat_idle_92: 6609940900697198265
+      Avatar_Lamniat_idle_93: -760244908993655362
+      Avatar_Lamniat_idle_94: -7345754998792211492
+      Avatar_Lamniat_idle_95: 4388991743446896783
+      Avatar_Lamniat_idle_96: -2097335148873040187
+      Avatar_Lamniat_idle_97: -2118063599969224893
+      Avatar_Lamniat_idle_98: 3019965365715756305
+      Avatar_Lamniat_idle_99: 6617090024447259791
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

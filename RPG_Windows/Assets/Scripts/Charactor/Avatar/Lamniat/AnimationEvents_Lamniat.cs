@@ -18,6 +18,18 @@ public class AnimationEvents_Lamniat : MonoBehaviour
     }
 
     #region 戰鬥相關動畫事件
+    public void OnMeleeCombo1() {
+        m_combat.SetMeleeComboCounter(1);
+    }
+
+    public void OnMeleeCombo2() {
+        m_combat.SetMeleeComboCounter(2);
+    }
+
+    public void OnMeleeCombo3() {
+        m_combat.SetMeleeComboCounter(3);
+    }
+
     public void OnPreAttack() 
     {
         if(!m_combat.IsPreAttacking) m_combat.IsPreAttacking = true;

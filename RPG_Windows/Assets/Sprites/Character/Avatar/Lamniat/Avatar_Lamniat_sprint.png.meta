@@ -185,10 +185,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMipmapLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -227,6 +229,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
   cookieLightType: 0
   platformSettings:
   - serializedVersion: 3
@@ -239,6 +242,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -251,6 +255,20 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
@@ -1421,9 +1439,64 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-  spritePackingTag: 
+    nameFileIdTable:
+      Avatar_Lamniat_sprint_0: 8537231037323503088
+      Avatar_Lamniat_sprint_1: -3106302946870732668
+      Avatar_Lamniat_sprint_10: -1728931472991270868
+      Avatar_Lamniat_sprint_11: 8136353801223995700
+      Avatar_Lamniat_sprint_12: 7467307598623086513
+      Avatar_Lamniat_sprint_13: 7605231892108044395
+      Avatar_Lamniat_sprint_14: 3116264618880680172
+      Avatar_Lamniat_sprint_15: -1286002833004732287
+      Avatar_Lamniat_sprint_16: -1417454513916779256
+      Avatar_Lamniat_sprint_17: 1915486024059927919
+      Avatar_Lamniat_sprint_18: -3938179512284855316
+      Avatar_Lamniat_sprint_19: 4043607637011596172
+      Avatar_Lamniat_sprint_2: -3409617353968194247
+      Avatar_Lamniat_sprint_20: -3678581935062988863
+      Avatar_Lamniat_sprint_21: -5597088334089953404
+      Avatar_Lamniat_sprint_22: -4636787060475222925
+      Avatar_Lamniat_sprint_23: -6441102304350319240
+      Avatar_Lamniat_sprint_24: -1966208690360781973
+      Avatar_Lamniat_sprint_25: 3846951325101191406
+      Avatar_Lamniat_sprint_26: -7314134260650508667
+      Avatar_Lamniat_sprint_27: 2003007253561538567
+      Avatar_Lamniat_sprint_28: -8819323563237006221
+      Avatar_Lamniat_sprint_29: -7199837867059667424
+      Avatar_Lamniat_sprint_3: 6929242411872292373
+      Avatar_Lamniat_sprint_30: 8415777520461910056
+      Avatar_Lamniat_sprint_31: 8257374509477974203
+      Avatar_Lamniat_sprint_32: 2163994366573124316
+      Avatar_Lamniat_sprint_33: 534019123210413268
+      Avatar_Lamniat_sprint_34: -7568193160659981005
+      Avatar_Lamniat_sprint_35: 7772387311427579333
+      Avatar_Lamniat_sprint_36: 5504353034346350514
+      Avatar_Lamniat_sprint_37: -3340775622345895391
+      Avatar_Lamniat_sprint_38: 3121765988739290887
+      Avatar_Lamniat_sprint_39: 5217473576268579830
+      Avatar_Lamniat_sprint_4: -5202044495828824770
+      Avatar_Lamniat_sprint_40: 7630310811578108649
+      Avatar_Lamniat_sprint_41: -4308472297359836950
+      Avatar_Lamniat_sprint_42: -8720679350786272311
+      Avatar_Lamniat_sprint_43: -6704612522187680350
+      Avatar_Lamniat_sprint_44: -1684918029152973946
+      Avatar_Lamniat_sprint_45: -7438323002058682710
+      Avatar_Lamniat_sprint_46: 7724306272308782960
+      Avatar_Lamniat_sprint_47: -5278487349818330813
+      Avatar_Lamniat_sprint_48: -1981332393078861079
+      Avatar_Lamniat_sprint_49: 1267071967954010552
+      Avatar_Lamniat_sprint_5: 3846350189957657886
+      Avatar_Lamniat_sprint_50: 3231674675170960108
+      Avatar_Lamniat_sprint_51: 8550890479331801733
+      Avatar_Lamniat_sprint_52: -1030354115186318390
+      Avatar_Lamniat_sprint_53: -5980806382028778617
+      Avatar_Lamniat_sprint_54: -1118965974140433582
+      Avatar_Lamniat_sprint_6: -8434581497685344426
+      Avatar_Lamniat_sprint_7: 8387883660916088025
+      Avatar_Lamniat_sprint_8: 2892603488094511746
+      Avatar_Lamniat_sprint_9: -2730492006901391457
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

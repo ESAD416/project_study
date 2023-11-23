@@ -95,10 +95,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMipmapLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -137,6 +139,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
   cookieLightType: 0
   platformSettings:
   - serializedVersion: 3
@@ -149,6 +152,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -161,6 +165,20 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
@@ -701,9 +719,34 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-  spritePackingTag: 
+    nameFileIdTable:
+      Avatar_Lamniat_shoot_0: 9168281228784100222
+      Avatar_Lamniat_shoot_1: 8196208699886578912
+      Avatar_Lamniat_shoot_10: -8665753891922184082
+      Avatar_Lamniat_shoot_11: -4349548814108673513
+      Avatar_Lamniat_shoot_12: 5763280175124477189
+      Avatar_Lamniat_shoot_13: 1283936062954046293
+      Avatar_Lamniat_shoot_14: 142335449399140781
+      Avatar_Lamniat_shoot_15: -1575114790581590872
+      Avatar_Lamniat_shoot_16: 5647827192368748032
+      Avatar_Lamniat_shoot_17: -263195888160793381
+      Avatar_Lamniat_shoot_18: -3504130594414545245
+      Avatar_Lamniat_shoot_19: 3628610339949027184
+      Avatar_Lamniat_shoot_2: -5950228894214057610
+      Avatar_Lamniat_shoot_20: -8580135282400317064
+      Avatar_Lamniat_shoot_21: 592719644770410708
+      Avatar_Lamniat_shoot_22: 5157445715768337328
+      Avatar_Lamniat_shoot_23: 2479263407053914168
+      Avatar_Lamniat_shoot_24: -8157118514587820731
+      Avatar_Lamniat_shoot_3: 5369410708127456141
+      Avatar_Lamniat_shoot_4: 3998118832242410509
+      Avatar_Lamniat_shoot_5: -9125408451235922609
+      Avatar_Lamniat_shoot_6: 1304655920575037930
+      Avatar_Lamniat_shoot_7: -6038136818842503136
+      Avatar_Lamniat_shoot_8: 7095702300547914813
+      Avatar_Lamniat_shoot_9: -8636229651576008435
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

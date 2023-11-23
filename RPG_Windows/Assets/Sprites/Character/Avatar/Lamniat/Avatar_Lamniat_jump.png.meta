@@ -320,10 +320,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMipmapLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -362,6 +364,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
   cookieLightType: 0
   platformSettings:
   - serializedVersion: 3
@@ -374,6 +377,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -386,6 +390,20 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
@@ -2501,9 +2519,109 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-  spritePackingTag: 
+    nameFileIdTable:
+      Avatar_Lamniat_jump_0: 8870445886750858189
+      Avatar_Lamniat_jump_1: 4311071401561159577
+      Avatar_Lamniat_jump_10: -5498425757236058448
+      Avatar_Lamniat_jump_11: 2108438293959076013
+      Avatar_Lamniat_jump_12: 2339749969876548863
+      Avatar_Lamniat_jump_13: -6608723407526812156
+      Avatar_Lamniat_jump_14: -6304538840402176458
+      Avatar_Lamniat_jump_15: -4268629220184073250
+      Avatar_Lamniat_jump_16: 3479885941876174946
+      Avatar_Lamniat_jump_17: 6021914116119896919
+      Avatar_Lamniat_jump_18: -1447330142972416578
+      Avatar_Lamniat_jump_19: -2616220572929866213
+      Avatar_Lamniat_jump_2: -8797891321163379144
+      Avatar_Lamniat_jump_20: 412695606422720670
+      Avatar_Lamniat_jump_21: 8594685609962817572
+      Avatar_Lamniat_jump_22: -7006017170897748017
+      Avatar_Lamniat_jump_23: 4777154638712033044
+      Avatar_Lamniat_jump_24: -9163230947859335894
+      Avatar_Lamniat_jump_25: 1267550589632941139
+      Avatar_Lamniat_jump_26: 5253915920490211166
+      Avatar_Lamniat_jump_27: -5963015761612564454
+      Avatar_Lamniat_jump_28: -1963315940671312973
+      Avatar_Lamniat_jump_29: -5021981949436983835
+      Avatar_Lamniat_jump_3: -3085118446880645528
+      Avatar_Lamniat_jump_30: -1917304404575217720
+      Avatar_Lamniat_jump_31: -5460141573530236242
+      Avatar_Lamniat_jump_32: 7199858866073488897
+      Avatar_Lamniat_jump_33: -3083452700593339908
+      Avatar_Lamniat_jump_34: 5150175655047095080
+      Avatar_Lamniat_jump_35: 5461493289660660010
+      Avatar_Lamniat_jump_36: -4719579636103738435
+      Avatar_Lamniat_jump_37: 3313012527048612440
+      Avatar_Lamniat_jump_38: -9044426946331158443
+      Avatar_Lamniat_jump_39: -416356697365431245
+      Avatar_Lamniat_jump_4: -1066378485603274723
+      Avatar_Lamniat_jump_40: -2662449551489650466
+      Avatar_Lamniat_jump_41: 8500370219088451583
+      Avatar_Lamniat_jump_42: -7150661192039081817
+      Avatar_Lamniat_jump_43: 812024687366220092
+      Avatar_Lamniat_jump_44: -8586534845931563561
+      Avatar_Lamniat_jump_45: 4541975825758558459
+      Avatar_Lamniat_jump_46: 3433707267613194438
+      Avatar_Lamniat_jump_47: 184530474636592225
+      Avatar_Lamniat_jump_48: 167670182556053798
+      Avatar_Lamniat_jump_49: -8498673139679678248
+      Avatar_Lamniat_jump_5: -1749112165040380791
+      Avatar_Lamniat_jump_50: 180291037794678206
+      Avatar_Lamniat_jump_51: 2805426772701561543
+      Avatar_Lamniat_jump_52: -4459411377034939152
+      Avatar_Lamniat_jump_53: 5571939001693975090
+      Avatar_Lamniat_jump_54: -3850878081060957142
+      Avatar_Lamniat_jump_55: -6530121645587958708
+      Avatar_Lamniat_jump_56: 4344751038579292818
+      Avatar_Lamniat_jump_57: -136307923901838404
+      Avatar_Lamniat_jump_58: -558403168742679528
+      Avatar_Lamniat_jump_59: 5519339757950890559
+      Avatar_Lamniat_jump_6: -7102594941869202707
+      Avatar_Lamniat_jump_60: 7688543356788525639
+      Avatar_Lamniat_jump_61: -9032045429190209364
+      Avatar_Lamniat_jump_62: 2940210530326082709
+      Avatar_Lamniat_jump_63: -1955602869814215865
+      Avatar_Lamniat_jump_64: 6864175917087691316
+      Avatar_Lamniat_jump_65: -2672612000010846717
+      Avatar_Lamniat_jump_66: 1852919711665862689
+      Avatar_Lamniat_jump_67: -263843912468019490
+      Avatar_Lamniat_jump_68: 8615585466423969154
+      Avatar_Lamniat_jump_69: -294972988347878606
+      Avatar_Lamniat_jump_7: -141841590937045103
+      Avatar_Lamniat_jump_70: -3946849368691155259
+      Avatar_Lamniat_jump_71: 4937955818975564226
+      Avatar_Lamniat_jump_72: 6808147916985428478
+      Avatar_Lamniat_jump_73: -7449820421724726276
+      Avatar_Lamniat_jump_74: 8066338991264939438
+      Avatar_Lamniat_jump_75: 1713747403076748493
+      Avatar_Lamniat_jump_76: -8963377713508239126
+      Avatar_Lamniat_jump_77: -3466286730114565181
+      Avatar_Lamniat_jump_78: -5247465144991638290
+      Avatar_Lamniat_jump_79: 5570370199364659939
+      Avatar_Lamniat_jump_8: -2687676271856938786
+      Avatar_Lamniat_jump_80: 117512440619012408
+      Avatar_Lamniat_jump_81: 34204049653666461
+      Avatar_Lamniat_jump_82: -1116963938224619787
+      Avatar_Lamniat_jump_83: -111542898214496872
+      Avatar_Lamniat_jump_84: -1707773700654655613
+      Avatar_Lamniat_jump_85: 5507870641079922417
+      Avatar_Lamniat_jump_86: 2513899102581505810
+      Avatar_Lamniat_jump_87: 3967990098651164590
+      Avatar_Lamniat_jump_88: 6331599040478781933
+      Avatar_Lamniat_jump_89: 2225862297618336654
+      Avatar_Lamniat_jump_9: -3441388199770576237
+      Avatar_Lamniat_jump_90: -3541425933155368050
+      Avatar_Lamniat_jump_91: -6350984629370353505
+      Avatar_Lamniat_jump_92: 4038009779284986162
+      Avatar_Lamniat_jump_93: -2381340076050129761
+      Avatar_Lamniat_jump_94: 6036547451605313183
+      Avatar_Lamniat_jump_95: 3247176954338460912
+      Avatar_Lamniat_jump_96: -7010171492813836249
+      Avatar_Lamniat_jump_97: 7321925371957949469
+      Avatar_Lamniat_jump_98: -3362607349218954139
+      Avatar_Lamniat_jump_99: -6300281254805596865
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

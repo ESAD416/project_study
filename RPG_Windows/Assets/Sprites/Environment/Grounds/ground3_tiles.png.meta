@@ -785,10 +785,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMipmapLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -827,6 +829,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
   cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
@@ -839,6 +842,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -851,6 +855,20 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
@@ -6221,9 +6239,264 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-  spritePackingTag: 
+    nameFileIdTable:
+      ground3_tiles_0: 49815611812650591
+      ground3_tiles_1: 8703936262630529647
+      ground3_tiles_10: -2172028284401824118
+      ground3_tiles_100: 6145152985767505
+      ground3_tiles_101: 874677360545241460
+      ground3_tiles_102: 1955070068210672351
+      ground3_tiles_103: 930813824528640500
+      ground3_tiles_104: 4329234518197165588
+      ground3_tiles_105: -3610032188535766017
+      ground3_tiles_106: 2453142823555608945
+      ground3_tiles_107: -2266178074072014592
+      ground3_tiles_108: -830228357748160762
+      ground3_tiles_109: -1624031368809888819
+      ground3_tiles_11: -5766316835635138196
+      ground3_tiles_110: -3922639925439214997
+      ground3_tiles_111: -7313100368159540442
+      ground3_tiles_112: 5116178897140073249
+      ground3_tiles_113: 6556703841018301953
+      ground3_tiles_114: 6415091759025999502
+      ground3_tiles_115: 3293150880043368533
+      ground3_tiles_116: 2925799369610131198
+      ground3_tiles_117: -4793644479713021697
+      ground3_tiles_118: 489469223434822109
+      ground3_tiles_119: -1826393582731754900
+      ground3_tiles_12: -4799531372193611274
+      ground3_tiles_120: 2206837026028209101
+      ground3_tiles_121: -1168984309628041185
+      ground3_tiles_122: -3060433724991490171
+      ground3_tiles_123: -5157177437315092244
+      ground3_tiles_124: -6100165076835059638
+      ground3_tiles_125: -1497940478283177654
+      ground3_tiles_126: 4264788968859085480
+      ground3_tiles_127: 2090153797258694055
+      ground3_tiles_128: -7180378441438601440
+      ground3_tiles_129: -549577905620962080
+      ground3_tiles_13: -7312006777257593754
+      ground3_tiles_130: -6714340515824453145
+      ground3_tiles_131: -8829756845861987584
+      ground3_tiles_132: 5929876407661370009
+      ground3_tiles_133: 5529263031439452832
+      ground3_tiles_134: -1727641499281863769
+      ground3_tiles_135: 542849531630113602
+      ground3_tiles_136: -754573955270053863
+      ground3_tiles_137: -2616058650510125291
+      ground3_tiles_138: -6991049672338576389
+      ground3_tiles_139: 6010632242924274158
+      ground3_tiles_14: -3731961939611684273
+      ground3_tiles_140: -8146154965639262098
+      ground3_tiles_141: -6653132720115736658
+      ground3_tiles_142: 3622474673793919145
+      ground3_tiles_143: 7122340118639129060
+      ground3_tiles_144: 5555468763695795991
+      ground3_tiles_145: 4741656869689132558
+      ground3_tiles_146: 8194611398818134663
+      ground3_tiles_147: 1508479266730296384
+      ground3_tiles_148: 8432814323312476567
+      ground3_tiles_149: 3851349845368518787
+      ground3_tiles_15: -2036387865073397394
+      ground3_tiles_150: 8284404988844613329
+      ground3_tiles_151: 7789659035823409703
+      ground3_tiles_152: 5743337475880758291
+      ground3_tiles_153: 6998629050495016645
+      ground3_tiles_154: 6178361603845145065
+      ground3_tiles_155: 4095259551448966983
+      ground3_tiles_156: -3801964146898478867
+      ground3_tiles_157: 7649509867479292279
+      ground3_tiles_158: 1817318012529626002
+      ground3_tiles_159: -3770254379722106212
+      ground3_tiles_16: -1880718137018076669
+      ground3_tiles_160: -4148618047262642353
+      ground3_tiles_161: 4527776510858610608
+      ground3_tiles_162: 1617478482218479180
+      ground3_tiles_163: -1558235416947591226
+      ground3_tiles_164: 610636146044234448
+      ground3_tiles_165: 5781190353872630945
+      ground3_tiles_166: 3461496311513223496
+      ground3_tiles_167: -7382017819030420772
+      ground3_tiles_168: -3441504572576351335
+      ground3_tiles_169: -6051962977436850519
+      ground3_tiles_17: -16473296234419717
+      ground3_tiles_170: -5700803855466845449
+      ground3_tiles_171: -7150521310144762533
+      ground3_tiles_172: 6093244156352144003
+      ground3_tiles_173: 1570265064118501559
+      ground3_tiles_174: -9096442104243045989
+      ground3_tiles_175: -6631779637578455870
+      ground3_tiles_176: 4760994267476323602
+      ground3_tiles_177: -5011447878540393520
+      ground3_tiles_178: 3126684084182094730
+      ground3_tiles_179: 8749519723843221961
+      ground3_tiles_18: -3903279596262771906
+      ground3_tiles_180: 6312813937315143570
+      ground3_tiles_181: 5809664404086184447
+      ground3_tiles_182: -3249723610118091190
+      ground3_tiles_183: 4124565526241738318
+      ground3_tiles_184: 6346443147457396671
+      ground3_tiles_185: 7325929340968766494
+      ground3_tiles_186: 4071002719846812420
+      ground3_tiles_187: -4559888539920696505
+      ground3_tiles_188: -6353325345651135219
+      ground3_tiles_189: 7237110071837788704
+      ground3_tiles_19: 341118945973954753
+      ground3_tiles_190: -7643806858841502010
+      ground3_tiles_191: -5494229004624387249
+      ground3_tiles_192: -8822854457385484916
+      ground3_tiles_193: 3553742787933084598
+      ground3_tiles_194: 1032769235125284494
+      ground3_tiles_195: -4864848981891514877
+      ground3_tiles_196: 118856296226004294
+      ground3_tiles_197: 1579373019476777787
+      ground3_tiles_198: 4083277834063062390
+      ground3_tiles_199: -2431079692357772653
+      ground3_tiles_2: 2467444174188108929
+      ground3_tiles_20: -376521890119964035
+      ground3_tiles_200: -7996083462900221390
+      ground3_tiles_201: 8292977897360069047
+      ground3_tiles_202: 4119450084706552351
+      ground3_tiles_203: 7980918252733781074
+      ground3_tiles_204: 5552539758868172809
+      ground3_tiles_205: -1602491406354912229
+      ground3_tiles_206: 5764723311030485282
+      ground3_tiles_207: 8343938107449726644
+      ground3_tiles_208: 3510111781065296955
+      ground3_tiles_209: -4867823988821315385
+      ground3_tiles_21: 682222670324190131
+      ground3_tiles_210: 5698293650684756117
+      ground3_tiles_211: 7301088345333746740
+      ground3_tiles_212: 7613988038381719357
+      ground3_tiles_213: 6894821132526095541
+      ground3_tiles_214: -5087666168055345725
+      ground3_tiles_215: -5083244660536462589
+      ground3_tiles_216: 9118353380136355538
+      ground3_tiles_217: 1893059260871635459
+      ground3_tiles_218: 1693466822247043309
+      ground3_tiles_219: 7974107389069269157
+      ground3_tiles_22: -4816227993112856130
+      ground3_tiles_220: 8629634809572145919
+      ground3_tiles_221: -1268477312493147377
+      ground3_tiles_222: -5004263999743822206
+      ground3_tiles_223: 1362617968476265187
+      ground3_tiles_224: 6217441448659441509
+      ground3_tiles_225: -4628096574857977255
+      ground3_tiles_226: 589194854899574777
+      ground3_tiles_227: 6777812801545392968
+      ground3_tiles_228: -4318404498006966466
+      ground3_tiles_229: -8869663605181729847
+      ground3_tiles_23: 4705792940305194920
+      ground3_tiles_230: -2870603797190410004
+      ground3_tiles_231: 5917285580944485417
+      ground3_tiles_232: 6008222557548187186
+      ground3_tiles_233: 7523493065496830068
+      ground3_tiles_234: 6044626577677832824
+      ground3_tiles_235: 6624278292314229955
+      ground3_tiles_236: -5395754282723066804
+      ground3_tiles_237: 7192082326152818597
+      ground3_tiles_238: -2914023147418985264
+      ground3_tiles_239: -1125815888554498567
+      ground3_tiles_24: 2667820252347697710
+      ground3_tiles_240: 5509756191797288141
+      ground3_tiles_241: -6231943827384586180
+      ground3_tiles_242: -4861217222157759622
+      ground3_tiles_243: 2694426116602596623
+      ground3_tiles_244: 94233120124646988
+      ground3_tiles_245: 8555298595639310935
+      ground3_tiles_246: 2476402459798742378
+      ground3_tiles_247: 7475172704482134760
+      ground3_tiles_248: -6525407151302006843
+      ground3_tiles_249: 7633185011386153110
+      ground3_tiles_25: 4073208537534386234
+      ground3_tiles_250: -394711983542912575
+      ground3_tiles_251: -5715415722356338476
+      ground3_tiles_252: 9724682229607368
+      ground3_tiles_253: -8810940334153920411
+      ground3_tiles_254: 4529153405174056516
+      ground3_tiles_26: -6298535454469257107
+      ground3_tiles_27: -7063809287413953448
+      ground3_tiles_28: -3779505475041525240
+      ground3_tiles_29: 1862338025372382443
+      ground3_tiles_3: -6338014874378494101
+      ground3_tiles_30: -7480251835668127483
+      ground3_tiles_31: -4930343970325225947
+      ground3_tiles_32: -5918027624626007118
+      ground3_tiles_33: -267495489756345604
+      ground3_tiles_34: 8072483837529494204
+      ground3_tiles_35: 2881006679467141967
+      ground3_tiles_36: -2425794489663273856
+      ground3_tiles_37: 4079106558065463840
+      ground3_tiles_38: -6634402616032980344
+      ground3_tiles_39: 6541014293279777256
+      ground3_tiles_4: -4214582235559459175
+      ground3_tiles_40: -4242637463621214417
+      ground3_tiles_41: 8923797196866303722
+      ground3_tiles_42: -8761018748086925876
+      ground3_tiles_43: 3307019308584731956
+      ground3_tiles_44: 2179045409107884460
+      ground3_tiles_45: -1072081669066549846
+      ground3_tiles_46: 2852873032753066862
+      ground3_tiles_47: 5138732928092939220
+      ground3_tiles_48: -5329920060227461397
+      ground3_tiles_49: -2428719355014580329
+      ground3_tiles_5: -7313942936028127650
+      ground3_tiles_50: -8587113448062022938
+      ground3_tiles_51: -6499843988121765579
+      ground3_tiles_52: 5847972890559454633
+      ground3_tiles_53: 3007124353280487166
+      ground3_tiles_54: -1079660682539324697
+      ground3_tiles_55: 7814396055723320400
+      ground3_tiles_56: -3416664014909511890
+      ground3_tiles_57: 8136185593436681878
+      ground3_tiles_58: -3681713005285856325
+      ground3_tiles_59: 4818322476493724312
+      ground3_tiles_6: 6532182847057121420
+      ground3_tiles_60: -858280554558884128
+      ground3_tiles_61: -3160147785095560815
+      ground3_tiles_62: -6007578283189365138
+      ground3_tiles_63: -812234091438156499
+      ground3_tiles_64: -3817809574250141046
+      ground3_tiles_65: 5142041626131286915
+      ground3_tiles_66: -4413820972442297396
+      ground3_tiles_67: -2758162129104936213
+      ground3_tiles_68: 7821356275482007783
+      ground3_tiles_69: 2673057791834780362
+      ground3_tiles_7: 5586918475281413867
+      ground3_tiles_70: 4190867680228036878
+      ground3_tiles_71: -7344097758899298955
+      ground3_tiles_72: -7750221795929010730
+      ground3_tiles_73: -8806582714691575051
+      ground3_tiles_74: -381668179868511238
+      ground3_tiles_75: 7675813429029077866
+      ground3_tiles_76: -647916894967459697
+      ground3_tiles_77: -2760334444211122821
+      ground3_tiles_78: 3911197076658917248
+      ground3_tiles_79: 7562944290666837167
+      ground3_tiles_8: -4315733710255531733
+      ground3_tiles_80: -2593870920780469648
+      ground3_tiles_81: 6920199829304431418
+      ground3_tiles_82: 8068454848624527220
+      ground3_tiles_83: 9190963515372837440
+      ground3_tiles_84: 28136024929780739
+      ground3_tiles_85: 3879876629184394259
+      ground3_tiles_86: -6003462992541099206
+      ground3_tiles_87: 1303424694193673598
+      ground3_tiles_88: 2484986920558255788
+      ground3_tiles_89: 9074495380466312760
+      ground3_tiles_9: 4935810042368416502
+      ground3_tiles_90: -838706790757864282
+      ground3_tiles_91: -5037026667090755859
+      ground3_tiles_92: -2504819910100786163
+      ground3_tiles_93: -978324124413804446
+      ground3_tiles_94: 1760264734328470740
+      ground3_tiles_95: 8000759775937880293
+      ground3_tiles_96: -1674896030056079684
+      ground3_tiles_97: 1756772960492142156
+      ground3_tiles_98: -6411588265935900903
+      ground3_tiles_99: 4416764405160191898
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

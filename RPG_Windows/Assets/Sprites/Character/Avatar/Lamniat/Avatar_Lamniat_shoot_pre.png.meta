@@ -230,10 +230,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMipmapLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -272,6 +274,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
   cookieLightType: 0
   platformSettings:
   - serializedVersion: 3
@@ -284,6 +287,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -296,6 +300,20 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
@@ -1781,9 +1799,79 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-  spritePackingTag: 
+    nameFileIdTable:
+      Avatar_Lamniat_shoot_pre_0: -7269021848883100863
+      Avatar_Lamniat_shoot_pre_1: 8861838935637337101
+      Avatar_Lamniat_shoot_pre_10: -748883967473539192
+      Avatar_Lamniat_shoot_pre_11: 5917333658110392553
+      Avatar_Lamniat_shoot_pre_12: -2141851538438442476
+      Avatar_Lamniat_shoot_pre_13: -8134078149976033089
+      Avatar_Lamniat_shoot_pre_14: -4703777221676327440
+      Avatar_Lamniat_shoot_pre_15: -5377873162467776358
+      Avatar_Lamniat_shoot_pre_16: 3743068228346001207
+      Avatar_Lamniat_shoot_pre_17: -5780689050091047056
+      Avatar_Lamniat_shoot_pre_18: -1648638878024433798
+      Avatar_Lamniat_shoot_pre_19: 855504604789941104
+      Avatar_Lamniat_shoot_pre_2: -8694815588510361836
+      Avatar_Lamniat_shoot_pre_20: 8466701178762335251
+      Avatar_Lamniat_shoot_pre_21: -2933940122328448837
+      Avatar_Lamniat_shoot_pre_22: -4601591431566199221
+      Avatar_Lamniat_shoot_pre_23: 3238575772255129179
+      Avatar_Lamniat_shoot_pre_24: 1897492357388857825
+      Avatar_Lamniat_shoot_pre_25: -4828870192570949996
+      Avatar_Lamniat_shoot_pre_26: 3169267615222243490
+      Avatar_Lamniat_shoot_pre_27: 3609606952617150110
+      Avatar_Lamniat_shoot_pre_28: -5448336841059903400
+      Avatar_Lamniat_shoot_pre_29: 6361445104267347057
+      Avatar_Lamniat_shoot_pre_3: -7171571445725629175
+      Avatar_Lamniat_shoot_pre_30: -6552903179195213458
+      Avatar_Lamniat_shoot_pre_31: -8766068873132078191
+      Avatar_Lamniat_shoot_pre_32: -987861618731017923
+      Avatar_Lamniat_shoot_pre_33: -889465153320846701
+      Avatar_Lamniat_shoot_pre_34: 8743397002501541020
+      Avatar_Lamniat_shoot_pre_35: -9108622416740622016
+      Avatar_Lamniat_shoot_pre_36: 3909696370700602270
+      Avatar_Lamniat_shoot_pre_37: 3896549477152788687
+      Avatar_Lamniat_shoot_pre_38: -2734830744298681409
+      Avatar_Lamniat_shoot_pre_39: -2811622905127434094
+      Avatar_Lamniat_shoot_pre_4: 9159817821291724492
+      Avatar_Lamniat_shoot_pre_40: 3789473668776810402
+      Avatar_Lamniat_shoot_pre_41: 2754764126883847662
+      Avatar_Lamniat_shoot_pre_42: -5705965412868309725
+      Avatar_Lamniat_shoot_pre_43: -6257234889811430918
+      Avatar_Lamniat_shoot_pre_44: -2650540219374320784
+      Avatar_Lamniat_shoot_pre_45: 2554728054742684630
+      Avatar_Lamniat_shoot_pre_46: -2306436229152494112
+      Avatar_Lamniat_shoot_pre_47: 222789052749720451
+      Avatar_Lamniat_shoot_pre_48: 1121465370221493391
+      Avatar_Lamniat_shoot_pre_49: -5078299235438563784
+      Avatar_Lamniat_shoot_pre_5: 2048730427827460156
+      Avatar_Lamniat_shoot_pre_50: -3217657879942854260
+      Avatar_Lamniat_shoot_pre_51: -8331890719440169212
+      Avatar_Lamniat_shoot_pre_52: -4314258527358141008
+      Avatar_Lamniat_shoot_pre_53: 5358340671764793890
+      Avatar_Lamniat_shoot_pre_54: -1666864217851981125
+      Avatar_Lamniat_shoot_pre_55: -3807259621545122962
+      Avatar_Lamniat_shoot_pre_56: -7737968032138387302
+      Avatar_Lamniat_shoot_pre_57: 1020692798759998955
+      Avatar_Lamniat_shoot_pre_58: 543471301045344038
+      Avatar_Lamniat_shoot_pre_59: 9042100492157976280
+      Avatar_Lamniat_shoot_pre_6: 8313040972063799866
+      Avatar_Lamniat_shoot_pre_60: 8190475445540800821
+      Avatar_Lamniat_shoot_pre_61: -5504887349487763719
+      Avatar_Lamniat_shoot_pre_62: 2879285676873395026
+      Avatar_Lamniat_shoot_pre_63: 529340861316421212
+      Avatar_Lamniat_shoot_pre_64: 658331047376839415
+      Avatar_Lamniat_shoot_pre_65: 8249352305529071330
+      Avatar_Lamniat_shoot_pre_66: -6998448991600816084
+      Avatar_Lamniat_shoot_pre_67: -4022651085275268339
+      Avatar_Lamniat_shoot_pre_68: 8312259116230737480
+      Avatar_Lamniat_shoot_pre_69: -6369807691211967772
+      Avatar_Lamniat_shoot_pre_7: 7460438962680145946
+      Avatar_Lamniat_shoot_pre_8: 1067676721227618176
+      Avatar_Lamniat_shoot_pre_9: 4588458999887672642
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

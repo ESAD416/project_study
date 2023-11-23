@@ -273,7 +273,7 @@ TextureImporter:
       213: 1976161224909772298
     second: wooden_stairs-ns_1_89
   externalObjects: {}
-  serializedVersion: 11
+  serializedVersion: 12
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -290,10 +290,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMipmapLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -332,6 +334,8 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -343,6 +347,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -355,6 +360,20 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
@@ -2260,9 +2279,99 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-  spritePackingTag: 
+    nameFileIdTable:
+      wooden_stairs-ns_1_0: 5198856052628523148
+      wooden_stairs-ns_1_1: 2532269201554829249
+      wooden_stairs-ns_1_10: 826656569583815023
+      wooden_stairs-ns_1_11: 5227471027263706014
+      wooden_stairs-ns_1_12: 7934139103289337952
+      wooden_stairs-ns_1_13: -204476201886850984
+      wooden_stairs-ns_1_14: -1094866899586275956
+      wooden_stairs-ns_1_15: -7510222942721406672
+      wooden_stairs-ns_1_16: 1228604972958149870
+      wooden_stairs-ns_1_17: -414535878476856252
+      wooden_stairs-ns_1_18: 5726677668868012260
+      wooden_stairs-ns_1_19: 8000769205281552856
+      wooden_stairs-ns_1_2: -5573624310838862169
+      wooden_stairs-ns_1_20: -4407558440159536574
+      wooden_stairs-ns_1_21: -9072247636212359740
+      wooden_stairs-ns_1_22: -7265704186523597750
+      wooden_stairs-ns_1_23: 3833092047379078197
+      wooden_stairs-ns_1_24: -4938637544525906796
+      wooden_stairs-ns_1_25: -2119721113564779830
+      wooden_stairs-ns_1_26: -2686482993525931968
+      wooden_stairs-ns_1_27: 87382845606367990
+      wooden_stairs-ns_1_28: 4072179153273625144
+      wooden_stairs-ns_1_29: 7656389491280683179
+      wooden_stairs-ns_1_3: -1677733276345348982
+      wooden_stairs-ns_1_30: -5857315717726611077
+      wooden_stairs-ns_1_31: -639384373835485445
+      wooden_stairs-ns_1_32: 6980071032931978595
+      wooden_stairs-ns_1_33: 3318368814412352778
+      wooden_stairs-ns_1_34: -1500676857590136041
+      wooden_stairs-ns_1_35: -1797168869226842587
+      wooden_stairs-ns_1_36: 7187060418560436643
+      wooden_stairs-ns_1_37: -7860293505372897433
+      wooden_stairs-ns_1_38: 5277219333082724974
+      wooden_stairs-ns_1_39: -8821960979696390461
+      wooden_stairs-ns_1_4: -1607251153026116513
+      wooden_stairs-ns_1_40: 8653961075850129589
+      wooden_stairs-ns_1_41: 3763287212430702485
+      wooden_stairs-ns_1_42: 2836862516727169929
+      wooden_stairs-ns_1_43: 740792117585685040
+      wooden_stairs-ns_1_44: -4843633611884760591
+      wooden_stairs-ns_1_45: 6299857075555339748
+      wooden_stairs-ns_1_46: 6466578695340109614
+      wooden_stairs-ns_1_47: 767166193096826619
+      wooden_stairs-ns_1_48: -8636841369157792937
+      wooden_stairs-ns_1_49: -5167015707916258085
+      wooden_stairs-ns_1_5: -922978488011488284
+      wooden_stairs-ns_1_50: 3687289433874154036
+      wooden_stairs-ns_1_51: -8658288059215133999
+      wooden_stairs-ns_1_52: 8105549606304280716
+      wooden_stairs-ns_1_53: 7691925969669409769
+      wooden_stairs-ns_1_54: 5627311951346669803
+      wooden_stairs-ns_1_55: -9180900212967312746
+      wooden_stairs-ns_1_56: -8429185449850180265
+      wooden_stairs-ns_1_57: -8666361075639155711
+      wooden_stairs-ns_1_58: 2717319537051221724
+      wooden_stairs-ns_1_59: -7576696607388159089
+      wooden_stairs-ns_1_6: 271953190650748639
+      wooden_stairs-ns_1_60: -3211154995241410175
+      wooden_stairs-ns_1_61: 2881466183764426605
+      wooden_stairs-ns_1_62: -4482347714053534442
+      wooden_stairs-ns_1_63: 77208406600513101
+      wooden_stairs-ns_1_64: 4445787467858048555
+      wooden_stairs-ns_1_65: -1411724056923583033
+      wooden_stairs-ns_1_66: 5114159361163178955
+      wooden_stairs-ns_1_67: -4964364964163332385
+      wooden_stairs-ns_1_68: 810761400663710751
+      wooden_stairs-ns_1_69: -1763474025436713602
+      wooden_stairs-ns_1_7: 8646758838631912690
+      wooden_stairs-ns_1_70: 8696023796347997764
+      wooden_stairs-ns_1_71: 2557600558035296614
+      wooden_stairs-ns_1_72: 5796391519632926225
+      wooden_stairs-ns_1_73: 6189658729797024549
+      wooden_stairs-ns_1_74: -3812989879180841651
+      wooden_stairs-ns_1_75: 8155141352831223470
+      wooden_stairs-ns_1_76: 1494082155622913633
+      wooden_stairs-ns_1_77: 1982428848835550519
+      wooden_stairs-ns_1_78: -1558793544265308958
+      wooden_stairs-ns_1_79: -7858262563523764660
+      wooden_stairs-ns_1_8: 1487641450569672433
+      wooden_stairs-ns_1_80: -6094643870389791606
+      wooden_stairs-ns_1_81: -290005342790497413
+      wooden_stairs-ns_1_82: -7299413082297957357
+      wooden_stairs-ns_1_83: -2516800514430608894
+      wooden_stairs-ns_1_84: 7996316481001919981
+      wooden_stairs-ns_1_85: 4777978758763131267
+      wooden_stairs-ns_1_86: 6235017401156213525
+      wooden_stairs-ns_1_87: 1976724920367807122
+      wooden_stairs-ns_1_88: 8323895994820110331
+      wooden_stairs-ns_1_89: 1976161224909772298
+      wooden_stairs-ns_1_9: -2469751451635433839
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

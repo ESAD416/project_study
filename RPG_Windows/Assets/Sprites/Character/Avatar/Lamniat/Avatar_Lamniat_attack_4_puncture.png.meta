@@ -215,10 +215,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMipmapLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -257,6 +259,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
   cookieLightType: 0
   platformSettings:
   - serializedVersion: 3
@@ -269,6 +272,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -281,6 +285,20 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
@@ -1661,9 +1679,74 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-  spritePackingTag: 
+    nameFileIdTable:
+      Avatar_Lamniat_attack_4_puncture_0: 5285004362863578499
+      Avatar_Lamniat_attack_4_puncture_1: 9123658152398175846
+      Avatar_Lamniat_attack_4_puncture_10: -2403747889767196614
+      Avatar_Lamniat_attack_4_puncture_11: -2836614538537936269
+      Avatar_Lamniat_attack_4_puncture_12: -4466751722069161141
+      Avatar_Lamniat_attack_4_puncture_13: -5778411107222507344
+      Avatar_Lamniat_attack_4_puncture_14: 5256283964645159328
+      Avatar_Lamniat_attack_4_puncture_15: 8333887308517799282
+      Avatar_Lamniat_attack_4_puncture_16: -8602282864980539057
+      Avatar_Lamniat_attack_4_puncture_17: -1457497440102415697
+      Avatar_Lamniat_attack_4_puncture_18: -2716770863629353855
+      Avatar_Lamniat_attack_4_puncture_19: 834335644742329345
+      Avatar_Lamniat_attack_4_puncture_2: -4064726617567029749
+      Avatar_Lamniat_attack_4_puncture_20: -2273817347035276192
+      Avatar_Lamniat_attack_4_puncture_21: -1030357164083926039
+      Avatar_Lamniat_attack_4_puncture_22: -1230108412226332468
+      Avatar_Lamniat_attack_4_puncture_23: 2803474307572880850
+      Avatar_Lamniat_attack_4_puncture_24: -670968509643294094
+      Avatar_Lamniat_attack_4_puncture_25: -8862750428268540517
+      Avatar_Lamniat_attack_4_puncture_26: -7069598304686517684
+      Avatar_Lamniat_attack_4_puncture_27: -287945677334051559
+      Avatar_Lamniat_attack_4_puncture_28: 2735099638440900631
+      Avatar_Lamniat_attack_4_puncture_29: -7955823146562610300
+      Avatar_Lamniat_attack_4_puncture_3: 4927999376538397579
+      Avatar_Lamniat_attack_4_puncture_30: 1691400616606889501
+      Avatar_Lamniat_attack_4_puncture_31: 2708432035761552460
+      Avatar_Lamniat_attack_4_puncture_32: -3615414960381389729
+      Avatar_Lamniat_attack_4_puncture_33: 3711713052231805494
+      Avatar_Lamniat_attack_4_puncture_34: -3723031168620454415
+      Avatar_Lamniat_attack_4_puncture_35: -1076184260128947610
+      Avatar_Lamniat_attack_4_puncture_36: -5620692515891981058
+      Avatar_Lamniat_attack_4_puncture_37: 6956194012036520616
+      Avatar_Lamniat_attack_4_puncture_38: 6820938576992422263
+      Avatar_Lamniat_attack_4_puncture_39: -219949452748101511
+      Avatar_Lamniat_attack_4_puncture_4: -150558509060326353
+      Avatar_Lamniat_attack_4_puncture_40: 1237434761619955664
+      Avatar_Lamniat_attack_4_puncture_41: -1962875364359861233
+      Avatar_Lamniat_attack_4_puncture_42: -1521479481575635538
+      Avatar_Lamniat_attack_4_puncture_43: 2024511192565802028
+      Avatar_Lamniat_attack_4_puncture_44: -1838956074979143805
+      Avatar_Lamniat_attack_4_puncture_45: -5638982381311438719
+      Avatar_Lamniat_attack_4_puncture_46: -7130634110562144831
+      Avatar_Lamniat_attack_4_puncture_47: 1832380116312693895
+      Avatar_Lamniat_attack_4_puncture_48: -4050068126019118192
+      Avatar_Lamniat_attack_4_puncture_49: -704817946740064910
+      Avatar_Lamniat_attack_4_puncture_5: -3901821293156029439
+      Avatar_Lamniat_attack_4_puncture_50: -1353503668031629263
+      Avatar_Lamniat_attack_4_puncture_51: 4629510104898348215
+      Avatar_Lamniat_attack_4_puncture_52: -809703641104003829
+      Avatar_Lamniat_attack_4_puncture_53: -6813032064831631878
+      Avatar_Lamniat_attack_4_puncture_54: -1808299438960440416
+      Avatar_Lamniat_attack_4_puncture_55: -6107609166976811578
+      Avatar_Lamniat_attack_4_puncture_56: -6192601351130433985
+      Avatar_Lamniat_attack_4_puncture_57: -5829685825203001931
+      Avatar_Lamniat_attack_4_puncture_58: 2975192111843257386
+      Avatar_Lamniat_attack_4_puncture_59: -5754803334609816193
+      Avatar_Lamniat_attack_4_puncture_6: 2006342211994273561
+      Avatar_Lamniat_attack_4_puncture_60: -1438542912117182677
+      Avatar_Lamniat_attack_4_puncture_61: -9072592415453919636
+      Avatar_Lamniat_attack_4_puncture_62: 7916249512050432629
+      Avatar_Lamniat_attack_4_puncture_63: -6927237529118019163
+      Avatar_Lamniat_attack_4_puncture_64: 26715422144625967
+      Avatar_Lamniat_attack_4_puncture_7: 2173843477610706898
+      Avatar_Lamniat_attack_4_puncture_8: 7006235117376420521
+      Avatar_Lamniat_attack_4_puncture_9: -5656762705198738867
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
