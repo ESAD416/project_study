@@ -77,7 +77,7 @@ public class Movement_Enemy : MonoBehaviour
     // Update is called once per frame
     protected virtual void Update()
     {
-        
+        m_enemyAnimator.SetFloat("moveSpeed", m_moveSpeed);
     }
 
     protected virtual void FixedUpdate() {

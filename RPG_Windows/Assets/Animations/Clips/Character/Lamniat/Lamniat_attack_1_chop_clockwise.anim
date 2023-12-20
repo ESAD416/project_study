@@ -49,7 +49,7 @@ AnimationClip:
         inWeight: 0
         outWeight: 0
       - serializedVersion: 3
-        time: 0.39999998
+        time: 0.4
         value: 0
         inSlope: Infinity
         outSlope: Infinity
@@ -224,7 +224,7 @@ AnimationClip:
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.39999998
+    m_StopTime: 0.4
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -272,7 +272,7 @@ AnimationClip:
         inWeight: 0
         outWeight: 0
       - serializedVersion: 3
-        time: 0.39999998
+        time: 0.4
         value: 0
         inSlope: Infinity
         outSlope: Infinity
@@ -300,14 +300,14 @@ AnimationClip:
     intParameter: 0
     messageOptions: 0
   - time: 0
-    functionName: CanCancelRecovery
+    functionName: OnMeleeCombo1
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0
-    functionName: OnMeleeCombo1
+    functionName: CanCancelRecovery
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
@@ -336,6 +336,13 @@ AnimationClip:
     messageOptions: 0
   - time: 0.28
     functionName: CanCancelRecovery
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.4
+    functionName: OnFinishMeleeAttackClip
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

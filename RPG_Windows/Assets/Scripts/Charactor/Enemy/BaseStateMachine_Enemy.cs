@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class BaseStateMachine_Enemy: BaseStateMachine_Charactor
+public abstract class BaseStateMachine_Enemy : BaseStateMachine_Charactor
 {
 
     protected Enemy currentEnemy;

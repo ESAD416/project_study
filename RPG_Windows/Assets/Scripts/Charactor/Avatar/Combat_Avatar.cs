@@ -2,20 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class Combat_Avatar : Attack
 {
-    #region 基本物件
-
-    [Header("可操作角色戰鬥物件")]
-    [SerializeField] protected Avatar m_avatar;
-    [SerializeField] protected Movement_Avatar m_avatarMovement;
-    [SerializeField] protected Dodge_Avatar m_avatarDodge;
-    [SerializeField] protected List<HitBox_Overlap2D> m_hitBoxs;
-    protected Animator m_avatarAnimator;
-    protected AvatarInputActionsControls m_inputControls;
-
-    #endregion
-
     #region 基本參數
 
     [Header("可操作角色戰鬥參數")]
@@ -40,6 +29,18 @@ public class Combat_Avatar : Attack
     /// 角色攻擊動作為即時觸發，故宣告一協程進行處理獨立的動作
     /// </summary>
     protected Coroutine m_attackRoutine;
+
+    #endregion
+
+    #region 基本物件
+
+    [Header("可操作角色戰鬥物件")]
+    [SerializeField] protected Avatar m_avatar;
+    [SerializeField] protected Movement_Avatar m_avatarMovement;
+    [SerializeField] protected Dodge_Avatar m_avatarDodge;
+    
+    protected Animator m_avatarAnimator;
+    protected AvatarInputActionsControls m_inputControls;
 
     #endregion
 

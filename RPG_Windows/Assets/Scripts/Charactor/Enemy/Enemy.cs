@@ -18,13 +18,15 @@ public class Enemy : Charactor
     }
 
     protected BaseStateMachine_Enemy m_idle;
-    public BaseStateMachine_Enemy Idle => m_idle;
+    public BaseStateMachine_Enemy Idle => this.m_idle;
     protected BaseStateMachine_Enemy m_move;
-    public BaseStateMachine_Enemy Move => m_move;
+    public BaseStateMachine_Enemy Move => this.m_move;
+    protected BaseStateMachine_Enemy m_attack;
+    public BaseStateMachine_Enemy Attack => this.m_attack;
     protected BaseStateMachine_Enemy m_hurt;
-    public BaseStateMachine_Enemy Hurt => m_hurt;
+    public BaseStateMachine_Enemy Hurt => this.m_hurt;
     protected BaseStateMachine_Enemy m_dead;
-    public BaseStateMachine_Enemy Dead => m_dead;
+    public BaseStateMachine_Enemy Dead => this.m_dead;
 
 
     private EnemyStateMachine m_currentEnemyState;
@@ -36,9 +38,9 @@ public class Enemy : Charactor
     }
 
     protected EnemyStateMachine m_patrol;
-    protected EnemyStateMachine Patrol => m_patrol;
+    protected EnemyStateMachine Patrol => this.m_patrol;
     protected EnemyStateMachine m_chase;
-    protected EnemyStateMachine Chase => m_chase;
+    protected EnemyStateMachine Chase => this.m_chase;
 
     #endregion
 
@@ -48,6 +50,11 @@ public class Enemy : Charactor
     protected override void Awake()
     {
         base.Awake();
+        m_idle = new IdleState_Boss(this);
+        m_move = new MoveState_Enemy(this);
+        m_attack = new AttackState_Enemy(this);
+        m_hurt = new HurtState_Enemy(this);
+        m_dead = new DeadState_Boss(this);
     }
 
     protected override void OnEnable() {

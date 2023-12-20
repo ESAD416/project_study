@@ -3,14 +3,20 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class Combat_Lamniat : Combat_Avatar
 {
+    [Header("Lamniat戰鬥參數")]
     protected int m_maximumMeleeComboCount = 3;
     protected int m_meleeComboCounter = 0;
     public int MeleeComboCounter => this.m_meleeComboCounter;
     public void SetMeleeComboCounter(int value) => this.m_meleeComboCounter = value;
-    [SerializeField] protected GameObject slashEffectPrefeb;
+
+    [Header("Lamniat戰鬥物件")]
+    [SerializeField] protected HitBox_Overlap2D m_hitBox_left;
+    [SerializeField] protected HitBox_Overlap2D m_hitBox_right;
+    [SerializeField] protected List<VisualEffect> m_slashEffects;
     
 
     protected override void Awake() {
@@ -32,8 +38,8 @@ public class Combat_Lamniat : Combat_Avatar
             }
 
             MeleeAttack();
-            if(m_meleeComboCounter >= m_maximumMeleeComboCount) m_meleeComboCounter = 0;
-            m_meleeComboCounter++;
+            // if(m_meleeComboCounter >= m_maximumMeleeComboCount) m_meleeComboCounter = 0;
+            // m_meleeComboCounter++;
         };
 
         #endregion
@@ -50,7 +56,7 @@ public class Combat_Lamniat : Combat_Avatar
         if(!IsAttacking) IsAttacking = true;
         if(!m_avatar.CurrentBaseState.State.Equals(BaseStateMachine_Charactor.BaseState.Attack)) m_avatar.SetCurrentBaseState(m_avatar.Attack);
         
-        SetHitboxDir();
+        //SetHitboxDir();
         m_avatarAnimator.SetTrigger("melee");
     }
 
@@ -67,6 +73,16 @@ public class Combat_Lamniat : Combat_Avatar
         if(m_avatarMovement.IsMoving) m_avatar.SetCurrentBaseState(m_avatar.Move);
         else m_avatar.SetCurrentBaseState(m_avatar.Idle);
 
+        m_hitBox_left.gameObject.SetActive(false);
+        m_hitBox_right.gameObject.SetActive(false);
+        m_slashEffects.ForEach(h => 
+        {
+            h.gameObject.SetActive(false);
+        });
+
+        this.m_meleeComboCounter = 0;
+
+
         Debug.Log("FinishMeleeAttack");
     }
 
@@ -78,45 +94,28 @@ public class Combat_Lamniat : Combat_Avatar
         m_avatarAnimator.SetBool("cancelRecovery", CancelRecovery);
     }
 
-    private void SetHitboxDir() {
-        Quaternion quaternion = Quaternion.identity;
-        if(m_avatarMovement.FacingDir.x == 0 && m_avatarMovement.FacingDir.y > 0) {
-            // Up
-            if(MeleeComboCounter == 2) quaternion = Quaternion.Euler(0f , 0f , 90f);
-            else quaternion = Quaternion.Euler(0f , 180f , 90f);
-            UpdateHitboxsEnabled("Melee_Up", quaternion);
-        } else if(m_avatarMovement.FacingDir.x == 0 && m_avatarMovement.FacingDir.y < 0) {
-            // Down 
-            if(m_meleeComboCounter == 2) quaternion = Quaternion.Euler(0f , 0f , -90f);
-            else quaternion = Quaternion.Euler(0f , 180f , -90f);
-            UpdateHitboxsEnabled("Melee_Down", quaternion);
-        } else if(m_avatarMovement.FacingDir.x < 0 && m_avatarMovement.FacingDir.y == 0) {
+    public void SetHitboxDir() {
+        Debug.Log("SetHitboxDir m_avatarMovement.FacingDir: "+m_avatarMovement.FacingDir);
+        Debug.Log("SetHitboxDir m_meleeComboCounter: "+m_meleeComboCounter);
+        string objName = string.Empty;
+        if(m_avatarMovement.FacingDir.x < 0) {
             // Left
-            if(m_meleeComboCounter == 2) quaternion = Quaternion.Euler(0f , 180f , 0f);
-            else quaternion = Quaternion.Euler(180f , 180f , 0f);
-            UpdateHitboxsEnabled("Melee_Left", quaternion);
-        } else if(m_avatarMovement.FacingDir.x > 0 && m_avatarMovement.FacingDir.y == 0) {
+            objName = "VFXGraph_slash_combo"+ m_meleeComboCounter +"_left";
+            UpdateHitboxsEnabled(m_hitBox_left, objName);
+            
+        } else if(m_avatarMovement.FacingDir.x > 0) {
             // Right
-            if(m_meleeComboCounter == 2) quaternion = Quaternion.Euler(0f , 0f , 0f);
-            else quaternion = Quaternion.Euler(180f , 0f , 0f);
-            UpdateHitboxsEnabled("Melee_Right", quaternion);
+            objName = "VFXGraph_slash_combo"+ m_meleeComboCounter +"_right";
+            UpdateHitboxsEnabled(m_hitBox_right, objName);
         } 
     }
-
-
     
-    private void UpdateHitboxsEnabled(string gameObjectName, Quaternion quaternion) 
+    private void UpdateHitboxsEnabled(HitBox_Overlap2D hitbox, string slashEffectObjName)
     {
-        m_hitBoxs.ForEach(h => 
+        hitbox.gameObject.SetActive(true);
+        m_slashEffects.ForEach(h => 
         {
-            if(h.name.Equals(gameObjectName)) {
-                h.gameObject.SetActive(true);
-
-                var existingSlashEffect = h.gameObject.transform.Find("VFXGraph_slash");
-                if(existingSlashEffect != null) {
-                    existingSlashEffect.transform.rotation = quaternion;
-                }
-            }
+            if(h.name.Equals(slashEffectObjName)) h.gameObject.SetActive(true);
             else h.gameObject.SetActive(false);
         });
     }

@@ -20,7 +20,8 @@ public class Boss : Enemy
     public BossStateMachine BattleFinish => this.m_battleFinish;
 
     protected override void Awake() {
-        base.Awake();
+        m_Coordinate = transform.position;
+        
         m_idle = new IdleState_Boss(this);
         m_move = new MoveState_Boss(this);
         m_dead = new DeadState_Boss(this);

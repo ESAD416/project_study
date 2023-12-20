@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Fungus;
 using UnityEngine;
 
 public class HitBox_Overlap2D : Detector_Overlap2D

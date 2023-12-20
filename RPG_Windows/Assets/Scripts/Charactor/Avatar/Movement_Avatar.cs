@@ -48,7 +48,7 @@ public class Movement_Avatar : MonoBehaviour
     /// <summary>
     /// 角色面向方向
     /// </summary>
-    [SerializeField] protected Vector2 m_facingDir = Vector2.down;
+    [SerializeField] protected Vector2 m_facingDir = Vector2.right;
     public Vector2 FacingDir => m_facingDir;
     /// <summary>
     /// 更改角色面向方向

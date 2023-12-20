@@ -18,18 +18,6 @@ public class AnimationEvents_Lamniat : MonoBehaviour
     }
 
     #region 戰鬥相關動畫事件
-    public void OnMeleeCombo1() {
-        m_combat.SetMeleeComboCounter(1);
-    }
-
-    public void OnMeleeCombo2() {
-        m_combat.SetMeleeComboCounter(2);
-    }
-
-    public void OnMeleeCombo3() {
-        m_combat.SetMeleeComboCounter(3);
-    }
-
     public void OnPreAttack() 
     {
         if(!m_combat.IsPreAttacking) m_combat.IsPreAttacking = true;
@@ -40,6 +28,7 @@ public class AnimationEvents_Lamniat : MonoBehaviour
     {
         if(m_combat.IsPreAttacking) m_combat.IsPreAttacking = false;
         if(m_combat.IsPostAttacking) m_combat.IsPostAttacking = false;
+        m_combat.SetHitboxDir();
     }
 
     public void OnPostAttack() 
@@ -55,5 +44,27 @@ public class AnimationEvents_Lamniat : MonoBehaviour
     public void CantCancelRecovery() {
         m_combat.CancelRecovery = false;
     }
+
+    #region 近戰動畫事件
+    public void OnMeleeCombo1() {
+        Debug.Log("OnMeleeCombo: 1");
+        m_combat.SetMeleeComboCounter(1);
+    }
+
+    public void OnMeleeCombo2() {
+        Debug.Log("OnMeleeCombo: 2");
+        m_combat.SetMeleeComboCounter(2);
+    }
+
+    public void OnMeleeCombo3() {
+        Debug.Log("OnMeleeCombo: 3");
+        m_combat.SetMeleeComboCounter(3);
+    }
+
+    public void OnFinishMeleeAttackClip() {
+        m_combat.FinishMeleeAttack();
+    }
+    #endregion
+
     #endregion
 }

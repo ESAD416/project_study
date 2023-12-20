@@ -5,7 +5,6 @@ using UnityEngine;
 public class Movement_HorizontalOscillation : Movement_Enemy
 {
     public bool moveRight;
-    
 
     protected override void FixedUpdate() {
         if(!m_enemy.CurrentBaseState.Equals(BaseStateMachine_Enemy.BaseState.Dead)) {
