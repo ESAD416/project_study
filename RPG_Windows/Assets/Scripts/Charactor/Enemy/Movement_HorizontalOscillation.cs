@@ -4,24 +4,61 @@ using UnityEngine;
 
 public class Movement_HorizontalOscillation : Movement_Enemy
 {
+    [Header("Movement_HorizontalOscillation 基本參數")]
     public bool moveRight;
+
+    [SerializeField] protected Detector_EnemyPatrol m_leftDetector_Patrol;
+    [SerializeField] protected Detector_EnemyPatrol m_rightDetector_Patrol;
+    
+    [SerializeField] protected List<Transform> pathTurn = new List<Transform>();
+    private Vector3 defaultPos;
+    private Dictionary<string, Vector3> turnPara = new Dictionary<string, Vector3>();
+
+    protected override void Start()
+    {
+        base.Start();
+        defaultPos = m_enemy.transform.position;
+
+        foreach (Transform trun in pathTurn) 
+        {
+            Vector3 v = defaultPos - trun.position;
+            turnPara.Add(trun.gameObject.name, v);
+        }
+    }
+
+    protected override void Update() 
+    {  
+        base.Update();
+        if(m_detector_chaser != null && m_detector_chaser.gameObject.activeSelf) {
+            if(m_detector_chaser.TargetModel != null && m_detector_chaser.targetVisable) 
+            {
+                UpdatePathParaForHorizontal();
+            } 
+            else 
+            {
+                StartCoroutine(UpdatePathParaEndingDelay());
+            }
+        }
+    }
 
     protected override void FixedUpdate() {
         if(!m_enemy.CurrentBaseState.Equals(BaseStateMachine_Enemy.BaseState.Dead)) {
-            if(moveRight) SetMovement(Vector3.right);
-            else SetMovement(Vector3.left);
-            // if(m_enemy.CurrentEnemyState.State.Equals(EnemyStateMachine.EnemyState.Patrol)) {
-                
-            // } 
-            // else if(m_enemy.CurrentEnemyState.State.Equals(EnemyStateMachine.EnemyState.Chase)) {
-            //     // TODO: chase logic
 
-            //     // if(movement.Equals(Vector3.zero)) {
-            //     //     moveRight = AnimeUtils.isRightForHorizontalAnimation(movementAfterAttack);
-            //     // }
-            //     //moveRight = AnimeUtils.isRightForHorizontalAnimation(Movement);
-            // }
-            
+            if(m_enemy.CurrentEnemyState.State.Equals(EnemyStateMachine.EnemyState.Patrol)) 
+            {
+                if(moveRight) 
+                {
+                    SetMovement(Vector3.right);
+                    m_leftDetector_Patrol.gameObject.SetActive(false);
+                    m_rightDetector_Patrol.gameObject.SetActive(true);
+                }
+                else 
+                {
+                    SetMovement(Vector3.left);
+                    m_leftDetector_Patrol.gameObject.SetActive(true);
+                    m_rightDetector_Patrol.gameObject.SetActive(false);
+                } 
+            }
             if(m_enemySprtRenderer!= null) m_enemySprtRenderer.flipX = moveRight;
         }
 
@@ -40,4 +77,18 @@ public class Movement_HorizontalOscillation : Movement_Enemy
 			}	
 		}
 	}
+
+    private void UpdatePathParaForHorizontal() {
+        var enemyPos = m_enemy.transform.position;
+        foreach (Transform turn in pathTurn) {
+                var v = turnPara[turn.gameObject.name];
+                turn.position = enemyPos - v;
+            
+        }
+    }
+
+    private IEnumerator UpdatePathParaEndingDelay() {
+        UpdatePathParaForHorizontal();
+        yield return new WaitForSeconds(m_detector_chaser.chaseModeDelay);  // hardcasted casted time for debugged
+    }
 }

@@ -6,7 +6,7 @@ public class HurtState_Enemy : BaseStateMachine_Enemy
 {
     public HurtState_Enemy(Enemy enemy) {
         this.currentEnemy = enemy;
-        this.m_bState = BaseState.Attack;
+        this.m_bState = BaseState.Hurt;
     }
 
     public override void OnEnter()

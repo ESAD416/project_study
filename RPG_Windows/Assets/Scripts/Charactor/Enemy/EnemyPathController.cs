@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemyPathController : MonoBehaviour
 {
     [SerializeField] private Enemy Enemy;
-    [SerializeField] private AIChaser AIChaser;
+    [SerializeField] private Detector_EnemyChase Chaser;
     [SerializeField] private bool isHorizontal;
 
     private Vector3 defaultPos;
@@ -34,10 +34,10 @@ public class EnemyPathController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(AIChaser != null) {
-            if(AIChaser.gameObject.activeSelf) {
+        if(Chaser != null) {
+            if(Chaser.gameObject.activeSelf) {
                 if(isHorizontal) {
-                    if((AIChaser.TargetModel != null && AIChaser.targetVisable)) {
+                    if((Chaser.TargetModel != null && Chaser.targetVisable)) {
                         UpdatePathParaForHorizontal();
                     } else {
                         StartCoroutine(UpdatePathParaEndingDelay());
@@ -52,7 +52,7 @@ public class EnemyPathController : MonoBehaviour
 
     private IEnumerator UpdatePathParaEndingDelay() {
         UpdatePathParaForHorizontal();
-        yield return new WaitForSeconds(AIChaser.chaseModeDelay);  // hardcasted casted time for debugged
+        yield return new WaitForSeconds(Chaser.chaseModeDelay);  // hardcasted casted time for debugged
     }
 
     private void UpdatePathParaForHorizontal() {

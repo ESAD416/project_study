@@ -6,7 +6,9 @@ public class Movement_Enemy : MonoBehaviour
 {
     #region 基本物件
 
+    [Header("Movement_Enemy 基本物件")]
     [SerializeField] protected Enemy m_enemy;
+    [SerializeField] protected Detector_EnemyChase m_detector_chaser;
     protected Rigidbody2D m_enemyRdbd;
     protected SpriteRenderer m_enemySprtRenderer;
     protected Animator m_enemyAnimator;
@@ -15,7 +17,7 @@ public class Movement_Enemy : MonoBehaviour
 
     #region 基本參數
 
-    [Header("Movement Parameters")]
+    [Header("Movement_Enemy 基本參數")]
     [SerializeField] protected Vector3 defaultMovement = Vector3.left;
     [SerializeField] protected float m_moveSpeed = 11f;
     /// <summary>
@@ -29,7 +31,7 @@ public class Movement_Enemy : MonoBehaviour
         this.m_moveSpeed = speed;
     }
     
-    protected Vector3 m_movement = Vector3.zero;
+    [SerializeField] protected Vector3 m_movement = Vector3.zero;
     /// <summary>
     /// 角色移動向量
     /// </summary>
@@ -85,6 +87,7 @@ public class Movement_Enemy : MonoBehaviour
            m_enemy.CurrentBaseState.Equals(BaseStateMachine_Enemy.BaseState.Attack)) {
             SetMovement(Vector3.zero);
         }
+        
         Move();
 
         // if(!cantMove) {
@@ -97,7 +100,7 @@ public class Movement_Enemy : MonoBehaviour
     }
 
     public void Move() {
-        m_enemyRdbd.velocity = Movement.normalized * MoveSpeed;
+        m_enemyRdbd.velocity = this.m_movement.normalized * MoveSpeed;
     }
 
     public void SetDefaultMovement() {

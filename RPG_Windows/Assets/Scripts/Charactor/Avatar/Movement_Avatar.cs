@@ -6,7 +6,7 @@ public class Movement_Avatar : MonoBehaviour
 {
     #region 基本物件
 
-    [Header("基本物件")]
+    [Header("Movement_Avatar 基本物件")]
     [SerializeField] protected Avatar m_avatar;
     protected Rigidbody2D m_avatarRdbd;
     protected SpriteRenderer m_avatarSprtRenderer;
@@ -17,7 +17,7 @@ public class Movement_Avatar : MonoBehaviour
     
     #region 基本參數
 
-    [Header("基本參數")]
+    [Header("Movement_Avatar 基本參數")]
     [SerializeField] protected float m_moveSpeed = 11f;
     /// <summary>
     /// 角色移速

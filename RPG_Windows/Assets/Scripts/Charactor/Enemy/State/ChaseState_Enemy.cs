@@ -2,15 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MoveState_Enemy : BaseStateMachine_Enemy
+public class ChaseState_Enemy : EnemyStateMachine
 {
-    public MoveState_Enemy(Enemy enemy) {
+    public ChaseState_Enemy(Enemy enemy) {
         this.currentEnemy = enemy;
-        this.m_bState = BaseState.Move;
+        this.m_eState = EnemyState.Chase;
     }
 
     public override void OnEnter()
     {
+        // OnEnter
     }
     public override void OnEnter(Enemy enemy)
     {
@@ -18,16 +19,18 @@ public class MoveState_Enemy : BaseStateMachine_Enemy
         OnEnter();
     }
 
-
-    public override void OnExit()
+    public override void OnUpdate()
     {
+        // 發現Player(Avatar)就轉移至ChaseState
     }
 
     public override void OnFixedUpdate()
     {
+        // 物理引擎相關的Update
     }
 
-    public override void OnUpdate()
+    public override void OnExit()
     {
+        // OnExit
     }
 }

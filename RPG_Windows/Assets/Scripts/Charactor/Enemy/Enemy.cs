@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Enemy : Charactor
 {
-    [Header("Avatar基本物件")]
+    [Header("Enemy 基本物件")]
     [SerializeField] protected Movement_Enemy m_enemyMovement;
     [SerializeField] protected HealthBar healthBar;
 
@@ -38,12 +38,13 @@ public class Enemy : Charactor
     }
 
     protected EnemyStateMachine m_patrol;
-    protected EnemyStateMachine Patrol => this.m_patrol;
+    public EnemyStateMachine Patrol => this.m_patrol;
     protected EnemyStateMachine m_chase;
-    protected EnemyStateMachine Chase => this.m_chase;
+    public EnemyStateMachine Chase => this.m_chase;
 
     #endregion
 
+    [Header("Enemy 基本參數")]
     public bool isPatroling = false;
     public bool isChasing = false;
 
@@ -55,6 +56,9 @@ public class Enemy : Charactor
         m_attack = new AttackState_Enemy(this);
         m_hurt = new HurtState_Enemy(this);
         m_dead = new DeadState_Boss(this);
+
+        m_patrol = new PatrolState_Enemy(this);
+        m_chase = new ChaseState_Enemy(this);
     }
 
     protected override void OnEnable() {
@@ -62,6 +66,9 @@ public class Enemy : Charactor
 
         m_currentBaseState = m_idle;
         m_currentBaseState.OnEnter();
+
+        m_currentEnemyState = m_patrol;
+        m_currentEnemyState.OnEnter();
 
     }
 
@@ -77,6 +84,7 @@ public class Enemy : Charactor
     protected override void Update() {
         //Debug.Log("moveSpeed: "+moveSpeed);
         m_currentBaseState.OnUpdate();
+        m_currentEnemyState.OnUpdate();
 
         base.Update();
         //m_Animator?.SetFloat("moveSpeed", MoveSpeed);
@@ -84,12 +92,14 @@ public class Enemy : Charactor
 
     protected override void FixedUpdate() {
         m_currentBaseState.OnFixedUpdate();
+        m_currentEnemyState.OnFixedUpdate();
 
         base.FixedUpdate();
     }
 
     protected virtual void OnDisable() {
         m_currentBaseState.OnExit();
+        m_currentEnemyState.OnExit();
     }
 
     public virtual void OnAttack() {
