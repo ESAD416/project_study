@@ -26,11 +26,13 @@ public class HitSystem_Avatar : HitSystem
 
         var avatarTakenHit = GetComponent<Avatar>();
         if(avatarTakenHit != null) {
+            if(m_target.CurrentBaseState.State.Equals(BaseStateMachine_Charactor.BaseState.Move)) {
+                Debug.Log("TakeHit: SetMovementAfterTrigger "+m_targetMovement.Movement);
+                m_targetMovement.SetMovementAfterTrigger(m_targetMovement.Movement);
+            }
+
             bool dodged = DodgedTheHit();
             if(dodged) {
-                if(m_target.CurrentBaseState.State.Equals(BaseStateMachine_Charactor.BaseState.Move)) {
-                    m_targetMovement.SetMovementAfterTrigger(m_targetMovement.Movement);
-                }
                 m_target.SetCurrentBaseState(m_target.Dodge);
 
                 yield return new WaitForSeconds(m_targetDodge.DodgeClipTime);
@@ -42,8 +44,9 @@ public class HitSystem_Avatar : HitSystem
                 
                 m_target.SetCurrentBaseState(m_target.Hurt);
 
+                var dir = SetAttackForceDir(attacker.transform);
                 if(!isHyperArmor && m_KnockbackFeedback != null) {
-                    m_KnockbackFeedback.ActiveFeedback(attacker.transform.position);
+                    m_KnockbackFeedback.ActiveFeedbackByDir(dir);
                     Invoke("SetHurtTrigger", m_KnockbackFeedback.HitRecoveryTime);
                 } else {
                     m_targetAnimator?.SetTrigger("hurt");
@@ -64,12 +67,13 @@ public class HitSystem_Avatar : HitSystem
 
         var avatarTakenHit = GetComponent<Avatar>();
         if(avatarTakenHit != null) {
+            if(m_target.CurrentBaseState.State.Equals(BaseStateMachine_Charactor.BaseState.Move)) {
+                //m_avatar.SetFacingDir(m_avatar.Movement);
+                m_targetMovement.SetMovementAfterTrigger(m_targetMovement.Movement);
+            }
+
             bool dodged = DodgedTheHit();
             if(dodged) {
-                if(m_target.CurrentBaseState.State.Equals(BaseStateMachine_Charactor.BaseState.Move)) {
-                    //m_avatar.SetFacingDir(m_avatar.Movement);
-                    m_targetMovement.SetMovementAfterTrigger(m_targetMovement.Movement);
-                }
                 m_target.SetCurrentBaseState(m_target.Dodge);
 
                 yield return new WaitForSeconds(m_targetDodge.DodgeClipTime);
@@ -82,8 +86,9 @@ public class HitSystem_Avatar : HitSystem
 
                 m_target.SetCurrentBaseState(m_target.Hurt);
 
+                var dir = SetAttackForceDir(attackedLocation);
                 if(!isHyperArmor && m_KnockbackFeedback != null) {
-                    m_KnockbackFeedback.ActiveFeedback(attackedLocation.position);
+                    m_KnockbackFeedback.ActiveFeedbackByDir(dir);
                     Invoke("SetHurtTrigger", m_KnockbackFeedback.HitRecoveryTime);
                 } else {
                     m_targetAnimator?.SetTrigger("hurt");
@@ -98,8 +103,21 @@ public class HitSystem_Avatar : HitSystem
         FinishTakeHit();
     }
 
+    protected Vector3 SetAttackForceDir(Transform attackedLocation) {
+        var dir = Vector3.zero;
+
+        if(attackedLocation.position.x > m_target.transform.position.x) dir = Vector3.left;
+        else if(attackedLocation.position.x < m_target.transform.position.x) dir = Vector3.right;
+        else if(attackedLocation.position.x == m_target.transform.position.x) {
+            if(m_targetMovement.FacingDir.x > 0 ) dir = Vector3.left;
+            else if(m_targetMovement.FacingDir.x < 0) dir = Vector3.right;
+        }
+
+        return dir;
+    }
+
     protected override void FinishTakeHit() {
-        // Debug.Log("HitSystem_Avatar FinishTakeHit start");
+        Debug.Log("HitSystem_Avatar FinishTakeHit start");
         if(takeHitRoutine != null) {
             StopCoroutine(takeHitRoutine);
         }
@@ -113,7 +131,7 @@ public class HitSystem_Avatar : HitSystem
         if(m_targetMovement.IsMoving) m_target.SetCurrentBaseState(m_target.Move);
         else m_target.SetCurrentBaseState(m_target.Idle);
         
-        // Debug.Log("HitSystem_Avatar FinishTakeHit end");
+        Debug.Log("HitSystem_Avatar FinishTakeHit end");
     }
 
     private bool DodgedTheHit() 

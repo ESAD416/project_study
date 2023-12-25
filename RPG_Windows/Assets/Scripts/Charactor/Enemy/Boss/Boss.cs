@@ -24,6 +24,8 @@ public class Boss : Enemy
         
         m_idle = new IdleState_Boss(this);
         m_move = new MoveState_Boss(this);
+        // m_attack = new AttackState_Boss(this);
+        // m_hurt = new HurtState_Boss(this);
         m_dead = new DeadState_Boss(this);
 
         m_beforeStart = new BeforeStartState_Boss(this);
@@ -31,7 +33,8 @@ public class Boss : Enemy
         m_battleFinish = new BattleFinishState_Boss(this);
     }
     protected override void OnEnable() {
-        base.OnEnable();
+        m_currentBaseState = m_idle;
+        m_currentBaseState.OnEnter();
 
         m_currentBossState = m_beforeStart;
         m_currentBossState.OnEnter();
@@ -44,18 +47,18 @@ public class Boss : Enemy
     protected override void Update() {
         m_currentBossState.OnUpdate();
 
-        base.Update();
+        m_currentBaseState.OnUpdate();
     }
     protected override void FixedUpdate() {
         m_currentBossState.OnFixedUpdate();
 
-        base.FixedUpdate();
+        m_currentBaseState.OnFixedUpdate();
     }
 
     protected override void OnDisable() {
         m_currentBossState.OnExit();
 
-        base.OnDisable();
+        m_currentBaseState.OnExit();
     }
 
     private void OnDamaged() {

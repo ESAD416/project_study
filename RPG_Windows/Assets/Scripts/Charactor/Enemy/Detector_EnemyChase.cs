@@ -13,7 +13,7 @@ public class Detector_EnemyChase : Detector_Overlap2D
     private float detectionCheckDelay = 0.1f;
     public float chaseModeDelay = 1.0f;
 
-    private Transform target = null;
+    [SerializeField] private Transform target = null;
     public Transform TargetModel {
         get => target;
         set {
@@ -28,10 +28,12 @@ public class Detector_EnemyChase : Detector_Overlap2D
         m_enemy.isPatroling = false;
         m_enemy.isChasing = true;
         m_enemy.SetCurrentEnemyState(m_enemy.Chase);
+
+        StartCoroutine(Detection());
     }
 
     private void Start() {
-        StartCoroutine(Detection());
+        
     }
 
     protected override void Update() {
@@ -47,14 +49,16 @@ public class Detector_EnemyChase : Detector_Overlap2D
         {
             if(TargetModel != null)
             {
+                // Debug.Log("TargetModel != null");
                 targetVisable = CheckTargetVisible();
                 if(targetVisable) {
-                    Debug.Log("targetVisable: "+(TargetModel.position - transform.position));
+                    //Debug.Log("targetVisable: "+(TargetModel.position - transform.position));
                     m_enemyMovement.SetMovement(TargetModel.position - transform.position);
                 } else {
                     StartCoroutine(ChaseModeEndingProcess());
                 }
             } else {
+                // Debug.Log("TargetModel == null");
                 StartCoroutine(ChaseModeEndingProcess());
             }
             
@@ -86,7 +90,7 @@ public class Detector_EnemyChase : Detector_Overlap2D
 
                 var charactor = col2d.GetComponent<Charactor>() as Charactor;
                 if(charactor != null) {
-                    //Debug.Log("Target m_Center: "+charactor.m_Center);
+                    Debug.Log("Target m_CenterObj: "+charactor.m_CenterObj);
                     TargetModel = charactor.m_CenterObj;
                 }
                 else {
@@ -104,14 +108,15 @@ public class Detector_EnemyChase : Detector_Overlap2D
         var result = Physics2D.Raycast(transform.position, TargetModel.position - transform.position, Radius, VisibilityLayer);
         Debug.DrawRay(transform.position, TargetModel.position - transform.position, HandlesColor);
         if(result.collider != null) {
-            // Debug.Log("CheckTargetVisible gameObject: "+result.collider.gameObject);
-            // Debug.Log("CheckTargetVisible layer: "+result.collider.gameObject.layer);
-            // Debug.Log("targetLayer: "+targetLayer);
+            //Debug.Log("CheckTargetVisible gameObject: "+result.collider.gameObject);
+            //Debug.Log("CheckTargetVisible layer: "+result.collider.gameObject.layer);
+            // Debug.Log("targetLayer: "+TargetLayer);
 
-            var binaryTgtLayer = (1 << result.collider.gameObject.layer);
-            // Debug.Log("binaryTgtLayer: "+binaryTgtLayer);
+            var binaryTgtLayer = 1 << result.collider.gameObject.layer;
+            Debug.Log("binaryTgtLayer: "+binaryTgtLayer);
 
             // targetLayer AND binaryTgtLayer will be zero if there are different
+            //Debug.Log("CheckTargetVisible: "+((TargetLayer & binaryTgtLayer) != 0));
             return (TargetLayer & binaryTgtLayer) != 0;
         }
         return false;

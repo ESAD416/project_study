@@ -7,6 +7,10 @@ public class Movement_Lamniat : Movement_Avatar
 {
     private bool isHoldInteraction = false;
 
+    protected override void OnEnable() {
+        Debug.Log("Movement_Lamniat: OnEnable");
+    }
+
     // Start is called before the first frame update
     protected override void Start() 
     {
@@ -40,8 +44,12 @@ public class Movement_Lamniat : Movement_Avatar
                 isHoldInteraction = false;
             }
         };
-        
 
         #endregion
+        
+    }
+    
+    protected override void OnDisable() {
+        Debug.Log("Movement_Lamniat: OnDisable");
     }
 }

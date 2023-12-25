@@ -40,6 +40,7 @@ public class Movement_Enemy : MonoBehaviour
     /// 更改角色向量
     /// </summary>
     public void SetMovement(Vector3 vector3) {
+        // Debug.Log("SetMovement: "+vector3);
         this.m_movement = vector3;
     }
     /// <summary>
@@ -58,7 +59,7 @@ public class Movement_Enemy : MonoBehaviour
     /// </summary>
     public bool isMoving {
         get {
-            return Movement.x != 0 || Movement.y != 0;
+            return m_movement.x != 0 || m_movement.y != 0;
         }
     }
 
@@ -79,7 +80,7 @@ public class Movement_Enemy : MonoBehaviour
     // Update is called once per frame
     protected virtual void Update()
     {
-        m_enemyAnimator.SetFloat("moveSpeed", m_moveSpeed);
+        if(m_enemyAnimator != null) m_enemyAnimator.SetFloat("moveSpeed", m_moveSpeed);
     }
 
     protected virtual void FixedUpdate() {
@@ -100,7 +101,7 @@ public class Movement_Enemy : MonoBehaviour
     }
 
     public void Move() {
-        m_enemyRdbd.velocity = this.m_movement.normalized * MoveSpeed;
+        m_enemyRdbd.velocity = m_movement.normalized * MoveSpeed;
     }
 
     public void SetDefaultMovement() {

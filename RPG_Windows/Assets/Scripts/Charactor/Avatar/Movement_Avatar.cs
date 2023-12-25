@@ -86,6 +86,10 @@ public class Movement_Avatar : MonoBehaviour
         m_avatarAnimator = m_avatar.Animator;
     }
 
+    protected virtual void OnEnable() {
+
+    }
+
     // Start is called before the first frame update
     protected virtual void Start()
     {
@@ -112,6 +116,10 @@ public class Movement_Avatar : MonoBehaviour
         Move();
         //     }
         // }
+    }
+
+    protected virtual void OnDisable() {
+
     }
 
     public void Move() 

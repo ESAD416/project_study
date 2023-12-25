@@ -43,22 +43,43 @@ public class Movement_HorizontalOscillation : Movement_Enemy
 
     protected override void FixedUpdate() {
         if(!m_enemy.CurrentBaseState.Equals(BaseStateMachine_Enemy.BaseState.Dead)) {
-
-            if(m_enemy.CurrentEnemyState.State.Equals(EnemyStateMachine.EnemyState.Patrol)) 
-            {
+            if(m_enemy.CurrentEnemyState != null && m_enemy.CurrentEnemyState.State.Equals(EnemyStateMachine.EnemyState.Chase)) {
+                // 如果有套用Patrol與Chase索敵模組
+                if(m_movement.x > 0) moveRight = true;
+                else if(m_movement.x < 0) moveRight = false;
+            } else {
                 if(moveRight) 
                 {
                     SetMovement(Vector3.right);
-                    m_leftDetector_Patrol.gameObject.SetActive(false);
-                    m_rightDetector_Patrol.gameObject.SetActive(true);
+                    m_leftDetector_Patrol?.gameObject.SetActive(false);
+                    m_rightDetector_Patrol?.gameObject.SetActive(true);
                 }
                 else 
                 {
                     SetMovement(Vector3.left);
-                    m_leftDetector_Patrol.gameObject.SetActive(true);
-                    m_rightDetector_Patrol.gameObject.SetActive(false);
+                    m_leftDetector_Patrol?.gameObject.SetActive(true);
+                    m_rightDetector_Patrol?.gameObject.SetActive(false);
                 } 
             }
+
+            // if(m_enemy.CurrentEnemyState.State.Equals(EnemyStateMachine.EnemyState.Patrol)) 
+            // {
+            //     if(moveRight) 
+            //     {
+            //         SetMovement(Vector3.right);
+            //         m_leftDetector_Patrol?.gameObject.SetActive(false);
+            //         m_rightDetector_Patrol?.gameObject.SetActive(true);
+            //     }
+            //     else 
+            //     {
+            //         SetMovement(Vector3.left);
+            //         m_leftDetector_Patrol?.gameObject.SetActive(true);
+            //         m_rightDetector_Patrol?.gameObject.SetActive(false);
+            //     } 
+            // } else if(m_enemy.CurrentEnemyState != null && m_enemy.CurrentEnemyState.State.Equals(EnemyStateMachine.EnemyState.Chase)) {
+            //     if(m_movement.x > 0) moveRight = true;
+            //     else if(m_movement.x < 0) moveRight = false;
+            // }
             if(m_enemySprtRenderer!= null) m_enemySprtRenderer.flipX = moveRight;
         }
 
@@ -68,7 +89,6 @@ public class Movement_HorizontalOscillation : Movement_Enemy
     private void OnTriggerEnter2D(Collider2D trig)
 	{
 		if (trig.gameObject.tag == "Enemy_Turn"){
-
 			if (moveRight){
 				moveRight = false;
 			}

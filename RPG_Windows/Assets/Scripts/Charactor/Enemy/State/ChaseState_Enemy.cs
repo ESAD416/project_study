@@ -21,7 +21,7 @@ public class ChaseState_Enemy : EnemyStateMachine
 
     public override void OnUpdate()
     {
-        // 發現Player(Avatar)就轉移至ChaseState
+        
     }
 
     public override void OnFixedUpdate()

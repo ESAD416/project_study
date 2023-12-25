@@ -6,10 +6,11 @@ public class Enemy : Charactor
 {
     [Header("Enemy 基本物件")]
     [SerializeField] protected Movement_Enemy m_enemyMovement;
+    public Movement_Enemy EnemyMovement => m_enemyMovement;
     [SerializeField] protected HealthBar healthBar;
 
     #region 敵人狀態
-    private BaseStateMachine_Enemy m_currentBaseState;
+    protected BaseStateMachine_Enemy m_currentBaseState;
     public BaseStateMachine_Enemy CurrentBaseState => m_currentBaseState;
     public void SetCurrentBaseState(BaseStateMachine_Enemy state) {
         this.m_currentBaseState.OnExit();
@@ -29,7 +30,7 @@ public class Enemy : Charactor
     public BaseStateMachine_Enemy Dead => this.m_dead;
 
 
-    private EnemyStateMachine m_currentEnemyState;
+    protected EnemyStateMachine m_currentEnemyState;
     public EnemyStateMachine CurrentEnemyState => m_currentEnemyState;
     public void SetCurrentEnemyState(EnemyStateMachine state) {
         this.m_currentEnemyState.OnExit();

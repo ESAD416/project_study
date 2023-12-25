@@ -27,8 +27,10 @@ public class HitSystem_Enemy : HitSystem
             
             m_target.SetCurrentBaseState(m_target.Hurt);
 
+            
+            var dir = SetAttackForceDir(attacker.transform);
             if(!isHyperArmor && m_KnockbackFeedback != null) {
-                m_KnockbackFeedback.ActiveFeedback(attacker.transform.position);
+                m_KnockbackFeedback.ActiveFeedbackByDir(dir);
                 Invoke("SetHurtTrigger", m_KnockbackFeedback.HitRecoveryTime);
             } else {
                 m_targetAnimator?.SetTrigger("hurt");
@@ -55,8 +57,10 @@ public class HitSystem_Enemy : HitSystem
 
             m_target.SetCurrentBaseState(m_target.Hurt);
 
+            var dir = SetAttackForceDir(attackedLocation);
+
             if(!isHyperArmor && m_KnockbackFeedback != null) {
-                m_KnockbackFeedback.ActiveFeedback(attackedLocation.position);
+                m_KnockbackFeedback.ActiveFeedbackByDir(dir);
                 Invoke("SetHurtTrigger", m_KnockbackFeedback.HitRecoveryTime);
             } else {
                 m_targetAnimator?.SetTrigger("hurt");
@@ -69,6 +73,19 @@ public class HitSystem_Enemy : HitSystem
         }
         
         FinishTakeHit();
+    }
+
+    protected Vector3 SetAttackForceDir(Transform attackedLocation) {
+        var dir = Vector3.zero;
+
+        if(attackedLocation.position.x > m_target.transform.position.x) dir = Vector3.left;
+        else if(attackedLocation.position.x < m_target.transform.position.x) dir = Vector3.right;
+        else if(attackedLocation.position.x == m_target.transform.position.x) {
+            if(m_targetMovement.FacingDir.x > 0 ) dir = Vector3.left;
+            else if(m_targetMovement.FacingDir.x < 0) dir = Vector3.right;
+        }
+
+        return dir;
     }
 
     protected override void FinishTakeHit() {

@@ -19,6 +19,8 @@ public class KnockbackFeedback : MonoBehaviour
     public void ActiveFeedback(Vector3 senderPos) {
         StopAllCoroutines();
         OnBegin?.Invoke();
+        m_target_rb2d.velocity = Vector3.zero;
+
         Vector3 dir = m_targetCenter.position - senderPos;
         Vector3 force = dir.normalized * m_thrust;
         m_target_rb2d.AddForce(force, ForceMode2D.Impulse);
@@ -26,9 +28,10 @@ public class KnockbackFeedback : MonoBehaviour
     }
 
     public void ActiveFeedbackByDir(Vector3 dir) {
-        Debug.Log("ActiveFeedbackByDir dir"+dir);
         StopAllCoroutines();
         OnBegin?.Invoke();
+        m_target_rb2d.velocity = Vector3.zero;
+
         Vector3 force = dir.normalized * m_thrust;
         m_target_rb2d.AddForce(force, ForceMode2D.Impulse);
         StartCoroutine(EndProcess());
