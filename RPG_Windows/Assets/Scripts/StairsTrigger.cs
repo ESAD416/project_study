@@ -46,7 +46,7 @@ public class StairsTrigger : MonoBehaviour
         if(otherCollider.gameObject.tag == "Player") {
             Debug.Log("player enter in StairsTrigger");
             player.onStairs = gameObject.name;
-            playerOrginHeight = player.currHeight;
+            playerOrginHeight = player.CurrentHeight;
 
             FocusOnStairsColliders();
         }

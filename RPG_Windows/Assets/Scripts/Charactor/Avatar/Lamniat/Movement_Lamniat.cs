@@ -5,10 +5,10 @@ using UnityEngine.InputSystem.Interactions;
 
 public class Movement_Lamniat : Movement_Avatar
 {
-    private bool isHoldInteraction = false;
+    private bool m_isHoldInteraction = false;
+    public bool IsHoldInteraction => this.m_isHoldInteraction;
 
     protected override void OnEnable() {
-        Debug.Log("Movement_Lamniat: OnEnable");
     }
 
     // Start is called before the first frame update
@@ -35,21 +35,28 @@ public class Movement_Lamniat : Movement_Avatar
 
         m_inputControls.Lamniat_Land.Hold.performed += content => {
             if(content.interaction is HoldInteraction) {
-                isHoldInteraction = true;
+                m_isHoldInteraction = true;
             }
         };
 
         m_inputControls.Lamniat_Land.Hold.canceled += content => {
             if(content.interaction is HoldInteraction) {
-                isHoldInteraction = false;
+                m_isHoldInteraction = false;
             }
         };
 
         #endregion
         
     }
+
+    protected override void FixedUpdate() {
+        // if(isJumping && jumpState == JumpState.JumpUp) {
+        //         MoveWhileJump();
+        //     } else {
+        Move();
+        //     }
+    }
     
     protected override void OnDisable() {
-        Debug.Log("Movement_Lamniat: OnDisable");
     }
 }
