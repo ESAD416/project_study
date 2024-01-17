@@ -28,7 +28,7 @@ public class Movement_Avatar : MonoBehaviour
     /// </summary>
     public void SetMoveSpeed(float speed) => this.m_moveSpeed = speed;
     
-    protected Vector3 m_movement = Vector3.zero;
+    [SerializeField] protected Vector3 m_movement = Vector3.zero;
     /// <summary>
     /// 角色移動向量
     /// </summary>

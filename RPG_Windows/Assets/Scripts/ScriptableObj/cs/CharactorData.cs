@@ -8,8 +8,6 @@ public class CharactorData : ScriptableObject, ISerializationCallbackReceiver
     public float initialHeight;
     public float defaultHeight;
 
-    public string jumpCollidersName;
-
     public void OnAfterDeserialize()
     {
         initialPos = defaultPos;

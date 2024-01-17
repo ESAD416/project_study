@@ -10,18 +10,20 @@ public class Jump_Lamniat : MonoBehaviour
     [SerializeField] protected Avatar_Lamniat m_Lamniat;
     [SerializeField] protected Movement_Lamniat m_avatarMovement;
     [SerializeField] private ColliderTrigger jumpPoint;
+    [SerializeField] private HeightManager m_hManager;
     public JumpState jumpState;
     protected Rigidbody2D m_LamniatRdbd;
     protected SpriteRenderer m_LamniatSprtRenderer;
     protected Animator m_LamniatAnimator;
-    protected AvatarInputActionsControls m_inputControls;
+
+    protected Stack<Vector3> jumpCoordStacks = new Stack<Vector3>();
     
     
     [Header("Jump_Lamniat 基本參數")]
 
     public bool IsJumping;
     protected float minjumpOffSet = -0.3f;
-    protected float jumpOffset = 0.3f;
+    protected float jumpOffset = 0f;  //0.3f
     [SerializeField] protected float maxJumpHeight = 0f;
     protected float maxJumpHeightOffSet = 1.5f;
     protected float jumpIncrement = 0f;
@@ -30,6 +32,7 @@ public class Jump_Lamniat : MonoBehaviour
     protected bool jumpHitColli;
 
     protected Vector3 takeOffCoord = Vector3.zero;
+    protected Vector3 lastJumpingCoord = Vector3.zero;
     protected Vector2 takeOffDir = Vector2.zero;
     
     protected Coroutine jumpDelayRoutine;
@@ -41,12 +44,12 @@ public class Jump_Lamniat : MonoBehaviour
     protected bool groundDelaying = false;
     protected float groundDelay = 0.2f;
 
-    private bool prepareToJump = false;
-    //private bool OnCollisioning = false;
+    [SerializeField] protected bool prepareToJump = false;
+    private bool OnHeightObjCollisionEnter = false;
+    private bool jumpPointTrigger = false;
     private List<Collider2D> OnColliders = new List<Collider2D>();
     private bool processingPushback = false;
     
-    private bool jumpPointTrigger = false;
     public bool testVer4 = true;
 
 
@@ -60,9 +63,19 @@ public class Jump_Lamniat : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
+        jumpPoint.OnPlayerEnterColliderEvent.AddListener(() => {
+            Debug.Log("ColliderTrigger EnterCollider");
+            if(prepareToJump) OnHeightObjCollisionEnter = true;
+        });
+
+        jumpPoint.OnPlayerExitColliderEvent.AddListener(() => {
+            Debug.Log("ColliderTrigger ExitCollider");
+            OnHeightObjCollisionEnter = true;
+        });
+
         jumpPoint.OnPlayerEnterTriggerEvent.AddListener(() => {
-            Debug.Log("ColliderTrigger jumpPointTrigger = true");
-            jumpPointTrigger = true;
+            Debug.Log("ColliderTrigger OnPlayerEnterTriggerEvent");
+            if(prepareToJump) jumpPointTrigger = true;
         });
 
         // Debug.Log("m_LamniatSprtRenderer position: "+m_LamniatSprtRenderer.transform.position);
@@ -78,14 +91,13 @@ public class Jump_Lamniat : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+        //Debug.Log("m_Lamniat.Center: "+m_Lamniat.Center);
         maxJumpHeight =  m_Lamniat.CurrentHeight + maxJumpHeightOffSet;
-
+        //Debug.DrawLine(m_Lamniat.RaycastStart.position, m_Lamniat.RaycastEnd, Color.blue);
         if(!groundDelaying) {
             if(!IsJumping) {
-                DetectedToJump();
-                if(!prepareToJump) {
-                    jumpState = DetectedWhetherNeedToJump();
-                }
+                //DetectedToJump();
+                if(!prepareToJump) jumpState = DetectedWhetherNeedToJump();
                 
                 switch(jumpState) {
                     case JumpState.Ground:
@@ -103,37 +115,53 @@ public class Jump_Lamniat : MonoBehaviour
                         break;
                 }
             } 
-            else if(!jumpHitColli) {
-                DetectedWhileJump();
-            }
+            // else if(!jumpHitColli) {
+            //     DetectedWhileJump();
+            // }
         }
     }
 
     private void FixedUpdate() {
         if(IsJumping) {
-        //if(IsJumping && !m_Lamniat.CurrentBaseState.State.Equals(BaseStateMachine_Avatar.BaseState.Attack)) {
+            //Debug.Log("FixedUpdate start: "+m_Lamniat.Coordinate);
+            //Debug.Log("FixedUpdate start lastJumpingCoord: "+lastJumpingCoord);
+            //Debug.Log("FixedUpdate start m_LamniatSprtRenderer.transform.position: "+m_LamniatSprtRenderer.transform.position);
+            //if(IsJumping && !m_Lamniat.CurrentBaseState.State.Equals(BaseStateMachine_Avatar.BaseState.Attack)) {
 
             if(testVer4) {
                 #region Ver.4
                 m_LamniatSprtRenderer.transform.position = m_Lamniat.GetWorldPosByCoordinate(m_Lamniat.Coordinate) - new Vector3(0, 2.0f);   // 預設中心點是(x, y+2)
-                HandleJumpingProcess(jumpState);
+                HandleJumpingProcessVer4(jumpState);
 
                 #endregion
             } else {
                 #region Ver.3 
                 m_Lamniat.transform.position = m_Lamniat.GetWorldPosByCoordinate(m_Lamniat.Coordinate) - new Vector3(0, 2.0f);   // 預設中心點是(x, y+2)
-                HandleJumpingProcess(jumpState);
+                //HandleJumpingProcess(jumpState);
+                HandleJumpingProcessVer3(jumpState);
 
                 #endregion
             }
+
+            jumpCoordStacks.Push(m_Lamniat.Coordinate);
+            //Debug.Log("FixedUpdate end: "+m_Lamniat.Coordinate);
+            //Debug.Log("FixedUpdate end lastJumpingCoord: "+lastJumpingCoord);
+            //Debug.Log("FixedUpdate end m_LamniatSprtRenderer.transform.position: "+m_LamniatSprtRenderer.transform.position);
         }
     }
 
     #region 碰撞偵測
 
     private void OnCollisionEnter2D(Collision2D other) {
-        //Debug.Log("OnCollisionEnter2D: "+other.gameObject.name);
+        Debug.Log("OnCollisionEnter2D: "+other.gameObject.name);
         OnColliders.Add(other.collider);
+        if(jumpState != JumpState.Ground) {
+            OnHeightObjCollisionEnter = true;
+            
+            if(jumpState == JumpState.JumpDown) {
+                ChangeColliderToJumpDown();
+            }
+        }
     }
 
     private void OnCollisionStay2D(Collision2D other) {
@@ -145,37 +173,47 @@ public class Jump_Lamniat : MonoBehaviour
         //Debug.Log("OnCollisionExit2D: "+other.gameObject.name);
         var itemToRemove = OnColliders.Single(r => r.name.Equals(other.collider.name));
         OnColliders.Remove(itemToRemove);
+
+        if(jumpState != JumpState.Ground) {
+            OnHeightObjCollisionEnter = false;
+            
+            // if(jumpState == JumpState.JumpDown) {
+            //     RevertColliderFromJumpDown();
+            // }
+        }
+
         //Debug.Log("OnColliders count: "+OnColliders.Count);
         //OnCollisioning = false;
     }
 
     private void ChangeColliderToJumpDown() {
+        Debug.Log("ChangeColliderToJumpDown start");
         var body = GetComponent<BoxCollider2D>();
         body.isTrigger = true;
-        // var jumpTrigger = GetComponent<CircleCollider2D>();
-        // if(body != null && jumpTrigger != null) {
-        //     jumpTrigger.enabled = true;
-        // }
+
+        var jumpTrigger = jumpPoint.GetComponent<BoxCollider2D>();
+        jumpTrigger.isTrigger = false;
+        
+        Debug.Log("ChangeColliderToJumpDown end");
     }
 
     private void RevertColliderFromJumpDown() {
+        var jumpTrigger = jumpPoint.GetComponent<BoxCollider2D>();
+        jumpTrigger.isTrigger = true;
         var body = GetComponent<BoxCollider2D>();
         body.isTrigger = false;
-        //var jumpTrigger = GetComponent<CircleCollider2D>();
-        // if(body != null && jumpTrigger != null) {
-        //     jumpTrigger.enabled = false;
-        // }
     }
 
     #endregion
 
     private JumpState DetectedWhetherNeedToJump() {
+        //Debug.Log("DetectedWhetherNeedToJump");
         if(m_avatarMovement.IsMoving) {
             m_Lamniat.SetRaycastPoint();
 
             Vector2 distance = new Vector2(m_avatarMovement.Movement.x, m_avatarMovement.Movement.y) * 0.5f;
+
             m_Lamniat.RaycastEnd = new Vector2(m_Lamniat.RaycastStart.position.x, m_Lamniat.RaycastStart.position.y) + distance;
-            //Debug.Log("castEndPos: "+rayCastEndPos);
             Debug.DrawLine(m_Lamniat.RaycastStart.position, m_Lamniat.RaycastEnd, Color.blue);
 
             return JumpMechanismUtils.DetectedJumpState(m_Lamniat.RaycastStart.position, m_Lamniat.RaycastEnd, distance, m_Lamniat.CurrentHeight, m_avatarMovement.IsMoving);
@@ -183,63 +221,63 @@ public class Jump_Lamniat : MonoBehaviour
         return JumpState.Ground;
     }
 
-    private void DetectedToJump() {
-        if(m_avatarMovement.IsMoving) {
-            m_Lamniat.SetRaycastPoint();
+    // private void DetectedToJump() {
+    //     if(m_avatarMovement.IsMoving) {
+    //         m_Lamniat.SetRaycastPoint();
 
-            Vector2 distance = new Vector2(m_avatarMovement.Movement.x, m_avatarMovement.Movement.y) * 0.35f;
-            m_Lamniat.RaycastEnd = new Vector2(m_Lamniat.RaycastStart.position.x, m_Lamniat.RaycastStart.position.y) + distance;
-            //Debug.Log("castEndPos: "+rayCastEndPos);
-            Debug.DrawLine(m_Lamniat.RaycastStart.position, m_Lamniat.RaycastEnd, Color.blue);
+    //         Vector2 distance = new Vector2(m_avatarMovement.Movement.x, m_avatarMovement.Movement.y) * 0.35f;
+    //         m_Lamniat.RaycastEnd = new Vector2(m_Lamniat.RaycastStart.position.x, m_Lamniat.RaycastStart.position.y) + distance;
+    //         //Debug.Log("castEndPos: "+rayCastEndPos);
+    //         Debug.DrawLine(m_Lamniat.RaycastStart.position, m_Lamniat.RaycastEnd, Color.blue);
 
-            // 偵測跳躍Edge ver.3
-            RaycastHit2D[] hits = Physics2D.LinecastAll(m_Lamniat.RaycastStart.position, m_Lamniat.RaycastEnd, 1 << LayerMask.NameToLayer("HeightObj"));
-            if(hits.Length > 0) {
-                var heightManager = GameObject.FindObjectOfType(typeof(HeightManager)) as HeightManager; 
-                float altitudeVariation = 0f;
-                bool jumpUp = false;
-                bool jumpDown = false;
+    //         // 偵測跳躍Edge ver.3
+    //         RaycastHit2D[] hits = Physics2D.LinecastAll(m_Lamniat.RaycastStart.position, m_Lamniat.RaycastEnd, 1 << LayerMask.NameToLayer("HeightObj"));
+    //         if(hits.Length > 0) {
+    //             var heightManager = GameObject.FindObjectOfType(typeof(HeightManager)) as HeightManager; 
+    //             float altitudeVariation = 0f;
+    //             bool jumpUp = false;
+    //             bool jumpDown = false;
 
-                if(hits.Length >= 1) {
-                    Debug.Log("DetectedToJump hits.Length > 1");
-                    foreach(RaycastHit2D hit in hits) {
-                        Debug.Log("DetectedToJump hits collider name: "+hit.collider.name);
-                        var heightObj = hit.collider.GetComponent<HeightOfObject>() as HeightOfObject;
-                        if(heightObj != null) {
-                            float correspondHeight = heightObj.GetCorrespondHeight();
-                            float selfHeight = heightObj.GetSelfHeight();
-                            altitudeVariation = Mathf.Abs(m_Lamniat.CurrentHeight - correspondHeight) ;
-                            var angle = Vector2.Angle((Vector2)m_Lamniat.RaycastStart.position - m_Lamniat.RaycastEnd, hit.normal);
-                            angle = 90.0f - Mathf.Abs(angle);
-                            Debug.Log("DetectedToJump linecast angle:"+angle);
+    //             if(hits.Length >= 1) {
+    //                 Debug.Log("DetectedToJump hits.Length > 1");
+    //                 foreach(RaycastHit2D hit in hits) {
+    //                     Debug.Log("DetectedToJump hits collider name: "+hit.collider.name);
+    //                     var heightObj = hit.collider.GetComponent<HeightOfObject>() as HeightOfObject;
+    //                     if(heightObj != null) {
+    //                         float correspondHeight = heightObj.GetCorrespondHeight();
+    //                         float selfHeight = heightObj.GetSelfHeight();
+    //                         altitudeVariation = Mathf.Abs(m_Lamniat.CurrentHeight - correspondHeight) ;
+    //                         var angle = Vector2.Angle((Vector2)m_Lamniat.RaycastStart.position - m_Lamniat.RaycastEnd, hit.normal);
+    //                         angle = 90.0f - Mathf.Abs(angle);
+    //                         Debug.Log("DetectedToJump linecast angle:"+angle);
 
-                            if(m_Lamniat.CurrentHeight < correspondHeight && altitudeVariation > 0 && altitudeVariation <= 1) {
-                                // jumpUp
-                                if(angle >= 60f && 180f - angle >= 60f) {
-                                    jumpUp = true;
-                                }
-                            }  else if(m_Lamniat.CurrentHeight >= correspondHeight) {
-                            //else if(currHeight >= correspondHeight  && altitudeVariation > 0 && altitudeVariation <= 1) {
-                                // jumpDown
-                                jumpDown = true;
-                            }
-                        }
-                    }
-                }
+    //                         if(m_Lamniat.CurrentHeight < correspondHeight && altitudeVariation > 0 && altitudeVariation <= 1) {
+    //                             // jumpUp
+    //                             if(angle >= 60f && 180f - angle >= 60f) {
+    //                                 jumpUp = true;
+    //                             }
+    //                         }  else if(m_Lamniat.CurrentHeight >= correspondHeight) {
+    //                         //else if(currHeight >= correspondHeight  && altitudeVariation > 0 && altitudeVariation <= 1) {
+    //                             // jumpDown
+    //                             jumpDown = true;
+    //                         }
+    //                     }
+    //                 }
+    //             }
 
-                if(jumpUp || jumpDown) {
-                    if(!IsJumping) {
-                        takeOffCoord = m_Lamniat.Coordinate;
-                        takeOffDir = m_avatarMovement.FacingDir;
-                        IsJumping = true;
-                        Debug.Log("takeOffPos: "+takeOffCoord);
-                    }
-                }
-            }
-        } 
-    }
+    //             // if(jumpUp || jumpDown) {
+    //             //     if(!IsJumping) {
+    //             //         takeOffCoord = m_Lamniat.Coordinate;
+    //             //         takeOffDir = m_avatarMovement.FacingDir;
+    //             //         IsJumping = true;
+    //             //         Debug.Log("takeOffPos: "+takeOffCoord);
+    //             //     }
+    //             // }
+    //         }
+    //     } 
+    // }
 
-    private void DetectedWhileJump() {
+    private void  DetectedWhileJump() {
         if(m_avatarMovement.IsMoving) {
             m_Lamniat.SetRaycastPoint();
 
@@ -280,10 +318,11 @@ public class Jump_Lamniat : MonoBehaviour
 
         RaycastHit2D[] hits = null;
         if(m_Lamniat.IsObliqueRaycast()) {
-            Vector2 distance1 = new Vector2(m_avatarMovement.Movement.x, 0) * 0.35f;
+            Debug.Log("Two raycast");
+            Vector2 distance1 = new Vector2(m_avatarMovement.Movement.x, 0) * 0.5f;
             var rayCastEndPos1 = new Vector2(m_Lamniat.RaycastStart.position.x, m_Lamniat.RaycastStart.position.y) + distance1;
             Debug.DrawLine(m_Lamniat.RaycastStart.position, rayCastEndPos1, Color.red);
-            Vector2 distance2 = new Vector2(0, m_avatarMovement.Movement.y) * 0.35f;
+            Vector2 distance2 = new Vector2(0, m_avatarMovement.Movement.y) * 0.5f;
             var rayCastEndPos2 = new Vector2(m_Lamniat.RaycastStart.position.x, m_Lamniat.RaycastStart.position.y) + distance2;
             Debug.DrawLine(m_Lamniat.RaycastStart.position, rayCastEndPos2, Color.red);
 
@@ -292,9 +331,11 @@ public class Jump_Lamniat : MonoBehaviour
 
             hits = hits1.Concat(hits2).ToArray();
         } else {
-            Vector2 distance = new Vector2(m_avatarMovement.Movement.x, m_avatarMovement.Movement.y) * 0.35f;
+            Debug.Log("One raycast");
+            Vector2 distance = new Vector2(m_avatarMovement.Movement.x, m_avatarMovement.Movement.y) * 0.5f;
             m_Lamniat.RaycastEnd = new Vector2(m_Lamniat.RaycastStart.position.x, m_Lamniat.RaycastStart.position.y) + distance;
-            //Debug.Log("castEndPos: "+rayCastEndPos);
+            Debug.Log("castStartPos: "+new Vector2(m_Lamniat.RaycastStart.position.x, m_Lamniat.RaycastStart.position.y));
+            Debug.Log("castEndPos: "+m_Lamniat.RaycastEnd);
             Debug.DrawLine(m_Lamniat.RaycastStart.position, m_Lamniat.RaycastEnd, Color.red);
 
             hits = Physics2D.LinecastAll(m_Lamniat.RaycastStart.position, m_Lamniat.RaycastEnd, 1 << LayerMask.NameToLayer("HeightObj"));
@@ -306,7 +347,7 @@ public class Jump_Lamniat : MonoBehaviour
                 Debug.Log("TriggerToJumpDown hits collider name: "+hit.collider.name);
                 var heightObj = hit.collider.GetComponent<HeightOfObject>() as HeightOfObject;
                 if(heightObj != null) {
-                    if(jumpPointTrigger) {
+                    if(OnHeightObjCollisionEnter) {
                         Debug.Log("TriggerToJumpDown jumpPointTrigger");
                          
                         //if(isHoldInteraction && facingDir.Equals(new Vector2(movement.x, movement.y))) {  
@@ -323,17 +364,17 @@ public class Jump_Lamniat : MonoBehaviour
                                 RevertColliderFromJumpDown();
                                 Debug.Log("takeOffPos: "+takeOffCoord);
                             }
-                            jumpPointTrigger = false;
+                            //OnHeightObjCollisionEnter = false;
                             break;
                         }
                         else {
                             Debug.Log("TriggerToJumpDown KnockbackFeedback");
-                            Debug.Log("TriggerToJumpDown isHoldInteraction "+m_avatarMovement.IsHoldInteraction );
+                            Debug.Log("TriggerToJumpDown isHoldInteraction "+m_avatarMovement.IsHoldInteraction);
                             Debug.Log("TriggerToJumpDown facingDir "+m_avatarMovement.FacingDir);
                             Debug.Log("TriggerToJumpDown new Vector2(movement.x, movement.y) "+new Vector2(m_avatarMovement.Movement.x, m_avatarMovement.Movement.y));
                             KnockbackFeedback feedback = GetComponent<KnockbackFeedback>();
                             feedback.ActiveFeedbackByDir(-new Vector2(m_avatarMovement.Movement.x, m_avatarMovement.Movement.y));
-                            jumpPointTrigger = false;
+                            //OnHeightObjCollisionEnter = false;
                         }
                     }
 
@@ -352,6 +393,9 @@ public class Jump_Lamniat : MonoBehaviour
                     //m_Rigidbody.AddForce((-new Vector2(movement.x, movement.y))* moveSpeed, ForceMode2D.Force);
                 }
             }
+        } 
+        else {
+            Debug.Log("hits.Length: "+hits.Length);
         }
         Debug.Log("TriggerToJumpDown end");
     }
@@ -376,8 +420,9 @@ public class Jump_Lamniat : MonoBehaviour
                     var angle = Vector2.Angle((Vector2)m_Lamniat.RaycastStart.position - m_Lamniat.RaycastEnd, hit.normal);
                     angle = 90.0f - Mathf.Abs(angle);
                     Debug.Log("DetectedJumpState linecast angle:"+angle);
-                    Debug.Log("OnCollisioning: "+OnColliders.Contains(hit.collider));
-                    if(angle >= 60f && 180f - angle >= 60f && OnColliders.Contains(hit.collider)) {
+                    Debug.Log("OnCollisioning: "+OnHeightObjCollisionEnter);
+                    if(angle >= 60f && 180f - angle >= 60f && OnHeightObjCollisionEnter) {
+                        
                         if(!jumpDelaying) {
                             Vector2 faceDirAtJump = m_avatarMovement.FacingDir;
                             jumpDelayRoutine = StartCoroutine(JumpUpDelay(faceDirAtJump));
@@ -416,6 +461,7 @@ public class Jump_Lamniat : MonoBehaviour
     #region 跳躍控制
 
     private void HandleJumpingProcess(JumpState state) {
+        Debug.Log("jumpstate start: "+state);
         Debug.Log("currHeight start: "+m_Lamniat.CurrentHeight);
         Debug.Log("lastHeight start: "+m_Lamniat.LastHeight);
 
@@ -436,8 +482,8 @@ public class Jump_Lamniat : MonoBehaviour
 
         if(jumpOffset >= 0) {
             jumpIncrement += jumpOffset;
+
             m_Lamniat.SetLastHeight(m_Lamniat.CurrentHeight);
-            
             m_Lamniat.SetCurrentHeight(goalheight);
             
             jumpOffset += (g / 2); 
@@ -448,7 +494,7 @@ public class Jump_Lamniat : MonoBehaviour
 
             float groundCheckHeight = Mathf.Floor(m_Lamniat.CurrentHeight);
 
-            Debug.Log("jumpstate: "+state);
+            
             Debug.Log("Center: "+m_Lamniat.Center);
             Debug.Log("Buttom: "+m_Lamniat.Buttom);
             Debug.Log("Coordinate: "+m_Lamniat.Coordinate);
@@ -464,10 +510,25 @@ public class Jump_Lamniat : MonoBehaviour
                     Debug.Log("Groundable true");
                     if(goalheight <= groundCheckHeight) {
                         if(hm.NotGroundableChecked(m_Lamniat.Center, groundCheckHeight) || hm.NotGroundableChecked(shadowWorldPos, groundCheckHeight)) {
+                        //if(hm.NotGroundableChecked(shadowWorldPos, groundCheckHeight)) {
                             // NotGroundable(ex: 岩壁)判定
                             Debug.Log("NotGroundable true");
                             bool hasCeiling = hm.CeilingChecked(m_Lamniat.Center, groundCheckHeight); 
                             if(hasCeiling) {
+                                // 跳入虛空判定
+                                Debug.Log("recall position");
+                                Debug.Log("Current Coord: "+m_Lamniat.Coordinate);
+                                Debug.Log("lastJumpingCoord: "+lastJumpingCoord);
+
+                                Vector3 recallPosition = jumpCoordStacks.Pop();
+
+                                Vector3 checkCoordinate = new Vector3(recallPosition.x, recallPosition.y, groundCheckHeight);
+                                Vector3 checkWorldPos = new Vector3(checkCoordinate.x, checkCoordinate.y + checkCoordinate.z);
+
+                                m_Lamniat.transform.position = m_Lamniat.GetWorldPosByCoordinate(m_Lamniat.Coordinate) - new Vector3(0, 2.0f); 
+
+
+                                m_Lamniat.SetCoordinate(new Vector3(lastJumpingCoord.x, lastJumpingCoord.y, goalheight));
                                 m_Lamniat.SetLastHeight(m_Lamniat.CurrentHeight);
                                 m_Lamniat.SetCurrentHeight(goalheight);
                                 // currHeight = groundCheckHeight - 0.01f;
@@ -499,11 +560,11 @@ public class Jump_Lamniat : MonoBehaviour
                 var jumpPointColliderPoint3 = new Vector2(jumpPointColliderPoint1.x, jumpPointColliderPoint2.y);
                 var jumpPointColliderPoint4 = new Vector2(jumpPointColliderPoint2.x, jumpPointColliderPoint1.y);
 
-                // Debug.Log("jumpPointCollider pos: "+jumpPointCollider.transform.position);
-                // Debug.Log("jumpPointColliderPoint1: "+jumpPointColliderPoint1);
-                // Debug.Log("jumpPointColliderPoint2: "+jumpPointColliderPoint2);
-                // Debug.Log("jumpPointColliderPoint3: "+jumpPointColliderPoint3);
-                // Debug.Log("jumpPointColliderPoint4: "+jumpPointColliderPoint4);
+                Debug.Log("jumpPointCollider pos: "+jumpPointCollider.transform.position);
+                Debug.Log("jumpPointColliderPoint1: "+jumpPointColliderPoint1);
+                Debug.Log("jumpPointColliderPoint2: "+jumpPointColliderPoint2);
+                Debug.Log("jumpPointColliderPoint3: "+jumpPointColliderPoint3);
+                Debug.Log("jumpPointColliderPoint4: "+jumpPointColliderPoint4);
 
                 // Debug.Log("PredictNext jumpPointColliderPoint1: "+PredictNextJumpPointWorldPos(jumpPointColliderPoint1, m_Lamniat.CurrentHeight, goalheight, m_avatarMovement.Movement));
                 // Debug.Log("PredictNext jumpPointColliderPoint1: "+PredictNextJumpPointWorldPos(jumpPointColliderPoint2, m_Lamniat.CurrentHeight, goalheight, m_avatarMovement.Movement));
@@ -526,6 +587,7 @@ public class Jump_Lamniat : MonoBehaviour
                     
                     //if(hm.NotGroundableChecked(PredictNextJumpPointWorldPos(m_Center, currHeight, goalheight, movement), groundCheckHeight)) {
                     if(hm.NotGroundableChecked(m_Lamniat.Center, groundCheckHeight) || hm.NotGroundableChecked(shadowWorldPos, groundCheckHeight)) {
+                    //if(hm.NotGroundableChecked(shadowWorldPos, groundCheckHeight)) {
                         // NotGroundable(ex: 岩壁)判定
                         Debug.Log("PredictNext NotGroundable true");
                         // bool hasCeiling = hm.CeilingChecked(m_Center, groundCheckHeight); 
@@ -600,28 +662,275 @@ public class Jump_Lamniat : MonoBehaviour
                     }
                 }
             }
-
             
         }
 
         if(jumpOffset <= minjumpOffSet) {
             jumpOffset = minjumpOffSet;
         }
-        
+
+        Debug.Log("jumpstate end: "+state);
         Debug.Log("currHeight end: "+m_Lamniat.CurrentHeight);
         Debug.Log("lastHeight end: "+m_Lamniat.LastHeight);
         Debug.Log("jumpOffset end: "+jumpOffset);
         Debug.Log("jumpIncrement end: "+jumpIncrement);
     }
 
-    private void HandleJumpingProcessVer2(JumpState state) {
+    private void RecallPositionToGround(float groundCheckHeight) {
+        
+    }
+
+    private void HandleJumpingProcessVer3(JumpState state) {
+        Debug.Log("jumpstate start: "+state);
         Debug.Log("currHeight start: "+m_Lamniat.CurrentHeight);
         Debug.Log("lastHeight start: "+m_Lamniat.LastHeight);
 
         // Debug.Log("jumpOffset start: "+jumpOffset);
         // Debug.Log("jumpIncrement end: "+jumpIncrement);
         float goalheight = m_Lamniat.CurrentHeight + jumpOffset;
+        if(goalheight >= maxJumpHeight) {
+            goalheight = maxJumpHeight;
+        }
+        Debug.Log("goalheight: "+goalheight);
+         if(jumpOffset >= 0) {
+            jumpIncrement += jumpOffset;
+            m_Lamniat.SetLastHeight(m_Lamniat.CurrentHeight);
+            
+            m_Lamniat.SetCurrentHeight(goalheight);
+            
+            jumpOffset += (g / 2); 
+        } 
+        else {
+            float groundCheckHeight = Mathf.Floor(m_Lamniat.CurrentHeight);
+            
+            Debug.Log("Center: "+m_Lamniat.Center);
+            Debug.Log("Buttom: "+m_Lamniat.Buttom);
+            Debug.Log("Coordinate: "+m_Lamniat.Coordinate);
+            Debug.Log("transform_pos: "+transform.position);
+
+            Vector3 shadowCoordinate = new Vector3(m_Lamniat.Coordinate.x, m_Lamniat.Coordinate.y, groundCheckHeight);
+            Debug.Log("shadowCoordinate: "+shadowCoordinate);
+            Vector3 shadowWorldPos = new Vector3(shadowCoordinate.x, shadowCoordinate.y + shadowCoordinate.z);
+
+            if(state == JumpState.JumpDown) 
+            {
+                Debug.Log("Process JumpDown");
+                // if(m_hManager.GroundableChecked(shadowWorldPos, groundCheckHeight)) {
+
+                // }
+            } 
+            else 
+            {
+                Debug.Log("Process JumpUp");
+                Debug.Log("currHeight start: "+m_Lamniat.CurrentHeight);
+                Debug.Log("lastHeight start: "+m_Lamniat.LastHeight);
+                Debug.Log("goalheight: "+goalheight);
+                Debug.Log("Mathf.Floor(goalheight): "+Mathf.Floor(goalheight));
+
+                if(goalheight < 1 && Mathf.Floor(goalheight) >= 0) {
+                    groundCheckHeight = Mathf.Floor(goalheight);
+                } else {
+                    groundCheckHeight = 0;
+                }
+
+                Debug.Log("groundCheckHeight: "+groundCheckHeight);
+
+                // Ver.2
+                // 目前底部有一BoxCollider2D，以BoxCollider2D四個頂點為判定落地點
+                var buttomPointCollider = jumpPoint.GetComponent<BoxCollider2D>();
+                var bpc_1 = buttomPointCollider.bounds.min;
+                var bpc_2 = buttomPointCollider.bounds.max;
+                var bpc_3 = new Vector2(bpc_1.x, bpc_2.y);
+                var bpc_4 = new Vector2(bpc_2.x, bpc_1.y);
+
+                // 根據上述得到的點預測下一Update的判定落地點
+                // Debug.Log("jumpPointCollider pos: "+jumpPointCollider.transform.position);
+                // Debug.Log("jumpPointColliderPoint1: "+jumpPointColliderPoint1);
+                // Debug.Log("jumpPointColliderPoint2: "+jumpPointColliderPoint2);
+                // Debug.Log("jumpPointColliderPoint3: "+jumpPointColliderPoint3);
+                // Debug.Log("jumpPointColliderPoint4: "+jumpPointColliderPoint4);
+
+
+                // 4個點分別做GroundableChecked，其中一個成立便做判定處理(以下先以當下做判斷做測試)
+                // bool groundable = m_hManager.GroundableChecked(bpc_1, groundCheckHeight) || m_hManager.GroundableChecked(bpc_2, groundCheckHeight) ||
+                //                   m_hManager.GroundableChecked(bpc_3, groundCheckHeight) || m_hManager.GroundableChecked(bpc_4, groundCheckHeight);
+
+                // 低處往高處跳就以角色Sprite中心為落地點
+                if(m_hManager.GroundableChecked(m_Lamniat.Buttom, groundCheckHeight)) {
+                    Debug.Log("Groundable true,worldPos:  " + m_Lamniat.Buttom + ", groundCheckHeight: "+groundCheckHeight);
+                    // NotGroundable(ex: 岩壁)判定
+                    if(m_hManager.NotGroundableChecked(m_Lamniat.Buttom, groundCheckHeight) || m_hManager.NotGroundableChecked(m_Lamniat.Center, groundCheckHeight)) {
+                        Debug.Log("NotGroundable true");
+                        // 跳入虛空判定
+                        bool hasCeiling = m_hManager.CeilingChecked(m_Lamniat.Center, groundCheckHeight); 
+                        if(hasCeiling) {
+                            Debug.Log("recall position");
+                            Debug.Log("Current Coord: "+m_Lamniat.Coordinate);
+                            Debug.Log("lastJumpingCoord: "+lastJumpingCoord);
+
+                            // Vector3 recallPosition = jumpCoordStacks.Pop();
+
+                            // Vector3 checkCoordinate = new Vector3(recallPosition.x, recallPosition.y, groundCheckHeight);
+                            // Vector3 checkWorldPos = new Vector3(checkCoordinate.x, checkCoordinate.y + checkCoordinate.z);
+
+                            // m_Lamniat.transform.position = m_Lamniat.GetWorldPosByCoordinate(m_Lamniat.Coordinate) - new Vector3(0, 2.0f); 
+                            // m_Lamniat.SetCoordinate(new Vector3(lastJumpingCoord.x, lastJumpingCoord.y, goalheight));
+
+                            // m_Lamniat.SetLastHeight(m_Lamniat.CurrentHeight);
+                            // m_Lamniat.SetCurrentHeight(goalheight);
+                            // jumpOffset += g;
+
+                        }
+                        m_Lamniat.SetLastHeight(m_Lamniat.CurrentHeight);
+                        m_Lamniat.SetCurrentHeight(goalheight);
+                        jumpOffset += g;
+                    } 
+                    else {
+                        Debug.Log("NotGroundable false");
+                        m_Lamniat.SetLastHeight(m_Lamniat.CurrentHeight);
+                        m_Lamniat.SetCurrentHeight(groundCheckHeight);
+                        FinishJump();
+                        groundDelayRoutine = StartCoroutine(GroundDelay());
+                    }
+                } 
+                else {
+                    m_Lamniat.SetLastHeight(m_Lamniat.CurrentHeight);
+                    m_Lamniat.SetCurrentHeight(goalheight);
+                    jumpOffset += g;
+                }
+
+            }
+
+        }
     }
+
+    private void HandleJumpingProcessVer4(JumpState state) {
+        Debug.Log("jumpstate start: "+state);
+        Debug.Log("currHeight start: "+m_Lamniat.CurrentHeight);
+        Debug.Log("lastHeight start: "+m_Lamniat.LastHeight);
+
+        // Debug.Log("jumpOffset start: "+jumpOffset);
+        // Debug.Log("jumpIncrement end: "+jumpIncrement);
+        
+         if(jumpOffset == 0) {
+            //jumpIncrement += jumpOffset;
+            m_Lamniat.SetLastHeight(m_Lamniat.CurrentHeight);
+            m_Lamniat.SetCurrentHeight(m_Lamniat.CurrentHeight + 1f);
+            
+            //jumpOffset += (g / 2);
+            jumpOffset += g;
+        } 
+        else {
+            float goalheight = m_Lamniat.CurrentHeight + jumpOffset;
+            if(goalheight >= maxJumpHeight) {
+                goalheight = maxJumpHeight;
+            }
+
+            float groundCheckHeight = Mathf.Floor(m_Lamniat.CurrentHeight);
+
+            Debug.Log("goalheight: "+goalheight);
+            Debug.Log("Center: "+m_Lamniat.Center);
+            Debug.Log("Buttom: "+m_Lamniat.Buttom);
+            Debug.Log("Coordinate: "+m_Lamniat.Coordinate);
+            Debug.Log("transform_pos: "+transform.position);
+
+            Vector3 shadowCoordinate = new Vector3(m_Lamniat.Coordinate.x, m_Lamniat.Coordinate.y, groundCheckHeight);
+            Debug.Log("shadowCoordinate: "+shadowCoordinate);
+            Vector3 shadowWorldPos = new Vector3(shadowCoordinate.x, shadowCoordinate.y + shadowCoordinate.z);
+
+            if(state == JumpState.JumpDown) 
+            {
+                Debug.Log("Process JumpDown");
+                // if(m_hManager.GroundableChecked(shadowWorldPos, groundCheckHeight)) {
+
+                // }
+            } 
+            else 
+            {
+                Debug.Log("Process JumpUp");
+                Debug.Log("currHeight start: "+m_Lamniat.CurrentHeight);
+                Debug.Log("lastHeight start: "+m_Lamniat.LastHeight);
+                Debug.Log("goalheight: "+goalheight);
+                Debug.Log("Mathf.Floor(goalheight): "+Mathf.Floor(goalheight));
+
+                // if(Mathf.Floor(goalheight) >= 0) {
+                //     groundCheckHeight = Mathf.Floor(goalheight);
+                // } else {
+                //     groundCheckHeight = 0;
+                // }
+
+                Debug.Log("groundCheckHeight: "+groundCheckHeight);
+
+                // Ver.2
+                // 目前底部有一BoxCollider2D，以BoxCollider2D四個頂點為判定落地點
+                var buttomPointCollider = jumpPoint.GetComponent<BoxCollider2D>();
+                var bpc_1 = buttomPointCollider.bounds.min;
+                var bpc_2 = buttomPointCollider.bounds.max;
+                var bpc_3 = new Vector2(bpc_1.x, bpc_2.y);
+                var bpc_4 = new Vector2(bpc_2.x, bpc_1.y);
+
+                // 根據上述得到的點預測下一Update的判定落地點
+                // Debug.Log("jumpPointCollider pos: "+jumpPointCollider.transform.position);
+                // Debug.Log("jumpPointColliderPoint1: "+jumpPointColliderPoint1);
+                // Debug.Log("jumpPointColliderPoint2: "+jumpPointColliderPoint2);
+                // Debug.Log("jumpPointColliderPoint3: "+jumpPointColliderPoint3);
+                // Debug.Log("jumpPointColliderPoint4: "+jumpPointColliderPoint4);
+
+
+                // 4個點分別做GroundableChecked，其中一個成立便做判定處理(以下先以當下做判斷做測試)
+                // bool groundable = m_hManager.GroundableChecked(bpc_1, groundCheckHeight) || m_hManager.GroundableChecked(bpc_2, groundCheckHeight) ||
+                //                   m_hManager.GroundableChecked(bpc_3, groundCheckHeight) || m_hManager.GroundableChecked(bpc_4, groundCheckHeight);
+
+                // 低處往高處跳就以角色Sprite中心為落地點
+                if(m_hManager.GroundableChecked(m_Lamniat.Buttom, groundCheckHeight)) {
+                    Debug.Log("Groundable true,worldPos:  " + m_Lamniat.Buttom + ", groundCheckHeight: "+groundCheckHeight);
+                    // NotGroundable(ex: 岩壁)判定
+                    if(m_hManager.NotGroundableChecked(m_Lamniat.Buttom, groundCheckHeight) || m_hManager.NotGroundableChecked(m_Lamniat.Center, groundCheckHeight)) {
+                        Debug.Log("NotGroundable true");
+                        // 跳入虛空判定
+                        bool hasCeiling = m_hManager.CeilingChecked(m_Lamniat.Center, groundCheckHeight); 
+                        if(hasCeiling) {
+                            Debug.Log("recall position");
+                            Debug.Log("Current Coord: "+m_Lamniat.Coordinate);
+                            Debug.Log("lastJumpingCoord: "+lastJumpingCoord);
+
+                            Vector3 recallPosition = jumpCoordStacks.Pop();
+
+                            // Vector3 checkCoordinate = new Vector3(recallPosition.x, recallPosition.y, groundCheckHeight);
+                            // Vector3 checkWorldPos = new Vector3(checkCoordinate.x, checkCoordinate.y + checkCoordinate.z);
+
+                            // m_Lamniat.transform.position = m_Lamniat.GetWorldPosByCoordinate(m_Lamniat.Coordinate) - new Vector3(0, 2.0f); 
+                            // m_Lamniat.SetCoordinate(new Vector3(lastJumpingCoord.x, lastJumpingCoord.y, goalheight));
+
+                            // m_Lamniat.SetLastHeight(m_Lamniat.CurrentHeight);
+                            // m_Lamniat.SetCurrentHeight(goalheight);
+                            // jumpOffset += g;
+
+                        }
+                        m_Lamniat.SetLastHeight(m_Lamniat.CurrentHeight);
+                        m_Lamniat.SetCurrentHeight(goalheight);
+                        jumpOffset += g;
+                    } 
+                    else {
+                        Debug.Log("NotGroundable false");
+                        m_Lamniat.SetLastHeight(m_Lamniat.CurrentHeight);
+                        m_Lamniat.SetCurrentHeight(groundCheckHeight);
+                        FinishJump();
+                        groundDelayRoutine = StartCoroutine(GroundDelay());
+                    }
+                } 
+                else {
+                    m_Lamniat.SetLastHeight(m_Lamniat.CurrentHeight);
+                    m_Lamniat.SetCurrentHeight(goalheight);
+                    jumpOffset += g;
+                }
+
+            }
+
+        }
+    }
+
+
 
     protected IEnumerator GroundDelay() {
         groundDelaying = true;
@@ -655,6 +964,7 @@ public class Jump_Lamniat : MonoBehaviour
     }
 
     protected IEnumerator JumpUpDelay(Vector2 faceDir) {
+        Debug.Log("jumpUpDelay");
         jumpDelaying = true;
         // if button is change before delay time
         if(m_avatarMovement.FacingDir != faceDir) {
@@ -691,6 +1001,41 @@ public class Jump_Lamniat : MonoBehaviour
         m_avatarMovement.SetMoveSpeed(11f);
         jumpingMovementVariable = 0.5f;
         OnColliders.Clear();
+        jumpCoordStacks.Clear();
+
+        if(testVer4) {
+            var lastPos = m_LamniatSprtRenderer.transform.position;
+            Debug.Log("lastSprtPos: "+lastPos);
+            m_LamniatSprtRenderer.transform.localPosition = new Vector3(0, 0);
+            m_Lamniat.transform.position = new Vector3(lastPos.x, lastPos.y, m_Lamniat.CurrentHeight);
+            Debug.Log("New Set SprtPos: "+m_LamniatSprtRenderer.transform.position);
+            
+        } else {
+            transform.position = new Vector3(transform.position.x, transform.position.y, m_Lamniat.CurrentHeight);
+        }
+        
+        Debug.Log("After Set SprtPos: "+m_LamniatSprtRenderer.transform.position);
+        takeOffCoord = Vector3.zero;
+    }
+
+    public void FinishJumpVer4() {
+        if(groundDelayRoutine != null) {
+            StopCoroutine(groundDelayRoutine);
+        }
+
+        Debug.Log("StopJump currHeight: "+m_Lamniat.CurrentHeight);
+        Debug.Log("StopJump takeOffPos: "+takeOffCoord);
+
+        IsJumping = false;
+        jumpHitColli = false;
+        groundDelaying = false;
+        jumpOffset = 0f;
+        jumpIncrement = 0f;
+        m_Lamniat.SetLastHeight(m_Lamniat.CurrentHeight);
+        m_avatarMovement.SetMoveSpeed(12f);
+        jumpingMovementVariable = 0.5f;
+        OnColliders.Clear();
+        jumpCoordStacks.Clear();
 
         if(testVer4) {
             var lastPos = m_LamniatSprtRenderer.transform.position;
@@ -709,5 +1054,10 @@ public class Jump_Lamniat : MonoBehaviour
 
     #endregion
 
-    
+    [ContextMenu("Get Matrix Test1")]
+    public void GetTileInfo() {
+
+    }
+
+
 }

@@ -25,26 +25,4 @@ public class Avatar_Lamniat : Avatar
         m_inputControls.Lamniat_Land.Enable();
     }
 
-    #region 碰撞偵測
-
-    private void ChangeColliderToJumpDown() {
-        var body = GetComponent<BoxCollider2D>();
-        body.isTrigger = true;
-        // var jumpTrigger = GetComponent<CircleCollider2D>();
-        // if(body != null && jumpTrigger != null) {
-        //     jumpTrigger.enabled = true;
-        // }
-    }
-
-    private void RevertColliderFromJumpDown() {
-        var body = GetComponent<BoxCollider2D>();
-        body.isTrigger = false;
-        //var jumpTrigger = GetComponent<CircleCollider2D>();
-        // if(body != null && jumpTrigger != null) {
-        //     jumpTrigger.enabled = false;
-        // }
-    }
-
-    #endregion
-
 }

@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   initialPos: {x: 0, y: 0}
   defaultPos: {x: 0, y: 0}
-  jumpCollidersName: Stage5
+  initialHeight: 0
+  defaultHeight: 0

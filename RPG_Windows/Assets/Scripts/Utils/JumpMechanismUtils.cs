@@ -11,7 +11,6 @@ public class JumpMechanismUtils
     public static JumpState DetectedJumpState(Vector2 raycastStartPoint, Vector2 rayCastEndPosition, Vector2 rayCastDistance, float currHeight, bool isMoving, bool OnCollisioning = false) {
         RaycastHit2D[] hits = Physics2D.LinecastAll(raycastStartPoint, rayCastEndPosition, 1 << LayerMask.NameToLayer("HeightObj"));
         
-        var heightManager = GameObject.FindObjectOfType(typeof(HeightManager)) as HeightManager;
         float altitudeVariation = 0f;
         bool jumpUp = false;
         bool jumpDown = false;

@@ -63,6 +63,7 @@ public abstract class Charactor : MonoBehaviour
     /// 角色橫縱高座標
     /// </summary>
     public Vector3 Coordinate => this.m_Coordinate;
+    public void SetCoordinate(Vector3 coordinate) => this.m_Coordinate = coordinate;
 
     #endregion
 
@@ -110,7 +111,6 @@ public abstract class Charactor : MonoBehaviour
         m_Buttom = m_ButtomObj?.position ?? Vector3.zero;
 
         UpdateCoordinate();
-        FocusCollidersWithHeight();
     }
 
     protected virtual void FixedUpdate() {
@@ -146,26 +146,4 @@ public abstract class Charactor : MonoBehaviour
     }
 
     #endregion
-
-    protected void FocusCollidersWithHeight() {
-        // Debug.Log("FocusCollidersWithHeight");
-        Collider2D[] jumpColls = GridUtils.GetColliders(m_InfoStorage.jumpCollidersName);
-
-        if(jumpColls != null) {
-            foreach(var collider2D in jumpColls) {
-                var heightObj = collider2D.GetComponent<HeightOfObject>() as HeightOfObject;
-                if(heightObj != null) {
-                    // Debug.Log("FocusCollidersWithHeight collider2D name: "+collider2D.name);
-                    // Debug.Log("FocusCollidersWithHeight collider2D type: "+collider2D.GetType());
-                    if(m_currHeight == heightObj.GetSelfHeight()) {
-                        collider2D.enabled = true;
-                    } else {
-                        collider2D.enabled = false;
-                    }
-                    // Debug.Log("FocusCollidersWithHeight collider2D enabled: "+collider2D.enabled);
-                }
-            }
-        }
-    }
-    
 }
