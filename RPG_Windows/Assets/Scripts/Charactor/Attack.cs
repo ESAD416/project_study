@@ -24,8 +24,8 @@ public class Attack : MonoBehaviour
         if (targetOnHit) {
             Debug.Log("targetAttacked");
             foreach (Collider2D col in m_OnHit) {
-                if (col.GetComponent<HitSystem>() != null) {
-                    col.GetComponent<HitSystem>().TakeHiProcess(this);
+                if (col.GetComponentInParent<HitSystem>() != null) {
+                    col.GetComponentInParent<HitSystem>().TakeHiProcess(this);
                 }
             }
         }

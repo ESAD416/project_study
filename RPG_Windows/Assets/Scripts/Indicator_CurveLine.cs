@@ -48,9 +48,9 @@ public class Indicator_CurveLine : MonoBehaviour
         Line.positionCount = SubDivisions;
 
         int index = 0;
-        Vector3[] segmrnts = Curve.GetSegments(SubDivisions);
-        for(int j = 0; j < segmrnts.Length; j++) {
-            Line.SetPosition(index, segmrnts[j]);
+        Vector3[] segments = Curve.GetSegments(SubDivisions);
+        for(int j = 0; j < segments.Length; j++) {
+            Line.SetPosition(index, segments[j]);
             index++;
         }
     }

@@ -39,11 +39,11 @@ public class HeightManager : MonoBehaviour
     void Update()
     {
         if(m_avatar != null) {
-            if(m_avatarJump != null && m_avatarJump.IsJumping) {
-                SetCollidersWithAvatarHeightWhileAvatarJump(m_avatar.CurrentHeight);
-            } else {
+            // if(m_avatarJump != null && m_avatarJump.IsJumping) {
+            //     SetCollidersWithAvatarHeightWhileAvatarJump(m_avatar.CurrentHeight);
+            // } else {
                 SetCollidersWithAvatarHeight(m_avatar.CurrentHeight);
-            }
+            // }
         }
         
     }
@@ -92,8 +92,31 @@ public class HeightManager : MonoBehaviour
         return false;
     }
 
+    public bool GroundableChecked(Vector2 worldPos, float height, out Vector3 groundablePos) {
+        foreach(var map in levels) {
+            Vector3Int gridPos = map.WorldToCell(worldPos);
+            if(map.HasTile(gridPos)) {
+                Tile resultTile = map.GetTile<Tile>(gridPos);
+                Debug.Log("At grid position "+gridPos+" there is a "+resultTile+" in map "+map.name);
+                Debug.Log("resultTile height: "+dataFromTiles[resultTile].height);
+                if(dataFromTiles[resultTile].height == height) {
+                    TileSpriteModel model = new TileSpriteModel(resultTile.sprite, map.GetTransformMatrix(gridPos).rotation.eulerAngles.z);
+                    bool IsTransparent = TileUtils.TilePixelIsTransparent(model, worldPos);
+                    groundablePos = gridPos;
+                    return !IsTransparent;
+                    // if(!IsTransparent) {
+                    //     bool hasCeiling = CeilingChecked(worldPos, height);
+                    //     return !hasCeiling;
+                    // }
+                }
+            }
+        }
+        groundablePos = new Vector3(-99, -99, -99);
+        return false;
+    }
+
     public bool NotGroundableChecked(Vector2 worldPos, float height) {
-        // Debug.Log("NotGroundable Check worldPos: "+worldPos+" height: "+height);
+        Debug.Log("NotGroundable Check worldPos: "+worldPos+" height: "+height);
         // for(float i = height; i >= 0; i--) {
             // Debug.Log("NotGroundable Check i: "+i);
             foreach(var map in levels) {

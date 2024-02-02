@@ -16,16 +16,32 @@ public class HitSystem_Enemy : HitSystem
     }
 
     protected override IEnumerator TakeHit(Attack attacker) {
-        
+        Debug.Log("TakeHit start");
         isTakingHit = true;
 
         var enemyTakenHit = GetComponent<Enemy>();
         if(enemyTakenHit != null) {
+            Debug.Log("enemyTakenHit start");
             if(isInvulnerable)
                 yield break;
             else if(!isInvulnerable) isInvulnerable = true;
-            
+
             m_target.SetCurrentBaseState(m_target.Hurt);
+
+            foreach (Collider2D hitCollider in attacker.OnHit)
+            {
+                // 獲取碰撞器的中心位置
+                Vector2 hitPosition = hitCollider.bounds.center;
+
+                // 獲取碰撞的相對位置
+                Vector2 relativeHitPosition = hitCollider.transform.InverseTransformPoint(attacker.transform.position);
+
+                // 在這裡使用碰撞位置進行後續處理
+                Debug.Log("Hit at position: " + hitPosition);
+                Debug.Log("Relative hit position: " + relativeHitPosition);
+
+                ViewHitEffect(new Vector3(hitPosition.x, hitPosition.y, 99));
+            }
 
             
             var dir = SetAttackForceDir(attacker.transform);
@@ -40,9 +56,11 @@ public class HitSystem_Enemy : HitSystem
             
             yield return new WaitForSeconds(invulnerableDuration);  // hardcasted casted time for debugged
 
+            Debug.Log("enemyTakenHit end");
         }
         
         FinishTakeHit();
+        Debug.Log("TakeHit end");
     }
 
     protected override IEnumerator TakeHit(DamageSystem damageSystem, Transform attackedLocation, int damageCounter = 1) {
@@ -96,7 +114,7 @@ public class HitSystem_Enemy : HitSystem
         isTakingHit = false;
         isInvulnerable = false;
 
-        if(m_targetMovement.isMoving) m_target.SetCurrentBaseState(m_target.Move);
+        if(m_targetMovement != null && m_targetMovement.isMoving) m_target.SetCurrentBaseState(m_target.Move);
         else m_target.SetCurrentBaseState(m_target.Idle);
         
         Debug.Log("FinishTakeHit");

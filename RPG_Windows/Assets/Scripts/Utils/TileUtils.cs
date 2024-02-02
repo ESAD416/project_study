@@ -14,6 +14,7 @@ internal static class TileUtils
         int pixelX = (int) (model.GetCenter().x + vX);
         int pixelY = (int) (model.GetCenter().y + vY);
         Color pixel = model.spriteOfTile.texture.GetPixel(pixelX, pixelY);
+        Debug.Log("pixel Color: "+pixel);
         if(pixel.a == 0f) {
             Debug.Log("IsTransparent: "+true);
             return true;

@@ -26,4 +26,9 @@ public class GameObjectPool : MonoBehaviour
 
         return null;
     }
+
+    public void DestroyPoolObjects(GameObject obj) {
+        obj.SetActive(false);
+    }
+
 }

@@ -20,14 +20,13 @@ public class Jump_Lamniat : MonoBehaviour
     
     
     [Header("Jump_Lamniat 基本參數")]
-
     public bool IsJumping;
     protected float minjumpOffSet = -0.3f;
-    protected float jumpOffset = 0f;  //0.3f
+    [SerializeField] protected float jumpOffset = 0.3f;  //0.3f
     [SerializeField] protected float maxJumpHeight = 0f;
     protected float maxJumpHeightOffSet = 1.5f;
     protected float jumpIncrement = 0f;
-    protected float g = -0.0565f; // -0.0565f;
+    [SerializeField] protected float g = -0.0565f; // -0.0565f;
     protected float jumpingMovementVariable = 0.5f;
     protected bool jumpHitColli;
 
@@ -40,6 +39,7 @@ public class Jump_Lamniat : MonoBehaviour
     protected bool jumpDelaying = false;
 
 
+    protected Vector3 groundablePos = Vector3.zero;
     protected Coroutine groundDelayRoutine;
     protected bool groundDelaying = false;
     protected float groundDelay = 0.2f;
@@ -70,14 +70,13 @@ public class Jump_Lamniat : MonoBehaviour
 
         jumpPoint.OnPlayerExitColliderEvent.AddListener(() => {
             Debug.Log("ColliderTrigger ExitCollider");
-            OnHeightObjCollisionEnter = true;
+            OnHeightObjCollisionEnter = false;
         });
 
         jumpPoint.OnPlayerEnterTriggerEvent.AddListener(() => {
             Debug.Log("ColliderTrigger OnPlayerEnterTriggerEvent");
             if(prepareToJump) jumpPointTrigger = true;
         });
-
         // Debug.Log("m_LamniatSprtRenderer position: "+m_LamniatSprtRenderer.transform.position);
         // m_LamniatSprtRenderer.transform.position = new Vector3(0, 2f);
         // Debug.Log("m_LamniatSprtRenderer position: "+m_LamniatSprtRenderer.transform.position);
@@ -130,7 +129,7 @@ public class Jump_Lamniat : MonoBehaviour
 
             if(testVer4) {
                 #region Ver.4
-                m_LamniatSprtRenderer.transform.position = m_Lamniat.GetWorldPosByCoordinate(m_Lamniat.Coordinate) - new Vector3(0, 2.0f);   // 預設中心點是(x, y+2)
+                //m_LamniatSprtRenderer.transform.position = m_Lamniat.GetWorldPosByCoordinate(m_Lamniat.Coordinate) - new Vector3(0, 2.0f);   // 預設中心點是(x, y+2)
                 HandleJumpingProcessVer4(jumpState);
 
                 #endregion
@@ -143,7 +142,7 @@ public class Jump_Lamniat : MonoBehaviour
                 #endregion
             }
 
-            jumpCoordStacks.Push(m_Lamniat.Coordinate);
+            //jumpCoordStacks.Push(m_Lamniat.Coordinate);
             //Debug.Log("FixedUpdate end: "+m_Lamniat.Coordinate);
             //Debug.Log("FixedUpdate end lastJumpingCoord: "+lastJumpingCoord);
             //Debug.Log("FixedUpdate end m_LamniatSprtRenderer.transform.position: "+m_LamniatSprtRenderer.transform.position);
@@ -405,7 +404,7 @@ public class Jump_Lamniat : MonoBehaviour
         prepareToJump = true;
         m_Lamniat.SetRaycastPoint();
 
-        Vector2 distance = new Vector2(m_avatarMovement.Movement.x, m_avatarMovement.Movement.y) * 0.35f;
+        Vector2 distance = new Vector2(m_avatarMovement.Movement.x, m_avatarMovement.Movement.y) * 1.5f;
         m_Lamniat.RaycastEnd = new Vector2(m_Lamniat.RaycastStart.position.x, m_Lamniat.RaycastStart.position.y) + distance;
         //Debug.Log("castEndPos: "+rayCastEndPos);
         Debug.DrawLine(m_Lamniat.RaycastStart.position, m_Lamniat.RaycastEnd, Color.red);
@@ -421,8 +420,7 @@ public class Jump_Lamniat : MonoBehaviour
                     angle = 90.0f - Mathf.Abs(angle);
                     Debug.Log("DetectedJumpState linecast angle:"+angle);
                     Debug.Log("OnCollisioning: "+OnHeightObjCollisionEnter);
-                    if(angle >= 60f && 180f - angle >= 60f && OnHeightObjCollisionEnter) {
-                        
+                    if(angle >= 60f && 180f - angle >= 60f && OnHeightObjCollisionEnter) {        
                         if(!jumpDelaying) {
                             Vector2 faceDirAtJump = m_avatarMovement.FacingDir;
                             jumpDelayRoutine = StartCoroutine(JumpUpDelay(faceDirAtJump));
@@ -676,8 +674,16 @@ public class Jump_Lamniat : MonoBehaviour
         Debug.Log("jumpIncrement end: "+jumpIncrement);
     }
 
-    private void RecallPositionToGround(float groundCheckHeight) {
-        
+    private void RecallPositionToGround(JumpState state, float groundCheckHeight) {
+        //if()
+        if(m_hManager.GroundableChecked(m_Lamniat.Buttom, groundCheckHeight)) {
+            Debug.Log("Groundable true,worldPos:  " + m_Lamniat.Buttom + ", groundCheckHeight: "+groundCheckHeight);
+            // NotGroundable(ex: 岩壁)判定
+            if(m_hManager.NotGroundableChecked(m_Lamniat.Buttom, groundCheckHeight) || m_hManager.NotGroundableChecked(m_Lamniat.Center, groundCheckHeight)) {
+
+            }
+        }
+            
     }
 
     private void HandleJumpingProcessVer3(JumpState state) {
@@ -712,12 +718,19 @@ public class Jump_Lamniat : MonoBehaviour
             Debug.Log("shadowCoordinate: "+shadowCoordinate);
             Vector3 shadowWorldPos = new Vector3(shadowCoordinate.x, shadowCoordinate.y + shadowCoordinate.z);
 
+            bool groundable = false;
+            bool notGroundable = false;
+            bool hasCeiling = false;
             if(state == JumpState.JumpDown) 
             {
                 Debug.Log("Process JumpDown");
-                // if(m_hManager.GroundableChecked(shadowWorldPos, groundCheckHeight)) {
+                if(m_hManager.GroundableChecked(shadowWorldPos, groundCheckHeight)) {
+                    groundable = true;
+                }
 
-                // }
+                if(m_hManager.NotGroundableChecked(m_Lamniat.Center, groundCheckHeight) || m_hManager.NotGroundableChecked(shadowWorldPos, groundCheckHeight)) {
+
+                }
             } 
             else 
             {
@@ -727,21 +740,12 @@ public class Jump_Lamniat : MonoBehaviour
                 Debug.Log("goalheight: "+goalheight);
                 Debug.Log("Mathf.Floor(goalheight): "+Mathf.Floor(goalheight));
 
-                if(goalheight < 1 && Mathf.Floor(goalheight) >= 0) {
-                    groundCheckHeight = Mathf.Floor(goalheight);
-                } else {
+
+                if(Mathf.Floor(goalheight) < 0) {
                     groundCheckHeight = 0;
                 }
 
                 Debug.Log("groundCheckHeight: "+groundCheckHeight);
-
-                // Ver.2
-                // 目前底部有一BoxCollider2D，以BoxCollider2D四個頂點為判定落地點
-                var buttomPointCollider = jumpPoint.GetComponent<BoxCollider2D>();
-                var bpc_1 = buttomPointCollider.bounds.min;
-                var bpc_2 = buttomPointCollider.bounds.max;
-                var bpc_3 = new Vector2(bpc_1.x, bpc_2.y);
-                var bpc_4 = new Vector2(bpc_2.x, bpc_1.y);
 
                 // 根據上述得到的點預測下一Update的判定落地點
                 // Debug.Log("jumpPointCollider pos: "+jumpPointCollider.transform.position);
@@ -755,49 +759,140 @@ public class Jump_Lamniat : MonoBehaviour
                 // bool groundable = m_hManager.GroundableChecked(bpc_1, groundCheckHeight) || m_hManager.GroundableChecked(bpc_2, groundCheckHeight) ||
                 //                   m_hManager.GroundableChecked(bpc_3, groundCheckHeight) || m_hManager.GroundableChecked(bpc_4, groundCheckHeight);
 
-                // 低處往高處跳就以角色Sprite中心為落地點
+                // 低處往高處跳不只需要以落地座標為判定點，還需要以角色Sprite底部為判定點
+                
+                if(m_hManager.GroundableChecked(shadowWorldPos, groundCheckHeight)) {
+                    Debug.Log("shadowWorldPos Groundable true:  " + shadowWorldPos + ", groundCheckHeight: "+groundCheckHeight);
+                    groundable = true;
+                }
                 if(m_hManager.GroundableChecked(m_Lamniat.Buttom, groundCheckHeight)) {
-                    Debug.Log("Groundable true,worldPos:  " + m_Lamniat.Buttom + ", groundCheckHeight: "+groundCheckHeight);
-                    // NotGroundable(ex: 岩壁)判定
-                    if(m_hManager.NotGroundableChecked(m_Lamniat.Buttom, groundCheckHeight) || m_hManager.NotGroundableChecked(m_Lamniat.Center, groundCheckHeight)) {
-                        Debug.Log("NotGroundable true");
-                        // 跳入虛空判定
-                        bool hasCeiling = m_hManager.CeilingChecked(m_Lamniat.Center, groundCheckHeight); 
-                        if(hasCeiling) {
-                            Debug.Log("recall position");
-                            Debug.Log("Current Coord: "+m_Lamniat.Coordinate);
-                            Debug.Log("lastJumpingCoord: "+lastJumpingCoord);
+                    Debug.Log("Buttom Groundable true:  " + m_Lamniat.Buttom + ", groundCheckHeight: "+groundCheckHeight);
+                    groundable = true;
+                }
 
-                            // Vector3 recallPosition = jumpCoordStacks.Pop();
-
-                            // Vector3 checkCoordinate = new Vector3(recallPosition.x, recallPosition.y, groundCheckHeight);
-                            // Vector3 checkWorldPos = new Vector3(checkCoordinate.x, checkCoordinate.y + checkCoordinate.z);
-
-                            // m_Lamniat.transform.position = m_Lamniat.GetWorldPosByCoordinate(m_Lamniat.Coordinate) - new Vector3(0, 2.0f); 
-                            // m_Lamniat.SetCoordinate(new Vector3(lastJumpingCoord.x, lastJumpingCoord.y, goalheight));
-
-                            // m_Lamniat.SetLastHeight(m_Lamniat.CurrentHeight);
-                            // m_Lamniat.SetCurrentHeight(goalheight);
-                            // jumpOffset += g;
-
-                        }
-                        m_Lamniat.SetLastHeight(m_Lamniat.CurrentHeight);
-                        m_Lamniat.SetCurrentHeight(goalheight);
-                        jumpOffset += g;
-                    } 
-                    else {
-                        Debug.Log("NotGroundable false");
-                        m_Lamniat.SetLastHeight(m_Lamniat.CurrentHeight);
-                        m_Lamniat.SetCurrentHeight(groundCheckHeight);
-                        FinishJump();
-                        groundDelayRoutine = StartCoroutine(GroundDelay());
+                // 需要判斷是否處於非落地區域
+                int notGroundableCounter = 0;
+                // 目前有一BoxCollider2D，以BoxCollider2D四個頂點為判定落地點
+                var bodyCollider = GetComponent<BoxCollider2D>();
+                var body_bottom_left = bodyCollider.bounds.min;
+                var body_top_right = bodyCollider.bounds.max;
+                var body_top_left = new Vector2(body_bottom_left.x, body_top_right.y);
+                var body_bottom_right = new Vector2(body_top_right.x, body_bottom_left.y);
+                var body_bottom_center = bodyCollider.bounds.center;
+                
+                // if(m_hManager.NotGroundableChecked(m_Lamniat.Buttom, groundCheckHeight)) {
+                //     Debug.Log("Buttom NotGroundable true");
+                //     notGroundable = true;
+                // } else if(m_hManager.NotGroundableChecked(m_Lamniat.Center, groundCheckHeight) ) {
+                //     Debug.Log("Center NotGroundable true");
+                //     notGroundable = true;
+                // }
+                if(m_hManager.NotGroundableChecked(body_bottom_left, groundCheckHeight)) {
+                    Debug.Log("body_bottom_left NotGroundable true");
+                    //notGroundable = true;
+                    notGroundableCounter++;
+                } 
+                if(m_hManager.NotGroundableChecked(body_top_right, groundCheckHeight) ) {
+                    Debug.Log("body_top_right NotGroundable true");
+                    //notGroundable = true;
+                    notGroundableCounter++;
+                } 
+                if(m_hManager.NotGroundableChecked(body_top_left, groundCheckHeight) ) {
+                    Debug.Log("body_top_left NotGroundable true");
+                    //notGroundable = true;
+                    notGroundableCounter++;
+                }
+                if(m_hManager.NotGroundableChecked(body_bottom_right, groundCheckHeight) ) {
+                    Debug.Log("body_bottom_right NotGroundable true");
+                    //notGroundable = true;
+                    notGroundableCounter++;
+                }
+                if(notGroundableCounter >= 2) {
+                    if(m_hManager.NotGroundableChecked(body_bottom_center, groundCheckHeight)) {
+                        Debug.Log("body_bottom_center NotGroundable true");
+                        notGroundable = true;
                     }
+                }
+
+
+                
+                if(m_hManager.CeilingChecked(m_Lamniat.Buttom, groundCheckHeight)) {
+                    Debug.Log("Buttom hasCeiling true");
+                    hasCeiling = true;
+                } else if(m_hManager.CeilingChecked(m_Lamniat.Center, groundCheckHeight) ) {
+                    Debug.Log("Center hasCeiling true");
+                    hasCeiling = true;
+                }
+
+                if(groundable && !notGroundable) {
+                    m_Lamniat.SetLastHeight(m_Lamniat.CurrentHeight);
+                    m_Lamniat.SetCurrentHeight(groundCheckHeight);
+                    FinishJump();
+                    groundDelayRoutine = StartCoroutine(GroundDelay());
                 } 
                 else {
+                    if(groundable && notGroundable) {
+                        //通常是角色可落地但整體位於岩壁上，在此作進一步判斷
+                        if(goalheight < groundCheckHeight) {
+                            // 下一個Update的高度將會比目前可落地的高度低，將下一高度設為目前的可落地高度
+                            goalheight = groundCheckHeight;
+                        }
+                    }
+
+                    if(hasCeiling) {
+                        Debug.Log("recall position");
+                        Debug.Log("Current Coord: "+m_Lamniat.Coordinate);
+                        Debug.Log("lastJumpingCoord: "+lastJumpingCoord);
+                    }
+
                     m_Lamniat.SetLastHeight(m_Lamniat.CurrentHeight);
                     m_Lamniat.SetCurrentHeight(goalheight);
                     jumpOffset += g;
                 }
+
+                // if(m_hManager.GroundableChecked(shadowWorldPos, groundCheckHeight) || m_hManager.GroundableChecked(m_Lamniat.Buttom, groundCheckHeight)) {
+                //     Debug.Log("Groundable true,worldPos:  " + m_Lamniat.Buttom + ", groundCheckHeight: "+groundCheckHeight);
+                //     // NotGroundable(ex: 岩壁)判定
+                //     //if(m_hManager.NotGroundableChecked(m_Lamniat.Buttom, groundCheckHeight)) {
+                //     if(m_hManager.NotGroundableChecked(m_Lamniat.Buttom, groundCheckHeight) && m_hManager.NotGroundableChecked(m_Lamniat.Center, groundCheckHeight)) {
+                //         Debug.Log("NotGroundable true");
+                //         // 跳入虛空判定
+                //         bool hasCeiling = m_hManager.CeilingChecked(m_Lamniat.Buttom, groundCheckHeight) && m_hManager.CeilingChecked(m_Lamniat.Center, groundCheckHeight); 
+                //         if(hasCeiling) {
+                //             Debug.Log("recall position");
+                //             Debug.Log("Current Coord: "+m_Lamniat.Coordinate);
+                //             Debug.Log("lastJumpingCoord: "+lastJumpingCoord);
+
+                //             // Vector3 recallPosition = jumpCoordStacks.Pop();
+
+                //             // Vector3 checkCoordinate = new Vector3(recallPosition.x, recallPosition.y, groundCheckHeight);
+                //             // Vector3 checkWorldPos = new Vector3(checkCoordinate.x, checkCoordinate.y + checkCoordinate.z);
+
+                //             // m_Lamniat.transform.position = m_Lamniat.GetWorldPosByCoordinate(m_Lamniat.Coordinate) - new Vector3(0, 2.0f); 
+                //             // m_Lamniat.SetCoordinate(new Vector3(lastJumpingCoord.x, lastJumpingCoord.y, goalheight));
+
+                //             // m_Lamniat.SetLastHeight(m_Lamniat.CurrentHeight);
+                //             // m_Lamniat.SetCurrentHeight(goalheight);
+                //             // jumpOffset += g;
+
+                //         }
+                //         m_Lamniat.SetLastHeight(m_Lamniat.CurrentHeight);
+                //         m_Lamniat.SetCurrentHeight(goalheight);
+                //         jumpOffset += g;
+                //     } 
+                //     else {
+                //         Debug.Log("NotGroundable false");
+                //         m_Lamniat.SetLastHeight(m_Lamniat.CurrentHeight);
+                //         m_Lamniat.SetCurrentHeight(groundCheckHeight);
+                //         FinishJump();
+                //         groundDelayRoutine = StartCoroutine(GroundDelay());
+                //     }
+                // } 
+                // else {
+                //     m_Lamniat.SetLastHeight(m_Lamniat.CurrentHeight);
+                //     m_Lamniat.SetCurrentHeight(goalheight);
+                //     jumpOffset += g;
+                // }
 
             }
 
@@ -809,125 +904,10 @@ public class Jump_Lamniat : MonoBehaviour
         Debug.Log("currHeight start: "+m_Lamniat.CurrentHeight);
         Debug.Log("lastHeight start: "+m_Lamniat.LastHeight);
 
-        // Debug.Log("jumpOffset start: "+jumpOffset);
-        // Debug.Log("jumpIncrement end: "+jumpIncrement);
+
+
         
-         if(jumpOffset == 0) {
-            //jumpIncrement += jumpOffset;
-            m_Lamniat.SetLastHeight(m_Lamniat.CurrentHeight);
-            m_Lamniat.SetCurrentHeight(m_Lamniat.CurrentHeight + 1f);
-            
-            //jumpOffset += (g / 2);
-            jumpOffset += g;
-        } 
-        else {
-            float goalheight = m_Lamniat.CurrentHeight + jumpOffset;
-            if(goalheight >= maxJumpHeight) {
-                goalheight = maxJumpHeight;
-            }
 
-            float groundCheckHeight = Mathf.Floor(m_Lamniat.CurrentHeight);
-
-            Debug.Log("goalheight: "+goalheight);
-            Debug.Log("Center: "+m_Lamniat.Center);
-            Debug.Log("Buttom: "+m_Lamniat.Buttom);
-            Debug.Log("Coordinate: "+m_Lamniat.Coordinate);
-            Debug.Log("transform_pos: "+transform.position);
-
-            Vector3 shadowCoordinate = new Vector3(m_Lamniat.Coordinate.x, m_Lamniat.Coordinate.y, groundCheckHeight);
-            Debug.Log("shadowCoordinate: "+shadowCoordinate);
-            Vector3 shadowWorldPos = new Vector3(shadowCoordinate.x, shadowCoordinate.y + shadowCoordinate.z);
-
-            if(state == JumpState.JumpDown) 
-            {
-                Debug.Log("Process JumpDown");
-                // if(m_hManager.GroundableChecked(shadowWorldPos, groundCheckHeight)) {
-
-                // }
-            } 
-            else 
-            {
-                Debug.Log("Process JumpUp");
-                Debug.Log("currHeight start: "+m_Lamniat.CurrentHeight);
-                Debug.Log("lastHeight start: "+m_Lamniat.LastHeight);
-                Debug.Log("goalheight: "+goalheight);
-                Debug.Log("Mathf.Floor(goalheight): "+Mathf.Floor(goalheight));
-
-                // if(Mathf.Floor(goalheight) >= 0) {
-                //     groundCheckHeight = Mathf.Floor(goalheight);
-                // } else {
-                //     groundCheckHeight = 0;
-                // }
-
-                Debug.Log("groundCheckHeight: "+groundCheckHeight);
-
-                // Ver.2
-                // 目前底部有一BoxCollider2D，以BoxCollider2D四個頂點為判定落地點
-                var buttomPointCollider = jumpPoint.GetComponent<BoxCollider2D>();
-                var bpc_1 = buttomPointCollider.bounds.min;
-                var bpc_2 = buttomPointCollider.bounds.max;
-                var bpc_3 = new Vector2(bpc_1.x, bpc_2.y);
-                var bpc_4 = new Vector2(bpc_2.x, bpc_1.y);
-
-                // 根據上述得到的點預測下一Update的判定落地點
-                // Debug.Log("jumpPointCollider pos: "+jumpPointCollider.transform.position);
-                // Debug.Log("jumpPointColliderPoint1: "+jumpPointColliderPoint1);
-                // Debug.Log("jumpPointColliderPoint2: "+jumpPointColliderPoint2);
-                // Debug.Log("jumpPointColliderPoint3: "+jumpPointColliderPoint3);
-                // Debug.Log("jumpPointColliderPoint4: "+jumpPointColliderPoint4);
-
-
-                // 4個點分別做GroundableChecked，其中一個成立便做判定處理(以下先以當下做判斷做測試)
-                // bool groundable = m_hManager.GroundableChecked(bpc_1, groundCheckHeight) || m_hManager.GroundableChecked(bpc_2, groundCheckHeight) ||
-                //                   m_hManager.GroundableChecked(bpc_3, groundCheckHeight) || m_hManager.GroundableChecked(bpc_4, groundCheckHeight);
-
-                // 低處往高處跳就以角色Sprite中心為落地點
-                if(m_hManager.GroundableChecked(m_Lamniat.Buttom, groundCheckHeight)) {
-                    Debug.Log("Groundable true,worldPos:  " + m_Lamniat.Buttom + ", groundCheckHeight: "+groundCheckHeight);
-                    // NotGroundable(ex: 岩壁)判定
-                    if(m_hManager.NotGroundableChecked(m_Lamniat.Buttom, groundCheckHeight) || m_hManager.NotGroundableChecked(m_Lamniat.Center, groundCheckHeight)) {
-                        Debug.Log("NotGroundable true");
-                        // 跳入虛空判定
-                        bool hasCeiling = m_hManager.CeilingChecked(m_Lamniat.Center, groundCheckHeight); 
-                        if(hasCeiling) {
-                            Debug.Log("recall position");
-                            Debug.Log("Current Coord: "+m_Lamniat.Coordinate);
-                            Debug.Log("lastJumpingCoord: "+lastJumpingCoord);
-
-                            Vector3 recallPosition = jumpCoordStacks.Pop();
-
-                            // Vector3 checkCoordinate = new Vector3(recallPosition.x, recallPosition.y, groundCheckHeight);
-                            // Vector3 checkWorldPos = new Vector3(checkCoordinate.x, checkCoordinate.y + checkCoordinate.z);
-
-                            // m_Lamniat.transform.position = m_Lamniat.GetWorldPosByCoordinate(m_Lamniat.Coordinate) - new Vector3(0, 2.0f); 
-                            // m_Lamniat.SetCoordinate(new Vector3(lastJumpingCoord.x, lastJumpingCoord.y, goalheight));
-
-                            // m_Lamniat.SetLastHeight(m_Lamniat.CurrentHeight);
-                            // m_Lamniat.SetCurrentHeight(goalheight);
-                            // jumpOffset += g;
-
-                        }
-                        m_Lamniat.SetLastHeight(m_Lamniat.CurrentHeight);
-                        m_Lamniat.SetCurrentHeight(goalheight);
-                        jumpOffset += g;
-                    } 
-                    else {
-                        Debug.Log("NotGroundable false");
-                        m_Lamniat.SetLastHeight(m_Lamniat.CurrentHeight);
-                        m_Lamniat.SetCurrentHeight(groundCheckHeight);
-                        FinishJump();
-                        groundDelayRoutine = StartCoroutine(GroundDelay());
-                    }
-                } 
-                else {
-                    m_Lamniat.SetLastHeight(m_Lamniat.CurrentHeight);
-                    m_Lamniat.SetCurrentHeight(goalheight);
-                    jumpOffset += g;
-                }
-
-            }
-
-        }
     }
 
 

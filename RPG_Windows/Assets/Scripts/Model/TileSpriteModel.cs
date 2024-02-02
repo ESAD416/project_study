@@ -70,13 +70,13 @@ public class TileSpriteModel
         if(perY < 0) {
             perY = 1f + perY;
         }
-        Debug.Log("perX: "+perX);
-        Debug.Log("perY: "+perY);
+        //Debug.Log("perX: "+perX);
+        //Debug.Log("perY: "+perY);
 
         int pixelsPosX = (int) (this.originNode.x + Mathf.Round(perX * this.width));
         int pixelsPosY = (int) (this.originNode.y + Mathf.Round(perY * this.height));
-        Debug.Log("pixelsPosX: "+pixelsPosX);
-        Debug.Log("pixelsPosY: "+pixelsPosY);
+        //Debug.Log("pixelsPosX: "+pixelsPosX);
+        //Debug.Log("pixelsPosY: "+pixelsPosY);
         return new Vector2(pixelsPosX, pixelsPosY);
     }
 

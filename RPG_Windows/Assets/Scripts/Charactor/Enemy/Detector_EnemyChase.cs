@@ -113,7 +113,7 @@ public class Detector_EnemyChase : Detector_Overlap2D
             // Debug.Log("targetLayer: "+TargetLayer);
 
             var binaryTgtLayer = 1 << result.collider.gameObject.layer;
-            Debug.Log("binaryTgtLayer: "+binaryTgtLayer);
+            //Debug.Log("binaryTgtLayer: "+binaryTgtLayer);
 
             // targetLayer AND binaryTgtLayer will be zero if there are different
             //Debug.Log("CheckTargetVisible: "+((TargetLayer & binaryTgtLayer) != 0));

@@ -121,4 +121,17 @@ public class HitSystem : MonoBehaviour
         
         Debug.Log("HitSystem FinishTakeHit");
     }
+
+    protected virtual void ViewHitEffect(Vector3 initialPosition = default(Vector3)) {
+        GameObject projectile = HitEffectPool.instance.GetPooledGameObject(initialPosition);
+        if(projectile != null) {
+
+            // TODO
+
+
+            projectile.SetActive(true);
+            StartCoroutine(HitEffectPool.instance.DestroyHitEffectObjects(projectile));
+        }
+    }
+
 }
