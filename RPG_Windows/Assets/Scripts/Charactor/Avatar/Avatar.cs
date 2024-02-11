@@ -55,7 +55,7 @@ public class Avatar : Charactor
         this.m_currentBaseState = state;
         this.m_currentBaseState.OnEnter(this);
     }
-
+    
     protected BaseStateMachine_Avatar m_idle;
     public BaseStateMachine_Avatar Idle => m_idle;
     protected BaseStateMachine_Avatar m_move;

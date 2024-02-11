@@ -24,12 +24,16 @@ public class AttackState_Lamniat : BaseStateMachine_Avatar
 
     public override void OnUpdate()
     {
+        // var velocity = this.currentAvatar.AvatarMovement.MoveVelocity;
+        // var moveSpeed = this.currentAvatar.AvatarMovement.MoveSpeed;
+        // this.currentAvatar.AvatarMovement.SetMoveVelocity(Vector2.ClampMagnitude(velocity*0f, moveSpeed*0f));
+        
         AnimeUtils.ActivateAnimatorLayer(this.currentAvatar.Animator, "AttackLayer");
     }
 
     public override void OnFixedUpdate()
     {
-       this.currentAvatar.AvatarMovement.SetMovement(Vector3.zero);
+       //this.currentAvatar.AvatarMovement.SetMovement(Vector3.zero);
     }
 
     public override void OnExit()

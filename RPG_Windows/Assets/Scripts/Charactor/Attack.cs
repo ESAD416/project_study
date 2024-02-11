@@ -4,11 +4,7 @@ using UnityEngine;
 
 public class Attack : MonoBehaviour
 {
-    [Header("基本參數")]
-    [SerializeField] protected float m_attackRate;
-    public float AttackRate => m_attackRate;
-
-    [Header("基本物件")]
+    [Header("Attack 物件")]
     [SerializeField] protected DamageSystem m_damageSystem;
     public DamageSystem DamageSystem => this.m_damageSystem;
     [SerializeField] protected Collider2D[] m_OnHit;
@@ -16,6 +12,11 @@ public class Attack : MonoBehaviour
     public void SetOverlapDetected(Collider2D[] m_Overlap) {
         this.m_OnHit = m_Overlap;
     } 
+    
+
+    [Header("Attack 參數")]
+    [SerializeField] protected float m_attackRate;
+    public float AttackRate => m_attackRate;
 
     // Update is called once per frame
     protected virtual void Update()

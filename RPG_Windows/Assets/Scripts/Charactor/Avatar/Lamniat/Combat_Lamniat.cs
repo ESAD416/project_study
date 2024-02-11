@@ -31,6 +31,12 @@ public class Combat_Lamniat : Combat_Avatar
 
         m_inputControls.Lamniat_Land.Attack.performed += content => {
             Debug.Log("Lamniat_Land.Attack.started");
+            // isAttack = true;
+            // lastAttackTime = Time.time;
+            // animator.SetInteger("AttackStage", attackStage);
+            // canAttack = false;
+
+
             if(m_avatar.CurrentBaseState.State.Equals(BaseStateMachine_Charactor.BaseState.Move)) {
                 m_avatarMovement.SetFacingDir(m_avatarMovement.Movement);
                 //m_avatar.SetFacingDir(m_avatar.Movement);

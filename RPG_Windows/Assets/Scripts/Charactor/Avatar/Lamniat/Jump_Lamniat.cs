@@ -135,7 +135,7 @@ public class Jump_Lamniat : MonoBehaviour
                 #endregion
             } else {
                 #region Ver.3 
-                m_Lamniat.transform.position = m_Lamniat.GetWorldPosByCoordinate(m_Lamniat.Coordinate) - new Vector3(0, 2.0f);   // 預設中心點是(x, y+2)
+                //m_Lamniat.transform.position = m_Lamniat.GetWorldPosByCoordinate(m_Lamniat.Coordinate) - new Vector3(0, 2.0f);   // 預設中心點是(x, y+2)
                 //HandleJumpingProcess(jumpState);
                 HandleJumpingProcessVer3(jumpState);
 
@@ -523,7 +523,7 @@ public class Jump_Lamniat : MonoBehaviour
                                 Vector3 checkCoordinate = new Vector3(recallPosition.x, recallPosition.y, groundCheckHeight);
                                 Vector3 checkWorldPos = new Vector3(checkCoordinate.x, checkCoordinate.y + checkCoordinate.z);
 
-                                m_Lamniat.transform.position = m_Lamniat.GetWorldPosByCoordinate(m_Lamniat.Coordinate) - new Vector3(0, 2.0f); 
+                                //m_Lamniat.transform.position = m_Lamniat.GetWorldPosByCoordinate(m_Lamniat.Coordinate) - new Vector3(0, 2.0f); 
 
 
                                 m_Lamniat.SetCoordinate(new Vector3(lastJumpingCoord.x, lastJumpingCoord.y, goalheight));

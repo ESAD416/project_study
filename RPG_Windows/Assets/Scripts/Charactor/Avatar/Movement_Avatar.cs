@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class Movement_Avatar : MonoBehaviour
 {
-    #region 基本物件
+    #region 物件
 
-    [Header("Movement_Avatar 基本物件")]
+    [Header("Movement_Avatar 物件")]
     [SerializeField] protected Avatar m_avatar;
     protected Rigidbody2D m_avatarRdbd;
     protected SpriteRenderer m_avatarSprtRenderer;
@@ -15,10 +15,11 @@ public class Movement_Avatar : MonoBehaviour
 
     #endregion
     
-    #region 基本參數
+    #region 參數
 
-    [Header("Movement_Avatar 基本參數")]
-    [SerializeField] protected float m_moveSpeed = 11f;
+    [Header("Movement_Avatar 參數")]
+    #region float 移速
+    [SerializeField] protected float m_moveSpeed = 25.0f;
     /// <summary>
     /// 角色移速
     /// </summary>
@@ -27,22 +28,79 @@ public class Movement_Avatar : MonoBehaviour
     /// 更改角色移速
     /// </summary>
     public void SetMoveSpeed(float speed) => this.m_moveSpeed = speed;
-    
-    [SerializeField] protected Vector3 m_movement = Vector3.zero;
+    #endregion
+
+    #region float 加速度
+    [SerializeField] protected float m_acceleration = 100.0f;
+    /// <summary>
+    /// 角色加速度
+    /// </summary>
+    public float Acceleration => this.m_acceleration;
+    /// <summary>
+    /// 更改角色加速度
+    /// </summary>
+    public void SetAcceleration(float acceleration) => this.m_acceleration = acceleration;
+    #endregion
+
+    #region float 跳躍移速
+    [SerializeField] protected float m_jumpingMoveSpeed = 25.0f;
+    /// <summary>
+    /// 角色跳躍時移速
+    /// </summary>
+    public float JumpingMoveSpeed => this.m_jumpingMoveSpeed;
+    /// <summary>
+    /// 更改角色跳躍時移速
+    /// </summary>
+    public void SetJumpingMoveSpeed(float speed) => this.m_jumpingMoveSpeed = speed;
+    #endregion
+
+    #region Vector2 移動向量
+    [SerializeField] protected Vector2 m_movement = Vector2.zero;
     /// <summary>
     /// 角色移動向量
     /// </summary>
-    public Vector3 Movement => m_movement;
+    public Vector2 Movement => this.m_movement;
     /// <summary>
     /// 更改角色向量
     /// </summary>
-    public void SetMovement(Vector3 vector3) => this.m_movement = vector3;
-    [SerializeField] protected Vector3 m_movementAfterTrigger = Vector3.zero;
+    public void SetMovement(Vector2 vector2) => this.m_movement = vector2;
+    #endregion
+
+    [SerializeField] protected Vector2 m_movementAfterTrigger = Vector2.zero;
     /// <summary>
-    /// 記錄當下角色攻擊動作時的移動向量並於攻擊動作完成後復原
+    /// 記錄當下角色其餘動作時的移動向量並於動作完成後復原
     /// </summary>
-    public Vector3 MovementAfterTrigger => this.m_movementAfterTrigger;
-    public void SetMovementAfterTrigger(Vector3 vector3) => this.m_movementAfterTrigger = vector3;
+    public Vector2 MovementAfterTrigger => this.m_movementAfterTrigger;
+    public void SetMovementAfterTrigger(Vector2 vector3) => this.m_movementAfterTrigger = vector3;
+
+    protected Vector2 m_previousMovement;
+
+    #region Vector2 剛體速度
+    protected Vector2 m_moveVelocity;
+    /// <summary>
+    /// 角色剛體速度
+    /// </summary>
+    public Vector2 MoveVelocity => this.m_moveVelocity;
+    /// <summary>
+    /// 更改角色剛體速度
+    /// </summary>
+    public void SetMoveVelocity(Vector2 vector2) => this.m_moveVelocity = vector2;
+    #endregion
+    protected Vector2 m_firstMoveVelocity;
+
+    /// <summary>
+    /// 角色目前是否為移動中
+    /// </summary>
+    public bool IsMoving {
+        get {
+            return this.m_movement != Vector2.zero;
+        }
+    }
+
+    /// <summary>
+    /// 角色移動歷經時間
+    /// </summary>
+    protected float m_moveingTimeElapsed = 0f;
 
 
     /// <summary>
@@ -55,27 +113,7 @@ public class Movement_Avatar : MonoBehaviour
     /// </summary>
     public void SetFacingDir(Vector2 vector2) => this.m_facingDir = vector2;
 
-    /// <summary>
-    /// 角色目前是否為移動中
-    /// </summary>
-    public bool IsMoving {
-        get {
-            return Movement.x != 0 || Movement.y != 0;
-        }
-    }
-
     
-
-
-    /// <summary>
-    /// 角色目前是否能移動
-    /// </summary>
-    // public bool cantMove {
-    //     get {
-    //         bool jumpingUpButNotFinish = isJumping && jumpState == JumpState.JumpUp && jumpIncrement < 1f;
-    //         return jumpingUpButNotFinish || jumpHitColli || (isTakingHit && !hyperArmor);
-    //     }
-    // }
 
     #endregion
 
@@ -104,30 +142,11 @@ public class Movement_Avatar : MonoBehaviour
 
     protected virtual void FixedUpdate() 
     {
-        // if(!cantMove) {
-        //     if(isJumping && jumpState == JumpState.JumpUp) {
-        //         MoveWhileJump();
-        //     } else {
-        Move();
-        //     }
-        // }
+        m_avatarRdbd.velocity = Movement.normalized * MoveSpeed;
     }
 
     protected virtual void OnDisable() {
 
-    }
-
-    public void Move() 
-    {
-        //Debug.Log("FixedUpdate movement.normalized: "+movement.normalized+", moveSpeed: "+moveSpeed );
-        m_avatarRdbd.velocity = Movement.normalized * MoveSpeed;
-        //m_Rigidbody.AddForce(movement.normalized* moveSpeed * Time.fixedDeltaTime, ForceMode2D.Force);
-        // transform.Translate(movement*moveSpeed*Time.deltaTime);
-    }
-
-    public void MoveWhileJump() 
-    {
-        //m_targetRdbd.velocity = Movement.normalized * jumpingMovementVariable * MoveSpeed;
     }
 
     protected void SetAnimateMovementPara() 

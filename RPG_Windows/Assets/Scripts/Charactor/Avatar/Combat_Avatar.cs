@@ -5,13 +5,29 @@ using UnityEngine;
 
 public class Combat_Avatar : Attack
 {
+    #region 基本物件
+
+    [Header("Combat_Avatar 物件")]
+    [SerializeField] protected Avatar m_avatar;
+    [SerializeField] protected Movement_Avatar m_avatarMovement;
+    [SerializeField] protected Dodge_Avatar m_avatarDodge;
+    
+    protected Animator m_avatarAnimator;
+    protected AvatarInputActionsControls m_inputControls;
+
+    #endregion
+
     #region 基本參數
 
-    [Header("可操作角色戰鬥參數")]
+    [Header("Combat_Avatar 參數")]
     /// <summary>
     /// 角色是否為正在攻擊中
     /// </summary>
     public bool IsAttacking = false;
+    /// <summary>
+    /// 角色是否可以攻擊
+    /// </summary>
+    public bool CanAttack = false;
     /// <summary>
     /// 角色是否為正在攻擊前搖中
     /// </summary>
@@ -25,23 +41,7 @@ public class Combat_Avatar : Attack
     /// </summary>
     public bool CancelRecovery = false;
     [SerializeField] protected float m_attackClipTime;
-    /// <summary>
-    /// 角色攻擊動作為即時觸發，故宣告一協程進行處理獨立的動作
-    /// </summary>
-    protected Coroutine m_attackRoutine;
-
-    #endregion
-
-    #region 基本物件
-
-    [Header("可操作角色戰鬥物件")]
-    [SerializeField] protected Avatar m_avatar;
-    [SerializeField] protected Movement_Avatar m_avatarMovement;
-    [SerializeField] protected Dodge_Avatar m_avatarDodge;
     
-    protected Animator m_avatarAnimator;
-    protected AvatarInputActionsControls m_inputControls;
-
     #endregion
 
     protected virtual void Awake() {
@@ -76,9 +76,6 @@ public class Combat_Avatar : Attack
 
     protected virtual void FinishAttack() {
         Debug.Log("Combat_Avatar FinishAttack start");
-        if(m_attackRoutine != null) {
-            StopCoroutine(m_attackRoutine);
-        }
 
         IsAttacking = false;
         IsPreAttacking = false;

@@ -25,7 +25,7 @@ public class HurtState_Lamniat : BaseStateMachine_Avatar
 
     public override void OnFixedUpdate()
     {
-       this.currentAvatar.AvatarMovement.SetMovement(Vector3.zero);
+       //this.currentAvatar.AvatarMovement.SetMovement(Vector3.zero);
     }
 
     public override void OnExit()

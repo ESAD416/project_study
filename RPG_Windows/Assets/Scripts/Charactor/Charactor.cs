@@ -16,6 +16,12 @@ public abstract class Charactor : MonoBehaviour
     /// 角色物理剛體
     /// </summary>
     public Rigidbody2D Rigidbody => this.m_Rigidbody;
+
+    /// <summary>
+    /// 角色碰撞控制
+    /// </summary>
+    [SerializeField] protected Collider2D m_bodyCollider; // 預設使用的是BoxCollider2D
+    public Collider2D BodyCollider => this.m_bodyCollider;
     
     [SerializeField] protected SpriteRenderer m_SprtRenderer;
     /// <summary>
@@ -110,7 +116,7 @@ public abstract class Charactor : MonoBehaviour
         m_Center = m_CenterObj?.position ?? Vector3.zero;
         m_Buttom = m_ButtomObj?.position ?? Vector3.zero;
 
-        UpdateCoordinate();
+        //UpdateCoordinate();
     }
 
     protected virtual void FixedUpdate() {
@@ -124,26 +130,26 @@ public abstract class Charactor : MonoBehaviour
         // }
     }
 
-    #region 位移控制
-    public void UpdateCoordinate() {
-        Vector3 result = Vector3.zero;
-        result.x = m_Center.x;
-        result.z = m_currHeight;
-        result.y = m_Center.y - m_lastHeight;
+    // #region 位移控制
+    // public void UpdateCoordinate() {
+    //     Vector3 result = Vector3.zero;
+    //     result.x = m_Center.x;
+    //     result.z = m_currHeight;
+    //     result.y = m_Center.y - m_lastHeight;
 
-        m_Coordinate = result;
-    }
+    //     m_Coordinate = result;
+    // }
 
-    public Vector3 GetWorldPosByCoordinate(Vector3 coordinate) {
-        //Debug.Log("GetWorldPosByCoordinate coordinate" + coordinate);
-        Vector3 result = Vector3.zero;
-        result.x = coordinate.x;
-        result.y = coordinate.y + coordinate.z;
-        result.z = coordinate.z;
+    // public Vector3 GetWorldPosByCoordinate(Vector3 coordinate) {
+    //     //Debug.Log("GetWorldPosByCoordinate coordinate" + coordinate);
+    //     Vector3 result = Vector3.zero;
+    //     result.x = coordinate.x;
+    //     result.y = coordinate.y + coordinate.z;
+    //     result.z = coordinate.z;
 
-        //Debug.Log("GetWorldPosByCoordinate result" + result);
-        return result;
-    }
+    //     //Debug.Log("GetWorldPosByCoordinate result" + result);
+    //     return result;
+    // }
 
-    #endregion
+    // #endregion
 }
