@@ -12,6 +12,9 @@ public class DynamicJump_Lamniat : MonoBehaviour
     public bool CanJump;
     public bool OnHeightObjCollisionExit;
 
+    public int JumpCounter = 0;
+    public int MaximumJumpCounter = 10;
+
     void Start() {
 
     }

@@ -8,6 +8,7 @@ public class Movement_Avatar : MonoBehaviour
 
     [Header("Movement_Avatar 物件")]
     [SerializeField] protected Avatar m_avatar;
+    [SerializeField] protected HeightManager m_HeightManager;
     protected Rigidbody2D m_avatarRdbd;
     protected SpriteRenderer m_avatarSprtRenderer;
     protected Animator m_avatarAnimator;

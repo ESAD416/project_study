@@ -903,11 +903,7 @@ public class Jump_Lamniat : MonoBehaviour
         Debug.Log("jumpstate start: "+state);
         Debug.Log("currHeight start: "+m_Lamniat.CurrentHeight);
         Debug.Log("lastHeight start: "+m_Lamniat.LastHeight);
-
-
-
         
-
     }
 
 

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem.Interactions;
+using UnityEngine.Tilemaps;
 
 public class Movement_Lamniat : Movement_Avatar
 {
@@ -12,6 +13,9 @@ public class Movement_Lamniat : Movement_Avatar
     //[Header("Movement_Lamniat 參數")]
     private bool m_isHoldInteraction = false;
     public bool IsHoldInteraction => this.m_isHoldInteraction;
+
+    private bool m_setFirstMoveWhileJumping = false;
+    protected Vector2 m_firstMoveVelocityWhileJumping;
 
     protected override void OnEnable() {
     }
@@ -58,15 +62,81 @@ public class Movement_Lamniat : Movement_Avatar
     protected override void Update()
     {
         m_previousMovement = m_movement;
-        // 實作加速效果
-        
 
-        // 正在移動
+        // 實作加速效果
+        // --正在移動
         if(IsMoving)
         {
             if (m_jumpLamiat.IsJumping) 
             {
                 // 如果在跳躍期間方向改變，方向雖然會更新，但只會減速而不會增加速率
+                if (!m_setFirstMoveWhileJumping) {
+                    m_moveVelocity = Vector2.MoveTowards(m_moveVelocity, m_movement.normalized * m_jumpingMoveSpeed, m_acceleration * Time.deltaTime);
+                    m_firstMoveVelocityWhileJumping = m_moveVelocity;
+                    m_setFirstMoveWhileJumping = true;
+                }
+
+                m_moveVelocity = m_firstMoveVelocityWhileJumping;
+                Debug.Log("Movement_Lamniat Update IsJumping moveVelocity: " + m_moveVelocity);
+
+                // 在這邊實現減速
+                if (m_firstMoveVelocityWhileJumping.x > 0)
+                {
+                    if (m_movement.normalized.x <= 0)
+                    {
+                        m_firstMoveVelocityWhileJumping.x = m_firstMoveVelocityWhileJumping.x / 1.1f;
+                    }
+                    if (m_movement.normalized.y != 0 && m_firstMoveVelocityWhileJumping.y < m_firstMoveVelocityWhileJumping.x)
+                    {
+                        m_firstMoveVelocityWhileJumping.y = m_firstMoveVelocityWhileJumping.x * 0.8f * m_movement.normalized.y;
+                    }
+
+                }
+                else if (m_firstMoveVelocityWhileJumping.x < 0)
+                {
+                    if (m_movement.normalized.x >= 0)
+                    {
+                        m_firstMoveVelocityWhileJumping.x = m_firstMoveVelocityWhileJumping.x / 1.1f;
+                    }
+                    if (m_movement.normalized.y != 0 && m_firstMoveVelocityWhileJumping.y < m_firstMoveVelocityWhileJumping.x)
+                    {
+                        m_firstMoveVelocityWhileJumping.y = m_firstMoveVelocityWhileJumping.x * 0.8f * m_movement.normalized.y;
+                    }
+
+                }
+
+                if (m_firstMoveVelocityWhileJumping.y > 0)
+                {
+                    if (m_movement.normalized.y <= 0)
+                    {
+                        m_firstMoveVelocityWhileJumping.y = m_firstMoveVelocityWhileJumping.y / 1.1f;
+                    }
+                    if (m_movement.normalized.x != 0 && m_firstMoveVelocityWhileJumping.x < m_firstMoveVelocityWhileJumping.y)
+                    {
+                        m_firstMoveVelocityWhileJumping.x = m_firstMoveVelocityWhileJumping.y * 0.8f * m_movement.normalized.x;
+                    }
+                }
+                else if (m_firstMoveVelocityWhileJumping.y < 0)
+                {
+                    if (m_movement.normalized.y >= 0)
+                    {
+                        m_firstMoveVelocityWhileJumping.y = m_firstMoveVelocityWhileJumping.y / 1.1f;
+                    }
+                    if (m_movement.normalized.x != 0 && m_firstMoveVelocityWhileJumping.x < m_firstMoveVelocityWhileJumping.y)
+                    {
+                        m_firstMoveVelocityWhileJumping.x = m_firstMoveVelocityWhileJumping.y * 0.8f * m_movement.normalized.x;
+                    }
+                }
+
+                Tilemap currentTilemap = m_HeightManager.GetCurrentTilemapByAvatarHeight(m_avatar.CurrentHeight);
+                if (m_jumpLamiat.JumpCounter > m_jumpLamiat.MaximumJumpCounter && TileUtils.HasTileAtPlayerPosition(currentTilemap, transform.position))
+                {
+                    m_firstMoveVelocityWhileJumping.x = m_firstMoveVelocityWhileJumping.x / 1.5f;
+                    m_firstMoveVelocityWhileJumping.y = m_firstMoveVelocityWhileJumping.y / 1.5f;
+                }
+
+
+
             }
             else if (m_movement != m_previousMovement)
             {

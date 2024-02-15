@@ -9,7 +9,7 @@ public class Avatar : Charactor
 {
     #region 可操作角色物件
 
-    [Header("Avatar基本物件")]
+    [Header("Avatar 基本物件")]
     [SerializeField] protected Movement_Avatar m_avatarMovement;
     /// <summary>
     /// 可操作角色的移動控制

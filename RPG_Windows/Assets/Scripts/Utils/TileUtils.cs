@@ -24,4 +24,50 @@ internal static class TileUtils
         }
     }
 
+    public static bool HasTileAtPlayerPosition(Tilemap currentTilemap, Vector3 playerWorldPos)
+    {
+        // 偵測Player的Collider對應位置是否有TileMap的地塊
+        Vector3Int bottomLeft = currentTilemap.WorldToCell(playerWorldPos + new Vector3(-0.5f, -2f, 0));
+        Vector3Int bottomRight = currentTilemap.WorldToCell(playerWorldPos + new Vector3(0.5f, -2f, 0));
+        Vector3Int topLeft = currentTilemap.WorldToCell(playerWorldPos + new Vector3(-0.5f, -1.0f, 0));
+        Vector3Int topRight = currentTilemap.WorldToCell(playerWorldPos + new Vector3(0.5f, -1.0f, 0));
+
+        /*if (TileExistsAtPosition(currentTilemap, bottomLeft))
+        {
+            Debug.Log("bottomLeft");
+        }
+
+        if (TileExistsAtPosition(currentTilemap, bottomRight))
+        {
+            Debug.Log("bottomRight");
+        }
+
+        if (TileExistsAtPosition(currentTilemap, topLeft))
+        {
+            Debug.Log("topLeft");
+        }
+
+        if (TileExistsAtPosition(currentTilemap, topRight))
+        {
+            Debug.Log("topRight");
+        }
+        Debug.Log("IsTileAtPlayerPosition LEVEL:" + level);*/
+        
+        if (HasTileAtPosition(currentTilemap, bottomLeft) || 
+            HasTileAtPosition(currentTilemap, bottomRight) || 
+            HasTileAtPosition(currentTilemap, topLeft) || 
+            HasTileAtPosition(currentTilemap, topRight))
+        {
+            return true; // 找到Tile
+        }
+
+        return false; // 未找到Tile*/
+
+    }
+
+    public static bool HasTileAtPosition(Tilemap currentTilemap, Vector3Int bottomLeft)
+    {
+        return currentTilemap.GetTile(bottomLeft) != null;
+    }
+
 }

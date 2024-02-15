@@ -9,30 +9,32 @@ using Fungus;
 public class HeightManager : MonoBehaviour
 {
     [SerializeField] private Avatar m_avatar;
-    [SerializeField] private Jump_Lamniat m_avatarJump;
     [SerializeField] private Grid mapGrid;
-    private Collider2D[] mapColliders;
+    [SerializeField] private Tilemap[] mapLevels;
+    [SerializeField] private Collider2D[] tilemapColliders;
+    [SerializeField] private Collider2D[] tilemapTriggers;
+
 
     public List<TileData> defaultTileDatas;
     private Tilemap[] levels;
     private Dictionary<Tile, TileData> dataFromTiles;
 
     private void Awake() {
-        dataFromTiles = new Dictionary<Tile, TileData>();
-        foreach(TileData data in defaultTileDatas) {
-            foreach(Tile tile in data.tiles) {
-                //Debug.Log("tile name: "+tile.name);
-                dataFromTiles.Add(tile, data);
-            }
-        }
+        // dataFromTiles = new Dictionary<Tile, TileData>();
+        // foreach(TileData data in defaultTileDatas) {
+        //     foreach(Tile tile in data.tiles) {
+        //         //Debug.Log("tile name: "+tile.name);
+        //         dataFromTiles.Add(tile, data);
+        //     }
+        // }
 
-        mapColliders = mapGrid.GetComponentsInChildren<Collider2D>().Where(c => c.GetType() != typeof(CompositeCollider2D)).ToArray();
+        // mapColliders = mapGrid.GetComponentsInChildren<Collider2D>().Where(c => c.GetType() != typeof(CompositeCollider2D)).ToArray();
     }
 
     void Start()
     {
-        Tilemap[] maps = transform.GetComponentsInChildren<Tilemap>();
-        levels = maps.Where(x => x.tag == "Level").ToArray();
+        // Tilemap[] maps = transform.GetComponentsInChildren<Tilemap>();
+        // levels = maps.Where(x => x.tag == "Level").ToArray();
     }
 
 
@@ -48,27 +50,29 @@ public class HeightManager : MonoBehaviour
         
     }
 
-    public float GetHeightByTileBase(Tile tileBase) {
-        return dataFromTiles[tileBase].height;
+    public Tilemap GetCurrentTilemapByAvatarHeight(float avatarHeight) {
+        int i = Mathf.FloorToInt(avatarHeight);
+        return mapLevels[i];
     }
 
-    public List<float> GetHeightsFromTileMapsByWorldPos(Vector2 worldPosition) {
-        List<float> result = new List<float>();
+    // public List<float> GetHeightsFromTileMapsByWorldPos(Vector2 worldPosition) {
+    //     List<float> result = new List<float>();
         
-        foreach(var map in levels) {
-            Vector3Int gridPos = map.WorldToCell(worldPosition);
-            if(map.HasTile(gridPos)) {
-                Tile resultTile = map.GetTile<Tile>(gridPos);
-                //Debug.Log("At grid position "+gridPos+" there is a "+resultTile+" in map "+map.name);
+    //     foreach(var map in levels) {
+    //         Vector3Int gridPos = map.WorldToCell(worldPosition);
+    //         if(map.HasTile(gridPos)) {
+    //             Tile resultTile = map.GetTile<Tile>(gridPos);
+    //             //Debug.Log("At grid position "+gridPos+" there is a "+resultTile+" in map "+map.name);
 
-                result.Add(dataFromTiles[resultTile].height);
-            }
+    //             result.Add(dataFromTiles[resultTile].height);
+    //         }
             
-        }
+    //     }
 
-        return result;
-    }
+    //     return result;
+    // }
 
+    
     public bool GroundableChecked(Vector2 worldPos, float height) {
         Debug.Log("groundCheck worldPos: "+worldPos);
         Debug.Log("groundCheck height: "+height);
@@ -161,43 +165,44 @@ public class HeightManager : MonoBehaviour
         }
         return false;
     }
+    
 
     public void SetCollidersWithAvatarHeight(float avatarHeight) {
-        if(mapColliders != null) {
-            foreach(var collider2D in mapColliders) {
-                var heightObj = collider2D.GetComponent<HeightOfObject>() as HeightOfObject;
-                if(heightObj != null) {
-                    // Debug.Log("SetCollidersWithAvatarHeight collider2D name: "+collider2D.name);
-                    // Debug.Log("SetCollidersWithAvatarHeight collider2D type: "+collider2D.GetType());
-                    if(avatarHeight == heightObj.GetSelfHeight()) {
-                        collider2D.enabled = true;
-                    } else {
-                        collider2D.enabled = false;
-                    }
-                    // Debug.Log("SetCollidersWithAvatarHeight collider2D enabled: "+collider2D.enabled);
-                }
-            }
-        }
+        // if(mapColliders != null) {
+        //     foreach(var collider2D in mapColliders) {
+        //         var heightObj = collider2D.GetComponent<HeightOfObject>() as HeightOfObject;
+        //         if(heightObj != null) {
+        //             // Debug.Log("SetCollidersWithAvatarHeight collider2D name: "+collider2D.name);
+        //             // Debug.Log("SetCollidersWithAvatarHeight collider2D type: "+collider2D.GetType());
+        //             if(avatarHeight == heightObj.GetSelfHeight()) {
+        //                 collider2D.enabled = true;
+        //             } else {
+        //                 collider2D.enabled = false;
+        //             }
+        //             // Debug.Log("SetCollidersWithAvatarHeight collider2D enabled: "+collider2D.enabled);
+        //         }
+        //     }
+        // }
     }
 
     public void SetCollidersWithAvatarHeightWhileAvatarJump(float avatarHeight) {
-        if(mapColliders != null) {
-            foreach(var collider2D in mapColliders) {
-                var heightObj = collider2D.GetComponent<HeightOfObject>() as HeightOfObject;
-                if(heightObj != null) {
-                    float groundCheckHeight = Mathf.Floor(avatarHeight);
-                    float maxGroundCheckHeight = groundCheckHeight + 1;
-                    // Debug.Log("FocusCollidersWithHeight collider2D name: "+collider2D.name);
-                    // Debug.Log("FocusCollidersWithHeight collider2D type: "+collider2D.GetType());
-                    if(maxGroundCheckHeight == heightObj.GetSelfHeight()) {
-                        collider2D.enabled = true;
-                    } else {
-                        collider2D.enabled = false;
-                    }
-                    // Debug.Log("FocusCollidersWithHeight collider2D enabled: "+collider2D.enabled);
-                }
-            }
-        }
+        // if(mapColliders != null) {
+        //     foreach(var collider2D in mapColliders) {
+        //         var heightObj = collider2D.GetComponent<HeightOfObject>() as HeightOfObject;
+        //         if(heightObj != null) {
+        //             float groundCheckHeight = Mathf.Floor(avatarHeight);
+        //             float maxGroundCheckHeight = groundCheckHeight + 1;
+        //             // Debug.Log("FocusCollidersWithHeight collider2D name: "+collider2D.name);
+        //             // Debug.Log("FocusCollidersWithHeight collider2D type: "+collider2D.GetType());
+        //             if(maxGroundCheckHeight == heightObj.GetSelfHeight()) {
+        //                 collider2D.enabled = true;
+        //             } else {
+        //                 collider2D.enabled = false;
+        //             }
+        //             // Debug.Log("FocusCollidersWithHeight collider2D enabled: "+collider2D.enabled);
+        //         }
+        //     }
+        // }
     }
 
     

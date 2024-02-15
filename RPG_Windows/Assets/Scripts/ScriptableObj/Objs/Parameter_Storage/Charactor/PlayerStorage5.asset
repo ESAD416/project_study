@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebabac5077cc33a4d916e2df45fc1f78, type: 3}
   m_Name: PlayerStorage5
   m_EditorClassIdentifier: 
-  initialPos: {x: 6, y: 30}
-  defaultPos: {x: 6, y: 30}
+  initialPos: {x: 0, y: 0}
+  defaultPos: {x: 0, y: 0}
   initialHeight: 0
   defaultHeight: 0

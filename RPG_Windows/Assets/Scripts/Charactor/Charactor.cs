@@ -10,7 +10,7 @@ public abstract class Charactor : MonoBehaviour
 {
     
     #region 角色物件
-    [Header("角色基本物件")]
+    [Header("Charactor 基本物件")]
     [SerializeField] protected Rigidbody2D m_Rigidbody;
     /// <summary>
     /// 角色物理剛體
@@ -50,8 +50,8 @@ public abstract class Charactor : MonoBehaviour
 
     #endregion
     
-    #region 角色物件
-    [Header("角色基本參數")]
+    #region 角色參數
+    [Header("Charactor 基本參數")]
     [SerializeField] protected Vector3 m_Center;
     /// <summary>
     /// 角色中心
