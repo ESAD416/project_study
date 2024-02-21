@@ -10,19 +10,27 @@ public class Avatar_Lamniat : Avatar
 {
     protected override void Awake() {
         base.Awake();
+    }
 
+    protected override void OnEnable() 
+    {
         m_idle = new IdleState_Lamniat(this);
         m_move = new MoveState_Lamniat(this);
         m_attack = new AttackState_Lamniat(this);
         m_dodge = new DodgeState_Lamniat(this);
         m_hurt = new HurtState_Lamniat(this);
         m_dead = new DeadState_Lamniat(this);
-    }
-
-    protected override void OnEnable() {
-        base.OnEnable();
         
         m_inputControls.Lamniat_Land.Enable();
+        base.OnEnable();
+    }
+
+    protected override void Update()
+    {
+        base.Update();
+        // Debug.Log("m_currentBaseState: "+m_currentBaseState.State);
+        float newZPosition = -m_currHeight - 1.9f;
+        transform.position = new Vector3(transform.position.x, transform.position.y, newZPosition);
     }
 
 }

@@ -47,7 +47,7 @@ public static class GridUtils
         Collider2D[] colls = GetColliders(gridName);
 
         foreach(var collider2D in colls) {
-            var heightObj = collider2D.GetComponent<HeightOfObject>() as HeightOfObject;
+            var heightObj = collider2D.GetComponent<HeightOfLevel>() as HeightOfLevel;
             if(heightObj != null && heightObj.GetSelfHeight() == selfHeight) {
                 if(result == null) {
                     result = new List<Collider2D>();

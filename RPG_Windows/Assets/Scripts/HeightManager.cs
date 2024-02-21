@@ -19,7 +19,9 @@ public class HeightManager : MonoBehaviour
     private Tilemap[] levels;
     private Dictionary<Tile, TileData> dataFromTiles;
 
-    private void Awake() {
+    private void Awake() 
+    {
+        
         // dataFromTiles = new Dictionary<Tile, TileData>();
         // foreach(TileData data in defaultTileDatas) {
         //     foreach(Tile tile in data.tiles) {
@@ -41,18 +43,20 @@ public class HeightManager : MonoBehaviour
     void Update()
     {
         if(m_avatar != null) {
-            // if(m_avatarJump != null && m_avatarJump.IsJumping) {
-            //     SetCollidersWithAvatarHeightWhileAvatarJump(m_avatar.CurrentHeight);
-            // } else {
-                SetCollidersWithAvatarHeight(m_avatar.CurrentHeight);
-            // }
+            UpdateTilemapCollision();
         }
-        
     }
 
-    public Tilemap GetCurrentTilemapByAvatarHeight(float avatarHeight) {
-        int i = Mathf.FloorToInt(avatarHeight);
-        return mapLevels[i];
+    public Tilemap GetCurrentTilemapByAvatarHeight(int avatarHeight) {
+        foreach(var level in mapLevels) 
+        {
+            var heightOfLevel = level.GetComponent<HeightOfLevel>() as HeightOfLevel;
+            if(heightOfLevel != null && heightOfLevel.GetSelfHeight() == avatarHeight) 
+            {
+                return level;
+            }
+        }
+        return null;
     }
 
     // public List<float> GetHeightsFromTileMapsByWorldPos(Vector2 worldPosition) {
@@ -164,6 +168,31 @@ public class HeightManager : MonoBehaviour
             }
         }
         return false;
+    }
+
+    private void UpdateTilemapCollision()
+    {
+        foreach(var collider2D in tilemapColliders) {
+            var heightLevel = collider2D.GetComponent<HeightOfLevel>() as HeightOfLevel;
+            if(heightLevel != null) {
+                collider2D.gameObject.SetActive(m_avatar.CurrentHeight == heightLevel.GetSelfHeight());
+            }
+        }
+
+        foreach(var trigger2D in tilemapTriggers) {
+            var heightLevel = trigger2D.GetComponent<HeightOfLevel>() as HeightOfLevel;
+            if(heightLevel != null) {
+                trigger2D.gameObject.SetActive(m_avatar.CurrentHeight == heightLevel.GetSelfHeight());
+            }
+        }
+        
+
+        // float newZPosition = -level - 1.9f;
+        // transform.position = new Vector3(transform.position.x, transform.position.y, newZPosition);
+    
+        // 根据需要继续设置其他level的Collider
+        
+
     }
     
 

@@ -1,21 +1,20 @@
 using System;
 using UnityEngine;
 
-public class HeightOfObject : MonoBehaviour
+public class HeightOfLevel : MonoBehaviour
 {
-    [SerializeField] private float selfHeight = 0;
-    [SerializeField] private float correspondHeight = 0;
-    protected Player player;
+    [SerializeField] private int selfHeight = 0;
+    [SerializeField] private int correspondHeight = 0;
 
     void Start() {
-        player = GameObject.FindObjectOfType(typeof(Player)) as Player;
+        
     }
 
-    public float GetCorrespondHeight() {
+    public int GetCorrespondHeight() {
         return correspondHeight;
     }
 
-    public float GetSelfHeight() {
+    public int GetSelfHeight() {
         return selfHeight;
     }
 

@@ -19,7 +19,7 @@ public class JumpMechanismUtils
             Debug.Log("DetectedJumpState hits.Length > 1");
             foreach(RaycastHit2D hit in hits) {
                 Debug.Log("DetectedJumpState hits collider name: "+hit.collider.name);
-                var heightObj = hit.collider.GetComponent<HeightOfObject>() as HeightOfObject;
+                var heightObj = hit.collider.GetComponent<HeightOfLevel>() as HeightOfLevel;
                 if(heightObj != null) {
                     float correspondHeight = heightObj.GetCorrespondHeight();
                     float selfHeight = heightObj.GetSelfHeight();

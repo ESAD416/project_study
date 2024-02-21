@@ -5,8 +5,8 @@ public class CharactorData : ScriptableObject, ISerializationCallbackReceiver
 {
     public Vector2 initialPos;
     public Vector2 defaultPos;
-    public float initialHeight;
-    public float defaultHeight;
+    public int initialHeight;
+    public int defaultHeight;
 
     public void OnAfterDeserialize()
     {

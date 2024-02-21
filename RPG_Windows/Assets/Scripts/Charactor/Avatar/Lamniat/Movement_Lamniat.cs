@@ -7,14 +7,14 @@ using UnityEngine.Tilemaps;
 public class Movement_Lamniat : Movement_Avatar
 {
     [Header("Movement_Lamniat 物件")]
-    [SerializeField] protected DynamicJump_Lamniat m_jumpLamiat;
-    [SerializeField] protected Combat_Lamniat m_combatLamiat;
+    [SerializeField] protected DynamicJump_Lamniat m_LamiatJump;
+    [SerializeField] protected Combat_Lamniat m_LamiatCombat;
 
     //[Header("Movement_Lamniat 參數")]
     private bool m_isHoldInteraction = false;
     public bool IsHoldInteraction => this.m_isHoldInteraction;
 
-    private bool m_setFirstMoveWhileJumping = false;
+    public bool SetFirstMoveWhileJumping = false;
     protected Vector2 m_firstMoveVelocityWhileJumping;
 
     protected override void OnEnable() {
@@ -67,13 +67,13 @@ public class Movement_Lamniat : Movement_Avatar
         // --正在移動
         if(IsMoving)
         {
-            if (m_jumpLamiat.IsJumping) 
+            if (m_LamiatJump.IsJumping) 
             {
                 // 如果在跳躍期間方向改變，方向雖然會更新，但只會減速而不會增加速率
-                if (!m_setFirstMoveWhileJumping) {
+                if (!SetFirstMoveWhileJumping) {
                     m_moveVelocity = Vector2.MoveTowards(m_moveVelocity, m_movement.normalized * m_jumpingMoveSpeed, m_acceleration * Time.deltaTime);
                     m_firstMoveVelocityWhileJumping = m_moveVelocity;
-                    m_setFirstMoveWhileJumping = true;
+                    SetFirstMoveWhileJumping = true;
                 }
 
                 m_moveVelocity = m_firstMoveVelocityWhileJumping;
@@ -129,13 +129,11 @@ public class Movement_Lamniat : Movement_Avatar
                 }
 
                 Tilemap currentTilemap = m_HeightManager.GetCurrentTilemapByAvatarHeight(m_avatar.CurrentHeight);
-                if (m_jumpLamiat.JumpCounter > m_jumpLamiat.MaximumJumpCounter && TileUtils.HasTileAtPlayerPosition(currentTilemap, transform.position))
+                if (m_LamiatJump.JumpCounter > m_LamiatJump.HeightIncreaseCount && TileUtils.HasTileAtPlayerPosition(currentTilemap, m_avatar.BodyCollider.bounds))
                 {
                     m_firstMoveVelocityWhileJumping.x = m_firstMoveVelocityWhileJumping.x / 1.5f;
                     m_firstMoveVelocityWhileJumping.y = m_firstMoveVelocityWhileJumping.y / 1.5f;
                 }
-
-
 
             }
             else if (m_movement != m_previousMovement)
@@ -150,14 +148,14 @@ public class Movement_Lamniat : Movement_Avatar
 
             // 監測移動時間，須在移動狀態下超過0.1秒才可跳躍
             m_moveingTimeElapsed += Time.deltaTime;
-            if (m_moveingTimeElapsed > 0.1f && !m_jumpLamiat.IsJumping)
+            if (m_moveingTimeElapsed > 0.1f && !m_LamiatJump.IsJumping)
             {
-                m_jumpLamiat.CanJump = true;
+                m_LamiatJump.CanJump = true;
             }
 
         } 
         // 正在跳躍
-        else if (m_jumpLamiat.IsJumping)
+        else if (m_LamiatJump.IsJumping)
         {
             m_moveingTimeElapsed = 0f;
             if (!IsMoving)
@@ -174,14 +172,14 @@ public class Movement_Lamniat : Movement_Avatar
 
             // 移動時間以及跳躍判定重置
             m_moveingTimeElapsed = 0f;
-            m_jumpLamiat.CanJump = false;
+            m_LamiatJump.CanJump = false;
 
             // 修正角色站的位置
-            //FixStandCorners(); 
+            FixStandCorners(); 
         }
 
         
-        if (!m_combatLamiat.IsAttacking && !m_jumpLamiat.OnHeightObjCollisionExit) 
+        if (!m_LamiatCombat.IsAttacking && !m_LamiatJump.OnHeightObjCollisionExit) 
         {
             // 最終設定剛體速度的上限
             m_moveVelocity = Vector2.ClampMagnitude(m_moveVelocity, m_moveSpeed);
@@ -190,7 +188,7 @@ public class Movement_Lamniat : Movement_Avatar
         {
             // 碰撞牆壁或是在攻擊狀態下剛體速度歸零
             m_moveVelocity = Vector2.ClampMagnitude(m_moveVelocity*0f, m_moveSpeed*0f);
-            if(m_jumpLamiat.OnHeightObjCollisionExit) m_jumpLamiat.OnHeightObjCollisionExit = false;
+            if(m_LamiatJump.OnHeightObjCollisionExit) m_LamiatJump.OnHeightObjCollisionExit = false;
         }
 
         base.Update();
@@ -204,8 +202,5 @@ public class Movement_Lamniat : Movement_Avatar
     protected override void OnDisable() {
     }
 
-    private void FixStandCorners()
-    {
-        
-    }
+    
 }

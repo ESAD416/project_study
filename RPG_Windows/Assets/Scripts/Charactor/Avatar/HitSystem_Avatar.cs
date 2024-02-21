@@ -18,6 +18,9 @@ public class HitSystem_Avatar : HitSystem
     protected virtual void Awake() {
         m_targetAnimator = m_target.Animator;
     }
+
+    protected void Start() {
+    }
     
 
     protected override IEnumerator TakeHit(Attack attacker) 

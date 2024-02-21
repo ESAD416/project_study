@@ -20,8 +20,8 @@ public abstract class Charactor : MonoBehaviour
     /// <summary>
     /// 角色碰撞控制
     /// </summary>
-    [SerializeField] protected Collider2D m_bodyCollider; // 預設使用的是BoxCollider2D
-    public Collider2D BodyCollider => this.m_bodyCollider;
+    [SerializeField] protected BoxCollider2D m_bodyCollider; // 預設使用的是BoxCollider2D
+    public BoxCollider2D BodyCollider => this.m_bodyCollider;
     
     [SerializeField] protected SpriteRenderer m_SprtRenderer;
     /// <summary>
@@ -87,13 +87,13 @@ public abstract class Charactor : MonoBehaviour
 
     #region 跳躍參數
     [Header("")]
-    [SerializeField] protected float m_currHeight = 0f;
-    public float CurrentHeight => m_currHeight;
-    public void SetCurrentHeight(float height) => this.m_currHeight = height;
+    [SerializeField] protected int m_currHeight = 0;
+    public int CurrentHeight => m_currHeight;
+    public void SetCurrentHeight(int height) => this.m_currHeight = height;
     
-    [SerializeField] protected float m_lastHeight = 0f;
-    public float LastHeight => m_lastHeight;
-    public void SetLastHeight(float height) => this.m_lastHeight = height;
+    [SerializeField] protected int m_lastHeight = 0;
+    public int LastHeight => m_lastHeight;
+    public void SetLastHeight(int height) => this.m_lastHeight = height;
     
     #endregion
     

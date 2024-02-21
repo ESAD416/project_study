@@ -102,7 +102,7 @@ public class Jump_Lamniat : MonoBehaviour
                     case JumpState.Ground:
                         break;
                     case JumpState.JumpDown:
-                        TriggerToJumpDown();
+                        //TriggerToJumpDown();
                         // if(!processingPushback) {
                         //     TriggerToJumpDown();
                         // } else {
@@ -110,7 +110,7 @@ public class Jump_Lamniat : MonoBehaviour
                         // }
                         break;
                     case JumpState.JumpUp:
-                        TriggerToJumpUp();
+                        //TriggerToJumpUp();
                         break;
                 }
             } 
@@ -130,14 +130,14 @@ public class Jump_Lamniat : MonoBehaviour
             if(testVer4) {
                 #region Ver.4
                 //m_LamniatSprtRenderer.transform.position = m_Lamniat.GetWorldPosByCoordinate(m_Lamniat.Coordinate) - new Vector3(0, 2.0f);   // 預設中心點是(x, y+2)
-                HandleJumpingProcessVer4(jumpState);
+                //HandleJumpingProcessVer4(jumpState);
 
                 #endregion
             } else {
                 #region Ver.3 
                 //m_Lamniat.transform.position = m_Lamniat.GetWorldPosByCoordinate(m_Lamniat.Coordinate) - new Vector3(0, 2.0f);   // 預設中心點是(x, y+2)
                 //HandleJumpingProcess(jumpState);
-                HandleJumpingProcessVer3(jumpState);
+                //HandleJumpingProcessVer3(jumpState);
 
                 #endregion
             }
@@ -276,6 +276,7 @@ public class Jump_Lamniat : MonoBehaviour
     //     } 
     // }
 
+    /*
     private void  DetectedWhileJump() {
         if(m_avatarMovement.IsMoving) {
             m_Lamniat.SetRaycastPoint();
@@ -291,7 +292,7 @@ public class Jump_Lamniat : MonoBehaviour
                 if(hits.Length >= 1) {
                     foreach(RaycastHit2D hit in hits) {
                         Debug.Log("DetectedWhileJump hits collider name: "+hit.collider.name);
-                        var heightObj = hit.collider.GetComponent<HeightOfObject>() as HeightOfObject;
+                        var heightObj = hit.collider.GetComponent<HeightOfLevel>() as HeightOfLevel;
                         if(heightObj != null) {
                             float correspondHeight = heightObj.GetCorrespondHeight();
                             float selfHeight = heightObj.GetSelfHeight();
@@ -344,7 +345,7 @@ public class Jump_Lamniat : MonoBehaviour
             Debug.Log("TriggerToJumpDown hits.Length > 1");
             foreach(RaycastHit2D hit in hits) {
                 Debug.Log("TriggerToJumpDown hits collider name: "+hit.collider.name);
-                var heightObj = hit.collider.GetComponent<HeightOfObject>() as HeightOfObject;
+                var heightObj = hit.collider.GetComponent<HeightOfLevel>() as HeightOfLevel;
                 if(heightObj != null) {
                     if(OnHeightObjCollisionEnter) {
                         Debug.Log("TriggerToJumpDown jumpPointTrigger");
@@ -414,7 +415,7 @@ public class Jump_Lamniat : MonoBehaviour
             Debug.Log("TriggerToJumpUp hits.Length > 1");
             foreach(RaycastHit2D hit in hits) {
                 Debug.Log("TriggerToJumpUp hits collider name: "+hit.collider.name);
-                var heightObj = hit.collider.GetComponent<HeightOfObject>() as HeightOfObject;
+                var heightObj = hit.collider.GetComponent<HeightOfLevel>() as HeightOfLevel;
                 if(heightObj != null) {
                     var angle = Vector2.Angle((Vector2)m_Lamniat.RaycastStart.position - m_Lamniat.RaycastEnd, hit.normal);
                     angle = 90.0f - Mathf.Abs(angle);
@@ -622,7 +623,7 @@ public class Jump_Lamniat : MonoBehaviour
 
                                 foreach(RaycastHit2D hit in hits) {
                                     Debug.Log("TriggerToJumpUp hits collider name: "+hit.collider.name);
-                                    var heightObj = hit.collider.GetComponent<HeightOfObject>() as HeightOfObject;
+                                    var heightObj = hit.collider.GetComponent<HeightOfLevel>() as HeightOfLevel;
                                     if(heightObj != null) {
                                         Vector2 surfaceVector = Vector2.Perpendicular(hit.normal);
                                         
@@ -643,7 +644,7 @@ public class Jump_Lamniat : MonoBehaviour
 
                             foreach(RaycastHit2D hit in hits) {
                                 Debug.Log("TriggerToJumpUp hits collider name: "+hit.collider.name);
-                                var heightObj = hit.collider.GetComponent<HeightOfObject>() as HeightOfObject;
+                                var heightObj = hit.collider.GetComponent<HeightOfLevel>() as HeightOfLevel;
                                 if(heightObj != null) {
                                     Vector2 surfaceVector = Vector2.Perpendicular(hit.normal);
                                     
@@ -1030,6 +1031,7 @@ public class Jump_Lamniat : MonoBehaviour
 
     #endregion
 
+    */
     [ContextMenu("Get Matrix Test1")]
     public void GetTileInfo() {
 

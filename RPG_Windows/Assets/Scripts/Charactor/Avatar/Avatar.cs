@@ -16,12 +16,6 @@ public class Avatar : Charactor
     /// </summary>
     public Movement_Avatar AvatarMovement =>this.m_avatarMovement;
 
-    [SerializeField] protected Jump_Lamniat m_avatarJump;
-    /// <summary>
-    /// 可操作角色的跳躍機制
-    /// </summary>
-    public Jump_Lamniat AvatarJump => this.m_avatarJump;
-
     protected AvatarInputActionsControls m_inputControls;
     /// <summary>
     /// 可操作角色的使用者輸入

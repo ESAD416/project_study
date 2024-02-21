@@ -24,13 +24,13 @@ internal static class TileUtils
         }
     }
 
-    public static bool HasTileAtPlayerPosition(Tilemap currentTilemap, Vector3 playerWorldPos)
+    public static bool HasTileAtPlayerPosition(Tilemap currentTilemap, Bounds playerColliderBounds)
     {
         // 偵測Player的Collider對應位置是否有TileMap的地塊
-        Vector3Int bottomLeft = currentTilemap.WorldToCell(playerWorldPos + new Vector3(-0.5f, -2f, 0));
-        Vector3Int bottomRight = currentTilemap.WorldToCell(playerWorldPos + new Vector3(0.5f, -2f, 0));
-        Vector3Int topLeft = currentTilemap.WorldToCell(playerWorldPos + new Vector3(-0.5f, -1.0f, 0));
-        Vector3Int topRight = currentTilemap.WorldToCell(playerWorldPos + new Vector3(0.5f, -1.0f, 0));
+        Vector3Int body_bottom_left = currentTilemap.WorldToCell(playerColliderBounds.min);
+        Vector3Int body_top_right = currentTilemap.WorldToCell(playerColliderBounds.max);
+        Vector3Int body_bottom_right = currentTilemap.WorldToCell(new Vector3(playerColliderBounds.max.x, playerColliderBounds.min.y));
+        Vector3Int body_top_left = currentTilemap.WorldToCell(new Vector3(playerColliderBounds.min.x, playerColliderBounds.max.y));
 
         /*if (TileExistsAtPosition(currentTilemap, bottomLeft))
         {
@@ -53,10 +53,10 @@ internal static class TileUtils
         }
         Debug.Log("IsTileAtPlayerPosition LEVEL:" + level);*/
         
-        if (HasTileAtPosition(currentTilemap, bottomLeft) || 
-            HasTileAtPosition(currentTilemap, bottomRight) || 
-            HasTileAtPosition(currentTilemap, topLeft) || 
-            HasTileAtPosition(currentTilemap, topRight))
+        if (HasTileAtPosition(currentTilemap, body_bottom_left) || 
+            HasTileAtPosition(currentTilemap, body_bottom_right) || 
+            HasTileAtPosition(currentTilemap, body_top_left) || 
+            HasTileAtPosition(currentTilemap, body_top_right))
         {
             return true; // 找到Tile
         }

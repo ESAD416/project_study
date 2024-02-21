@@ -87,7 +87,7 @@ public class StaticJump_Lamniat : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D other) {
         Debug.Log("OnCollisionEnter2D: "+other.gameObject.name);
         if(jumpState != JumpState.Ground) {
-            var heightObj = other.collider.GetComponent<HeightOfObject>() as HeightOfObject;
+            var heightObj = other.collider.GetComponent<HeightOfLevel>() as HeightOfLevel;
             if(heightObj != null) OnHeightObjCollisionEnter = true;
         }
     }
@@ -100,7 +100,7 @@ public class StaticJump_Lamniat : MonoBehaviour
         Debug.Log("OnCollisionExit2D: "+other.gameObject.name);
 
         if(jumpState != JumpState.Ground) {
-            var heightObj = other.collider.GetComponent<HeightOfObject>() as HeightOfObject;
+            var heightObj = other.collider.GetComponent<HeightOfLevel>() as HeightOfLevel;
             if(heightObj != null) OnHeightObjCollisionEnter = false;
             
             // if(jumpState == JumpState.JumpDown) {
@@ -131,7 +131,7 @@ public class StaticJump_Lamniat : MonoBehaviour
     private void TriggerToJumpUp() {
         Debug.Log("TriggerToJumpUp start");
         prepareToJump = true;
-        float targetHeight = m_Lamniat.CurrentHeight + 1f;
+        int targetHeight = m_Lamniat.CurrentHeight + 1;
         m_Lamniat.SetRaycastPoint();
 
         Vector2 distance = new Vector2(m_avatarMovement.Movement.x, m_avatarMovement.Movement.y) * jumpDistance;
@@ -159,7 +159,7 @@ public class StaticJump_Lamniat : MonoBehaviour
         Debug.Log("TriggerToJumpUp start");
 
         prepareToJump = true;
-        float targetHeight = m_Lamniat.CurrentHeight;
+        int targetHeight = m_Lamniat.CurrentHeight;
         m_Lamniat.SetRaycastPoint();
 
         Vector2 distance = new Vector2(m_avatarMovement.Movement.x, m_avatarMovement.Movement.y) * jumpDistance;
@@ -192,7 +192,7 @@ public class StaticJump_Lamniat : MonoBehaviour
         Debug.Log("TriggerToJumpUp end");
     }
 
-    protected IEnumerator JumpDelay(Vector2 faceDir, float targetHeight, Vector3 targetPos) {
+    protected IEnumerator JumpDelay(Vector2 faceDir, int targetHeight, Vector3 targetPos) {
         Debug.Log("jumpUpDelay");
         jumpDelaying = true;
         // if button is change before delay time

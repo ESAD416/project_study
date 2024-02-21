@@ -15,7 +15,7 @@ public class Scene_Transition : MonoBehaviour
 
     [Header("Destination Player Controls")]
     public Vector2 destinationPlayerPos;
-    public float destinationPlayerHeight;
+    public int destinationPlayerHeight;
     public string destinationJumpCollidersName;
     public CharactorData destinationPlayerInfo;
 

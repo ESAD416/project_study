@@ -7,10 +7,11 @@ TagManager:
   - Stairs
   - Stair_Top
   - Stair_Down
-  - Level
   - Enemies
   - Enemy_Turn
   - BreakableObj
+  - Map_Collision
+  - Map_Jump_Trigger
   layers:
   - Default
   - TransparentFX
