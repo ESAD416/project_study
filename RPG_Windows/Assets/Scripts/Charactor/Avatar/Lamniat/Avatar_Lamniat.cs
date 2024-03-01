@@ -29,7 +29,7 @@ public class Avatar_Lamniat : Avatar
     {
         base.Update();
         // Debug.Log("m_currentBaseState: "+m_currentBaseState.State);
-        float newZPosition = -m_currHeight - 1.9f;
+        float newZPosition = m_currHeight;
         transform.position = new Vector3(transform.position.x, transform.position.y, newZPosition);
     }
 

@@ -13,6 +13,8 @@ public class HeightManager : MonoBehaviour
     [SerializeField] private Tilemap[] mapLevels;
     [SerializeField] private Collider2D[] tilemapColliders;
     [SerializeField] private Collider2D[] tilemapTriggers;
+    [SerializeField] private int minimumLevel = 0;
+    public int MinimumLevel => minimumLevel;
 
 
     public List<TileData> defaultTileDatas;

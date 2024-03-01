@@ -69,9 +69,9 @@ public class Movement_Lamniat : Movement_Avatar
         {
             if (m_LamiatJump.IsJumping) 
             {
-                // 如果在跳躍期間方向改變，方向雖然會更新，但只會減速而不會增加速率
                 if (!SetFirstMoveWhileJumping) {
-                    m_moveVelocity = Vector2.MoveTowards(m_moveVelocity, m_movement.normalized * m_jumpingMoveSpeed, m_acceleration * Time.deltaTime);
+                    //m_moveVelocity = Vector2.MoveTowards(m_moveVelocity, m_movement.normalized * m_jumpingMoveSpeed, m_acceleration * Time.deltaTime);
+                    m_moveVelocity = m_movement.normalized * m_jumpingMoveSpeed;
                     m_firstMoveVelocityWhileJumping = m_moveVelocity;
                     SetFirstMoveWhileJumping = true;
                 }
@@ -79,7 +79,7 @@ public class Movement_Lamniat : Movement_Avatar
                 m_moveVelocity = m_firstMoveVelocityWhileJumping;
                 Debug.Log("Movement_Lamniat Update IsJumping moveVelocity: " + m_moveVelocity);
 
-                // 在這邊實現減速
+                // 如果在跳躍期間方向改變，方向雖然會更新，但只會減速而不會增加速率
                 if (m_firstMoveVelocityWhileJumping.x > 0)
                 {
                     if (m_movement.normalized.x <= 0)
@@ -90,7 +90,6 @@ public class Movement_Lamniat : Movement_Avatar
                     {
                         m_firstMoveVelocityWhileJumping.y = m_firstMoveVelocityWhileJumping.x * 0.8f * m_movement.normalized.y;
                     }
-
                 }
                 else if (m_firstMoveVelocityWhileJumping.x < 0)
                 {
@@ -102,11 +101,11 @@ public class Movement_Lamniat : Movement_Avatar
                     {
                         m_firstMoveVelocityWhileJumping.y = m_firstMoveVelocityWhileJumping.x * 0.8f * m_movement.normalized.y;
                     }
-
                 }
 
                 if (m_firstMoveVelocityWhileJumping.y > 0)
                 {
+                    //Debug.Log("m_movement: "+m_movement.normalized);
                     if (m_movement.normalized.y <= 0)
                     {
                         m_firstMoveVelocityWhileJumping.y = m_firstMoveVelocityWhileJumping.y / 1.1f;
@@ -128,11 +127,20 @@ public class Movement_Lamniat : Movement_Avatar
                     }
                 }
 
-                Tilemap currentTilemap = m_HeightManager.GetCurrentTilemapByAvatarHeight(m_avatar.CurrentHeight);
-                if (m_LamiatJump.JumpCounter > m_LamiatJump.HeightIncreaseCount && TileUtils.HasTileAtPlayerPosition(currentTilemap, m_avatar.BodyCollider.bounds))
+                
+                if (m_LamiatJump.JumpCounter > m_LamiatJump.HeightIncreaseCount)
                 {
-                    m_firstMoveVelocityWhileJumping.x = m_firstMoveVelocityWhileJumping.x / 1.5f;
-                    m_firstMoveVelocityWhileJumping.y = m_firstMoveVelocityWhileJumping.y / 1.5f;
+                    // 實現減速(通常只有下往上跳會觸發)
+                    Tilemap currentTilemap = m_HeightManager.GetCurrentTilemapByAvatarHeight(m_avatar.CurrentHeight);
+                    if(TileUtils.HasTileAtPlayerPosition(currentTilemap, m_avatar.BodyCollider.bounds)) 
+                    {
+                        m_firstMoveVelocityWhileJumping.x = m_firstMoveVelocityWhileJumping.x / 1.5f;
+                        m_firstMoveVelocityWhileJumping.y = m_firstMoveVelocityWhileJumping.y / 1.5f;
+                    }
+                    // else {
+                    //     m_firstMoveVelocityWhileJumping.x = m_firstMoveVelocityWhileJumping.x / 1.15f;
+                    //     m_firstMoveVelocityWhileJumping.y = m_firstMoveVelocityWhileJumping.y / 1.15f;
+                    // }
                 }
 
             }
@@ -158,12 +166,8 @@ public class Movement_Lamniat : Movement_Avatar
         else if (m_LamiatJump.IsJumping)
         {
             m_moveingTimeElapsed = 0f;
-            if (!IsMoving)
-            {
-                m_moveVelocity.x = m_moveVelocity.x / 1.05f;
-                m_moveVelocity.y = m_moveVelocity.y / 1.05f;
-            }
-
+            m_moveVelocity.x = m_moveVelocity.x / 1.05f;
+            m_moveVelocity.y = m_moveVelocity.y / 1.05f;
         }
         else
         {
@@ -178,6 +182,7 @@ public class Movement_Lamniat : Movement_Avatar
             FixStandCorners(); 
         }
 
+        //Debug.Log("m_moveVelocity before adjust: "+m_moveVelocity);
         
         if (!m_LamiatCombat.IsAttacking && !m_LamiatJump.OnHeightObjCollisionExit) 
         {
@@ -191,11 +196,14 @@ public class Movement_Lamniat : Movement_Avatar
             if(m_LamiatJump.OnHeightObjCollisionExit) m_LamiatJump.OnHeightObjCollisionExit = false;
         }
 
+        //Debug.Log("m_moveVelocity after adjust: "+m_moveVelocity);
+
         base.Update();
     }
 
     protected override void FixedUpdate() 
     {
+        //m_avatarRdbd.velocity = m_moveVelocity;
         m_avatarRdbd.MovePosition(m_avatarRdbd.position + m_moveVelocity * Time.fixedDeltaTime);
     }
     

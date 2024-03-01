@@ -19,7 +19,7 @@ public class DynamicJump_Lamniat : MonoBehaviour
     public int HeightIncreaseCount = 10;
     public int JumpFallingCount = 25;
     public int HeightDecreaseCount = 40;
-    private int HeightDecreaseExponentialCount = 10;
+    private int HeightDecreaseCountExponential = 10;
     public int HeightChangeCount;
     private float[] jumpOffset = new float[] 
     {
@@ -47,23 +47,17 @@ public class DynamicJump_Lamniat : MonoBehaviour
         0.138f, 0.0f     //100
     };
 
+    void Awake() {
+        QualitySettings.vSyncCount = 0;
+        Application.targetFrameRate = 100; // FPS鎖幀
+        Debug.Log("targetFrameRate: "+Application.targetFrameRate);
+        Debug.Log("vSyncCount: "+QualitySettings.vSyncCount);
+    }
     void Start() {
-
+        InvokeRepeating("SetParameterByFPS", 1, 1);
     }
 
     void Update() {
-        int playerLayerMask = 1 << LayerMask.NameToLayer("Player");
-        int mapRangeLayerMask = 1 << LayerMask.NameToLayer("MapRange");
-        int layerMask = ~(playerLayerMask | mapRangeLayerMask);
-
-        Vector2 start = (Vector2)transform.position + m_Lamniat.BodyCollider.offset ;  // 射线的起点
-        RaycastHit2D hit = Physics2D.Raycast(start, m_Lamniat.AvatarMovement.Movement.normalized, 1f, layerMask);
-        //RaycastHit2D[] hits = Physics2D.RaycastAll(start, m_Lamniat.AvatarMovement.Movement.normalized, 1f, layerMask);
-        Color color = hit.collider != null ? Color.red : Color.green;
-        //Color color = hits != null && hits.Length > 1 ? Color.red : Color.green;
-        Debug.DrawLine(start, start + m_Lamniat.AvatarMovement.Movement.normalized*1f, color);
-        //Debug.Log("hit.collider name: "+hit.collider.gameObject.name);
-
         // 不在跳躍狀態就不執行
         if (!IsJumping) {
             return;
@@ -80,6 +74,73 @@ public class DynamicJump_Lamniat : MonoBehaviour
         UpdateLamniatJumping();
     }
 
+    private void SetParameterByFPS() {
+        var fps = 1f / Time.unscaledDeltaTime;
+        Debug.Log("FPS: " + fps);
+        if(fps >= 31f && fps < 89f) {
+            // 減半
+            HeightIncreaseCount = 5; 
+            JumpFallingCount = 13;
+            HeightDecreaseCount = 20;
+            HeightDecreaseCountExponential = 5;
+
+            jumpOffset = new float[] 
+            {
+                0.0f,     //5
+                0.2f,      //10
+                0.4f,     //20
+                0.6f,     //25
+                0.8f,     //35
+                
+                1.0f, 1.067f, 1.133f, 1.2f, 1.267f,     //45
+                1.333f, 1.4f, 1.467f, 1.533f, 1.6f,     //50
+                1.667f, 1.733f, 1.8f, 1.867f, 1.933f,     //55
+                2.0f, 1.933f, 1.867f, 1.8f, 1.733f,     //60
+                1.667f, 1.6f, 1.533f, 1.467f, 1.4f,     //65
+                1.333f, 1.267f, 1.2f, 1.133f, 1.067f,     //70
+
+                1.0f,     //75
+                0.793f,     //80
+                0.586f,     //85
+                0.379f,     //90
+                0.276f,     //95
+                0.0f     //100
+            };
+        } else {
+            HeightIncreaseCount = 10;
+            JumpFallingCount = 25;
+            HeightDecreaseCount = 40;
+            HeightDecreaseCountExponential = 10;
+
+            jumpOffset = new float[] 
+            {
+                0.0f, 0.1f,     //5
+                0.2f,      //10
+                0.3f,     //15
+                0.4f,     //20
+                0.5f, 0.6f,     //25
+                0.7f,     //30
+                0.8f,     //35
+                0.9f,     //40
+                
+                1.0f, 1.067f, 1.133f, 1.2f, 1.267f,     //45
+                1.333f, 1.4f, 1.467f, 1.533f, 1.6f,     //50
+                1.667f, 1.733f, 1.8f, 1.867f, 1.933f,     //55
+                2.0f, 1.933f, 1.867f, 1.8f, 1.733f,     //60
+                1.667f, 1.6f, 1.533f, 1.467f, 1.4f,     //65
+                1.333f, 1.267f, 1.2f, 1.133f, 1.067f,     //70
+
+                1.0f, 0.897f,     //75
+                0.793f, 0.69f,     //80
+                0.586f,     //85
+                0.483f, 0.379f,     //90
+                0.276f,     //95
+                0.138f, 0.0f     //100
+            };
+        }
+
+    }
+
     
 
     #region 碰撞偵測
@@ -87,10 +148,12 @@ public class DynamicJump_Lamniat : MonoBehaviour
     void OnCollisionEnter2D(Collision2D collision)
     {
         // 碰到了Collider，执行相应的逻辑
+        //Debug.Log("collision Enter: "+collision.gameObject.name);
     }
 
     void OnCollisionExit2D(Collision2D collision)
     {
+        //Debug.Log("collision : "+collision.gameObject.name);
         // 碰到了Collider，执行相应的逻辑
         if (collision.gameObject.CompareTag("Map_Collision") && IsJumping)
         {
@@ -120,7 +183,7 @@ public class DynamicJump_Lamniat : MonoBehaviour
             return;
         }
 
-        // Debug.Log("trigger tag: "+trigger.gameObject.tag);
+        //Debug.Log("trigger tag: "+trigger.gameObject.tag);
         // Debug.Log("CanJump: "+CanJump);
         if (trigger.gameObject.CompareTag("Map_Jump_Trigger") && CanJump)
         {
@@ -160,7 +223,7 @@ public class DynamicJump_Lamniat : MonoBehaviour
             return;
         }
 
-        // Debug.Log("trigger tag: "+trigger.gameObject.tag);
+        //Debug.Log("trigger tag: "+trigger.gameObject.tag);
         // Debug.Log("CanJump: "+CanJump);
         if (trigger.gameObject.CompareTag("Map_Jump_Trigger") && CanJump)
         {
@@ -230,17 +293,19 @@ public class DynamicJump_Lamniat : MonoBehaviour
             }
             else
             {
-                int fixedJumpCounter = HeightDecreaseCount+(JumpCounter-HeightDecreaseCount)%HeightDecreaseExponentialCount;
+                int fixedJumpCounter = HeightDecreaseCount+(JumpCounter-HeightDecreaseCount)%HeightDecreaseCountExponential;
                 if (JumpCounter == HeightDecreaseCount)
                 {
                     var level = m_Lamniat.CurrentHeight - 1;
+                    if(level < m_HeightManager.MinimumLevel) level = 0;
                     m_Lamniat.SetCurrentHeight(level); // 否则回到level 0
                     HeightChangeCount = JumpCounter;
                     Debug.Log("level--");
                 }
-                else if (JumpCounter - HeightChangeCount == HeightDecreaseExponentialCount)
+                else if (JumpCounter - HeightChangeCount == HeightDecreaseCountExponential)
                 {
                     var level = m_Lamniat.CurrentHeight - 1;
+                    if(level < m_HeightManager.MinimumLevel) level = 0;
                     m_Lamniat.SetCurrentHeight(level); // 否则回到level 0
                     HeightChangeCount = JumpCounter;
                     Debug.Log("level--");
@@ -251,7 +316,7 @@ public class DynamicJump_Lamniat : MonoBehaviour
             }
         }
 
-        JumpCounter++ ;
+        if(IsJumping) JumpCounter++ ;
         if (JumpCounter > JumpFallingCount)
         {
             //Debug.Log("jumpCounter: " + jumpCounter + " x:" + transform.position.x + " y:" + transform.position.y );
