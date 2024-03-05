@@ -42,7 +42,7 @@ public class Avatar : Charactor
 
     #region 可操作角色狀態
 
-    private BaseStateMachine_Avatar m_currentBaseState;
+    protected BaseStateMachine_Avatar m_currentBaseState;
     public BaseStateMachine_Avatar CurrentBaseState => this.m_currentBaseState;
     public void SetCurrentBaseState(BaseStateMachine_Avatar state) {
         this.m_currentBaseState.OnExit();
@@ -54,12 +54,14 @@ public class Avatar : Charactor
     public BaseStateMachine_Avatar Idle => m_idle;
     protected BaseStateMachine_Avatar m_move;
     public BaseStateMachine_Avatar Move => m_move;
-    protected BaseStateMachine_Avatar m_dodge;
-    public BaseStateMachine_Avatar Dodge => m_dodge;
     protected BaseStateMachine_Avatar m_attack;
     public BaseStateMachine_Avatar Attack => m_attack;
+    protected BaseStateMachine_Avatar m_jump;
+    public BaseStateMachine_Avatar Jump => m_jump;
     protected BaseStateMachine_Avatar m_hurt;
     public BaseStateMachine_Avatar Hurt => m_hurt;
+    protected BaseStateMachine_Avatar m_dodge;
+    public BaseStateMachine_Avatar Dodge => m_dodge;
     protected BaseStateMachine_Avatar m_dead;
     public BaseStateMachine_Avatar Dead => m_dead;
 

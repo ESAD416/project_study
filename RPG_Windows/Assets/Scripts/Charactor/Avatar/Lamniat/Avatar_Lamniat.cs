@@ -17,6 +17,7 @@ public class Avatar_Lamniat : Avatar
         m_idle = new IdleState_Lamniat(this);
         m_move = new MoveState_Lamniat(this);
         m_attack = new AttackState_Lamniat(this);
+        m_jump = new JumpState_Lamniat(this);
         m_dodge = new DodgeState_Lamniat(this);
         m_hurt = new HurtState_Lamniat(this);
         m_dead = new DeadState_Lamniat(this);

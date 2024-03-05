@@ -41,7 +41,8 @@ public class Movement_Lamniat : Movement_Avatar
 
         m_inputControls.Lamniat_Land.Move.canceled += content => {
             SetMovement(Vector2.zero);
-            m_avatar.SetCurrentBaseState(m_avatar.Idle);
+            if(m_LamiatJump.IsJumping) m_avatar.SetCurrentBaseState(m_avatar.Jump);
+            else m_avatar.SetCurrentBaseState(m_avatar.Idle);
         };
 
         m_inputControls.Lamniat_Land.Hold.performed += content => {

@@ -52,7 +52,7 @@ public class HitSystem_Avatar : HitSystem
                     m_KnockbackFeedback.ActiveFeedbackByDir(dir);
                     Invoke("SetHurtTrigger", m_KnockbackFeedback.HitRecoveryTime);
                 } else {
-                    m_targetAnimator?.SetTrigger("hurt");
+                    SetHurtTrigger();
                 }
 
                 attacker.DamageSystem.OnDamage(m_HealthSystem);
@@ -94,7 +94,7 @@ public class HitSystem_Avatar : HitSystem
                     m_KnockbackFeedback.ActiveFeedbackByDir(dir);
                     Invoke("SetHurtTrigger", m_KnockbackFeedback.HitRecoveryTime);
                 } else {
-                    m_targetAnimator?.SetTrigger("hurt");
+                    SetHurtTrigger();
                 }
 
                 damageSystem.OnDamage(m_HealthSystem);

@@ -77,7 +77,7 @@ public class DynamicJump_Lamniat : MonoBehaviour
     private void SetParameterByFPS() {
         var fps = 1f / Time.unscaledDeltaTime;
         Debug.Log("FPS: " + fps);
-        if(fps >= 31f && fps < 89f) {
+        if(fps < 89f) {
             // 減半
             HeightIncreaseCount = 5; 
             JumpFallingCount = 13;
@@ -92,12 +92,12 @@ public class DynamicJump_Lamniat : MonoBehaviour
                 0.6f,     //25
                 0.8f,     //35
                 
-                1.0f, 1.067f, 1.133f, 1.2f, 1.267f,     //45
-                1.333f, 1.4f, 1.467f, 1.533f, 1.6f,     //50
-                1.667f, 1.733f, 1.8f, 1.867f, 1.933f,     //55
-                2.0f, 1.933f, 1.867f, 1.8f, 1.733f,     //60
-                1.667f, 1.6f, 1.533f, 1.467f, 1.4f,     //65
-                1.333f, 1.267f, 1.2f, 1.133f, 1.067f,     //70
+                1.0f, 1.1f, 1.2335f,
+                1.3665f, 1.5f, 1.6335f, 
+                1.7665f, 1.9f,
+                2.0f, 
+                1.9f, 1.7665f, 1.6335f, 1.5f,
+                1.3665f, 1.2335f, 1.1f,     
 
                 1.0f,     //75
                 0.793f,     //80
@@ -123,10 +123,12 @@ public class DynamicJump_Lamniat : MonoBehaviour
                 0.8f,     //35
                 0.9f,     //40
                 
-                1.0f, 1.067f, 1.133f, 1.2f, 1.267f,     //45
+                1.0f, 
+                1.067f, 1.133f, 1.2f, 1.267f,     //45
                 1.333f, 1.4f, 1.467f, 1.533f, 1.6f,     //50
                 1.667f, 1.733f, 1.8f, 1.867f, 1.933f,     //55
-                2.0f, 1.933f, 1.867f, 1.8f, 1.733f,     //60
+                2.0f, 
+                1.933f, 1.867f, 1.8f, 1.733f,     //60
                 1.667f, 1.6f, 1.533f, 1.467f, 1.4f,     //65
                 1.333f, 1.267f, 1.2f, 1.133f, 1.067f,     //70
 
@@ -189,7 +191,7 @@ public class DynamicJump_Lamniat : MonoBehaviour
         {
             // Debug.Log("trigger Enter jump start");
             // 触发跳跃逻辑
-            m_Lamniat.Animator.SetBool("isJumping", true);
+            m_Lamniat.SetCurrentBaseState(m_Lamniat.Jump);
             IsJumping = true;
             CanJump = false;
             //moveDuration = 0f;
@@ -229,7 +231,7 @@ public class DynamicJump_Lamniat : MonoBehaviour
         {
             // Debug.Log("trigger stay jump start");
             // 触发跳跃逻辑
-            m_Lamniat.Animator.SetBool("isJumping", true);
+            m_Lamniat.SetCurrentBaseState(m_Lamniat.Jump);
             IsJumping = true;
             CanJump = false;
             //moveDuration = 0f;
@@ -272,14 +274,19 @@ public class DynamicJump_Lamniat : MonoBehaviour
             Tilemap currentTilemap = m_HeightManager.GetCurrentTilemapByAvatarHeight(m_Lamniat.CurrentHeight);
             if (TileUtils.HasTileAtPlayerPosition(currentTilemap, m_Lamniat.BodyCollider.bounds))
             {
-                m_Lamniat.Animator.SetBool("isJumping", false); // 结束跳跃状态
-                IsJumping = false; // 结束跳跃状态
+                Debug.Log("FinishJump");
+                IsJumping = false; // 结束跳跃
                 JumpCounter = 0;
-                // TODO 移到Animator實作
-                // m_Lamniat.Animator.Play("Jumping State", 0, 0.8f); // 从0.8秒的位置重新开始播放
 
                 m_LamniatMovement.SetMoveVelocity(Vector2.zero);
                 m_LamniatMovement.SetFirstMoveWhileJumping = false;
+
+                // 播完Landing動畫
+                m_Lamniat.Animator.SetTrigger("land");
+                // 切換状态
+                float clipTime = AnimeUtils.GetAnimateClipTimeInRuntime(m_Lamniat.Animator, "Lamniat_jump_landing");
+                Debug.Log("clipTime: "+clipTime);
+                Invoke("EndJumpState", clipTime);
 
                 // 一旦跳躍結束，便啟動對應level的Trigger
                 // for (int i = 0; i < tilemapTriggerArray.Length; i++)
@@ -323,6 +330,11 @@ public class DynamicJump_Lamniat : MonoBehaviour
             FixJumpCorners();
         }
         UpdateViewPosition();
+    }
+
+    private void EndJumpState() {
+        if(m_LamniatMovement.IsMoving) m_Lamniat.SetCurrentBaseState(m_Lamniat.Move);
+        else m_Lamniat.SetCurrentBaseState(m_Lamniat.Idle);
     }
 
     private void UpdateViewPosition() 
