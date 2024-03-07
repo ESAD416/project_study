@@ -31,7 +31,7 @@ public class Movement_Lamniat : Movement_Avatar
             SetFacingDir(inputVecter2);
             SetMovement(inputVecter2);
             //m_avatar.SetStatus(Charactor.CharactorStatus.Move);
-            m_avatar.SetCurrentBaseState(m_avatar.Move);
+            if(!m_LamiatJump.IsJumping) m_avatar.SetCurrentBaseState(m_avatar.Move);
 
             if(m_avatarSprtRenderer!= null) {
                 var faceLeft = m_avatarSprtRenderer.flipX;
@@ -71,8 +71,8 @@ public class Movement_Lamniat : Movement_Avatar
             if (m_LamiatJump.IsJumping) 
             {
                 if (!SetFirstMoveWhileJumping) {
-                    //m_moveVelocity = Vector2.MoveTowards(m_moveVelocity, m_movement.normalized * m_jumpingMoveSpeed, m_acceleration * Time.deltaTime);
-                    m_moveVelocity = m_movement.normalized * m_jumpingMoveSpeed;
+                    m_moveVelocity = Vector2.MoveTowards(m_moveVelocity, m_movement.normalized * m_jumpingMoveSpeed, m_acceleration * Time.deltaTime);
+                    //m_moveVelocity = m_movement.normalized * m_jumpingMoveSpeed;
                     m_firstMoveVelocityWhileJumping = m_moveVelocity;
                     SetFirstMoveWhileJumping = true;
                 }
