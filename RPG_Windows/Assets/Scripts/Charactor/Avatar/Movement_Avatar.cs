@@ -99,6 +99,8 @@ public class Movement_Avatar : MonoBehaviour
         }
     }
 
+    public bool CanMove = true;
+
     /// <summary>
     /// 角色移動歷經時間
     /// </summary>

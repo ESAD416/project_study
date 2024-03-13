@@ -138,10 +138,6 @@ public class Movement_Lamniat : Movement_Avatar
                         m_firstMoveVelocityWhileJumping.x = m_firstMoveVelocityWhileJumping.x / 1.5f;
                         m_firstMoveVelocityWhileJumping.y = m_firstMoveVelocityWhileJumping.y / 1.5f;
                     }
-                    // else {
-                    //     m_firstMoveVelocityWhileJumping.x = m_firstMoveVelocityWhileJumping.x / 1.15f;
-                    //     m_firstMoveVelocityWhileJumping.y = m_firstMoveVelocityWhileJumping.y / 1.15f;
-                    // }
                 }
 
             }
@@ -185,7 +181,7 @@ public class Movement_Lamniat : Movement_Avatar
 
         //Debug.Log("m_moveVelocity before adjust: "+m_moveVelocity);
         
-        if (!m_LamiatCombat.IsAttacking && !m_LamiatJump.OnHeightObjCollisionExit) 
+        if (!m_LamiatCombat.IsAttacking && !m_LamiatJump.OnHeightObjCollisionExit && CanMove) 
         {
             // 最終設定剛體速度的上限
             m_moveVelocity = Vector2.ClampMagnitude(m_moveVelocity, m_moveSpeed);
@@ -193,7 +189,7 @@ public class Movement_Lamniat : Movement_Avatar
         else
         {
             // 碰撞牆壁或是在攻擊狀態下剛體速度歸零
-            m_moveVelocity = Vector2.ClampMagnitude(m_moveVelocity*0f, m_moveSpeed*0f);
+            m_moveVelocity = Vector2.ClampMagnitude(m_moveVelocity*0.1f, m_moveSpeed*0.1f);
             if(m_LamiatJump.OnHeightObjCollisionExit) m_LamiatJump.OnHeightObjCollisionExit = false;
         }
 

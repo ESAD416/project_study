@@ -13,6 +13,8 @@ public class DynamicJump_Lamniat : MonoBehaviour
     [Header("DynamicJump_Lamniat 基本參數")]
     public bool IsJumping;
     public bool CanJump;
+    private bool HasUpStep = false;
+    private bool HasDownStep = false;
     public bool OnHeightObjCollisionExit;
 
 
@@ -271,16 +273,18 @@ public class DynamicJump_Lamniat : MonoBehaviour
         {
             // 跳跃上升阶段
             // level = 0; // 虚拟高度保持在0
+            FixJumpCornersWhileDownStep();
             m_Lamniat.SprtRenderer.transform.localPosition = new Vector2(0, jumpOffset[JumpCounter]);
         }
         else if (JumpCounter < HeightDecreaseCount)
         {
             // 顶点暂停阶段
-            if (JumpCounter == HeightIncreaseCount)
+            if (JumpCounter >= HeightIncreaseCount && !HasUpStep)
             {            
                 Debug.Log("level++");
                 var level = m_Lamniat.CurrentHeight + 1;
                 m_Lamniat.SetCurrentHeight(level);  // 虚拟高度提升到1
+                HasUpStep = true;
             }
             
             m_Lamniat.SprtRenderer.transform.localPosition = new Vector2(0, jumpOffset[JumpCounter]-1);
@@ -292,6 +296,9 @@ public class DynamicJump_Lamniat : MonoBehaviour
             {
                 Debug.Log("FinishJump");
                 IsJumping = false; // 结束跳跃
+                m_LamniatMovement.CanMove = true;
+                HasUpStep = false;
+                HasDownStep = false;
 
                 m_LamniatMovement.SetMoveVelocity(Vector2.zero);
                 m_LamniatMovement.SetFirstMoveWhileJumping = false;
@@ -312,21 +319,21 @@ public class DynamicJump_Lamniat : MonoBehaviour
                 // }
 
                 m_Lamniat.SprtRenderer.transform.localPosition = new Vector2(0, 0);
-                m_jumpingTimeElapsed = 0f;
                 JumpCounter = 0;
             }
             else
             {
                 int fixedJumpCounter = HeightDecreaseCount+(JumpCounter-HeightDecreaseCount)%HeightDecreaseCountExponential;
-                if (JumpCounter == HeightDecreaseCount)
+                if (JumpCounter >= HeightDecreaseCount && !HasDownStep)
                 {
                     var level = m_Lamniat.CurrentHeight - 1;
                     if(level < m_HeightManager.MinimumLevel) level = 0;
                     m_Lamniat.SetCurrentHeight(level); // 否则回到level 0
                     HeightChangeCount = JumpCounter;
+                    HasDownStep = true;
                     Debug.Log("level--");
                 }
-                else if (JumpCounter - HeightChangeCount == HeightDecreaseCountExponential)
+                else if (JumpCounter - HeightChangeCount >= HeightDecreaseCountExponential)
                 {
                     var level = m_Lamniat.CurrentHeight - 1;
                     if(level < m_HeightManager.MinimumLevel) level = 0;
@@ -340,11 +347,8 @@ public class DynamicJump_Lamniat : MonoBehaviour
             }
         }
 
-        // if(IsJumping) {
-            
-        //     //FloatTimeElapsedConvertToFrameInt(Time.deltaTime);  ;
-        // }
-        JumpCounter++;
+        // JumpCounter++;
+        JumpCounter = JumpCounter + (int)Mathf.Round(Time.deltaTime*100) ;
         if (JumpCounter > JumpFallingCount)
         {
             //Debug.Log("jumpCounter: " + jumpCounter + " x:" + transform.position.x + " y:" + transform.position.y );
@@ -504,6 +508,31 @@ public class DynamicJump_Lamniat : MonoBehaviour
             Vector3 fixCornersPosition = transform.position + offsetPosition;
             transform.position = fixCornersPosition;
             //Debug.Log("offsetPosition: x = " + offsetPosition.x + ", y = " + offsetPosition.y + ", level = " + level);
+        }
+    }
+
+    private void FixJumpCornersWhileDownStep() {
+        if (m_Lamniat.CurrentHeight-1 < 0 || !m_LamniatMovement.CanMove)
+        {
+            Debug.Log("FixJumpCornersWhileDownStep return");
+            return;
+        }
+        Tilemap currentTilemap = m_HeightManager.GetCurrentTilemapByAvatarHeight(m_Lamniat.CurrentHeight);
+        // 與BodyCollider範圍相比有縮小
+        Vector3Int body_bottom_left = currentTilemap.WorldToCell(transform.position + new Vector3(-0.3f, -1.2f, 0));
+        Vector3Int body_bottom_right = currentTilemap.WorldToCell(transform.position + new Vector3(0.3f, -1.8f, 0));
+        Vector3Int body_top_left = currentTilemap.WorldToCell(transform.position + new Vector3(-0.3f, -1.2f, 0));
+        Vector3Int body_top_right = currentTilemap.WorldToCell(transform.position + new Vector3(0.3f, -1.2f, 0));
+
+        Vector3 offsetPosition = new Vector3(0, 0, 0);
+
+        if (TileUtils.HasTileAtPosition(currentTilemap, body_bottom_left) && 
+            TileUtils.HasTileAtPosition(currentTilemap, body_bottom_right) && 
+            TileUtils.HasTileAtPosition(currentTilemap, body_top_left) && 
+            TileUtils.HasTileAtPosition(currentTilemap, body_top_right) && 
+            !TileUtils.HasTileAtPlayerPosition(currentTilemap, m_Lamniat.BodyCollider.bounds))
+        {
+            m_LamniatMovement.CanMove = false;
         }
     }
 }
