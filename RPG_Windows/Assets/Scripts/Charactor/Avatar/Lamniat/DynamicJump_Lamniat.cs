@@ -22,11 +22,6 @@ public class DynamicJump_Lamniat : MonoBehaviour
     /// 角色跳躍歷經時間
     /// </summary>
     public float m_jumpingTimeElapsed = 0f;
-    public float HeightIncreaseElapsed = 0.1f;
-    public float JumpFallingElapsed  = 0.25f;
-    public float HeightDecreaseElapsed  = 0.4f;
-    public float HeightDecreaseElapsedExponential   = 0.1f;
-
     /// <summary>
     /// 角色跳躍歷經禎數
     /// </summary>
@@ -94,7 +89,7 @@ public class DynamicJump_Lamniat : MonoBehaviour
 
     private void SetParameterByFPS() {
         var fps = 1f / Time.unscaledDeltaTime;
-        Debug.Log("FPS: " + fps);
+        
         // if(fps < 89f) {
         //     // 減半
         //     HeightIncreaseCount = 5; 
@@ -350,90 +345,6 @@ public class DynamicJump_Lamniat : MonoBehaviour
         // JumpCounter++;
         JumpCounter = JumpCounter + (int)Mathf.Round(Time.deltaTime*100) ;
         if (JumpCounter > JumpFallingCount)
-        {
-            //Debug.Log("jumpCounter: " + jumpCounter + " x:" + transform.position.x + " y:" + transform.position.y );
-            FixJumpCorners();
-        }
-        UpdateViewPosition();
-
-    }
-
-    private void UpdateLamniatJumpingVer2() {
-        if (m_jumpingTimeElapsed < HeightIncreaseElapsed)
-        {
-            // 跳跃上升阶段
-            // level = 0; // 虚拟高度保持在0
-            m_Lamniat.SprtRenderer.transform.localPosition = new Vector2(0, jumpOffset[JumpCounter]);
-        }
-        else if (m_jumpingTimeElapsed < HeightDecreaseElapsed)
-        {
-            // 顶点暂停阶段
-            if (JumpCounter == HeightIncreaseCount)
-            {            
-                Debug.Log("level++");
-                var level = m_Lamniat.CurrentHeight + 1;
-                m_Lamniat.SetCurrentHeight(level);  // 虚拟高度提升到1
-            }
-            
-            m_Lamniat.SprtRenderer.transform.localPosition = new Vector2(0, jumpOffset[JumpCounter]-1);
-        }
-        else if (m_jumpingTimeElapsed >= HeightDecreaseElapsed) 
-        {
-            Tilemap currentTilemap = m_HeightManager.GetCurrentTilemapByAvatarHeight(m_Lamniat.CurrentHeight);
-            if (TileUtils.HasTileAtPlayerPosition(currentTilemap, m_Lamniat.BodyCollider.bounds))
-            {
-                Debug.Log("FinishJump");
-                IsJumping = false; // 结束跳跃
-
-                m_LamniatMovement.SetMoveVelocity(Vector2.zero);
-                m_LamniatMovement.SetFirstMoveWhileJumping = false;
-
-                // 播完Landing動畫
-                m_Lamniat.Animator.SetTrigger("land");
-                // 切換状态
-                float clipTime = AnimeUtils.GetAnimateClipTimeInRuntime(m_Lamniat.Animator, "Lamniat_jump_landing");
-                Debug.Log("clipTime: "+clipTime);
-                Invoke("EndJumpState", clipTime);
-
-                // 一旦跳躍結束，便啟動對應level的Trigger
-                // for (int i = 0; i < tilemapTriggerArray.Length; i++)
-                // {
-                //     // 通过计算确定当前Trigger属于哪个level
-                //     int triggerLevel = i / triggersPerLevel;
-                //     tilemapTriggerArray[i].enabled = (triggerLevel == level);
-                // }
-
-                m_Lamniat.SprtRenderer.transform.localPosition = new Vector2(0, 0);
-                m_jumpingTimeElapsed = 0f;
-                JumpCounter = 0;
-            }
-            else
-            {
-                int fixedJumpCounter = HeightDecreaseCount+(JumpCounter-HeightDecreaseCount)%HeightDecreaseCountExponential;
-                if (JumpCounter == HeightDecreaseCount)
-                {
-                    var level = m_Lamniat.CurrentHeight - 1;
-                    if(level < m_HeightManager.MinimumLevel) level = 0;
-                    m_Lamniat.SetCurrentHeight(level); // 否则回到level 0
-                    HeightChangeCount = JumpCounter;
-                    Debug.Log("level--");
-                }
-                else if (JumpCounter - HeightChangeCount == HeightDecreaseCountExponential)
-                {
-                    var level = m_Lamniat.CurrentHeight - 1;
-                    if(level < m_HeightManager.MinimumLevel) level = 0;
-                    m_Lamniat.SetCurrentHeight(level); // 否则回到level 0
-                    HeightChangeCount = JumpCounter;
-                    Debug.Log("level--");
-                }
-
-                //Debug.Log("fixJumpCounter:" + fixJumpCounter);
-                m_Lamniat.SprtRenderer.transform.localPosition = new Vector2(0, jumpOffset[fixedJumpCounter]);
-            }
-        }
-
-        if(IsJumping) FloatTimeElapsedConvertToFrameInt(Time.deltaTime);
-        if (m_jumpingTimeElapsed > JumpFallingElapsed)
         {
             //Debug.Log("jumpCounter: " + jumpCounter + " x:" + transform.position.x + " y:" + transform.position.y );
             FixJumpCorners();

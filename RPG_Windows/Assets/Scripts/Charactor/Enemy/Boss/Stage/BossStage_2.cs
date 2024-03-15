@@ -29,9 +29,12 @@ public class BossStage_2 : Attack
         if (targetAttacked) {
             Debug.Log("targetAttacked");
             foreach (Collider2D col in m_OnHit) {
-                if (col.GetComponent<HitSystem_Avatar>() != null) {
-                    col.GetComponent<HitSystem_Avatar>().TakeHiProcess(this.DamageSystem, this.transform);
+                if(col.gameObject.tag == "Player") {
+                    if (col.GetComponentInParent<HitSystem_Avatar>() != null) {
+                        col.GetComponentInParent<HitSystem_Avatar>().TakeHiProcess(this.DamageSystem, this.transform);
+                    }
                 }
+                
             }
         }
     }

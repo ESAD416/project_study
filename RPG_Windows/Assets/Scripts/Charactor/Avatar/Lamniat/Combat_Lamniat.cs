@@ -68,12 +68,13 @@ public class Combat_Lamniat : Combat_Avatar
 
     public void FinishMeleeAttack() 
     {
+        Debug.Log("FinishMeleeAttack start"); 
         IsAttacking = false;
         IsPreAttacking = false;
         IsPostAttacking = false;
         CancelRecovery = false;
 
-        m_avatarMovement.SetMovement(m_avatarMovement.MovementAfterTrigger);
+        //m_avatarMovement.SetMovement(m_avatarMovement.MovementAfterTrigger);
         m_avatarMovement.SetMovementAfterTrigger(Vector3.zero);
         
         if(m_avatarMovement.IsMoving) m_avatar.SetCurrentBaseState(m_avatar.Move);
@@ -89,7 +90,7 @@ public class Combat_Lamniat : Combat_Avatar
         this.m_meleeComboCounter = 0;
 
 
-        Debug.Log("FinishMeleeAttack");
+        Debug.Log("FinishMeleeAttack end");
     }
 
     public void SetAnimateCombatPara() 

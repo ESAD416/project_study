@@ -128,7 +128,7 @@ public class HitSystem_Avatar : HitSystem
         isTakingHit = false;
         isInvulnerable = false;
         
-        m_targetMovement.SetMovement(m_targetMovement.MovementAfterTrigger);
+        //m_targetMovement.SetMovement(m_targetMovement.MovementAfterTrigger);
         m_targetMovement.SetMovementAfterTrigger(Vector3.zero);
 
         if(m_targetMovement.IsMoving) m_target.SetCurrentBaseState(m_target.Move);

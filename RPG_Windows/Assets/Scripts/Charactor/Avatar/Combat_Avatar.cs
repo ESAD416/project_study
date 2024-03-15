@@ -81,7 +81,7 @@ public class Combat_Avatar : Attack
         IsPreAttacking = false;
         IsPostAttacking = false;
         
-        m_avatarMovement.SetMovement(m_avatarMovement.MovementAfterTrigger);
+        //m_avatarMovement.SetMovement(m_avatarMovement.MovementAfterTrigger);
         m_avatarMovement.SetMovementAfterTrigger(Vector3.zero);
         
         if(m_avatarMovement.IsMoving) m_avatar.SetCurrentBaseState(m_avatar.Move);

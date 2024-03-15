@@ -31,7 +31,7 @@ public class Movement_Lamniat : Movement_Avatar
             SetFacingDir(inputVecter2);
             SetMovement(inputVecter2);
             //m_avatar.SetStatus(Charactor.CharactorStatus.Move);
-            if(!m_LamiatJump.IsJumping) m_avatar.SetCurrentBaseState(m_avatar.Move);
+            if(!m_LamiatJump.IsJumping && !m_LamiatCombat.IsAttacking) m_avatar.SetCurrentBaseState(m_avatar.Move);
 
             if(m_avatarSprtRenderer!= null) {
                 var faceLeft = m_avatarSprtRenderer.flipX;
@@ -42,6 +42,7 @@ public class Movement_Lamniat : Movement_Avatar
         m_inputControls.Lamniat_Land.Move.canceled += content => {
             SetMovement(Vector2.zero);
             if(m_LamiatJump.IsJumping) m_avatar.SetCurrentBaseState(m_avatar.Jump);
+            else if(m_LamiatCombat.IsAttacking) m_avatar.SetCurrentBaseState(m_avatar.Attack);
             else m_avatar.SetCurrentBaseState(m_avatar.Idle);
         };
 
