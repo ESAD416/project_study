@@ -182,14 +182,14 @@ public class Movement_Lamniat : Movement_Avatar
 
         //Debug.Log("m_moveVelocity before adjust: "+m_moveVelocity);
         
-        if (!m_LamiatCombat.IsAttacking && !m_LamiatJump.OnHeightObjCollisionExit && CanMove) 
+        if (CanMove && !m_LamiatJump.OnHeightObjCollisionExit) 
         {
             // 最終設定剛體速度的上限
             m_moveVelocity = Vector2.ClampMagnitude(m_moveVelocity, m_moveSpeed);
         }
         else
         {
-            // 碰撞牆壁或是在攻擊狀態下剛體速度歸零
+            // 碰撞牆壁或是在其他狀態下剛體速度歸零
             m_moveVelocity = Vector2.ClampMagnitude(m_moveVelocity*0.1f, m_moveSpeed*0.1f);
             if(m_LamiatJump.OnHeightObjCollisionExit) m_LamiatJump.OnHeightObjCollisionExit = false;
         }

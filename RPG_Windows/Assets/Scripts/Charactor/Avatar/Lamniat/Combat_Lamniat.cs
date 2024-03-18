@@ -59,7 +59,10 @@ public class Combat_Lamniat : Combat_Avatar
 
     private void MeleeAttack() 
     {
-        if(!IsAttacking) IsAttacking = true;
+        if(!IsAttacking) {
+            IsAttacking = true;
+            m_avatarMovement.CanMove = false;
+        }
         if(!m_avatar.CurrentBaseState.State.Equals(BaseStateMachine_Charactor.BaseState.Attack)) m_avatar.SetCurrentBaseState(m_avatar.Attack);
         
         //SetHitboxDir();
@@ -73,6 +76,7 @@ public class Combat_Lamniat : Combat_Avatar
         IsPreAttacking = false;
         IsPostAttacking = false;
         CancelRecovery = false;
+        m_avatarMovement.CanMove = true;
 
         //m_avatarMovement.SetMovement(m_avatarMovement.MovementAfterTrigger);
         m_avatarMovement.SetMovementAfterTrigger(Vector3.zero);

@@ -8526,7 +8526,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HealthSystem: {fileID: 251194362}
   m_KnockbackFeedback: {fileID: 251194360}
-  isTakingHit: 0
+  IsTakingHit: 0
   onHitDelay: 0.1
   isInvulnerable: 0
   invulnerableDuration: 1.5
@@ -9920,7 +9920,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HealthSystem: {fileID: 499398710}
   m_KnockbackFeedback: {fileID: 0}
-  isTakingHit: 0
+  IsTakingHit: 0
   onHitDelay: 0.1
   isInvulnerable: 0
   invulnerableDuration: 0
@@ -26616,7 +26616,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1446191129
 Transform:
   m_ObjectHideFlags: 0
@@ -32627,7 +32627,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HealthSystem: {fileID: 1775921694}
   m_KnockbackFeedback: {fileID: 1775921689}
-  isTakingHit: 0
+  IsTakingHit: 0
   onHitDelay: 0.1
   isInvulnerable: 0
   invulnerableDuration: 0

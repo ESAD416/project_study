@@ -15,7 +15,7 @@ public class HitSystem : MonoBehaviour
     /// <summary>
     /// 正在受擊
     /// </summary>
-    public bool isTakingHit = false;
+    public bool IsTakingHit = false;
 
     [SerializeField] protected float onHitDelay;
     public float OnHitDelay => onHitDelay;
@@ -55,8 +55,8 @@ public class HitSystem : MonoBehaviour
 
     protected virtual IEnumerator TakeHit(Attack attacker) 
     {
-        isTakingHit = true;
-
+        IsTakingHit = true;
+        
         var charactorTakenHit = GetComponent<Charactor>();
         var breakableTakenHit = GetComponent<BreakableObjects>();
         if(charactorTakenHit != null) {
@@ -82,7 +82,7 @@ public class HitSystem : MonoBehaviour
 
     protected virtual IEnumerator TakeHit(DamageSystem damageSystem, Transform attackedLocation, int damageCounter = 1) 
     {
-        isTakingHit = true;
+        IsTakingHit = true;
 
         var charactorTakenHit = GetComponent<Charactor>();
         var breakableTakenHit = GetComponent<BreakableObjects>();
@@ -114,7 +114,7 @@ public class HitSystem : MonoBehaviour
             StopCoroutine(takeHitRoutine);
         }
 
-        isTakingHit = false;
+        IsTakingHit = false;
         isInvulnerable = false;
         
         //OnHitEventEnd?.Invoke();

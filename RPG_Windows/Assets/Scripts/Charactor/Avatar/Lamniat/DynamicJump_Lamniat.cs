@@ -183,7 +183,7 @@ public class DynamicJump_Lamniat : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D trigger)
     {
-        // Debug.Log("trigger Enter: "+trigger.gameObject.name);
+        Debug.Log("trigger Enter: "+trigger.gameObject.name);
         int playerLayerMask = 1 << LayerMask.NameToLayer("Player");
         int mapRangeLayerMask = 1 << LayerMask.NameToLayer("MapRange");
         int layerMask = ~(playerLayerMask | mapRangeLayerMask);
@@ -224,7 +224,7 @@ public class DynamicJump_Lamniat : MonoBehaviour
 
     void OnTriggerStay2D(Collider2D trigger)
     {
-        // Debug.Log("trigger stay: "+trigger.gameObject.name);
+        Debug.Log("trigger stay: "+trigger.gameObject.name);
         int playerLayerMask = 1 << LayerMask.NameToLayer("Player");
         int mapRangeLayerMask = 1 << LayerMask.NameToLayer("MapRange");
         int layerMask = ~(playerLayerMask | mapRangeLayerMask);
@@ -388,7 +388,7 @@ public class DynamicJump_Lamniat : MonoBehaviour
 
         Tilemap currentTilemap = m_HeightManager.GetCurrentTilemapByAvatarHeight(m_Lamniat.CurrentHeight);
         // 與BodyCollider範圍相比有縮小
-        Vector3Int body_bottom_left = currentTilemap.WorldToCell(transform.position + new Vector3(-0.3f, -1.2f, 0));
+        Vector3Int body_bottom_left = currentTilemap.WorldToCell(transform.position + new Vector3(-0.3f, -1.8f, 0));
         Vector3Int body_bottom_right = currentTilemap.WorldToCell(transform.position + new Vector3(0.3f, -1.8f, 0));
         Vector3Int body_top_left = currentTilemap.WorldToCell(transform.position + new Vector3(-0.3f, -1.2f, 0));
         Vector3Int body_top_right = currentTilemap.WorldToCell(transform.position + new Vector3(0.3f, -1.2f, 0));
@@ -423,17 +423,18 @@ public class DynamicJump_Lamniat : MonoBehaviour
     }
 
     private void FixJumpCornersWhileDownStep() {
+        Debug.Log("FixJumpCornersWhileDownStep start");
         if (m_Lamniat.CurrentHeight-1 < 0 || !m_LamniatMovement.CanMove)
         {
             Debug.Log("FixJumpCornersWhileDownStep return");
             return;
         }
-        Tilemap currentTilemap = m_HeightManager.GetCurrentTilemapByAvatarHeight(m_Lamniat.CurrentHeight);
+        Tilemap currentTilemap = m_HeightManager.GetCurrentTilemapByAvatarHeight(m_Lamniat.CurrentHeight-1);
         // 與BodyCollider範圍相比有縮小
-        Vector3Int body_bottom_left = currentTilemap.WorldToCell(transform.position + new Vector3(-0.3f, -1.2f, 0));
-        Vector3Int body_bottom_right = currentTilemap.WorldToCell(transform.position + new Vector3(0.3f, -1.8f, 0));
-        Vector3Int body_top_left = currentTilemap.WorldToCell(transform.position + new Vector3(-0.3f, -1.2f, 0));
-        Vector3Int body_top_right = currentTilemap.WorldToCell(transform.position + new Vector3(0.3f, -1.2f, 0));
+        Vector3Int body_bottom_left = currentTilemap.WorldToCell(transform.position + new Vector3(-0.3f, -2.8f, 0));
+        Vector3Int body_bottom_right = currentTilemap.WorldToCell(transform.position + new Vector3(0.3f, -2.8f, 0));
+        Vector3Int body_top_left = currentTilemap.WorldToCell(transform.position + new Vector3(-0.3f, -2.2f, 0));
+        Vector3Int body_top_right = currentTilemap.WorldToCell(transform.position + new Vector3(0.3f, -2.2f, 0));
 
         Vector3 offsetPosition = new Vector3(0, 0, 0);
 
@@ -443,7 +444,9 @@ public class DynamicJump_Lamniat : MonoBehaviour
             TileUtils.HasTileAtPosition(currentTilemap, body_top_right) && 
             !TileUtils.HasTileAtPlayerPosition(currentTilemap, m_Lamniat.BodyCollider.bounds))
         {
+            Debug.Log("FixJumpCornersWhileDownStep CanMove = false");
             m_LamniatMovement.CanMove = false;
         }
+        Debug.Log("FixJumpCornersWhileDownStep end");
     }
 }

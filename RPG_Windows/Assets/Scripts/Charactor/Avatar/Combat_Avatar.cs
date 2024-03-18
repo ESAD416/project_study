@@ -68,6 +68,7 @@ public class Combat_Avatar : Attack
     protected virtual IEnumerator Attack() {
         Debug.Log("Combat_Avatar attack start");
         IsAttacking = true;
+        m_avatarMovement.CanMove = false;
         
         m_avatar.SetCurrentBaseState(m_avatar.Attack);
         yield return new WaitForSeconds(m_attackClipTime);  // hardcasted casted time for debugged
@@ -80,6 +81,7 @@ public class Combat_Avatar : Attack
         IsAttacking = false;
         IsPreAttacking = false;
         IsPostAttacking = false;
+        m_avatarMovement.CanMove = true;
         
         //m_avatarMovement.SetMovement(m_avatarMovement.MovementAfterTrigger);
         m_avatarMovement.SetMovementAfterTrigger(Vector3.zero);

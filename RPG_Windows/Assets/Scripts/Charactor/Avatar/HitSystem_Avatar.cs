@@ -25,7 +25,8 @@ public class HitSystem_Avatar : HitSystem
 
     protected override IEnumerator TakeHit(Attack attacker) 
     {    
-        isTakingHit = true;
+        IsTakingHit = true;
+        m_targetMovement.CanMove = false;
 
         var avatarTakenHit = GetComponent<Avatar>();
         if(avatarTakenHit != null) {
@@ -66,7 +67,8 @@ public class HitSystem_Avatar : HitSystem
 
     protected override IEnumerator TakeHit(DamageSystem damageSystem, Transform attackedLocation, int damageCounter = 1) 
     {
-        isTakingHit = true;
+        IsTakingHit = true;
+        m_targetMovement.CanMove = false;
 
         var avatarTakenHit = GetComponent<Avatar>();
         if(avatarTakenHit != null) {
@@ -125,8 +127,9 @@ public class HitSystem_Avatar : HitSystem
             StopCoroutine(takeHitRoutine);
         }
 
-        isTakingHit = false;
+        IsTakingHit = false;
         isInvulnerable = false;
+        m_targetMovement.CanMove = true;
         
         //m_targetMovement.SetMovement(m_targetMovement.MovementAfterTrigger);
         m_targetMovement.SetMovementAfterTrigger(Vector3.zero);

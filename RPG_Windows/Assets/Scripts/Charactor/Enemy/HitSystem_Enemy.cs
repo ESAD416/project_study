@@ -17,7 +17,7 @@ public class HitSystem_Enemy : HitSystem
 
     protected override IEnumerator TakeHit(Attack attacker) {
         Debug.Log("TakeHit start");
-        isTakingHit = true;
+        IsTakingHit = true;
 
         var enemyTakenHit = GetComponent<Enemy>();
         if(enemyTakenHit != null) {
@@ -65,7 +65,7 @@ public class HitSystem_Enemy : HitSystem
 
     protected override IEnumerator TakeHit(DamageSystem damageSystem, Transform attackedLocation, int damageCounter = 1) {
         
-        isTakingHit = true;
+        IsTakingHit = true;
 
         var enemyTakenHit = GetComponent<Enemy>();
         if(enemyTakenHit != null) {
@@ -111,7 +111,7 @@ public class HitSystem_Enemy : HitSystem
             StopCoroutine(takeHitRoutine);
         }
 
-        isTakingHit = false;
+        IsTakingHit = false;
         isInvulnerable = false;
 
         if(m_targetMovement != null && m_targetMovement.isMoving) m_target.SetCurrentBaseState(m_target.Move);
