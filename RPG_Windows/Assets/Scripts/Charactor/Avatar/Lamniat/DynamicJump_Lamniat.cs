@@ -70,8 +70,41 @@ public class DynamicJump_Lamniat : MonoBehaviour
     }
 
     void Update() {
+        // Vector3 bottomLeft = transform.position + new Vector3(-0.5f, -2f, 0);
+        // Vector3 bottomRight = transform.position + new Vector3(0.5f, -2f, 0);
+        // Vector3 topLeft = transform.position + new Vector3(-0.5f, -1.0f, 0);
+        // Vector3 topRight = transform.position + new Vector3(0.5f, -1.0f, 0);
+
+        // Debug.Log("bottomLeft: "+bottomLeft);
+        // Debug.Log("bottomRight: "+bottomRight);
+        // Debug.Log("topLeft: "+topLeft);
+        // Debug.Log("topRight: "+topRight);
+
+        // Bounds b = GetComponent<BoxCollider2D>().bounds;
+        // b.Expand(-0.4f);
+        // Vector3 body_bottom_left_expand = b.min;
+        // Vector3 body_top_right_expand = b.max;
+        // Vector3 body_bottom_right_expand = new Vector3(b.max.x, b.min.y);
+        // Vector3 body_top_left_expand = new Vector3(b.min.x, b.max.y);
+
+        // Debug.Log("bottomLeft bound expand: "+body_bottom_left_expand);
+        // Debug.Log("bottomRight bound expand: "+body_top_right_expand);
+        // Debug.Log("topLeft bound expand: "+body_bottom_right_expand);
+        // Debug.Log("topRight bound expand: "+body_top_left_expand);
+
+        // Vector3 body_bottom_left = GetComponent<BoxCollider2D>().bounds.min;
+        // Vector3 body_top_right = GetComponent<BoxCollider2D>().bounds.max;
+        // Vector3 body_bottom_right = new Vector3(GetComponent<BoxCollider2D>().bounds.max.x, GetComponent<BoxCollider2D>().bounds.min.y);
+        // Vector3 body_top_left = new Vector3(GetComponent<BoxCollider2D>().bounds.min.x, GetComponent<BoxCollider2D>().bounds.max.y);
+
+        // Debug.Log("bottomLeft bound: "+body_bottom_left);
+        // Debug.Log("bottomRight bound: "+body_bottom_right);
+        // Debug.Log("topLeft bound: "+body_top_left);
+        // Debug.Log("topRight bound: "+body_top_right);
+
         // 不在跳躍狀態就不執行
         if (!IsJumping) {
+            JumpCounter = 0;
             return;
         }
 
@@ -387,26 +420,29 @@ public class DynamicJump_Lamniat : MonoBehaviour
         // 四個角都碰到，offset就會相加並互相抵銷
 
         Tilemap currentTilemap = m_HeightManager.GetCurrentTilemapByAvatarHeight(m_Lamniat.CurrentHeight);
+
         // 與BodyCollider範圍相比有縮小
-        Vector3Int body_bottom_left = currentTilemap.WorldToCell(transform.position + new Vector3(-0.3f, -1.8f, 0));
-        Vector3Int body_bottom_right = currentTilemap.WorldToCell(transform.position + new Vector3(0.3f, -1.8f, 0));
-        Vector3Int body_top_left = currentTilemap.WorldToCell(transform.position + new Vector3(-0.3f, -1.2f, 0));
-        Vector3Int body_top_right = currentTilemap.WorldToCell(transform.position + new Vector3(0.3f, -1.2f, 0));
+        Bounds b = GetComponent<BoxCollider2D>().bounds;
+        b.Expand(-0.4f);
+        Vector3Int body_bottom_left_expand = currentTilemap.WorldToCell(new Vector3(b.min.x, b.min.y));
+        Vector3Int body_top_right_expand = currentTilemap.WorldToCell(new Vector3(b.max.x, b.max.y));
+        Vector3Int body_bottom_right_expand = currentTilemap.WorldToCell(new Vector3(b.max.x, b.min.y));
+        Vector3Int body_top_left_expand = currentTilemap.WorldToCell(new Vector3(b.min.x, b.max.y));
 
         Vector3 offsetPosition = new Vector3(0, 0, 0);
-        if (TileUtils.HasTileAtPosition(currentTilemap, body_bottom_left))
+        if (TileUtils.HasTileAtPosition(currentTilemap, body_bottom_left_expand))
         {
             offsetPosition += new Vector3(-0.05f * m_Lamniat.BodyCollider.size.x, -0.05f * m_Lamniat.BodyCollider.size.y);
         }
-        if (TileUtils.HasTileAtPosition(currentTilemap, body_bottom_right))
+        if (TileUtils.HasTileAtPosition(currentTilemap, body_bottom_right_expand))
         {
             offsetPosition += new Vector3(0.05f * m_Lamniat.BodyCollider.size.x, -0.05f * m_Lamniat.BodyCollider.size.y);
         }
-        if (TileUtils.HasTileAtPosition(currentTilemap, body_top_left))
+        if (TileUtils.HasTileAtPosition(currentTilemap, body_top_left_expand))
         {
             offsetPosition += new Vector3(-0.05f * m_Lamniat.BodyCollider.size.x, 0.05f * m_Lamniat.BodyCollider.size.y);
         }
-        if (TileUtils.HasTileAtPosition(currentTilemap, body_top_right))
+        if (TileUtils.HasTileAtPosition(currentTilemap, body_top_right_expand))
         {
             offsetPosition += new Vector3(0.05f * m_Lamniat.BodyCollider.size.x, 0.05f * m_Lamniat.BodyCollider.size.y);
         }
@@ -430,18 +466,21 @@ public class DynamicJump_Lamniat : MonoBehaviour
             return;
         }
         Tilemap currentTilemap = m_HeightManager.GetCurrentTilemapByAvatarHeight(m_Lamniat.CurrentHeight-1);
+
         // 與BodyCollider範圍相比有縮小
-        Vector3Int body_bottom_left = currentTilemap.WorldToCell(transform.position + new Vector3(-0.3f, -2.8f, 0));
-        Vector3Int body_bottom_right = currentTilemap.WorldToCell(transform.position + new Vector3(0.3f, -2.8f, 0));
-        Vector3Int body_top_left = currentTilemap.WorldToCell(transform.position + new Vector3(-0.3f, -2.2f, 0));
-        Vector3Int body_top_right = currentTilemap.WorldToCell(transform.position + new Vector3(0.3f, -2.2f, 0));
+        Bounds b = GetComponent<BoxCollider2D>().bounds;
+        b.Expand(-0.4f);
+        Vector3Int body_bottom_left_expand = currentTilemap.WorldToCell(new Vector3(b.min.x, b.min.y-1f));
+        Vector3Int body_top_right_expand = currentTilemap.WorldToCell(new Vector3(b.max.x, b.max.y-1f));
+        Vector3Int body_bottom_right_expand = currentTilemap.WorldToCell(new Vector3(b.max.x, b.min.y-1f));
+        Vector3Int body_top_left_expand = currentTilemap.WorldToCell(new Vector3(b.min.x, b.max.y-1f));
 
         Vector3 offsetPosition = new Vector3(0, 0, 0);
 
-        if (TileUtils.HasTileAtPosition(currentTilemap, body_bottom_left) && 
-            TileUtils.HasTileAtPosition(currentTilemap, body_bottom_right) && 
-            TileUtils.HasTileAtPosition(currentTilemap, body_top_left) && 
-            TileUtils.HasTileAtPosition(currentTilemap, body_top_right) && 
+        if (TileUtils.HasTileAtPosition(currentTilemap, body_bottom_left_expand) && 
+            TileUtils.HasTileAtPosition(currentTilemap, body_bottom_right_expand) && 
+            TileUtils.HasTileAtPosition(currentTilemap, body_top_left_expand) && 
+            TileUtils.HasTileAtPosition(currentTilemap, body_top_right_expand) && 
             !TileUtils.HasTileAtPlayerPosition(currentTilemap, m_Lamniat.BodyCollider.bounds))
         {
             Debug.Log("FixJumpCornersWhileDownStep CanMove = false");

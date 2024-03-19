@@ -11,12 +11,13 @@ public class CameraAdjustment : MonoBehaviour
     private Vector3 originalFollowOffset;
     public float smoothOffsetY = 100f; // Y軸平滑速度
     public float smoothOffsetX = 100f; // X軸平滑速度（保持不變）
-    private float originalSmoothOffsetY = 10f; 
+    private float originalSmoothOffsetY;
 
     // Start is called before the first frame update
     void Start()
     {
         originalSmoothOffsetY = smoothOffsetY;
+        Debug.Log("originalSmoothOffsetY: "+originalSmoothOffsetY);
     }
 
     void Update() {

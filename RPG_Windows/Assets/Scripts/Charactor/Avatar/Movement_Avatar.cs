@@ -176,12 +176,13 @@ public class Movement_Avatar : MonoBehaviour
         // 跟跳躍的數值差在，位移速度會比較快一點
 
         Tilemap currentTilemap = m_HeightManager.GetCurrentTilemapByAvatarHeight(m_avatar.CurrentHeight);
-        Vector3Int body_bottom_left = currentTilemap.WorldToCell(m_avatar.BodyCollider.bounds.min);
-        Vector3Int body_top_right = currentTilemap.WorldToCell(m_avatar.BodyCollider.bounds.max);
+        Vector3Int body_bottom_left = currentTilemap.WorldToCell(new Vector3(m_avatar.BodyCollider.bounds.min.x, m_avatar.BodyCollider.bounds.min.y));
+        Vector3Int body_top_right = currentTilemap.WorldToCell(new Vector3(m_avatar.BodyCollider.bounds.max.x, m_avatar.BodyCollider.bounds.max.y));
         Vector3Int body_bottom_right = currentTilemap.WorldToCell(new Vector3(m_avatar.BodyCollider.bounds.max.x, m_avatar.BodyCollider.bounds.min.y));
         Vector3Int body_top_left = currentTilemap.WorldToCell(new Vector3(m_avatar.BodyCollider.bounds.min.x, m_avatar.BodyCollider.bounds.max.y));
 
         Vector3 offsetPosition = Vector3.zero;
+        
         if (TileUtils.HasTileAtPosition(currentTilemap, body_bottom_left))
         {
             offsetPosition += new Vector3(-0.05f * m_avatar.BodyCollider.size.x, -0.05f * m_avatar.BodyCollider.size.y);

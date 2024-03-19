@@ -27,8 +27,8 @@ internal static class TileUtils
     public static bool HasTileAtPlayerPosition(Tilemap currentTilemap, Bounds playerColliderBounds)
     {
         // 偵測Player的Collider對應位置是否有TileMap的地塊
-        Vector3Int body_bottom_left = currentTilemap.WorldToCell(playerColliderBounds.min);
-        Vector3Int body_top_right = currentTilemap.WorldToCell(playerColliderBounds.max);
+        Vector3Int body_bottom_left = currentTilemap.WorldToCell(new Vector3(playerColliderBounds.min.x, playerColliderBounds.min.y));
+        Vector3Int body_top_right = currentTilemap.WorldToCell(new Vector3(playerColliderBounds.max.x, playerColliderBounds.max.y));
         Vector3Int body_bottom_right = currentTilemap.WorldToCell(new Vector3(playerColliderBounds.max.x, playerColliderBounds.min.y));
         Vector3Int body_top_left = currentTilemap.WorldToCell(new Vector3(playerColliderBounds.min.x, playerColliderBounds.max.y));
 
