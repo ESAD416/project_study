@@ -6,16 +6,15 @@ using UnityEngine;
 [Serializable]
 public class InventorySlotModel
 {
-    [SerializeField] private InventoryItemData itemData;
-    [SerializeField] private int stackSize;
+    [SerializeField] private InventoryItemData m_itemData;
+    public InventoryItemData ItemData => m_itemData;
+    [SerializeField] private int m_stackSize;
+    public int StackSize => m_stackSize;
     
-    // Getter
-    public InventoryItemData ItemData => itemData;
-    public int StackSize => stackSize;
 
     public InventorySlotModel(InventoryItemData source, int amount) {
-        itemData = source;
-        stackSize = amount;
+        m_itemData = source;
+        m_stackSize = amount;
     }
 
     public InventorySlotModel() {
@@ -23,30 +22,30 @@ public class InventorySlotModel
     }
 
     public void ClearSlot() {
-        itemData = null;
-        stackSize = -1;
+        m_itemData = null;
+        m_stackSize = -1;
     }
 
     public void UpdateInventorySlot(InventoryItemData data, int amount) {
-        itemData = data;
-        stackSize = amount;
+        m_itemData = data;
+        m_stackSize = amount;
     }
 
     public void IncreaseToStack(int amount) {
-        stackSize += amount;
+        m_stackSize += amount;
     }
 
     public void ReduceFromStack(int amount) {
-        stackSize -= amount;
+        m_stackSize -= amount;
     }
 
     public bool RoomLeftInStack(int amountToIncrease) {
-        if(stackSize + amountToIncrease <= itemData.maxStackSize) return true;
+        if(m_stackSize + amountToIncrease <= m_itemData.MaxStackSize) return true;
         return false;
     }
 
     public bool RoomLeftInStack(int amountToIncrease, out int amountRemaining) {
-        amountRemaining = itemData.maxStackSize - stackSize;
+        amountRemaining = m_itemData.MaxStackSize - m_stackSize;
         return RoomLeftInStack(amountToIncrease);
     }
 }

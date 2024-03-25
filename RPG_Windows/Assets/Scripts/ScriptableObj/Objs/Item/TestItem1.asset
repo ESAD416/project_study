@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: TestItem1
   m_EditorClassIdentifier: 
   ID: 1
-  displayName: Apple
-  description: An Apple, heal 10
-  icon: {fileID: -3764680047136686143, guid: 7e6e7ea7113ea0749838be879a13a9e5, type: 3}
-  maxStackSize: 2
+  DisplayName: Apple
+  Description: An apple, heal 10
+  Icon: {fileID: -3764680047136686143, guid: 7e6e7ea7113ea0749838be879a13a9e5, type: 3}
+  MaxStackSize: 2

@@ -6,6 +6,6 @@ using UnityEngine;
 public class LootData : InventoryItemData
 {
     [Header("Loot Details")]
-    public Sprite lootSprite;
-    public float dropChance;
+    public Sprite LootSprite;
+    public float DropChance;
 }

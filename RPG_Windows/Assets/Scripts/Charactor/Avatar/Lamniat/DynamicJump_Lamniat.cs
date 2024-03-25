@@ -66,42 +66,10 @@ public class DynamicJump_Lamniat : MonoBehaviour
         Debug.Log("vSyncCount: "+QualitySettings.vSyncCount);
     }
     void Start() {
-        InvokeRepeating("SetParameterByFPS", 1, 1);
+        //InvokeRepeating("SetParameterByFPS", 1, 1);
     }
 
     void Update() {
-        // Vector3 bottomLeft = transform.position + new Vector3(-0.5f, -2f, 0);
-        // Vector3 bottomRight = transform.position + new Vector3(0.5f, -2f, 0);
-        // Vector3 topLeft = transform.position + new Vector3(-0.5f, -1.0f, 0);
-        // Vector3 topRight = transform.position + new Vector3(0.5f, -1.0f, 0);
-
-        // Debug.Log("bottomLeft: "+bottomLeft);
-        // Debug.Log("bottomRight: "+bottomRight);
-        // Debug.Log("topLeft: "+topLeft);
-        // Debug.Log("topRight: "+topRight);
-
-        // Bounds b = GetComponent<BoxCollider2D>().bounds;
-        // b.Expand(-0.4f);
-        // Vector3 body_bottom_left_expand = b.min;
-        // Vector3 body_top_right_expand = b.max;
-        // Vector3 body_bottom_right_expand = new Vector3(b.max.x, b.min.y);
-        // Vector3 body_top_left_expand = new Vector3(b.min.x, b.max.y);
-
-        // Debug.Log("bottomLeft bound expand: "+body_bottom_left_expand);
-        // Debug.Log("bottomRight bound expand: "+body_top_right_expand);
-        // Debug.Log("topLeft bound expand: "+body_bottom_right_expand);
-        // Debug.Log("topRight bound expand: "+body_top_left_expand);
-
-        // Vector3 body_bottom_left = GetComponent<BoxCollider2D>().bounds.min;
-        // Vector3 body_top_right = GetComponent<BoxCollider2D>().bounds.max;
-        // Vector3 body_bottom_right = new Vector3(GetComponent<BoxCollider2D>().bounds.max.x, GetComponent<BoxCollider2D>().bounds.min.y);
-        // Vector3 body_top_left = new Vector3(GetComponent<BoxCollider2D>().bounds.min.x, GetComponent<BoxCollider2D>().bounds.max.y);
-
-        // Debug.Log("bottomLeft bound: "+body_bottom_left);
-        // Debug.Log("bottomRight bound: "+body_bottom_right);
-        // Debug.Log("topLeft bound: "+body_top_left);
-        // Debug.Log("topRight bound: "+body_top_right);
-
         // 不在跳躍狀態就不執行
         if (!IsJumping) {
             JumpCounter = 0;
@@ -117,76 +85,10 @@ public class DynamicJump_Lamniat : MonoBehaviour
 
         // 調整跳躍level
         UpdateLamniatJumping();
-        //UpdateLamniatJumpingVer2();
     }
 
     private void SetParameterByFPS() {
         var fps = 1f / Time.unscaledDeltaTime;
-        
-        // if(fps < 89f) {
-        //     // 減半
-        //     HeightIncreaseCount = 5; 
-        //     JumpFallingCount = 13;
-        //     HeightDecreaseCount = 20;
-        //     HeightDecreaseCountExponential = 5;
-
-        //     jumpOffset = new float[] 
-        //     {
-        //         0.0f,     //5
-        //         0.2f,      //10
-        //         0.4f,     //20
-        //         0.6f,     //25
-        //         0.8f,     //35
-                
-        //         1.0f, 1.1f, 1.2335f,
-        //         1.3665f, 1.5f, 1.6335f, 
-        //         1.7665f, 1.9f,
-        //         2.0f, 
-        //         1.9f, 1.7665f, 1.6335f, 1.5f,
-        //         1.3665f, 1.2335f, 1.1f,     
-
-        //         1.0f,     //75
-        //         0.793f,     //80
-        //         0.586f,     //85
-        //         0.379f,     //90
-        //         0.276f,     //95
-        //         0.0f     //100
-        //     };
-        // } else {
-        //     HeightIncreaseCount = 10;
-        //     JumpFallingCount = 25;
-        //     HeightDecreaseCount = 40;
-        //     HeightDecreaseCountExponential = 10;
-
-        //     jumpOffset = new float[] 
-        //     {
-        //         0.0f, 0.1f,     //5
-        //         0.2f,      //10
-        //         0.3f,     //15
-        //         0.4f,     //20
-        //         0.5f, 0.6f,     //25
-        //         0.7f,     //30
-        //         0.8f,     //35
-        //         0.9f,     //40
-                
-        //         1.0f, 
-        //         1.067f, 1.133f, 1.2f, 1.267f,     //45
-        //         1.333f, 1.4f, 1.467f, 1.533f, 1.6f,     //50
-        //         1.667f, 1.733f, 1.8f, 1.867f, 1.933f,     //55
-        //         2.0f, 
-        //         1.933f, 1.867f, 1.8f, 1.733f,     //60
-        //         1.667f, 1.6f, 1.533f, 1.467f, 1.4f,     //65
-        //         1.333f, 1.267f, 1.2f, 1.133f, 1.067f,     //70
-
-        //         1.0f, 0.897f,     //75
-        //         0.793f, 0.69f,     //80
-        //         0.586f,     //85
-        //         0.483f, 0.379f,     //90
-        //         0.276f,     //95
-        //         0.138f, 0.0f     //100
-        //     };
-        // }
-
     }
 
     
@@ -216,87 +118,75 @@ public class DynamicJump_Lamniat : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D trigger)
     {
-        Debug.Log("trigger Enter: "+trigger.gameObject.name);
-        int playerLayerMask = 1 << LayerMask.NameToLayer("Player");
-        int mapRangeLayerMask = 1 << LayerMask.NameToLayer("MapRange");
-        int layerMask = ~(playerLayerMask | mapRangeLayerMask);
-
-        Vector2 start = (Vector2)transform.position + m_Lamniat.BodyCollider.offset ;  // 射线的起点
-        RaycastHit2D hit = Physics2D.Raycast(start, m_Lamniat.AvatarMovement.Movement.normalized, 1f, layerMask);
-        Color color = hit.collider != null ? Color.red : Color.green;
-        Debug.DrawLine(start, start + m_Lamniat.AvatarMovement.Movement.normalized*1f, color);
-        //print(hit.collider);
-        //Debug.Log("hit.collider name: "+hit.collider.gameObject.name);
-        if (hit.collider == null || hit.collider.gameObject.name != trigger.gameObject.name) {
-            return;
-        }
-
-        //Debug.Log("trigger tag: "+trigger.gameObject.tag);
-        // Debug.Log("CanJump: "+CanJump);
-        if (trigger.gameObject.CompareTag("Map_Jump_Trigger") && CanJump)
+        // Debug.Log("trigger Enter transform: "+transform.gameObject.name);
+        // Debug.Log("trigger Enter trigger: "+trigger.gameObject.name);
+        if (trigger.gameObject.CompareTag("Map_Jump_Trigger")) 
         {
-            // Debug.Log("trigger Enter jump start");
-            // 触发跳跃逻辑
-            m_Lamniat.SetCurrentBaseState(m_Lamniat.Jump);
-            IsJumping = true;
-            CanJump = false;
-            //moveDuration = 0f;
-            JumpCounter = 0;
-            HeightChangeCount = 0;
-            // 記錄最一開始的跳躍
+            Debug.Log("Jump Trigger: ");
+            if (m_Lamniat.RaycastHit.collider == null || m_Lamniat.RaycastHit.collider.gameObject.name != trigger.gameObject.name) {
+                return;
+            }
+            Debug.Log("hit.collider name: "+m_Lamniat.RaycastHit.collider.gameObject.name);
+            //Debug.Log("trigger tag: "+trigger.gameObject.tag);
+            // Debug.Log("CanJump: "+CanJump);
+            if (CanJump)
+            {
+                // Debug.Log("trigger Enter jump start");
+                // 触发跳跃逻辑
+                m_Lamniat.SetCurrentBaseState(m_Lamniat.Jump);
+                IsJumping = true;
+                CanJump = false;
+                //moveDuration = 0f;
+                JumpCounter = 0;
+                HeightChangeCount = 0;
+                // 記錄最一開始的跳躍
 
-            // 一旦跳躍，Trigger就關掉
-            // for (int i = 0; i < tilemapTriggerArray.Length; i++)
-            // {
-            //     int triggerLevel = i / triggersPerLevel;
-            //     tilemapTriggerArray[i].enabled = false;
-            // } 
+                // 一旦跳躍，Trigger就關掉
+                // for (int i = 0; i < tilemapTriggerArray.Length; i++)
+                // {
+                //     int triggerLevel = i / triggersPerLevel;
+                //     tilemapTriggerArray[i].enabled = false;
+                // } 
+            }
         }
-
     }
 
     void OnTriggerStay2D(Collider2D trigger)
     {
-        Debug.Log("trigger stay: "+trigger.gameObject.name);
-        int playerLayerMask = 1 << LayerMask.NameToLayer("Player");
-        int mapRangeLayerMask = 1 << LayerMask.NameToLayer("MapRange");
-        int layerMask = ~(playerLayerMask | mapRangeLayerMask);
-
-        Vector2 start = (Vector2)transform.position + m_Lamniat.BodyCollider.offset ;  // 射线的起点
-        RaycastHit2D hit = Physics2D.Raycast(start, m_Lamniat.AvatarMovement.Movement.normalized, 1f, layerMask);
-        Color color = hit.collider != null ? Color.red : Color.green;
-        Debug.DrawLine(start, start + m_Lamniat.AvatarMovement.Movement.normalized*1f, color);
-        // Debug.Log("hit.collider name: "+hit.collider.gameObject.name);
-        if (hit.collider == null || hit.collider.gameObject.name != trigger.gameObject.name) {
-            return;
-        }
-
-        //Debug.Log("trigger tag: "+trigger.gameObject.tag);
-        // Debug.Log("CanJump: "+CanJump);
-        if (trigger.gameObject.CompareTag("Map_Jump_Trigger") && CanJump)
+        // Debug.Log("trigger stay transform: "+transform.gameObject.name);
+        // Debug.Log("trigger stay trigger: "+trigger.gameObject.name);
+        if (trigger.gameObject.CompareTag("Map_Jump_Trigger")) 
         {
-            // Debug.Log("trigger stay jump start");
-            // 触发跳跃逻辑
-            m_Lamniat.SetCurrentBaseState(m_Lamniat.Jump);
-            IsJumping = true;
-            CanJump = false;
-            //moveDuration = 0f;
-            JumpCounter = 0;
-            HeightChangeCount = 0;
-            // 記錄最一開始的跳躍
+            if (m_Lamniat.RaycastHit.collider == null || m_Lamniat.RaycastHit.collider.gameObject.name != trigger.gameObject.name) {
+                return;
+            }
+            //Debug.Log("trigger tag: "+trigger.gameObject.tag);
+            // Debug.Log("CanJump: "+CanJump);
+            if (CanJump)
+            {
+                // Debug.Log("trigger stay jump start");
+                // 触发跳跃逻辑
+                m_Lamniat.SetCurrentBaseState(m_Lamniat.Jump);
+                IsJumping = true;
+                CanJump = false;
+                //moveDuration = 0f;
+                JumpCounter = 0;
+                HeightChangeCount = 0;
+                // 記錄最一開始的跳躍
 
-            // 一旦跳躍，Trigger就關掉
-            // for (int i = 0; i < tilemapTriggerArray.Length; i++)
-            // {
-            //     int triggerLevel = i / triggersPerLevel;
-            //     tilemapTriggerArray[i].enabled = false;
-            // }
+                // 一旦跳躍，Trigger就關掉
+                // for (int i = 0; i < tilemapTriggerArray.Length; i++)
+                // {
+                //     int triggerLevel = i / triggersPerLevel;
+                //     tilemapTriggerArray[i].enabled = false;
+                // }
+            }
         }
-
     }
     #endregion
 
     private void UpdateLamniatJumping() {
+        // Debug.Log("location: "+transform.position);
         if (JumpCounter < HeightIncreaseCount)
         {
             // 跳跃上升阶段
@@ -334,10 +224,8 @@ public class DynamicJump_Lamniat : MonoBehaviour
                 // 播完Landing動畫
                 m_Lamniat.Animator.SetTrigger("land");
                 // 切換状态
-                float clipTime = AnimeUtils.GetAnimateClipTimeInRuntime(m_Lamniat.Animator, "Lamniat_jump_landing");
-                Debug.Log("clipTime: "+clipTime);
-                Invoke("EndJumpState", clipTime);
-
+                //float clipTime = AnimeUtils.GetAnimateClipTimeInRuntime(m_Lamniat.Animator, "Lamniat_jump_landing");
+                //Debug.Log("clipTime: "+clipTime);
                 // 一旦跳躍結束，便啟動對應level的Trigger
                 // for (int i = 0; i < tilemapTriggerArray.Length; i++)
                 // {
@@ -386,18 +274,6 @@ public class DynamicJump_Lamniat : MonoBehaviour
 
     }
 
-    private void FloatTimeElapsedConvertToFrameInt(float value) 
-    {
-        float threshold = 0.01f;
-        m_jumpingTimeElapsed += value;
-        JumpCounter = Mathf.FloorToInt(m_jumpingTimeElapsed / threshold);
-    }
-
-    private void EndJumpState() {
-        if(m_LamniatMovement.IsMoving) m_Lamniat.SetCurrentBaseState(m_Lamniat.Move);
-        else m_Lamniat.SetCurrentBaseState(m_Lamniat.Idle);
-    }
-
     private void UpdateViewPosition() 
     {
         Vector3 viewPosition = transform.position;
@@ -418,11 +294,10 @@ public class DynamicJump_Lamniat : MonoBehaviour
         // 只碰到一個角，就往斜向位移
         // 碰到兩個角，就往X或Y方向移動
         // 四個角都碰到，offset就會相加並互相抵銷
-
         Tilemap currentTilemap = m_HeightManager.GetCurrentTilemapByAvatarHeight(m_Lamniat.CurrentHeight);
 
         // 與BodyCollider範圍相比有縮小
-        Bounds b = GetComponent<BoxCollider2D>().bounds;
+        Bounds b = m_Lamniat.BodyCollider.bounds;
         b.Expand(-0.4f);
         Vector3Int body_bottom_left_expand = currentTilemap.WorldToCell(new Vector3(b.min.x, b.min.y));
         Vector3Int body_top_right_expand = currentTilemap.WorldToCell(new Vector3(b.max.x, b.max.y));
@@ -465,22 +340,33 @@ public class DynamicJump_Lamniat : MonoBehaviour
             Debug.Log("FixJumpCornersWhileDownStep return");
             return;
         }
-        Tilemap currentTilemap = m_HeightManager.GetCurrentTilemapByAvatarHeight(m_Lamniat.CurrentHeight-1);
+        Tilemap downHeightTilemap = m_HeightManager.GetCurrentTilemapByAvatarHeight(m_Lamniat.CurrentHeight-1);
 
         // 與BodyCollider範圍相比有縮小
-        Bounds b = GetComponent<BoxCollider2D>().bounds;
+        Bounds b = m_Lamniat.BodyCollider.bounds;
         b.Expand(-0.4f);
-        Vector3Int body_bottom_left_expand = currentTilemap.WorldToCell(new Vector3(b.min.x, b.min.y-1f));
-        Vector3Int body_top_right_expand = currentTilemap.WorldToCell(new Vector3(b.max.x, b.max.y-1f));
-        Vector3Int body_bottom_right_expand = currentTilemap.WorldToCell(new Vector3(b.max.x, b.min.y-1f));
-        Vector3Int body_top_left_expand = currentTilemap.WorldToCell(new Vector3(b.min.x, b.max.y-1f));
+        Vector3Int body_bottom_left_expand = downHeightTilemap.WorldToCell(new Vector3(b.min.x, b.min.y-1f));
+        Vector3Int body_top_right_expand = downHeightTilemap.WorldToCell(new Vector3(b.max.x, b.max.y-1f));
+        Vector3Int body_bottom_right_expand = downHeightTilemap.WorldToCell(new Vector3(b.max.x, b.min.y-1f));
+        Vector3Int body_top_left_expand = downHeightTilemap.WorldToCell(new Vector3(b.min.x, b.max.y-1f));
 
         Vector3 offsetPosition = new Vector3(0, 0, 0);
 
-        if (TileUtils.HasTileAtPosition(currentTilemap, body_bottom_left_expand) && 
-            TileUtils.HasTileAtPosition(currentTilemap, body_bottom_right_expand) && 
-            TileUtils.HasTileAtPosition(currentTilemap, body_top_left_expand) && 
-            TileUtils.HasTileAtPosition(currentTilemap, body_top_right_expand) && 
+        // var bl = new Vector3(b.min.x, b.min.y-1f);
+        // var br = new Vector3(b.max.x, b.min.y-1f);
+        // var tl = new Vector3(b.min.x, b.max.y-1f);
+        // var tr = new Vector3(b.max.x, b.max.y-1f);
+
+        // Debug.Log("bottomLeft: "+bl);
+        // Debug.Log("bottomRight: "+br);
+        // Debug.Log("topLeft: "+tl);
+        // Debug.Log("topRight: "+tr);
+
+        Tilemap currentTilemap = m_HeightManager.GetCurrentTilemapByAvatarHeight(m_Lamniat.CurrentHeight);
+        if (TileUtils.HasTileAtPosition(downHeightTilemap, body_bottom_left_expand) && 
+            TileUtils.HasTileAtPosition(downHeightTilemap, body_bottom_right_expand) && 
+            TileUtils.HasTileAtPosition(downHeightTilemap, body_top_left_expand) && 
+            TileUtils.HasTileAtPosition(downHeightTilemap, body_top_right_expand) && 
             !TileUtils.HasTileAtPlayerPosition(currentTilemap, m_Lamniat.BodyCollider.bounds))
         {
             Debug.Log("FixJumpCornersWhileDownStep CanMove = false");

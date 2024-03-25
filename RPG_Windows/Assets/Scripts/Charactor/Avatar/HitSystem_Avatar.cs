@@ -21,6 +21,11 @@ public class HitSystem_Avatar : HitSystem
 
     protected void Start() {
     }
+
+    protected void Update() 
+    {
+        transform.position = m_target.transform.position;
+    }
     
 
     protected override IEnumerator TakeHit(Attack attacker) 
@@ -28,8 +33,7 @@ public class HitSystem_Avatar : HitSystem
         IsTakingHit = true;
         m_targetMovement.CanMove = false;
 
-        var avatarTakenHit = GetComponent<Avatar>();
-        if(avatarTakenHit != null) {
+        if(m_target != null) {
             if(m_target.CurrentBaseState.State.Equals(BaseStateMachine_Charactor.BaseState.Move)) {
                 Debug.Log("TakeHit: SetMovementAfterTrigger "+m_targetMovement.Movement);
                 m_targetMovement.SetMovementAfterTrigger(m_targetMovement.Movement);
@@ -49,14 +53,14 @@ public class HitSystem_Avatar : HitSystem
                 m_target.SetCurrentBaseState(m_target.Hurt);
 
                 var dir = SetAttackForceDir(attacker.transform);
-                if(!isHyperArmor && m_KnockbackFeedback != null) {
-                    m_KnockbackFeedback.ActiveFeedbackByDir(dir);
-                    Invoke("SetHurtTrigger", m_KnockbackFeedback.HitRecoveryTime);
+                if(!isHyperArmor && m_targetKnockbackFeedback != null) {
+                    m_targetKnockbackFeedback.ActiveFeedbackByDir(dir);
+                    Invoke("SetHurtTrigger", m_targetKnockbackFeedback.HitRecoveryTime);
                 } else {
                     SetHurtTrigger();
                 }
 
-                attacker.DamageSystem.OnDamage(m_HealthSystem);
+                attacker.DamageSystem.OnDamage(m_targetHealthSystem);
                 
                 yield return new WaitForSeconds(invulnerableDuration);  // hardcasted casted time for debugged
             }
@@ -67,11 +71,11 @@ public class HitSystem_Avatar : HitSystem
 
     protected override IEnumerator TakeHit(DamageSystem damageSystem, Transform attackedLocation, int damageCounter = 1) 
     {
+        Debug.Log("TakeHit start");
         IsTakingHit = true;
         m_targetMovement.CanMove = false;
 
-        var avatarTakenHit = GetComponent<Avatar>();
-        if(avatarTakenHit != null) {
+        if(m_target != null) {
             if(m_target.CurrentBaseState.State.Equals(BaseStateMachine_Charactor.BaseState.Move)) {
                 //m_avatar.SetFacingDir(m_avatar.Movement);
                 m_targetMovement.SetMovementAfterTrigger(m_targetMovement.Movement);
@@ -92,18 +96,19 @@ public class HitSystem_Avatar : HitSystem
                 m_target.SetCurrentBaseState(m_target.Hurt);
 
                 var dir = SetAttackForceDir(attackedLocation);
-                if(!isHyperArmor && m_KnockbackFeedback != null) {
-                    m_KnockbackFeedback.ActiveFeedbackByDir(dir);
-                    Invoke("SetHurtTrigger", m_KnockbackFeedback.HitRecoveryTime);
+                if(!isHyperArmor && m_targetKnockbackFeedback != null) {
+                    m_targetKnockbackFeedback.ActiveFeedbackByDir(dir);
+                    Invoke("SetHurtTrigger", m_targetKnockbackFeedback.HitRecoveryTime);
                 } else {
                     SetHurtTrigger();
                 }
 
-                damageSystem.OnDamage(m_HealthSystem);
+                damageSystem.OnDamage(m_targetHealthSystem);
                 
                 yield return new WaitForSeconds(invulnerableDuration);  // hardcasted casted time for debugged
             }
         }
+        Debug.Log("TakeHit end");
 
         FinishTakeHit();
     }

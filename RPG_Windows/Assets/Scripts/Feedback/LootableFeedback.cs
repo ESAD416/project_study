@@ -22,7 +22,7 @@ public class LootableFeedback : MonoBehaviour
             pos.y += spread * Random.value - spread / 2;
 
             GameObject dropLoot = Instantiate(lootPrefeb);
-            dropLoot.GetComponent<SpriteRenderer>().sprite = lootItem.lootSprite;
+            dropLoot.GetComponent<SpriteRenderer>().sprite = lootItem.LootSprite;
             dropLoot.GetComponent<ItemPickUpFeedback>().itemData = lootItem;
             dropLoot.transform.position = pos;
         }
@@ -42,7 +42,7 @@ public class LootableFeedback : MonoBehaviour
     private List<LootData> GetPossibleLoot(int randomChance) {
         List<LootData> possibleLoot = new List<LootData>();
         foreach(LootData loot in lootList) {
-            if(randomChance <= loot.dropChance) {
+            if(randomChance <= loot.DropChance) {
                 possibleLoot.Add(loot);
             }
         }

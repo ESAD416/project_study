@@ -79,7 +79,7 @@ public class Movement_Lamniat : Movement_Avatar
                 }
 
                 m_moveVelocity = m_firstMoveVelocityWhileJumping;
-                Debug.Log("Movement_Lamniat Update IsJumping moveVelocity: " + m_moveVelocity);
+                //Debug.Log("Movement_Lamniat Update IsJumping moveVelocity: " + m_moveVelocity);
 
                 // 如果在跳躍期間方向改變，方向雖然會更新，但只會減速而不會增加速率
                 if (m_firstMoveVelocityWhileJumping.x > 0)
@@ -163,9 +163,11 @@ public class Movement_Lamniat : Movement_Avatar
         // 正在跳躍
         else if (m_LamiatJump.IsJumping)
         {
+            //Debug.Log("IsJumping not moving moveVelocity start: " + m_moveVelocity);
             m_moveingTimeElapsed = 0f;
             m_moveVelocity.x = m_moveVelocity.x / 1.05f;
             m_moveVelocity.y = m_moveVelocity.y / 1.05f;
+            //Debug.Log("IsJumping not moving moveVelocity end: " + m_moveVelocity);
         }
         else
         {
@@ -181,7 +183,7 @@ public class Movement_Lamniat : Movement_Avatar
         }
 
         //Debug.Log("m_moveVelocity before adjust: "+m_moveVelocity);
-        
+        //Debug.Log("ClampMagnitude OnHeightObjCollisionExit: "+m_LamiatJump.OnHeightObjCollisionExit+", canMove: "+CanMove);
         if (CanMove && !m_LamiatJump.OnHeightObjCollisionExit) 
         {
             // 最終設定剛體速度的上限

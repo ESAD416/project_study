@@ -45,14 +45,14 @@ public class HitSystem_Enemy : HitSystem
 
             
             var dir = SetAttackForceDir(attacker.transform);
-            if(!isHyperArmor && m_KnockbackFeedback != null) {
-                m_KnockbackFeedback.ActiveFeedbackByDir(dir);
-                Invoke("SetHurtTrigger", m_KnockbackFeedback.HitRecoveryTime);
+            if(!isHyperArmor && m_targetKnockbackFeedback != null) {
+                m_targetKnockbackFeedback.ActiveFeedbackByDir(dir);
+                Invoke("SetHurtTrigger", m_targetKnockbackFeedback.HitRecoveryTime);
             } else {
                 m_targetAnimator?.SetTrigger("hurt");
             }
 
-            attacker.DamageSystem.OnDamage(m_HealthSystem);
+            attacker.DamageSystem.OnDamage(m_targetHealthSystem);
             
             yield return new WaitForSeconds(invulnerableDuration);  // hardcasted casted time for debugged
 
@@ -77,14 +77,14 @@ public class HitSystem_Enemy : HitSystem
 
             var dir = SetAttackForceDir(attackedLocation);
 
-            if(!isHyperArmor && m_KnockbackFeedback != null) {
-                m_KnockbackFeedback.ActiveFeedbackByDir(dir);
-                Invoke("SetHurtTrigger", m_KnockbackFeedback.HitRecoveryTime);
+            if(!isHyperArmor && m_targetKnockbackFeedback != null) {
+                m_targetKnockbackFeedback.ActiveFeedbackByDir(dir);
+                Invoke("SetHurtTrigger", m_targetKnockbackFeedback.HitRecoveryTime);
             } else {
                 m_targetAnimator?.SetTrigger("hurt");
             }
 
-            damageSystem.OnDamage(m_HealthSystem);
+            damageSystem.OnDamage(m_targetHealthSystem);
             
             yield return new WaitForSeconds(invulnerableDuration);  // hardcasted casted time for debugged
 

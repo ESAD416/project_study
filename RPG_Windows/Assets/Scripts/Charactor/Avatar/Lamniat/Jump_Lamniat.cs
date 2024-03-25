@@ -63,20 +63,20 @@ public class Jump_Lamniat : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        jumpPoint.OnPlayerEnterColliderEvent.AddListener(() => {
-            Debug.Log("ColliderTrigger EnterCollider");
-            if(prepareToJump) OnHeightObjCollisionEnter = true;
-        });
+        // jumpPoint.OnPlayerEnterColliderEvent.AddListener(() => {
+        //     Debug.Log("ColliderTrigger EnterCollider");
+        //     if(prepareToJump) OnHeightObjCollisionEnter = true;
+        // });
 
-        jumpPoint.OnPlayerExitColliderEvent.AddListener(() => {
-            Debug.Log("ColliderTrigger ExitCollider");
-            OnHeightObjCollisionEnter = false;
-        });
+        // jumpPoint.OnPlayerExitColliderEvent.AddListener(() => {
+        //     Debug.Log("ColliderTrigger ExitCollider");
+        //     OnHeightObjCollisionEnter = false;
+        // });
 
-        jumpPoint.OnPlayerEnterTriggerEvent.AddListener(() => {
-            Debug.Log("ColliderTrigger OnPlayerEnterTriggerEvent");
-            if(prepareToJump) jumpPointTrigger = true;
-        });
+        // jumpPoint.OnPlayerEnterTriggerEvent.AddListener(() => {
+        //     Debug.Log("ColliderTrigger OnPlayerEnterTriggerEvent");
+        //     if(prepareToJump) jumpPointTrigger = true;
+        // });
         // Debug.Log("m_LamniatSprtRenderer position: "+m_LamniatSprtRenderer.transform.position);
         // m_LamniatSprtRenderer.transform.position = new Vector3(0, 2f);
         // Debug.Log("m_LamniatSprtRenderer position: "+m_LamniatSprtRenderer.transform.position);
@@ -91,33 +91,33 @@ public class Jump_Lamniat : MonoBehaviour
     private void Update()
     {
         //Debug.Log("m_Lamniat.Center: "+m_Lamniat.Center);
-        maxJumpHeight =  m_Lamniat.CurrentHeight + maxJumpHeightOffSet;
-        //Debug.DrawLine(m_Lamniat.RaycastStart.position, m_Lamniat.RaycastEnd, Color.blue);
-        if(!groundDelaying) {
-            if(!IsJumping) {
-                //DetectedToJump();
-                if(!prepareToJump) jumpState = DetectedWhetherNeedToJump();
+        // maxJumpHeight =  m_Lamniat.CurrentHeight + maxJumpHeightOffSet;
+        // //Debug.DrawLine(m_Lamniat.RaycastStart.position, m_Lamniat.RaycastEnd, Color.blue);
+        // if(!groundDelaying) {
+        //     if(!IsJumping) {
+        //         //DetectedToJump();
+        //         if(!prepareToJump) jumpState = DetectedWhetherNeedToJump();
                 
-                switch(jumpState) {
-                    case JumpState.Ground:
-                        break;
-                    case JumpState.JumpDown:
-                        //TriggerToJumpDown();
-                        // if(!processingPushback) {
-                        //     TriggerToJumpDown();
-                        // } else {
-                        //     m_Rigidbody.AddForce((-new Vector2(movement.x, movement.y))* moveSpeed, ForceMode2D.Force);
-                        // }
-                        break;
-                    case JumpState.JumpUp:
-                        //TriggerToJumpUp();
-                        break;
-                }
-            } 
-            // else if(!jumpHitColli) {
-            //     DetectedWhileJump();
-            // }
-        }
+        //         switch(jumpState) {
+        //             case JumpState.Ground:
+        //                 break;
+        //             case JumpState.JumpDown:
+        //                 //TriggerToJumpDown();
+        //                 // if(!processingPushback) {
+        //                 //     TriggerToJumpDown();
+        //                 // } else {
+        //                 //     m_Rigidbody.AddForce((-new Vector2(movement.x, movement.y))* moveSpeed, ForceMode2D.Force);
+        //                 // }
+        //                 break;
+        //             case JumpState.JumpUp:
+        //                 //TriggerToJumpUp();
+        //                 break;
+        //         }
+        //     } 
+        //     // else if(!jumpHitColli) {
+        //     //     DetectedWhileJump();
+        //     // }
+        // }
     }
 
     private void FixedUpdate() {
@@ -149,76 +149,76 @@ public class Jump_Lamniat : MonoBehaviour
         }
     }
 
-    #region 碰撞偵測
+    // #region 碰撞偵測
 
-    private void OnCollisionEnter2D(Collision2D other) {
-        Debug.Log("OnCollisionEnter2D: "+other.gameObject.name);
-        OnColliders.Add(other.collider);
-        if(jumpState != JumpState.Ground) {
-            OnHeightObjCollisionEnter = true;
+    // private void OnCollisionEnter2D(Collision2D other) {
+    //     Debug.Log("OnCollisionEnter2D: "+other.gameObject.name);
+    //     OnColliders.Add(other.collider);
+    //     if(jumpState != JumpState.Ground) {
+    //         OnHeightObjCollisionEnter = true;
             
-            if(jumpState == JumpState.JumpDown) {
-                ChangeColliderToJumpDown();
-            }
-        }
-    }
+    //         if(jumpState == JumpState.JumpDown) {
+    //             ChangeColliderToJumpDown();
+    //         }
+    //     }
+    // }
 
-    private void OnCollisionStay2D(Collision2D other) {
-        //Debug.Log("OnCollisionStay2D: "+other.gameObject.name);
-    }
+    // private void OnCollisionStay2D(Collision2D other) {
+    //     //Debug.Log("OnCollisionStay2D: "+other.gameObject.name);
+    // }
 
-    private void OnCollisionExit2D(Collision2D other) {
-        //Debug.Log("OnColliders count: "+OnColliders.Count);
-        //Debug.Log("OnCollisionExit2D: "+other.gameObject.name);
-        var itemToRemove = OnColliders.Single(r => r.name.Equals(other.collider.name));
-        OnColliders.Remove(itemToRemove);
+    // private void OnCollisionExit2D(Collision2D other) {
+    //     //Debug.Log("OnColliders count: "+OnColliders.Count);
+    //     //Debug.Log("OnCollisionExit2D: "+other.gameObject.name);
+    //     var itemToRemove = OnColliders.Single(r => r.name.Equals(other.collider.name));
+    //     OnColliders.Remove(itemToRemove);
 
-        if(jumpState != JumpState.Ground) {
-            OnHeightObjCollisionEnter = false;
+    //     if(jumpState != JumpState.Ground) {
+    //         OnHeightObjCollisionEnter = false;
             
-            // if(jumpState == JumpState.JumpDown) {
-            //     RevertColliderFromJumpDown();
-            // }
-        }
+    //         // if(jumpState == JumpState.JumpDown) {
+    //         //     RevertColliderFromJumpDown();
+    //         // }
+    //     }
 
-        //Debug.Log("OnColliders count: "+OnColliders.Count);
-        //OnCollisioning = false;
-    }
+    //     //Debug.Log("OnColliders count: "+OnColliders.Count);
+    //     //OnCollisioning = false;
+    // }
 
-    private void ChangeColliderToJumpDown() {
-        Debug.Log("ChangeColliderToJumpDown start");
-        var body = GetComponent<BoxCollider2D>();
-        body.isTrigger = true;
+    // private void ChangeColliderToJumpDown() {
+    //     Debug.Log("ChangeColliderToJumpDown start");
+    //     var body = GetComponent<BoxCollider2D>();
+    //     body.isTrigger = true;
 
-        var jumpTrigger = jumpPoint.GetComponent<BoxCollider2D>();
-        jumpTrigger.isTrigger = false;
+    //     var jumpTrigger = jumpPoint.GetComponent<BoxCollider2D>();
+    //     jumpTrigger.isTrigger = false;
         
-        Debug.Log("ChangeColliderToJumpDown end");
-    }
+    //     Debug.Log("ChangeColliderToJumpDown end");
+    // }
 
-    private void RevertColliderFromJumpDown() {
-        var jumpTrigger = jumpPoint.GetComponent<BoxCollider2D>();
-        jumpTrigger.isTrigger = true;
-        var body = GetComponent<BoxCollider2D>();
-        body.isTrigger = false;
-    }
+    // private void RevertColliderFromJumpDown() {
+    //     var jumpTrigger = jumpPoint.GetComponent<BoxCollider2D>();
+    //     jumpTrigger.isTrigger = true;
+    //     var body = GetComponent<BoxCollider2D>();
+    //     body.isTrigger = false;
+    // }
 
-    #endregion
+    // #endregion
 
-    private JumpState DetectedWhetherNeedToJump() {
-        //Debug.Log("DetectedWhetherNeedToJump");
-        if(m_avatarMovement.IsMoving) {
-            m_Lamniat.SetRaycastPoint();
+    // private JumpState DetectedWhetherNeedToJump() {
+    //     //Debug.Log("DetectedWhetherNeedToJump");
+    //     if(m_avatarMovement.IsMoving) {
+    //         m_Lamniat.SetRaycastPoint();
 
-            Vector2 distance = new Vector2(m_avatarMovement.Movement.x, m_avatarMovement.Movement.y) * 0.5f;
+    //         Vector2 distance = new Vector2(m_avatarMovement.Movement.x, m_avatarMovement.Movement.y) * 0.5f;
 
-            m_Lamniat.RaycastEnd = new Vector2(m_Lamniat.RaycastStart.position.x, m_Lamniat.RaycastStart.position.y) + distance;
-            Debug.DrawLine(m_Lamniat.RaycastStart.position, m_Lamniat.RaycastEnd, Color.blue);
+    //         m_Lamniat.RaycastEnd = new Vector2(m_Lamniat.RaycastStart.position.x, m_Lamniat.RaycastStart.position.y) + distance;
+    //         Debug.DrawLine(m_Lamniat.RaycastStart.position, m_Lamniat.RaycastEnd, Color.blue);
 
-            return JumpMechanismUtils.DetectedJumpState(m_Lamniat.RaycastStart.position, m_Lamniat.RaycastEnd, distance, m_Lamniat.CurrentHeight, m_avatarMovement.IsMoving);
-        }
-        return JumpState.Ground;
-    }
+    //         return JumpMechanismUtils.DetectedJumpState(m_Lamniat.RaycastStart.position, m_Lamniat.RaycastEnd, distance, m_Lamniat.CurrentHeight, m_avatarMovement.IsMoving);
+    //     }
+    //     return JumpState.Ground;
+    // }
 
     // private void DetectedToJump() {
     //     if(m_avatarMovement.IsMoving) {

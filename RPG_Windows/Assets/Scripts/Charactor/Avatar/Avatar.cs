@@ -23,16 +23,6 @@ public class Avatar : Charactor
     public AvatarInputActionsControls InputCtrl => this.m_inputControls;
     protected bool isHoldInteraction = false;
 
-    #region Raycast物件
-
-    [SerializeField] private List<Transform> m_raycastStartPosition = new List<Transform>();
-    public List<Transform> RaycastStartPosition => this.m_raycastStartPosition;
-    [SerializeField] private Transform m_raycastStart;
-    public Transform RaycastStart => this.m_raycastStart;
-    public Vector2 RaycastEnd;
-
-    #endregion
-
 
     public string onStairs;
     public string stair_start;
@@ -77,7 +67,6 @@ public class Avatar : Charactor
         base.OnEnable();
         
         m_currHeight = m_InfoStorage.initialHeight;
-        RaycastEnd = new Vector2(m_raycastStart.position.x, m_raycastStart.position.y) + new Vector2(0.35f, 0) ;   // 預設射線終點
         transform.position = new Vector3(m_InfoStorage.initialPos.x, m_InfoStorage.initialPos.y, m_InfoStorage.initialHeight);
 
         m_currentBaseState = m_idle;
@@ -110,40 +99,7 @@ public class Avatar : Charactor
         m_currentBaseState.OnExit();
     }
 
-    #region 碰撞偵測
-
-    private void OnTriggerEnter2D(Collider2D other) {
-        //Debug.Log("OnTriggerEnter2D: "+other.gameObject.name);
-    }
-
-    private void OnTriggerStay2D(Collider2D other) {
-        //Debug.Log("OnTriggerStay2D: "+other.gameObject.name);
-    }
-
-    private void OnTriggerExit2D(Collider2D other) {
-        //Debug.Log("OnTriggerStay2D: "+other.gameObject.name);
-    }
-
-    private void ChangeColliderToJumpDown() {
-        var body = GetComponent<BoxCollider2D>();
-        body.isTrigger = true;
-        // var jumpTrigger = GetComponent<CircleCollider2D>();
-        // if(body != null && jumpTrigger != null) {
-        //     jumpTrigger.enabled = true;
-        // }
-    }
-
-    private void RevertColliderFromJumpDown() {
-        var body = GetComponent<BoxCollider2D>();
-        body.isTrigger = false;
-        //var jumpTrigger = GetComponent<CircleCollider2D>();
-        // if(body != null && jumpTrigger != null) {
-        //     jumpTrigger.enabled = false;
-        // }
-    }
-
-    #endregion
-    
+    /*
     public void SetRaycastPoint(string raycastPointName = null) {
         if(raycastPointName != null) {
             //m_raycastStart = GetComponentInChildren<Transform>().Find(raycastPointName);
@@ -194,7 +150,7 @@ public class Avatar : Charactor
         return false;
     }
 
-    /*
+    
 
     private void HeightSettleOnStair(string stairName) {
         var stairTriggers = GameObject.FindObjectsOfType(typeof(StairsTrigger)) as StairsTrigger[];

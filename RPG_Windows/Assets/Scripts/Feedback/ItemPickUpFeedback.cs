@@ -16,6 +16,7 @@ public class ItemPickUpFeedback : MonoBehaviour
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
+        Debug.Log("ItemPickUpFeedback OnTriggerEnter2D");
         var inventory = other.transform.GetComponent<InventoryHolder>();
         if(!inventory) return;
 

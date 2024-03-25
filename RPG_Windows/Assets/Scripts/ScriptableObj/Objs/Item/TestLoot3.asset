@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: TestLoot3
   m_EditorClassIdentifier: 
   ID: 3
-  displayName: Potion
-  description: A potion, heal 50
-  icon: {fileID: 327129806211339556, guid: 7e6e7ea7113ea0749838be879a13a9e5, type: 3}
-  maxStackSize: 2
-  lootSprite: {fileID: 327129806211339556, guid: 7e6e7ea7113ea0749838be879a13a9e5, type: 3}
-  dropChance: 30
+  DisplayName: Meat
+  Description: A Meat, heal 30
+  Icon: {fileID: 8778621054884393417, guid: 7e6e7ea7113ea0749838be879a13a9e5, type: 3}
+  MaxStackSize: 2
+  LootSprite: {fileID: 8778621054884393417, guid: 7e6e7ea7113ea0749838be879a13a9e5, type: 3}
+  DropChance: 40

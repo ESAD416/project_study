@@ -6,8 +6,8 @@ using UnityEngine.Events;
 public class HitSystem : MonoBehaviour
 {
     [Header("基本物件")]
-    [SerializeField] protected HealthSystem m_HealthSystem;
-    [SerializeField] protected KnockbackFeedback m_KnockbackFeedback;
+    [SerializeField] protected HealthSystem m_targetHealthSystem;
+    [SerializeField] protected KnockbackFeedback m_targetKnockbackFeedback;
 
     #region 受擊參數
 
@@ -65,11 +65,11 @@ public class HitSystem : MonoBehaviour
             else if(!isInvulnerable) isInvulnerable = true;
 
             //OnHitEventBegin?.Invoke();
-            if(!isHyperArmor && m_KnockbackFeedback != null) {
-                m_KnockbackFeedback.ActiveFeedback(attacker.transform.position);
+            if(!isHyperArmor && m_targetKnockbackFeedback != null) {
+                m_targetKnockbackFeedback.ActiveFeedback(attacker.transform.position);
             }
 
-            attacker.DamageSystem.OnDamage(m_HealthSystem);
+            attacker.DamageSystem.OnDamage(m_targetHealthSystem);
             
             yield return new WaitForSeconds(invulnerableDuration);  // hardcasted casted time for debugged
 
@@ -93,11 +93,11 @@ public class HitSystem : MonoBehaviour
 
             //OnHitEventBegin?.Invoke();
 
-            if(!isHyperArmor && m_KnockbackFeedback != null) {
-                m_KnockbackFeedback.ActiveFeedback(attackedLocation.position);
+            if(!isHyperArmor && m_targetKnockbackFeedback != null) {
+                m_targetKnockbackFeedback.ActiveFeedback(attackedLocation.position);
             }
 
-            damageSystem.OnDamage(m_HealthSystem);
+            damageSystem.OnDamage(m_targetHealthSystem);
             
             yield return new WaitForSeconds(invulnerableDuration);  // hardcasted casted time for debugged
 

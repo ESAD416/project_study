@@ -7,9 +7,9 @@ public class InventoryItemData : ScriptableObject
 {
     [Header("Item Details")]
     public int ID;
-    public string displayName;
+    public string DisplayName;
     [TextArea(4, 4)]
-    public string description;
-    public Sprite icon;
-    public int maxStackSize;
+    public string Description;
+    public Sprite Icon;
+    public int MaxStackSize;
 }

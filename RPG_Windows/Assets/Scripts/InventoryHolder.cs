@@ -8,15 +8,15 @@ using System.Linq;
 [Serializable]
 public class InventoryHolder : MonoBehaviour
 {
-    [SerializeField] private int inventorySize;
-    [SerializeField] protected InventorySystemModel inventorySystem;
+    [SerializeField] private int m_inventorySize;
+    [SerializeField] protected InventorySystemModel m_inventorySystem;
 
     //Getter
-    public InventorySystemModel InventorySystem => inventorySystem;
+    public InventorySystemModel InventorySystem => m_inventorySystem;
 
     public static UnityAction<InventorySystemModel> OnDynamicInventoryDisplayRequested;
 
-    private void Awake() {
-        inventorySystem = new InventorySystemModel(inventorySize);
+    private void Start() {
+        m_inventorySystem = new InventorySystemModel(m_inventorySize);
     }
 }

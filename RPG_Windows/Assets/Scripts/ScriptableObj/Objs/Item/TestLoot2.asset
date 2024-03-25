@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: TestLoot2
   m_EditorClassIdentifier: 
   ID: 2
-  displayName: Ore
-  description: An ore, for forging use
-  icon: {fileID: 431880589147972995, guid: 7e6e7ea7113ea0749838be879a13a9e5, type: 3}
-  maxStackSize: 2
-  lootSprite: {fileID: 431880589147972995, guid: 7e6e7ea7113ea0749838be879a13a9e5, type: 3}
-  dropChance: 50
+  DisplayName: Potion
+  Description: "A \nPotion, heal 50"
+  Icon: {fileID: 327129806211339556, guid: 7e6e7ea7113ea0749838be879a13a9e5, type: 3}
+  MaxStackSize: 1
+  LootSprite: {fileID: 327129806211339556, guid: 7e6e7ea7113ea0749838be879a13a9e5, type: 3}
+  DropChance: 20

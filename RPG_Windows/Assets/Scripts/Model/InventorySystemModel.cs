@@ -8,19 +8,18 @@ using System.Linq;
 [Serializable]
 public class InventorySystemModel
 {
-    [SerializeField] private List<InventorySlotModel> inventorySlots;
-
+    [SerializeField] private List<InventorySlotModel> m_inventorySlots;
     // Getter
-    public List<InventorySlotModel> InventorySlots => inventorySlots;
-    public int InventorySize => inventorySlots.Count;
+    public List<InventorySlotModel> InventorySlots => m_inventorySlots;
+    public int InventorySize => m_inventorySlots.Count;
 
     public UnityAction<InventorySlotModel> OnInventorySlotChanged;
 
     public InventorySystemModel(int size) {
-        inventorySlots = new List<InventorySlotModel>(size);
+        m_inventorySlots = new List<InventorySlotModel>(size);
 
         for(int i = 0; i < size; i++) {
-            inventorySlots.Add(new InventorySlotModel());
+            m_inventorySlots.Add(new InventorySlotModel());
         }
     }
 
@@ -46,13 +45,13 @@ public class InventorySystemModel
     }
 
     public bool ContainsItem(InventoryItemData itemToAdd, out List<InventorySlotModel> invSlots) {
-        invSlots = inventorySlots.Where(i => i.ItemData != null && i.ItemData.ID == itemToAdd.ID).ToList();
+        invSlots = m_inventorySlots.Where(i => i.ItemData != null && i.ItemData.ID == itemToAdd.ID).ToList();
 
         return invSlots == null ? false : invSlots.Count >= 1 ? true : false;
     }
     
     public bool HasFreeSlot(out InventorySlotModel freeSlot) {
-        freeSlot = inventorySlots.FirstOrDefault(i => i.ItemData == null);
+        freeSlot = m_inventorySlots.FirstOrDefault(i => i.ItemData == null);
         return freeSlot == null ? false : true;
     }
 }

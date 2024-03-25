@@ -8,8 +8,30 @@ using static JumpMechanismUtils;
 
 public class Avatar_Lamniat : Avatar
 {
+    [Header("Avatar_Lamniat 基本物件")]
+    
+    #region Raycast物件
+    [SerializeField] private Vector3 m_raycastStart;
+    public Vector3 RaycastStart => this.m_raycastStart;
+    private RaycastHit2D m_raycastHit;
+    public RaycastHit2D RaycastHit => this.m_raycastHit;
+    private int raycastLayerMask;
+
+    #endregion
+
     protected override void Awake() {
         base.Awake();
+    }
+
+    protected override void Start() {
+        base.Start();
+
+        // 射線的除外遮罩
+        int playerLayerMask = 1 << LayerMask.NameToLayer("Player");
+        int mapRangeLayerMask = 1 << LayerMask.NameToLayer("MapRange");
+        int hittableLayerMask = 1 << LayerMask.NameToLayer("Hittable");
+        raycastLayerMask = ~(playerLayerMask | mapRangeLayerMask | hittableLayerMask);
+        
     }
 
     protected override void OnEnable() 
@@ -30,6 +52,12 @@ public class Avatar_Lamniat : Avatar
     {
         base.Update();
         //Debug.Log("m_currentBaseState: "+m_currentBaseState.State);
+
+        m_raycastStart = (Vector2)transform.position + m_bodyCollider.offset ;  // 射线的起点
+        m_raycastHit = Physics2D.Raycast(m_raycastStart, m_avatarMovement.Movement.normalized, 1f, raycastLayerMask);
+        Color color = m_raycastHit.collider != null ? Color.red : Color.green;
+        Debug.DrawLine(m_raycastStart, (Vector2)m_raycastStart + m_avatarMovement.Movement.normalized*1f, color);
+
         float newZPosition = -m_currHeight - 1.9f;
         transform.position = new Vector3(transform.position.x, transform.position.y, newZPosition);
     }
