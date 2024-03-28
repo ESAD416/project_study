@@ -67,6 +67,7 @@ public class Movement_Avatar : MonoBehaviour
     /// </summary>
     public void SetMovement(Vector2 vector2) => this.m_movement = vector2;
     #endregion
+    protected Vector2 m_previousMovement = Vector2.zero;
 
     [SerializeField] protected Vector2 m_movementAfterTrigger = Vector2.zero;
     /// <summary>
@@ -75,7 +76,6 @@ public class Movement_Avatar : MonoBehaviour
     public Vector2 MovementAfterTrigger => this.m_movementAfterTrigger;
     public void SetMovementAfterTrigger(Vector2 vector3) => this.m_movementAfterTrigger = vector3;
 
-    protected Vector2 m_previousMovement;
 
     #region Vector2 剛體速度
     protected Vector2 m_moveVelocity;
@@ -202,6 +202,7 @@ public class Movement_Avatar : MonoBehaviour
 
         if (offsetPosition != Vector3.zero)
         {
+            Debug.Log("FixStandCorners offsetPosition: " + offsetPosition);
             offsetPosition.x = Mathf.Clamp(offsetPosition.x, -0.25f * m_avatar.BodyCollider.size.x, 0.25f * m_avatar.BodyCollider.size.x);
             offsetPosition.y = Mathf.Clamp(offsetPosition.y, -0.25f * m_avatar.BodyCollider.size.y, 0.25f * m_avatar.BodyCollider.size.y);
             Vector3 fixCornersPosition = transform.position + offsetPosition;

@@ -28,11 +28,11 @@ public class Movement_Lamniat : Movement_Avatar
 
         m_inputControls.Lamniat_Land.Move.performed += content => {
             var inputVecter2 = content.ReadValue<Vector2>();
-            SetFacingDir(inputVecter2);
-            SetMovement(inputVecter2);
+            m_facingDir = inputVecter2;
+            m_movement = inputVecter2;
             //m_avatar.SetStatus(Charactor.CharactorStatus.Move);
+            if(m_previousMovement == Vector2.zero) m_previousMovement = inputVecter2;
             if(!m_LamiatJump.IsJumping && !m_LamiatCombat.IsAttacking) m_avatar.SetCurrentBaseState(m_avatar.Move);
-
             if(m_avatarSprtRenderer!= null) {
                 var faceLeft = m_avatarSprtRenderer.flipX;
                 m_avatarSprtRenderer.flipX = AnimeUtils.isLeftForHorizontalAnimation(Movement, faceLeft);
@@ -40,7 +40,8 @@ public class Movement_Lamniat : Movement_Avatar
         };
 
         m_inputControls.Lamniat_Land.Move.canceled += content => {
-            SetMovement(Vector2.zero);
+            m_movement = Vector2.zero;
+            if(m_previousMovement != Vector2.zero) m_previousMovement = Vector2.zero;
             if(m_LamiatJump.IsJumping) m_avatar.SetCurrentBaseState(m_avatar.Jump);
             else if(m_LamiatCombat.IsAttacking) m_avatar.SetCurrentBaseState(m_avatar.Attack);
             else m_avatar.SetCurrentBaseState(m_avatar.Idle);
@@ -63,7 +64,7 @@ public class Movement_Lamniat : Movement_Avatar
 
     protected override void Update()
     {
-        m_previousMovement = m_movement;
+        //m_previousMovement = m_movement;
 
         // 實作加速效果
         // --正在移動
@@ -146,6 +147,7 @@ public class Movement_Lamniat : Movement_Avatar
             {
                 // 如果在地面上方向改变，立即更新方向但保持当前速率
                 m_moveVelocity = m_movement.normalized * m_moveVelocity.magnitude;
+                m_previousMovement = m_movement;
             }
             else
             {
@@ -186,12 +188,14 @@ public class Movement_Lamniat : Movement_Avatar
         //Debug.Log("ClampMagnitude OnHeightObjCollisionExit: "+m_LamiatJump.OnHeightObjCollisionExit+", canMove: "+CanMove);
         if (CanMove && !m_LamiatJump.OnHeightObjCollisionExit) 
         {
-            // 最終設定剛體速度的上限
+            // 設定剛體移動向量的上限
+            //Debug.Log("Movement_Lamniat Update before ClampMagnitude moveVelocity: " + m_moveVelocity);
             m_moveVelocity = Vector2.ClampMagnitude(m_moveVelocity, m_moveSpeed);
+            //Debug.Log("Movement_Lamniat Update after ClampMagnitude moveVelocity: " + m_moveVelocity);
         }
         else
         {
-            // 碰撞牆壁或是在其他狀態下剛體速度歸零
+            // 碰撞牆壁或是在其他狀態下，設定剛體移動向量為0.1倍
             m_moveVelocity = Vector2.ClampMagnitude(m_moveVelocity*0.1f, m_moveSpeed*0.1f);
             if(m_LamiatJump.OnHeightObjCollisionExit) m_LamiatJump.OnHeightObjCollisionExit = false;
         }

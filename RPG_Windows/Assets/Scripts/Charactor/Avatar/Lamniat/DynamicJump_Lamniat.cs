@@ -221,11 +221,18 @@ public class DynamicJump_Lamniat : MonoBehaviour
                 m_LamniatMovement.SetMoveVelocity(Vector2.zero);
                 m_LamniatMovement.SetFirstMoveWhileJumping = false;
 
-                // 播完Landing動畫
+                // 播放Landing動畫
                 m_Lamniat.Animator.SetTrigger("land");
                 // 切換状态
+                if(m_LamniatMovement.IsMoving) m_Lamniat.SetCurrentBaseState(m_Lamniat.Move);
+                else m_Lamniat.SetCurrentBaseState(m_Lamniat.Idle);
+
+
+                // 根據狀況決定是否新增落地硬直
                 //float clipTime = AnimeUtils.GetAnimateClipTimeInRuntime(m_Lamniat.Animator, "Lamniat_jump_landing");
-                //Debug.Log("clipTime: "+clipTime);
+                //StartCoroutine(LandingProcess(clipTime));
+
+
                 // 一旦跳躍結束，便啟動對應level的Trigger
                 // for (int i = 0; i < tilemapTriggerArray.Length; i++)
                 // {
@@ -286,6 +293,9 @@ public class DynamicJump_Lamniat : MonoBehaviour
         transform.position = viewPosition;
     }
 
+    private IEnumerator LandingProcess(float landingclipTime) {
+        yield return new WaitForSeconds(landingclipTime);  // hardcasted casted time for debugged
+    } 
 
     private void FixJumpCorners()
     {
@@ -325,6 +335,7 @@ public class DynamicJump_Lamniat : MonoBehaviour
 
         if (offsetPosition != Vector3.zero)
         {
+            Debug.Log("FixJumpCorners offsetPosition: " + offsetPosition);
             offsetPosition.x = Mathf.Clamp(offsetPosition.x, -0.25f * m_Lamniat.BodyCollider.size.x, 0.25f * m_Lamniat.BodyCollider.size.x);
             offsetPosition.y = Mathf.Clamp(offsetPosition.y, -0.25f * m_Lamniat.BodyCollider.size.y, 0.25f * m_Lamniat.BodyCollider.size.y);
             Vector3 fixCornersPosition = transform.position + offsetPosition;

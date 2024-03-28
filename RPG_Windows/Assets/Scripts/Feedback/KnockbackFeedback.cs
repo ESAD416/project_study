@@ -16,6 +16,10 @@ public class KnockbackFeedback : MonoBehaviour
 
     public UnityEvent OnBegin, OnDone;
 
+    void Start() {
+        
+    }
+
     public void ActiveFeedback(Vector3 senderPos) {
         StopAllCoroutines();
         OnBegin?.Invoke();
