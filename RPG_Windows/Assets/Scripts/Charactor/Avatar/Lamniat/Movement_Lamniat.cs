@@ -73,61 +73,39 @@ public class Movement_Lamniat : Movement_Avatar
             if (m_LamiatJump.IsJumping) 
             {
                 if (!SetFirstMoveWhileJumping) {
+                    Debug.Log("SetFirstMoveWhileJumping m_movement: "+m_movement);
                     m_moveVelocity = Vector2.MoveTowards(m_moveVelocity, m_movement.normalized * m_jumpingMoveSpeed, m_acceleration * Time.deltaTime);
+                    Debug.Log("SetFirstMoveWhileJumping m_movement: "+m_moveVelocity);
                     //m_moveVelocity = m_movement.normalized * m_jumpingMoveSpeed;
                     m_firstMoveVelocityWhileJumping = m_moveVelocity;
                     SetFirstMoveWhileJumping = true;
                 }
 
                 m_moveVelocity = m_firstMoveVelocityWhileJumping;
-                //Debug.Log("Movement_Lamniat Update IsJumping moveVelocity: " + m_moveVelocity);
 
-                // 如果在跳躍期間方向改變，方向雖然會更新，但只會減速而不會增加速率
-                if (m_firstMoveVelocityWhileJumping.x > 0)
+                // --如果在跳躍期間使用者輸入改變，移動方向雖然會更新，但只會為了增加阻尼感做減速，所以不影響整體跳躍移動方向
+                // 使用者x輸入為零，或與跳躍x向量正負不同就做減速阻尼
+                if ((m_movement.normalized.x <= 0 && m_firstMoveVelocityWhileJumping.x > 0) ||
+                    (m_movement.normalized.x >= 0 && m_firstMoveVelocityWhileJumping.x < 0) )
                 {
-                    if (m_movement.normalized.x <= 0)
-                    {
-                        m_firstMoveVelocityWhileJumping.x = m_firstMoveVelocityWhileJumping.x / 1.1f;
-                    }
-                    if (m_movement.normalized.y != 0 && m_firstMoveVelocityWhileJumping.y < m_firstMoveVelocityWhileJumping.x)
-                    {
-                        m_firstMoveVelocityWhileJumping.y = m_firstMoveVelocityWhileJumping.x * 0.8f * m_movement.normalized.y;
-                    }
+                    m_firstMoveVelocityWhileJumping.x = m_firstMoveVelocityWhileJumping.x / 1.1f;
                 }
-                else if (m_firstMoveVelocityWhileJumping.x < 0)
+                // 使用者y輸入不為零，且跳躍y向量絕對值小跳躍x向量絕對值就做減速阻尼
+                if (m_movement.normalized.y != 0 && Mathf.Abs(m_firstMoveVelocityWhileJumping.y) < Mathf.Abs(m_firstMoveVelocityWhileJumping.x))
                 {
-                    if (m_movement.normalized.x >= 0)
-                    {
-                        m_firstMoveVelocityWhileJumping.x = m_firstMoveVelocityWhileJumping.x / 1.1f;
-                    }
-                    if (m_movement.normalized.y != 0 && m_firstMoveVelocityWhileJumping.y < m_firstMoveVelocityWhileJumping.x)
-                    {
-                        m_firstMoveVelocityWhileJumping.y = m_firstMoveVelocityWhileJumping.x * 0.8f * m_movement.normalized.y;
-                    }
+                    m_firstMoveVelocityWhileJumping.y = Mathf.Abs(m_firstMoveVelocityWhileJumping.x) * 0.8f * m_movement.normalized.y;
                 }
 
-                if (m_firstMoveVelocityWhileJumping.y > 0)
+                // 使用者y輸入為零，或與跳躍y向量正負不同就做減速阻尼
+                if ((m_movement.normalized.y <= 0 && m_firstMoveVelocityWhileJumping.y > 0) ||
+                    (m_movement.normalized.y >= 0 && m_firstMoveVelocityWhileJumping.y < 0))
                 {
-                    //Debug.Log("m_movement: "+m_movement.normalized);
-                    if (m_movement.normalized.y <= 0)
-                    {
-                        m_firstMoveVelocityWhileJumping.y = m_firstMoveVelocityWhileJumping.y / 1.1f;
-                    }
-                    if (m_movement.normalized.x != 0 && m_firstMoveVelocityWhileJumping.x < m_firstMoveVelocityWhileJumping.y)
-                    {
-                        m_firstMoveVelocityWhileJumping.x = m_firstMoveVelocityWhileJumping.y * 0.8f * m_movement.normalized.x;
-                    }
+                    m_firstMoveVelocityWhileJumping.y = m_firstMoveVelocityWhileJumping.y / 1.1f;
                 }
-                else if (m_firstMoveVelocityWhileJumping.y < 0)
+                // 使用者x輸入不為零，且跳躍x向量絕對值小跳躍y向量絕對值就做減速阻尼
+                if (m_movement.normalized.x != 0 && Mathf.Abs(m_firstMoveVelocityWhileJumping.x) < Mathf.Abs(m_firstMoveVelocityWhileJumping.y))
                 {
-                    if (m_movement.normalized.y >= 0)
-                    {
-                        m_firstMoveVelocityWhileJumping.y = m_firstMoveVelocityWhileJumping.y / 1.1f;
-                    }
-                    if (m_movement.normalized.x != 0 && m_firstMoveVelocityWhileJumping.x < m_firstMoveVelocityWhileJumping.y)
-                    {
-                        m_firstMoveVelocityWhileJumping.x = m_firstMoveVelocityWhileJumping.y * 0.8f * m_movement.normalized.x;
-                    }
+                    m_firstMoveVelocityWhileJumping.x = Mathf.Abs(m_firstMoveVelocityWhileJumping.y) * 0.8f * m_movement.normalized.x;
                 }
 
                 
@@ -142,6 +120,8 @@ public class Movement_Lamniat : Movement_Avatar
                     }
                 }
 
+                Debug.Log("Movement_Lamniat Update IsJumping moveVelocity: " + m_moveVelocity);
+                Debug.Log("Movement_Lamniat Update IsJumping m_firstMoveVelocityWhileJumping: " + m_firstMoveVelocityWhileJumping);
             }
             else if (m_movement != m_previousMovement)
             {

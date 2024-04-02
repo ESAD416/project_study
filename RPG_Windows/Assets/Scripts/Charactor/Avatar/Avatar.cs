@@ -67,7 +67,8 @@ public class Avatar : Charactor
         base.OnEnable();
         
         m_currHeight = m_InfoStorage.initialHeight;
-        transform.position = new Vector3(m_InfoStorage.initialPos.x, m_InfoStorage.initialPos.y, m_InfoStorage.initialHeight);
+        m_lastHeight = m_InfoStorage.initialHeight;
+        transform.position = new Vector3(m_InfoStorage.initialPos.x, m_InfoStorage.initialPos.y);
 
         m_currentBaseState = m_idle;
         m_currentBaseState.OnEnter();

@@ -21,6 +21,7 @@ public class KnockbackFeedback : MonoBehaviour
     }
 
     public void ActiveFeedback(Vector3 senderPos) {
+        //Debug.Log("KnockbackFeedback ActiveFeedback senderPos: "+senderPos);
         StopAllCoroutines();
         OnBegin?.Invoke();
         m_target_rb2d.velocity = Vector3.zero;
@@ -32,6 +33,7 @@ public class KnockbackFeedback : MonoBehaviour
     }
 
     public void ActiveFeedbackByDir(Vector3 dir) {
+        //Debug.Log("KnockbackFeedback ActiveFeedback dir: "+dir);
         StopAllCoroutines();
         OnBegin?.Invoke();
         m_target_rb2d.velocity = Vector3.zero;
