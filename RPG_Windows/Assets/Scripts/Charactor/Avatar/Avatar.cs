@@ -23,10 +23,7 @@ public class Avatar : Charactor
     public AvatarInputActionsControls InputCtrl => this.m_inputControls;
     protected bool isHoldInteraction = false;
 
-
-    public string onStairs;
-    public string stair_start;
-    public string stair_end ;
+    public bool OnStairs;
 
     #endregion
 
@@ -81,6 +78,9 @@ public class Avatar : Charactor
     protected override void Update()
     {
         m_currentBaseState.OnUpdate();
+
+        if(OnStairs) m_SprtRenderer.sortingLayerID = SortingLayer.NameToID("Character");
+        else m_SprtRenderer.sortingLayerID = SortingLayer.NameToID("Default");
 
         base.Update();
         // Debug.Log("m_currentBaseState: "+m_currentBaseState.State);

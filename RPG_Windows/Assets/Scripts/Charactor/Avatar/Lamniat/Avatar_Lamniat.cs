@@ -58,7 +58,7 @@ public class Avatar_Lamniat : Avatar
         Color color = m_raycastHit.collider != null ? Color.red : Color.green;
         Debug.DrawLine(m_raycastStart, (Vector2)m_raycastStart + m_avatarMovement.Movement.normalized*1f, color);
 
-        float newZPosition = -m_currHeight - 1.9f;
+        float newZPosition = -m_currHeight;
         transform.position = new Vector3(transform.position.x, transform.position.y, newZPosition);
     }
 

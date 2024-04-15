@@ -5,8 +5,6 @@ TagManager:
   serializedVersion: 2
   tags:
   - Stairs
-  - Stair_Top
-  - Stair_Down
   - Enemies
   - Enemy_Turn
   - BreakableObj
@@ -55,9 +53,9 @@ TagManager:
   - name: Character
     uniqueID: 846716007
     locked: 0
-  - name: Projectile
-    uniqueID: 3343522911
-    locked: 0
   - name: FrontGround
     uniqueID: 3815499763
+    locked: 0
+  - name: Projectile
+    uniqueID: 3343522911
     locked: 0
