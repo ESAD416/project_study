@@ -21,7 +21,7 @@ public class FinishAttackAnimation_Lamniat : StateMachineBehaviour
     {
         Debug.Log("FinishAttackAnimation_Lamniat OnStateExit");
         var animationEvents = animator.GetComponent<AnimationEvents_Lamniat>();
-        animationEvents?.Combat.FinishMeleeAttack();
+        animationEvents?.Combat.FinishMelee();
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

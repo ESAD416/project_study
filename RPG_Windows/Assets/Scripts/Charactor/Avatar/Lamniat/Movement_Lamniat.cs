@@ -176,7 +176,9 @@ public class Movement_Lamniat : Movement_Avatar
         else
         {
             // 碰撞牆壁或是在其他狀態下，設定剛體移動向量為0.1倍
-            m_moveVelocity = Vector2.ClampMagnitude(m_moveVelocity*0.1f, m_moveSpeed*0.1f);
+            if(CanMove) m_moveVelocity = Vector2.ClampMagnitude(m_moveVelocity*0.1f, m_moveSpeed*0.1f);
+            else m_moveVelocity = Vector2.zero;
+
             if(m_LamiatJump.OnHeightObjCollisionExit) m_LamiatJump.OnHeightObjCollisionExit = false;
         }
 

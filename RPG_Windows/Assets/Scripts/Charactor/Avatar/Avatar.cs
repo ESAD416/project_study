@@ -21,7 +21,6 @@ public class Avatar : Charactor
     /// 可操作角色的使用者輸入
     /// </summary>
     public AvatarInputActionsControls InputCtrl => this.m_inputControls;
-    protected bool isHoldInteraction = false;
 
     public bool OnStairs;
 

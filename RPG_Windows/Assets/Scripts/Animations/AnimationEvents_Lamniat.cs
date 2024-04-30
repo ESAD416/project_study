@@ -24,13 +24,6 @@ public class AnimationEvents_Lamniat : MonoBehaviour
         if(m_combat.IsPostAttacking) m_combat.IsPostAttacking = false;
     }
 
-    public void OnAttackHitBox() 
-    {
-        if(m_combat.IsPreAttacking) m_combat.IsPreAttacking = false;
-        if(m_combat.IsPostAttacking) m_combat.IsPostAttacking = false;
-        m_combat.SetHitboxDir();
-    }
-
     public void OnPostAttack() 
     {
         if(m_combat.IsPreAttacking) m_combat.IsPreAttacking = false;
@@ -61,9 +54,28 @@ public class AnimationEvents_Lamniat : MonoBehaviour
         m_combat.SetMeleeComboCounter(3);
     }
 
-    public void OnFinishMeleeAttackClip() {
-        m_combat.FinishMeleeAttack();
+    public void OnMeleeAttackHitBoxEnabled() 
+    {
+        if(m_combat.IsPreAttacking) m_combat.IsPreAttacking = false;
+        if(m_combat.IsPostAttacking) m_combat.IsPostAttacking = false;
+        m_combat.SetMeleeHitboxDir();
     }
+
+    public void OnFinishMeleeAttackClip() {
+        m_combat.FinishMelee();
+    }
+    #endregion
+
+    #region 遠程動畫事件
+
+    public void OnShoot() {
+        m_combat.Shoot();
+    }
+
+    public void OnFinishShootAttackClip() {
+        m_combat.FinishShoot();
+    }
+
     #endregion
 
     #endregion

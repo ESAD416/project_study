@@ -28,12 +28,39 @@ public partial class @AvatarInputActionsControls: IInputActionCollection2, IDisp
             ""id"": ""e6cae321-99e0-4375-9af9-b361da1455b9"",
             ""actions"": [
                 {
-                    ""name"": ""Attack"",
+                    ""name"": ""Melee"",
                     ""type"": ""Button"",
                     ""id"": ""67a225ed-aba2-4b08-87d6-e2d237e90afd"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Aim"",
+                    ""type"": ""Button"",
+                    ""id"": ""40e970ca-1182-46b0-bae9-c030fe413930"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Shoot"",
+                    ""type"": ""Button"",
+                    ""id"": ""e4f158bd-0943-47d2-aae3-1f6120e006a4"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Shoot_Hold"",
+                    ""type"": ""Button"",
+                    ""id"": ""f51a8b44-2005-4981-a956-62c676fa7be8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Hold"",
                     ""initialStateCheck"": false
                 },
                 {
@@ -72,7 +99,7 @@ public partial class @AvatarInputActionsControls: IInputActionCollection2, IDisp
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard & Mouse"",
-                    ""action"": ""Attack"",
+                    ""action"": ""Melee"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -83,7 +110,7 @@ public partial class @AvatarInputActionsControls: IInputActionCollection2, IDisp
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
-                    ""action"": ""Attack"",
+                    ""action"": ""Melee"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -328,6 +355,72 @@ public partial class @AvatarInputActionsControls: IInputActionCollection2, IDisp
                     ""action"": ""Hold"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c19e557c-65e7-4dc3-bedb-5432f38b2c4d"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": ""Hold"",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""Aim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""236aca76-5a27-47c8-a735-68a8d140522c"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Aim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e49afdd8-c8ac-4fbc-b362-7e4f3240edde"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""Shoot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0db6e1d9-ddfd-49d6-a481-97538f4ecf8e"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Shoot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7ed3e5b5-81a3-400f-b7f4-9326f3a3cf77"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""Shoot_Hold"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1245c265-16ad-439c-96fc-ef4bccb89105"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Shoot_Hold"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -364,7 +457,10 @@ public partial class @AvatarInputActionsControls: IInputActionCollection2, IDisp
 }");
         // Lamniat_Land
         m_Lamniat_Land = asset.FindActionMap("Lamniat_Land", throwIfNotFound: true);
-        m_Lamniat_Land_Attack = m_Lamniat_Land.FindAction("Attack", throwIfNotFound: true);
+        m_Lamniat_Land_Melee = m_Lamniat_Land.FindAction("Melee", throwIfNotFound: true);
+        m_Lamniat_Land_Aim = m_Lamniat_Land.FindAction("Aim", throwIfNotFound: true);
+        m_Lamniat_Land_Shoot = m_Lamniat_Land.FindAction("Shoot", throwIfNotFound: true);
+        m_Lamniat_Land_Shoot_Hold = m_Lamniat_Land.FindAction("Shoot_Hold", throwIfNotFound: true);
         m_Lamniat_Land_Move = m_Lamniat_Land.FindAction("Move", throwIfNotFound: true);
         m_Lamniat_Land_Dodge = m_Lamniat_Land.FindAction("Dodge", throwIfNotFound: true);
         m_Lamniat_Land_Hold = m_Lamniat_Land.FindAction("Hold", throwIfNotFound: true);
@@ -429,7 +525,10 @@ public partial class @AvatarInputActionsControls: IInputActionCollection2, IDisp
     // Lamniat_Land
     private readonly InputActionMap m_Lamniat_Land;
     private List<ILamniat_LandActions> m_Lamniat_LandActionsCallbackInterfaces = new List<ILamniat_LandActions>();
-    private readonly InputAction m_Lamniat_Land_Attack;
+    private readonly InputAction m_Lamniat_Land_Melee;
+    private readonly InputAction m_Lamniat_Land_Aim;
+    private readonly InputAction m_Lamniat_Land_Shoot;
+    private readonly InputAction m_Lamniat_Land_Shoot_Hold;
     private readonly InputAction m_Lamniat_Land_Move;
     private readonly InputAction m_Lamniat_Land_Dodge;
     private readonly InputAction m_Lamniat_Land_Hold;
@@ -437,7 +536,10 @@ public partial class @AvatarInputActionsControls: IInputActionCollection2, IDisp
     {
         private @AvatarInputActionsControls m_Wrapper;
         public Lamniat_LandActions(@AvatarInputActionsControls wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Attack => m_Wrapper.m_Lamniat_Land_Attack;
+        public InputAction @Melee => m_Wrapper.m_Lamniat_Land_Melee;
+        public InputAction @Aim => m_Wrapper.m_Lamniat_Land_Aim;
+        public InputAction @Shoot => m_Wrapper.m_Lamniat_Land_Shoot;
+        public InputAction @Shoot_Hold => m_Wrapper.m_Lamniat_Land_Shoot_Hold;
         public InputAction @Move => m_Wrapper.m_Lamniat_Land_Move;
         public InputAction @Dodge => m_Wrapper.m_Lamniat_Land_Dodge;
         public InputAction @Hold => m_Wrapper.m_Lamniat_Land_Hold;
@@ -450,9 +552,18 @@ public partial class @AvatarInputActionsControls: IInputActionCollection2, IDisp
         {
             if (instance == null || m_Wrapper.m_Lamniat_LandActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_Lamniat_LandActionsCallbackInterfaces.Add(instance);
-            @Attack.started += instance.OnAttack;
-            @Attack.performed += instance.OnAttack;
-            @Attack.canceled += instance.OnAttack;
+            @Melee.started += instance.OnMelee;
+            @Melee.performed += instance.OnMelee;
+            @Melee.canceled += instance.OnMelee;
+            @Aim.started += instance.OnAim;
+            @Aim.performed += instance.OnAim;
+            @Aim.canceled += instance.OnAim;
+            @Shoot.started += instance.OnShoot;
+            @Shoot.performed += instance.OnShoot;
+            @Shoot.canceled += instance.OnShoot;
+            @Shoot_Hold.started += instance.OnShoot_Hold;
+            @Shoot_Hold.performed += instance.OnShoot_Hold;
+            @Shoot_Hold.canceled += instance.OnShoot_Hold;
             @Move.started += instance.OnMove;
             @Move.performed += instance.OnMove;
             @Move.canceled += instance.OnMove;
@@ -466,9 +577,18 @@ public partial class @AvatarInputActionsControls: IInputActionCollection2, IDisp
 
         private void UnregisterCallbacks(ILamniat_LandActions instance)
         {
-            @Attack.started -= instance.OnAttack;
-            @Attack.performed -= instance.OnAttack;
-            @Attack.canceled -= instance.OnAttack;
+            @Melee.started -= instance.OnMelee;
+            @Melee.performed -= instance.OnMelee;
+            @Melee.canceled -= instance.OnMelee;
+            @Aim.started -= instance.OnAim;
+            @Aim.performed -= instance.OnAim;
+            @Aim.canceled -= instance.OnAim;
+            @Shoot.started -= instance.OnShoot;
+            @Shoot.performed -= instance.OnShoot;
+            @Shoot.canceled -= instance.OnShoot;
+            @Shoot_Hold.started -= instance.OnShoot_Hold;
+            @Shoot_Hold.performed -= instance.OnShoot_Hold;
+            @Shoot_Hold.canceled -= instance.OnShoot_Hold;
             @Move.started -= instance.OnMove;
             @Move.performed -= instance.OnMove;
             @Move.canceled -= instance.OnMove;
@@ -515,7 +635,10 @@ public partial class @AvatarInputActionsControls: IInputActionCollection2, IDisp
     }
     public interface ILamniat_LandActions
     {
-        void OnAttack(InputAction.CallbackContext context);
+        void OnMelee(InputAction.CallbackContext context);
+        void OnAim(InputAction.CallbackContext context);
+        void OnShoot(InputAction.CallbackContext context);
+        void OnShoot_Hold(InputAction.CallbackContext context);
         void OnMove(InputAction.CallbackContext context);
         void OnDodge(InputAction.CallbackContext context);
         void OnHold(InputAction.CallbackContext context);

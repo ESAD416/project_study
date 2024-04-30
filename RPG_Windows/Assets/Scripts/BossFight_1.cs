@@ -23,8 +23,6 @@ public class BossFight_1 : MonoBehaviour
     private int countOfLaunches = 2;
     
     [SerializeField] private Player player;
-    [SerializeField] private Projectile_FireBall fireProjectile;
-
 
     [SerializeField] private DynamicOffsets attackOffsets;
     
@@ -188,12 +186,12 @@ public class BossFight_1 : MonoBehaviour
             //Debug.Log("LunchProjectile dir: "+dir);
             GameObject projectile = ProjectilePool.instance.GetPooledGameObject();
             if(projectile != null) {
-                projectile.GetComponent<DirectProjectile>().SetDirection(dir.normalized);
+                projectile.GetComponent<Projectile_FireBall>().SetDirection(dir.normalized);
                 
                 //Debug.Log("LunchProjectile referenceAxis: "+projectile.GetComponent<Projectile>().referenceAxis);
                 // var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
                 // var quaternion =Quaternion.Euler(0, 0, angle);
-                var angle = Vector3.Angle(dir, projectile.GetComponent<DirectProjectile>().referenceAxis);
+                var angle = Vector3.Angle(dir, projectile.GetComponent<Projectile_FireBall>().referenceAxis);
                 Debug.Log("LunchProjectile angle: "+angle);
                 var quaternion = dir.x > 0 ? Quaternion.Euler(0, 0, angle) : Quaternion.Euler(0, 0, -angle);
 
