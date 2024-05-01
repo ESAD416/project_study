@@ -25667,7 +25667,7 @@ MonoBehaviour:
   IsPostAttacking: 0
   CancelRecovery: 0
   m_attackClipTime: 0
-  IsAiming: 0
+  IsShooting: 0
   m_hitBox_left: {fileID: 19209132}
   m_hitBox_right: {fileID: 619139676}
   m_slashEffects_left:
@@ -30668,7 +30668,7 @@ GameObject:
   - component: {fileID: 2025998960}
   - component: {fileID: 2025998964}
   - component: {fileID: 2025998963}
-  - component: {fileID: 2025998962}
+  - component: {fileID: 2025998965}
   - component: {fileID: 2025998961}
   m_Layer: 8
   m_Name: Avatar_Hitbox
@@ -30707,29 +30707,6 @@ MonoBehaviour:
   m_inventorySize: 10
   m_inventorySystem:
     m_inventorySlots: []
---- !u!114 &2025998962
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2025998959}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 78082d910246d0549a275cdb44eadb8e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_targetHealthSystem: {fileID: 1636407362}
-  m_targetKnockbackFeedback: {fileID: 1636407361}
-  IsTakingHit: 0
-  onHitDelay: 0.1
-  isInvulnerable: 0
-  invulnerableDuration: 1.5
-  isHyperArmor: 0
-  m_target: {fileID: 1636407360}
-  m_targetMovement: {fileID: 1636407359}
-  m_targetCombat: {fileID: 1636407358}
-  m_targetDodge: {fileID: 1636407352}
 --- !u!61 &2025998963
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -30802,6 +30779,29 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &2025998965
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2025998959}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7f885f60090b3740bdff923edbfa696, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_targetHealthSystem: {fileID: 1636407362}
+  m_targetKnockbackFeedback: {fileID: 1636407361}
+  IsTakingHit: 0
+  onHitDelay: 0.1
+  isInvulnerable: 0
+  invulnerableDuration: 1.5
+  isHyperArmor: 0
+  m_target: {fileID: 1636407360}
+  m_targetMovement: {fileID: 1636407359}
+  m_targetCombat: {fileID: 1636407358}
+  m_targetDodge: {fileID: 1636407352}
 --- !u!1 &2051092245
 GameObject:
   m_ObjectHideFlags: 0

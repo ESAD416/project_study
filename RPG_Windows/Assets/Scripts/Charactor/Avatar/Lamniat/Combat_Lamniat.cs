@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Fungus;
 using UnityEngine;
 using UnityEngine.VFX;
 
@@ -15,8 +14,7 @@ public class Combat_Lamniat : Combat_Avatar
     public void SetMeleeComboCounter(int value) => this.m_meleeComboCounter = value;
 
     [Header("Lamniat遠程參數")]
-    public bool IsAiming;
-    private bool m_isHoldShoot = false;
+    public bool IsShooting;
 
     [Header("Lamniat近戰物件")]
     [SerializeField] protected HitBox_Overlap2D m_hitBox_left;
@@ -51,6 +49,7 @@ public class Combat_Lamniat : Combat_Avatar
             SetToAttackState();
 
             m_avatarAnimator.SetTrigger("shoot");
+            IsShooting = true;
         };
 
         m_inputControls.Lamniat_Land.Shoot_Hold.performed += content => {
@@ -111,6 +110,7 @@ public class Combat_Lamniat : Combat_Avatar
     }
 
     public void Shoot() {
+        IsShooting =  true;
         GameObject bullet = Instantiate(m_bulletPrefab, m_firePoint.position, m_firePoint.rotation);
         bullet.GetComponent<Projectile_Bullet>().SetDirection(m_avatarMovement.FacingDir);
         var angle = Vector3.Angle(m_avatarMovement.FacingDir, bullet.GetComponent<Projectile_Bullet>().referenceAxis);
@@ -153,7 +153,7 @@ public class Combat_Lamniat : Combat_Avatar
     public void FinishShoot() {
         Debug.Log("FinishShoot start"); 
         IsAttacking = false;
-        m_isHoldShoot =false;
+        IsShooting =false;
         m_avatarMovement.CanMove = true;
 
         //m_avatarMovement.SetMovement(m_avatarMovement.MovementAfterTrigger);
