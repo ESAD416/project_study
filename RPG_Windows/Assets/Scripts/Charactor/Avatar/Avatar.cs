@@ -55,8 +55,6 @@ public class Avatar : Charactor
 
     protected override void Awake() {
         base.Awake();
-
-        m_inputControls = new AvatarInputActionsControls();
     }
 
     protected override void OnEnable() {

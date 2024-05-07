@@ -27,6 +27,7 @@ public class Movement_Lamniat : Movement_Avatar
         m_inputControls = m_avatar.InputCtrl;
 
         m_inputControls.Lamniat_Land.Move.performed += content => {
+            //Debug.Log("Lamniat_Land.Move.started");
             var inputVecter2 = content.ReadValue<Vector2>();
             m_facingDir = inputVecter2;
             m_movement = inputVecter2;
@@ -45,18 +46,6 @@ public class Movement_Lamniat : Movement_Avatar
             if(m_LamiatJump.IsJumping) m_avatar.SetCurrentBaseState(m_avatar.Jump);
             else if(m_LamiatCombat.IsAttacking) m_avatar.SetCurrentBaseState(m_avatar.Attack);
             else m_avatar.SetCurrentBaseState(m_avatar.Idle);
-        };
-
-        m_inputControls.Lamniat_Land.Hold.performed += content => {
-            if(content.interaction is HoldInteraction) {
-                m_isHoldInteraction = true;
-            }
-        };
-
-        m_inputControls.Lamniat_Land.Hold.canceled += content => {
-            if(content.interaction is HoldInteraction) {
-                m_isHoldInteraction = false;
-            }
         };
 
         #endregion

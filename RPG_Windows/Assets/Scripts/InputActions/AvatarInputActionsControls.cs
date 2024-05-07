@@ -28,6 +28,15 @@ public partial class @AvatarInputActionsControls: IInputActionCollection2, IDisp
             ""id"": ""e6cae321-99e0-4375-9af9-b361da1455b9"",
             ""actions"": [
                 {
+                    ""name"": ""Move"",
+                    ""type"": ""Value"",
+                    ""id"": ""d7dae9ef-466c-4c54-b9af-aa3128023eb4"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
                     ""name"": ""Melee"",
                     ""type"": ""Button"",
                     ""id"": ""67a225ed-aba2-4b08-87d6-e2d237e90afd"",
@@ -37,10 +46,19 @@ public partial class @AvatarInputActionsControls: IInputActionCollection2, IDisp
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Aim"",
-                    ""type"": ""Button"",
+                    ""name"": ""AimAt_GamePad"",
+                    ""type"": ""Value"",
+                    ""id"": ""1e1d2e9c-c7ef-4d9a-a086-0cb56a80eac6"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""AimAt_Mouse"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""40e970ca-1182-46b0-bae9-c030fe413930"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -64,55 +82,158 @@ public partial class @AvatarInputActionsControls: IInputActionCollection2, IDisp
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Move"",
-                    ""type"": ""Value"",
-                    ""id"": ""d7dae9ef-466c-4c54-b9af-aa3128023eb4"",
-                    ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                },
-                {
                     ""name"": ""Dodge"",
                     ""type"": ""Button"",
                     ""id"": ""cfaf3ca6-4058-4326-adc1-b9b6d097ef6a"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": """",
+                    ""interactions"": ""Hold"",
                     ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Hold"",
-                    ""type"": ""Value"",
-                    ""id"": ""4db0b699-3899-4cd9-bfe6-06efcfefa167"",
-                    ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
                 {
                     ""name"": """",
-                    ""id"": ""43869e2d-e0c6-4b33-96c4-43df5b538096"",
-                    ""path"": ""<Mouse>/leftButton"",
+                    ""id"": ""7ebe0b2a-7f7f-49b7-abd9-982a6bdaed62"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard & Mouse"",
-                    ""action"": ""Melee"",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Dodge"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""6a07de5e-37da-43cf-9f3a-b0843043d8f0"",
-                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""id"": ""9be91d66-dae0-4dec-9803-d644b656f66a"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""Dodge"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0db6e1d9-ddfd-49d6-a481-97538f4ecf8e"",
+                    ""path"": ""<Gamepad>/buttonEast"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
-                    ""action"": ""Melee"",
+                    ""action"": ""Shoot"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e49afdd8-c8ac-4fbc-b362-7e4f3240edde"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""Shoot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1245c265-16ad-439c-96fc-ef4bccb89105"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Shoot_Hold"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7ed3e5b5-81a3-400f-b7f4-9326f3a3cf77"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""Shoot_Hold"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f5f114be-2e9a-4fc5-8e76-c55b831646cc"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""AimAt_Mouse"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c1f1e5c2-a43a-4c70-b6f7-28c4be641e98"",
+                    ""path"": ""<Gamepad>/leftStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""AimAt_GamePad"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""8DirectionalStick"",
+                    ""id"": ""61378b33-e958-4122-bd6e-550b5dc0e3f0"",
+                    ""path"": ""2DVector(mode=2)"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""3f6fa3a2-473f-4910-b700-45a94c048983"",
+                    ""path"": ""<Gamepad>/leftStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""199cd84e-fc96-4fcd-a355-bf8504703fd1"",
+                    ""path"": ""<Gamepad>/leftStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""74fe5ee3-f5ed-4f48-b98f-7e9708b61151"",
+                    ""path"": ""<Gamepad>/leftStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""db437aa4-4c94-4dae-841f-6bce0ee83b74"",
+                    ""path"": ""<Gamepad>/leftStick/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 },
                 {
                     ""name"": ""WASD Keys"",
@@ -170,255 +291,24 @@ public partial class @AvatarInputActionsControls: IInputActionCollection2, IDisp
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""Joysticks"",
-                    ""id"": ""61378b33-e958-4122-bd6e-550b5dc0e3f0"",
-                    ""path"": ""2DVector"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Move"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""up"",
-                    ""id"": ""3f6fa3a2-473f-4910-b700-45a94c048983"",
-                    ""path"": ""<Gamepad>/leftStick/up"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""down"",
-                    ""id"": ""199cd84e-fc96-4fcd-a355-bf8504703fd1"",
-                    ""path"": ""<Gamepad>/leftStick/down"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""left"",
-                    ""id"": ""74fe5ee3-f5ed-4f48-b98f-7e9708b61151"",
-                    ""path"": ""<Gamepad>/leftStick/left"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""right"",
-                    ""id"": ""db437aa4-4c94-4dae-841f-6bce0ee83b74"",
-                    ""path"": ""<Gamepad>/leftStick/right"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
                     ""name"": """",
-                    ""id"": ""9be91d66-dae0-4dec-9803-d644b656f66a"",
-                    ""path"": ""<Keyboard>/leftShift"",
-                    ""interactions"": ""Hold"",
+                    ""id"": ""6a07de5e-37da-43cf-9f3a-b0843043d8f0"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard & Mouse"",
-                    ""action"": ""Dodge"",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Melee"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""7ebe0b2a-7f7f-49b7-abd9-982a6bdaed62"",
-                    ""path"": ""<Gamepad>/rightTrigger"",
-                    ""interactions"": ""Hold"",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Dodge"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""WASD Keys"",
-                    ""id"": ""ae220899-4bdf-4e05-ba58-0ac86196ec5f"",
-                    ""path"": ""2DVector"",
-                    ""interactions"": ""Hold(duration=0.2)"",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Hold"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""up"",
-                    ""id"": ""3171fdf8-a493-48ee-a063-2b1737ac34ac"",
-                    ""path"": ""<Keyboard>/w"",
+                    ""id"": ""43869e2d-e0c6-4b33-96c4-43df5b538096"",
+                    ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard & Mouse"",
-                    ""action"": ""Hold"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""down"",
-                    ""id"": ""46e1f673-fc23-4b3f-9d0a-1bc17d750a3e"",
-                    ""path"": ""<Keyboard>/s"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard & Mouse"",
-                    ""action"": ""Hold"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""left"",
-                    ""id"": ""518e6b52-2361-4b97-825b-a96bec244cd8"",
-                    ""path"": ""<Keyboard>/a"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard & Mouse"",
-                    ""action"": ""Hold"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""right"",
-                    ""id"": ""2b445428-0afe-486c-b1a9-9c7b1b235a89"",
-                    ""path"": ""<Keyboard>/d"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard & Mouse"",
-                    ""action"": ""Hold"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""Joysticks"",
-                    ""id"": ""215ffaf7-23c5-4dd1-991a-02eaedd819b4"",
-                    ""path"": ""2DVector"",
-                    ""interactions"": ""Hold(duration=0.2)"",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Hold"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""up"",
-                    ""id"": ""4038013e-e169-4333-ab63-56153cac80a4"",
-                    ""path"": ""<Gamepad>/leftStick/up"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Hold"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""down"",
-                    ""id"": ""fc00cf27-9965-4985-a316-75d0e6a21e00"",
-                    ""path"": ""<Gamepad>/leftStick/down"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Hold"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""left"",
-                    ""id"": ""c333d81b-19ab-4b8c-a080-f4123718a31d"",
-                    ""path"": ""<Gamepad>/leftStick/left"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Hold"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""right"",
-                    ""id"": ""32dbdcc2-d834-4328-82b5-56aeac3cbca7"",
-                    ""path"": ""<Gamepad>/leftStick/right"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Hold"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""c19e557c-65e7-4dc3-bedb-5432f38b2c4d"",
-                    ""path"": ""<Mouse>/rightButton"",
-                    ""interactions"": ""Hold"",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard & Mouse"",
-                    ""action"": ""Aim"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""236aca76-5a27-47c8-a735-68a8d140522c"",
-                    ""path"": ""<Gamepad>/leftTrigger"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Aim"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""e49afdd8-c8ac-4fbc-b362-7e4f3240edde"",
-                    ""path"": ""<Mouse>/rightButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard & Mouse"",
-                    ""action"": ""Shoot"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""0db6e1d9-ddfd-49d6-a481-97538f4ecf8e"",
-                    ""path"": ""<Gamepad>/buttonEast"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Shoot"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""7ed3e5b5-81a3-400f-b7f4-9326f3a3cf77"",
-                    ""path"": ""<Mouse>/rightButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard & Mouse"",
-                    ""action"": ""Shoot_Hold"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""1245c265-16ad-439c-96fc-ef4bccb89105"",
-                    ""path"": ""<Gamepad>/buttonEast"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Shoot_Hold"",
+                    ""action"": ""Melee"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -457,13 +347,13 @@ public partial class @AvatarInputActionsControls: IInputActionCollection2, IDisp
 }");
         // Lamniat_Land
         m_Lamniat_Land = asset.FindActionMap("Lamniat_Land", throwIfNotFound: true);
+        m_Lamniat_Land_Move = m_Lamniat_Land.FindAction("Move", throwIfNotFound: true);
         m_Lamniat_Land_Melee = m_Lamniat_Land.FindAction("Melee", throwIfNotFound: true);
-        m_Lamniat_Land_Aim = m_Lamniat_Land.FindAction("Aim", throwIfNotFound: true);
+        m_Lamniat_Land_AimAt_GamePad = m_Lamniat_Land.FindAction("AimAt_GamePad", throwIfNotFound: true);
+        m_Lamniat_Land_AimAt_Mouse = m_Lamniat_Land.FindAction("AimAt_Mouse", throwIfNotFound: true);
         m_Lamniat_Land_Shoot = m_Lamniat_Land.FindAction("Shoot", throwIfNotFound: true);
         m_Lamniat_Land_Shoot_Hold = m_Lamniat_Land.FindAction("Shoot_Hold", throwIfNotFound: true);
-        m_Lamniat_Land_Move = m_Lamniat_Land.FindAction("Move", throwIfNotFound: true);
         m_Lamniat_Land_Dodge = m_Lamniat_Land.FindAction("Dodge", throwIfNotFound: true);
-        m_Lamniat_Land_Hold = m_Lamniat_Land.FindAction("Hold", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -525,24 +415,24 @@ public partial class @AvatarInputActionsControls: IInputActionCollection2, IDisp
     // Lamniat_Land
     private readonly InputActionMap m_Lamniat_Land;
     private List<ILamniat_LandActions> m_Lamniat_LandActionsCallbackInterfaces = new List<ILamniat_LandActions>();
+    private readonly InputAction m_Lamniat_Land_Move;
     private readonly InputAction m_Lamniat_Land_Melee;
-    private readonly InputAction m_Lamniat_Land_Aim;
+    private readonly InputAction m_Lamniat_Land_AimAt_GamePad;
+    private readonly InputAction m_Lamniat_Land_AimAt_Mouse;
     private readonly InputAction m_Lamniat_Land_Shoot;
     private readonly InputAction m_Lamniat_Land_Shoot_Hold;
-    private readonly InputAction m_Lamniat_Land_Move;
     private readonly InputAction m_Lamniat_Land_Dodge;
-    private readonly InputAction m_Lamniat_Land_Hold;
     public struct Lamniat_LandActions
     {
         private @AvatarInputActionsControls m_Wrapper;
         public Lamniat_LandActions(@AvatarInputActionsControls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Move => m_Wrapper.m_Lamniat_Land_Move;
         public InputAction @Melee => m_Wrapper.m_Lamniat_Land_Melee;
-        public InputAction @Aim => m_Wrapper.m_Lamniat_Land_Aim;
+        public InputAction @AimAt_GamePad => m_Wrapper.m_Lamniat_Land_AimAt_GamePad;
+        public InputAction @AimAt_Mouse => m_Wrapper.m_Lamniat_Land_AimAt_Mouse;
         public InputAction @Shoot => m_Wrapper.m_Lamniat_Land_Shoot;
         public InputAction @Shoot_Hold => m_Wrapper.m_Lamniat_Land_Shoot_Hold;
-        public InputAction @Move => m_Wrapper.m_Lamniat_Land_Move;
         public InputAction @Dodge => m_Wrapper.m_Lamniat_Land_Dodge;
-        public InputAction @Hold => m_Wrapper.m_Lamniat_Land_Hold;
         public InputActionMap Get() { return m_Wrapper.m_Lamniat_Land; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -552,52 +442,52 @@ public partial class @AvatarInputActionsControls: IInputActionCollection2, IDisp
         {
             if (instance == null || m_Wrapper.m_Lamniat_LandActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_Lamniat_LandActionsCallbackInterfaces.Add(instance);
+            @Move.started += instance.OnMove;
+            @Move.performed += instance.OnMove;
+            @Move.canceled += instance.OnMove;
             @Melee.started += instance.OnMelee;
             @Melee.performed += instance.OnMelee;
             @Melee.canceled += instance.OnMelee;
-            @Aim.started += instance.OnAim;
-            @Aim.performed += instance.OnAim;
-            @Aim.canceled += instance.OnAim;
+            @AimAt_GamePad.started += instance.OnAimAt_GamePad;
+            @AimAt_GamePad.performed += instance.OnAimAt_GamePad;
+            @AimAt_GamePad.canceled += instance.OnAimAt_GamePad;
+            @AimAt_Mouse.started += instance.OnAimAt_Mouse;
+            @AimAt_Mouse.performed += instance.OnAimAt_Mouse;
+            @AimAt_Mouse.canceled += instance.OnAimAt_Mouse;
             @Shoot.started += instance.OnShoot;
             @Shoot.performed += instance.OnShoot;
             @Shoot.canceled += instance.OnShoot;
             @Shoot_Hold.started += instance.OnShoot_Hold;
             @Shoot_Hold.performed += instance.OnShoot_Hold;
             @Shoot_Hold.canceled += instance.OnShoot_Hold;
-            @Move.started += instance.OnMove;
-            @Move.performed += instance.OnMove;
-            @Move.canceled += instance.OnMove;
             @Dodge.started += instance.OnDodge;
             @Dodge.performed += instance.OnDodge;
             @Dodge.canceled += instance.OnDodge;
-            @Hold.started += instance.OnHold;
-            @Hold.performed += instance.OnHold;
-            @Hold.canceled += instance.OnHold;
         }
 
         private void UnregisterCallbacks(ILamniat_LandActions instance)
         {
+            @Move.started -= instance.OnMove;
+            @Move.performed -= instance.OnMove;
+            @Move.canceled -= instance.OnMove;
             @Melee.started -= instance.OnMelee;
             @Melee.performed -= instance.OnMelee;
             @Melee.canceled -= instance.OnMelee;
-            @Aim.started -= instance.OnAim;
-            @Aim.performed -= instance.OnAim;
-            @Aim.canceled -= instance.OnAim;
+            @AimAt_GamePad.started -= instance.OnAimAt_GamePad;
+            @AimAt_GamePad.performed -= instance.OnAimAt_GamePad;
+            @AimAt_GamePad.canceled -= instance.OnAimAt_GamePad;
+            @AimAt_Mouse.started -= instance.OnAimAt_Mouse;
+            @AimAt_Mouse.performed -= instance.OnAimAt_Mouse;
+            @AimAt_Mouse.canceled -= instance.OnAimAt_Mouse;
             @Shoot.started -= instance.OnShoot;
             @Shoot.performed -= instance.OnShoot;
             @Shoot.canceled -= instance.OnShoot;
             @Shoot_Hold.started -= instance.OnShoot_Hold;
             @Shoot_Hold.performed -= instance.OnShoot_Hold;
             @Shoot_Hold.canceled -= instance.OnShoot_Hold;
-            @Move.started -= instance.OnMove;
-            @Move.performed -= instance.OnMove;
-            @Move.canceled -= instance.OnMove;
             @Dodge.started -= instance.OnDodge;
             @Dodge.performed -= instance.OnDodge;
             @Dodge.canceled -= instance.OnDodge;
-            @Hold.started -= instance.OnHold;
-            @Hold.performed -= instance.OnHold;
-            @Hold.canceled -= instance.OnHold;
         }
 
         public void RemoveCallbacks(ILamniat_LandActions instance)
@@ -635,12 +525,12 @@ public partial class @AvatarInputActionsControls: IInputActionCollection2, IDisp
     }
     public interface ILamniat_LandActions
     {
+        void OnMove(InputAction.CallbackContext context);
         void OnMelee(InputAction.CallbackContext context);
-        void OnAim(InputAction.CallbackContext context);
+        void OnAimAt_GamePad(InputAction.CallbackContext context);
+        void OnAimAt_Mouse(InputAction.CallbackContext context);
         void OnShoot(InputAction.CallbackContext context);
         void OnShoot_Hold(InputAction.CallbackContext context);
-        void OnMove(InputAction.CallbackContext context);
         void OnDodge(InputAction.CallbackContext context);
-        void OnHold(InputAction.CallbackContext context);
     }
 }

@@ -11,6 +11,7 @@ public class Combat_Avatar : Attack
     [SerializeField] protected Avatar m_avatar;
     [SerializeField] protected Movement_Avatar m_avatarMovement;
     [SerializeField] protected Dodge_Avatar m_avatarDodge;
+    [SerializeField] protected Constant.ControlDevice controlDevice;
     
     protected Animator m_avatarAnimator;
     protected AvatarInputActionsControls m_inputControls;
