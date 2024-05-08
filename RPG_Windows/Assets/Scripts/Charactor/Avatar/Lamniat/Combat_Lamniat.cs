@@ -75,12 +75,12 @@ public class Combat_Lamniat : Combat_Avatar
         };
 
         m_inputControls.Lamniat_Land.Shoot_Hold.canceled += content => {
-            Debug.Log("Lamniat_Land.Shoot_Hold.canceled");
+            //Debug.Log("Lamniat_Land.Shoot_Hold.canceled");
             //m_isHoldShoot = false;
         };
 
         m_inputControls.Lamniat_Land.AimAt_GamePad.performed += content => {
-            Debug.Log("Lamniat_Land.AimAt_GamePad.started");
+            //Debug.Log("Lamniat_Land.AimAt_GamePad.started");
             var inputVecter2 = content.ReadValue<Vector2>();
 
             m_AimDir = inputVecter2;
@@ -88,7 +88,7 @@ public class Combat_Lamniat : Combat_Avatar
 
         m_inputControls.Lamniat_Land.AimAt_Mouse.performed += content => {
             var inputVecter2 = content.ReadValue<Vector2>();
-            Debug.Log("Lamniat_Land.AimAt_Mouse.inputVecter2: "+inputVecter2);
+            //Debug.Log("Lamniat_Land.AimAt_Mouse.inputVecter2: "+inputVecter2);
 
             m_AimDir = inputVecter2;
         };
@@ -234,7 +234,7 @@ public class Combat_Lamniat : Combat_Avatar
                     Debug.DrawLine(m_avatar.Center, point, Color.blue);
                     
                     m_ShootDir = point.normalized;
-                    Debug.Log("Shoot m_ShootDir "+m_ShootDir);
+                    //Debug.Log("Shoot m_ShootDir "+m_ShootDir);
                 }
                 break;
             default:

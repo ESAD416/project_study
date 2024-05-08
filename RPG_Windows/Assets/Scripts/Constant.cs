@@ -7,7 +7,7 @@ public static class Constant
     public enum ControlDevice {
         Gamepad,
         KeyboardMouse,
-        Mobile
+        TouchScreen
     };
 
 
