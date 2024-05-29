@@ -9,6 +9,8 @@ public class AOECtrl : MonoBehaviour
     [Header("基本物件")]
     [SerializeField] private Enemy boss;
     [SerializeField] private GameObject areaIndicatorPrefab;
+    private float areaIndicatorRadius = 2.048f;  // 根據areaIndicator Sprite Renderer的Bounds與Scale計算得出
+
     //[SerializeField] private GameObject areaHitBoxPrefab;
     // [SerializeField] private GameObject curveLineIndicatorPrefab;
 
@@ -57,7 +59,7 @@ public class AOECtrl : MonoBehaviour
     }
 
     public void InstantiateAreaIndicators(float duration = 0) {
-        foreach(var pos in aoePositions)
+        foreach(var pos in SpawnPositions)
         {
             GameObject offsetObject = Instantiate(areaIndicatorPrefab);
             offsetObject.transform.position = pos;
@@ -176,10 +178,10 @@ public class AOECtrl : MonoBehaviour
     }
 
     public Vector3 GetAOEPositionByStackCombination() {
-        Area randomArea = areas[UnityEngine.Random.Range(0, areas.Count)];
+        Area randomArea = areas[Random.Range(0, areas.Count)];
         while(stackAreas.Contains(randomArea))
         {
-            randomArea = areas[UnityEngine.Random.Range(0, areas.Count)];
+            randomArea = areas[Random.Range(0, areas.Count)];
         }
 
         stackAreas.Add(randomArea);
@@ -218,7 +220,7 @@ public class AOECtrl : MonoBehaviour
     public Vector3 GetTrailedAOEPosition(Avatar target) {
         if(trailedPos.Equals(Vector3.zero)) {
             // 第一次的生成
-            trailedPos = new Vector3(0, -3);
+            trailedPos = new Vector3( 0, -3);
             //Debug.Log("First trailedPos: "+trailedPos);
         } else {
             Vector3 lastTrailedPos = trailedPos;
@@ -264,5 +266,94 @@ public class AOECtrl : MonoBehaviour
         //Debug.Log("trailDir: "+trailDir);
         // 6. 上述都府和後變回傳
         return trailedPos;
+    }
+
+    public Vector3 GetPathFindingAOEPosition(Avatar target) {
+        if(trailedPos.Equals(Vector3.zero)) {
+            // 第一次的生成
+            trailedPos = new Vector3( 0, -3);
+            //Debug.Log("First trailedPos: "+trailedPos);
+        } else {
+            Vector3 lastTrailedPos = trailedPos;
+            
+            trailedPos = new Vector3(lastTrailedPos.x + (trailOffset * trailDir.x), -3);
+           // Debug.Log("trailedPos: "+trailedPos);
+
+            // 5. 新的位置需確認是否在areaRange內，如果不在則須進行再計算得新的位置
+            if(trailedPos.y < areaMin.y) {
+                while(trailedPos.y < areaMin.y) {
+                    trailedPos = new Vector3(trailedPos.x, trailedPos.y + 0.1f);
+                }
+            } else if(trailedPos.y > areaMax.y) {
+                while(trailedPos.y > areaMax.y) {
+                    trailedPos = new Vector3(trailedPos.x, trailedPos.y - 0.1f);
+                }
+            }
+
+            if(trailedPos.x < areaMin.x) {
+                while(trailedPos.x < areaMin.x) {
+                    trailedPos = new Vector3(trailedPos.x + 0.1f, trailedPos.y);
+                }
+                trailDir = Vector3.right;
+            } else if(trailedPos.x > areaMax.x) {
+                while(trailedPos.x > areaMax.x) {
+                    trailedPos = new Vector3(trailedPos.x - 0.1f, trailedPos.y);
+                }
+                trailDir = Vector3.left;
+            } 
+            
+
+            //Debug.Log("Non-First trailedPos: "+trailedPos);
+        }           
+
+
+        return trailedPos;
+    }
+
+    public List<Vector3> SpawnPositions = new List<Vector3>();
+    int circlesPerRow = 5;
+    public void GenerateSpawnPositions()
+    {
+        SpawnPositions.Clear();
+
+        float diameter = areaIndicatorRadius * 2;
+        Vector2 areaSize = areaMax - areaMin;
+        for (float x = -areaSize.x / 2; x <= areaSize.x / 2; x += diameter)
+        {
+            for (float y = -areaSize.y / 2; y <= areaSize.y / 2; y += diameter)
+            {
+                //Debug.Log("GenerateSpawnPositions");
+                //Vector2 position = new Vector2(x, y);
+                Vector2 position = new Vector2(
+                    x + Random.Range(-areaIndicatorRadius / 2, areaIndicatorRadius / 2),
+                    y + Random.Range(-areaIndicatorRadius - 1f , areaIndicatorRadius + 1f)
+                );
+                
+                // 确保圆形不会超出地板边界
+                position.x = Mathf.Clamp(position.x, areaMin.x, areaMax.x);
+                position.y = Mathf.Clamp(position.y, areaMin.y, areaMax.y);
+
+                SpawnPositions.Add(position);
+            }
+        }
+
+        // for (float x = areaMin.x + areaIndicatorRadius; x <= areaMax.x - areaIndicatorRadius; x += diameter)
+        // {
+        //     for (float y = areaMin.y + areaIndicatorRadius; y <= areaMax.y - areaIndicatorRadius; y += diameter)
+        //     {
+        //         Debug.Log("GenerateSpawnPositions");
+        //         //Vector2 position = new Vector2(x, y);
+        //         Vector2 position = new Vector2(
+        //             x + Random.Range(-areaIndicatorRadius / 2, areaIndicatorRadius / 2),
+        //             y + Random.Range(-areaIndicatorRadius / 2, areaIndicatorRadius / 2)
+        //         );
+                
+        //         // 确保圆形不会超出地板边界
+        //         position.x = Mathf.Clamp(position.x, areaMin.x, areaMax.x);
+        //         position.y = Mathf.Clamp(position.y, areaMin.y, areaMax.y);
+
+        //         SpawnPositions.Add(position);
+        //     }
+        // }
     }
 }

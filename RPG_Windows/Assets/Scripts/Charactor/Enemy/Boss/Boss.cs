@@ -48,6 +48,9 @@ public class Boss : Enemy
         m_currentBossState.OnUpdate();
 
         m_currentBaseState.OnUpdate();
+
+        m_Center = m_CenterObj?.position ?? Vector3.zero;
+        m_Buttom = m_ButtomObj?.position ?? Vector3.zero;
     }
     protected override void FixedUpdate() {
         m_currentBossState.OnFixedUpdate();

@@ -31,6 +31,10 @@ public class Player : Charactor
     [SerializeField] private InputActionReference holdActionReference;
     private bool isHoldInteraction = false;
 
+     private void SetRaycastPoint(string raycastPointName = null) {
+        raycastPoint = GetComponentInChildren<Transform>().Find(raycastPointName);
+     }
+        
     /*
     
     protected override void Start() {

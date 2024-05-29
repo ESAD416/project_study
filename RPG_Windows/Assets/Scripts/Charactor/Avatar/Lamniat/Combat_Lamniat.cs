@@ -9,9 +9,10 @@ using UnityEngine.VFX;
 public class Combat_Lamniat : Combat_Avatar
 {
     [Header("Lamniat近戰參數")]
+    private bool m_getMeleeInput = true;
     protected int m_maximumMeleeComboCount = 3;
-    protected int m_meleeComboCounter = 0;
-    [SerializeField] protected int MeleeComboCounter => this.m_meleeComboCounter;
+    [SerializeField] protected int m_meleeComboCounter = 0;
+    public int MeleeComboCounter => this.m_meleeComboCounter;
     public void SetMeleeComboCounter(int value) => this.m_meleeComboCounter = value;
 
     [Header("Lamniat遠程參數")]
@@ -19,17 +20,14 @@ public class Combat_Lamniat : Combat_Avatar
     public bool IsAiming;
     [SerializeField] protected Vector2 m_AimDir = Vector2.zero;
     [SerializeField] protected Vector2 m_ShootDir = Vector2.zero;
+    public Vector2 ShootDir => this.m_ShootDir;
 
     [Header("Lamniat近戰物件")]
+    private HitBox_Overlap2D enabledMeleeHitbox;
     [SerializeField] protected HitBox_Overlap2D m_hitBox_left;
     [SerializeField] protected HitBox_Overlap2D m_hitBox_right;
-    [SerializeField] protected List<VisualEffect> m_slashEffects_left;
-    [SerializeField] protected List<VisualEffect> m_slashEffects_right;
 
     [Header("Lamniat遠程物件")]
-    [SerializeField] protected Transform m_firePoint_left;
-    [SerializeField] protected Transform m_firePoint_right;
-    private Transform enabledFirePoint;
     [SerializeField] protected GameObject m_bulletPrefab;
     
 
@@ -47,7 +45,7 @@ public class Combat_Lamniat : Combat_Avatar
             Debug.Log("Lamniat_Land.Melee.started");
             SetToAttackState();
 
-            m_avatarAnimator.SetTrigger("melee");
+            if(m_getMeleeInput) m_avatarAnimator.SetTrigger("melee");
         };
 
         m_inputControls.Lamniat_Land.Shoot.performed += content => {
@@ -98,32 +96,15 @@ public class Combat_Lamniat : Combat_Avatar
 
     protected override void Update() {
         base.Update();
+        if(m_avatar.SprtRenderer.flipX) enabledMeleeHitbox = m_hitBox_left;
+        else enabledMeleeHitbox = m_hitBox_right;
+
+        if(m_meleeComboCounter == 3) m_getMeleeInput = false;
+        else m_getMeleeInput = true;
 
         SetAnimateCombatPara();
         SetShootDir();
-
-        switch(controlDevice) {
-            case Constant.ControlDevice.KeyboardMouse:
-                if(m_ShootDir.x < 0) {
-                    // Left
-                    enabledFirePoint = m_firePoint_left;
-                } else if(m_ShootDir.x > 0) {
-                    // Right
-                    enabledFirePoint = m_firePoint_right;
-                } 
-                break;
-            default:
-                if(m_avatarMovement.FacingDir.x < 0) {
-                    // Left
-                    enabledFirePoint = m_firePoint_left;
-                    
-                } else if(m_avatarMovement.FacingDir.x > 0) {
-                    // Right
-                    enabledFirePoint = m_firePoint_right;
-                } 
-                break;
-
-        }
+        
     }
 
     protected void SetToAttackState() {
@@ -185,18 +166,21 @@ public class Combat_Lamniat : Combat_Avatar
         if(m_avatarMovement.IsMoving) m_avatar.SetCurrentBaseState(m_avatar.Move);
         else m_avatar.SetCurrentBaseState(m_avatar.Idle);
 
-        m_hitBox_left.gameObject.SetActive(false);
-        m_hitBox_right.gameObject.SetActive(false);
-        m_slashEffects_left.ForEach(h => 
-        {
-            h.gameObject.SetActive(false);
-        });
-        m_slashEffects_right.ForEach(h => 
-        {
-            h.gameObject.SetActive(false);
-        });
+        m_hitBox_left.GetComponentsInChildren<Transform>(true).ToList().ForEach(h => h.gameObject.SetActive(false));
+        m_hitBox_right.GetComponentsInChildren<Transform>(true).ToList().ForEach(h => h.gameObject.SetActive(false));
 
-        // this.m_meleeComboCounter = 0;
+        // m_hitBox_left.gameObject.SetActive(false);
+        // m_hitBox_right.gameObject.SetActive(false);
+        // m_slashEffects_left.ForEach(h => 
+        // {
+        //     h.gameObject.SetActive(false);
+        // });
+        // m_slashEffects_right.ForEach(h => 
+        // {
+        //     h.gameObject.SetActive(false);
+        // });
+
+        this.m_meleeComboCounter = 0;
 
 
         Debug.Log("FinishMeleeAttack end");
@@ -205,22 +189,23 @@ public class Combat_Lamniat : Combat_Avatar
     public void SetMeleeHitboxDir() {
         Debug.Log("SetHitboxDir m_avatarMovement.FacingDir: "+m_avatarMovement.FacingDir);
         Debug.Log("SetHitboxDir m_meleeComboCounter: "+m_meleeComboCounter);
-        string objName = string.Empty;
-        if(m_avatarMovement.FacingDir.x < 0) {
-            // Left
-            UpdateMeleeHitboxsEnabled(m_hitBox_left, m_slashEffects_left);
-            
-        } else if(m_avatarMovement.FacingDir.x > 0) {
-            // Right
-            UpdateMeleeHitboxsEnabled(m_hitBox_right, m_slashEffects_right);
-        } 
+        UpdateMeleeHitboxsEnabled();
     }
     
-    private void UpdateMeleeHitboxsEnabled(HitBox_Overlap2D hitbox, List<VisualEffect> m_slashEffects)
+    private void UpdateMeleeHitboxsEnabled()
     {
-        hitbox.gameObject.SetActive(true);
-        int index = m_meleeComboCounter - 1 >= 0 ? m_meleeComboCounter - 1 : 0;
-        m_slashEffects[index].gameObject.SetActive(true);
+        Debug.Log("UpdateMeleeHitboxsEnabled set hitbox name: "+enabledMeleeHitbox.gameObject.name);
+        enabledMeleeHitbox.gameObject.SetActive(true);
+
+        var visualEffects = enabledMeleeHitbox.GetComponentsInChildren<VisualEffect>(true);
+        foreach(VisualEffect effect in visualEffects) {
+            Debug.Log("effect.gameObject.name: "+effect.gameObject.name);
+            if(effect.gameObject.name.Equals("_combo"+m_meleeComboCounter)) {
+                effect.gameObject.SetActive(true);
+            } else {
+                effect.gameObject.SetActive(false);
+            }
+        }
     }
 
     public void SetShootDir() {
@@ -233,7 +218,7 @@ public class Combat_Lamniat : Combat_Avatar
                     Vector3 point = ray.GetPoint(rayDistance);
                     Debug.DrawLine(m_avatar.Center, point, Color.blue);
                     
-                    m_ShootDir = point.normalized;
+                    m_ShootDir = (point - m_avatar.Center).normalized;
                     //Debug.Log("Shoot m_ShootDir "+m_ShootDir);
                 }
                 break;
@@ -255,7 +240,7 @@ public class Combat_Lamniat : Combat_Avatar
     public void Shoot() {
         IsShooting =  true;
         Debug.Log("Shoot m_ShootDir "+m_ShootDir);
-        GameObject bullet = Instantiate(m_bulletPrefab, enabledFirePoint.position, enabledFirePoint.rotation);
+        GameObject bullet = Instantiate(m_bulletPrefab, m_avatar.Center, transform.rotation);
         bullet.GetComponent<Projectile_Bullet>().SetDirection(m_ShootDir);
         var angle = Vector3.Angle(m_ShootDir, bullet.GetComponent<Projectile_Bullet>().referenceAxis);
         var quaternion = m_ShootDir.x > 0 ? Quaternion.Euler(0, 0, -angle) : Quaternion.Euler(0, 0, angle);

@@ -25,18 +25,6 @@ public class BossStage_2 : Attack
 
     protected override void Update()
     {
-        bool targetAttacked = m_OnHit != null && m_OnHit.Length > 0;
-        if (targetAttacked) {
-            Debug.Log("targetAttacked");
-            foreach (Collider2D col in m_OnHit) {
-                if(col.gameObject.tag == "Player") {
-                    if (col.GetComponentInParent<HitSystem_Avatar>() != null) {
-                        col.GetComponentInParent<HitSystem_Avatar>().TakeHiProcess(this.DamageSystem, this.transform);
-                    }
-                }
-                
-            }
-        }
     }
 
     private void NextBossState() {
@@ -44,9 +32,9 @@ public class BossStage_2 : Attack
             case BossStateMachine.BossState.BeforeStart: 
                 boss.SetCurrentBossState(boss.DuringBattle);
                 StopBattle();
-                //AttackSimultaneouslyProcess();
+                AttackSimultaneouslyProcess();
                 //AttackSeparatelyProcess(0.5f);
-                AttackByTrailProcess(m_attackRate);
+                //AttackByTrailProcess(m_attackRate);
                 break;
             case BossStateMachine.BossState.DuringBattle:
                 StopBattle();
@@ -110,10 +98,10 @@ public class BossStage_2 : Attack
         Debug.Log("attackDuration: "+m_attackDuration);
         Debug.Log("countOfRandomLaunches: "+m_countOfRandomLaunches);
 
-        int count = indicatorCtrl.aoePositions.Count + m_countOfRandomLaunches;
-        if(count > 0) {
+        // int count = indicatorCtrl.aoePositions.Count + m_countOfRandomLaunches;
+        // if(count > 0) {
             m_attackRoutine = StartCoroutine(AttackCoroutines_Simultaneously());
-        }
+        // }
     }
 
     #endregion
@@ -142,32 +130,35 @@ public class BossStage_2 : Attack
         while(true) {
             // 1. 動態生成攻擊點
             Vector3 pos = indicatorCtrl.GetTrailedAOEPosition(player);
-
+             // 2. 顯示指示器
             StartCoroutine(DisplayIndicator(pos));
             // 3. 控制攻擊的動畫與傷害機制 etc.
             StartCoroutine(LaunchAttack(pos));
             StartCoroutine(SetExplosion(pos));
             
             //TODO 增加隨機AOE指示器至Player附近By countOfRandomLaunches
-
+           
             yield return new WaitForSeconds(attackTimeSpan);
             //Debug.Log("SeparatelyAttackCoroutines: one round end");
         }
     }
 
     private IEnumerator AttackCoroutines_Simultaneously() {
-        // 所有的aoe攻擊*count是同時發動的
+        // 所有的aoe攻擊是同時發動的
 
         while(true) {
             // 1. 動態生成攻擊點
-            indicatorCtrl.UpdateCombination();
+            //indicatorCtrl.UpdateCombination();
+            indicatorCtrl.GenerateSpawnPositions();
             // 2. 同時顯示指示器
             StartCoroutine(DisplayIndicators_Simultaneously());
             // 3. 同時控制攻擊的動畫與傷害機制 etc.
-            StartCoroutine(LaunchAttack_Simultaneously());
+            StartCoroutine(LaunchAttack_Simultaneously(indicatorCtrl.SpawnPositions));
+            StartCoroutine(SetExplosion_Simultaneously(indicatorCtrl.SpawnPositions));
 
             // 等待下一輪攻擊
-            yield return new WaitForSeconds(m_indicatorDuration + m_attackDuration - m_delayTime);
+            yield return new WaitForSeconds(m_indicatorDuration + m_attackDuration);
+            // yield return new WaitForSeconds(m_indicatorDuration + m_attackDuration - m_delayTime);
         }
     }
 
@@ -186,9 +177,10 @@ public class BossStage_2 : Attack
 
     private IEnumerator DisplayIndicators_Simultaneously() {
         //Debug.Log("AttackCoroutines: DisplayMutipleIndicatorsSimultaneously start");
-        yield return null;
 
         indicatorCtrl.InstantiateAreaIndicators(m_indicatorDuration);
+        yield return null;
+        
         //Debug.Log("AttackCoroutines: DisplayMutipleIndicatorsSimultaneously end");
 
         // TODO 增加隨機AOE指示器至Player附近By countOfRandomLaunches
@@ -230,11 +222,40 @@ public class BossStage_2 : Attack
         //Debug.Log("AttackCoroutines: SetAttackHitBox end");
     }
 
-    private IEnumerator LaunchAttack_Simultaneously() {
+    private IEnumerator LaunchAttack_Simultaneously(List<Vector3> posList) {
         //Debug.Log("AttackCoroutines: LaunchAttackSimultaneously start");
-        yield return new WaitForSeconds(m_indicatorDuration);
+        yield return new WaitForSeconds(m_indicatorDuration - m_attackDuration);
         //TODO 攻擊
+        foreach(Vector2 pos in posList) {
+            GameObject projectile = ProjectilePool.instance.GetPooledGameObject();
+            if(projectile != null) {
+                // projectile.GetComponent<IndirectProjectile>();
+                projectile.GetComponent<IndirectProjectile>().SetPositionOfBezierCurve(boss.Center, pos, 12f);
+                projectile.GetComponent<IndirectProjectile>().SetDuration(m_attackDuration);
+
+                projectile.SetActive(true);
+            }
+        }
+
         //Debug.Log("AttackCoroutines: LaunchAttackSimultaneously end");
+    }
+
+    private IEnumerator SetExplosion_Simultaneously(List<Vector3> posList) {
+        yield return new WaitForSeconds(m_indicatorDuration);
+
+        foreach(Vector2 pos in posList) {
+            GameObject explosion = HitBoxPool.instance.GetPooledGameObject();
+            if(explosion != null) {
+                explosion.GetComponent<AreaExplosion>().SetByWhom(this);
+                explosion.GetComponent<AreaExplosion>().SetPosition(pos);
+                explosion.GetComponent<AreaExplosion>().SetDuration(1f);
+
+                explosion.GetComponent<HitBox_Overlap2D>().SetAttacker(this);
+                
+                explosion.SetActive(true);
+            }
+        }
+        
     }
 
     #endregion

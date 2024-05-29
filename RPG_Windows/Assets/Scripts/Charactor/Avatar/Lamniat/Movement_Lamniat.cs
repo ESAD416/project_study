@@ -63,9 +63,9 @@ public class Movement_Lamniat : Movement_Avatar
             {
                 if (!SetFirstMoveWhileJumping) {
                     Debug.Log("SetFirstMoveWhileJumping m_movement: "+m_movement);
-                    m_moveVelocity = Vector2.MoveTowards(m_moveVelocity, m_movement.normalized * m_jumpingMoveSpeed, m_acceleration * Time.deltaTime);
+                    //m_moveVelocity = Vector2.MoveTowards(m_moveVelocity, m_movement.normalized * m_jumpingMoveSpeed, m_acceleration * Time.deltaTime);
                     Debug.Log("SetFirstMoveWhileJumping m_movement: "+m_moveVelocity);
-                    //m_moveVelocity = m_movement.normalized * m_jumpingMoveSpeed;
+                    m_moveVelocity = m_movement.normalized * m_jumpingMoveSpeed;
                     m_firstMoveVelocityWhileJumping = m_moveVelocity;
                     SetFirstMoveWhileJumping = true;
                 }

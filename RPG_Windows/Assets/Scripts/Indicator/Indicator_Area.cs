@@ -8,6 +8,7 @@ public class Indicator_Area : MonoBehaviour
     public float areaValue = 0f;
     public float duration;
     [SerializeField] private Transform fillArea;
+    public SpriteRenderer SprtRenderer;
     
     private float elapsedTime = 0f;
 
@@ -15,7 +16,12 @@ public class Indicator_Area : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        SprtRenderer = GetComponent<SpriteRenderer>();
+        Bounds bounds = SprtRenderer.sprite.bounds;
+        Vector3 scale = SprtRenderer.transform.localScale;
+
+        // 计算实际半径，考虑 Scale
+        float radius = bounds.size.x * scale.x / 2f;
     }
 
     // Update is called once per frame

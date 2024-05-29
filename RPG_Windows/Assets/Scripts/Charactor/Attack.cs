@@ -10,6 +10,7 @@ public class Attack : MonoBehaviour
     [SerializeField] protected Collider2D[] m_OnHit;
     public Collider2D[] OnHit => m_OnHit;
     public void SetOverlapDetected(Collider2D[] m_Overlap) {
+        Debug.Log("SetOverlapDetected");
         this.m_OnHit = m_Overlap;
     } 
     
@@ -21,14 +22,6 @@ public class Attack : MonoBehaviour
     // Update is called once per frame
     protected virtual void Update()
     {
-        bool targetOnHit = m_OnHit != null && m_OnHit.Length > 0;
-        if (targetOnHit) {
-            Debug.Log("targetAttacked");
-            foreach (Collider2D col in m_OnHit) {
-                if (col.GetComponentInParent<HitSystem>() != null) {
-                    col.GetComponentInParent<HitSystem>().TakeHiProcess(this);
-                }
-            }
-        }
+
     }
 }

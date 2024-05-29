@@ -15,7 +15,7 @@ public class HealthSystem : MonoBehaviour
         this.m_maxHealth = maxH;
     }
 
-    [SerializeField] private float m_currHealth = 20;
+    [SerializeField] private float m_currHealth;
     /// <summary>
     /// 當前血量
     /// </summary>
@@ -31,15 +31,15 @@ public class HealthSystem : MonoBehaviour
 
 
     [Header("血量變化觸發事件")]
-    public UnityEvent OnTakenDamage;
-    public UnityEvent OnGetHeal;
+    public UnityEvent<float> OnTakenDamage;
+    public UnityEvent<float> OnGetHeal;
 
 
     // Start is called before the first frame update
     private void Start()
     {
-        SetMaxHealth(100f);
-        SetCurrHealth(100f);
+        SetMaxHealth(m_maxHealth);
+        SetCurrHealth(m_maxHealth);
     }
 
     // Update is called once per frame
@@ -68,15 +68,17 @@ public class HealthSystem : MonoBehaviour
         Debug.Log("TakeDamage: "+amount);
         m_currHealth -= amount;
 
-
         if(m_currHealth < 0) m_currHealth = 0;
-        OnTakenDamage?.Invoke();
+
+        OnTakenDamage?.Invoke(m_currHealth);
     }
 
     public void Increase(float amount) {
         Debug.Log("GetHeal: "+amount);
         m_currHealth += amount;
+
         if(m_currHealth > 0) m_currHealth = MaxHealth;
-        OnGetHeal?.Invoke();
+
+        OnGetHeal?.Invoke(m_currHealth);
     }
 }
