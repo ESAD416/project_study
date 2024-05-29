@@ -16,7 +16,6 @@ public class HitBox_Overlap2D : Detector_Overlap2D
 
     private int counterElapsed;
     private float delaytimeElapsed;
-    public UnityEvent OnHitBoxDetected;
 
     private void OnEnable() {
         counterElapsed = 0;
@@ -45,7 +44,7 @@ public class HitBox_Overlap2D : Detector_Overlap2D
     public void SetOnHit() {
         foreach (Collider2D col in OverlapDetected) {
             if (col.GetComponentInParent<HitSystem>() != null) {
-                col.GetComponentInParent<HitSystem>().TakeHiProcess(m_attacker);
+                col.GetComponentInParent<HitSystem>().TakeHiProcess(m_attacker.DamageSystem, transform);
             }
         }
     }

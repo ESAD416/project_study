@@ -9,10 +9,10 @@ public class HitSystem_Lamniat : HitSystem_Avatar
     [SerializeField] protected Combat_Lamniat m_targetCombat;
     [SerializeField] protected Dodge_Lamniat m_targetDodge;
 
-    protected Vector2 m_defaultHitBoxOffset = new Vector2(0, 1.8f);
-    protected Vector2 m_defaultHitBoxSize = new Vector2(1.25f, 2.75f);
-    protected Vector2 m_crouchHitBoxOffset = new Vector2(0, 1.36f);
-    protected Vector2 m_crouchHitBoxSize = new Vector2(1.25f, 1.86f);
+    protected Vector2 m_defaultHitBoxOffset = new Vector2(0, 1.85f);
+    protected Vector2 m_defaultHitBoxSize = new Vector2(1f, 1.5f);
+    protected Vector2 m_crouchHitBoxOffset = new Vector2(0, 1.05f);
+    protected Vector2 m_crouchHitBoxSize = new Vector2(1.25f, 1.25f);
 
     protected override void Start() {
         base.Start();

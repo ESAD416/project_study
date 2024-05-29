@@ -8,8 +8,10 @@ using System.Linq;
 [Serializable]
 public class InventoryHolder : MonoBehaviour
 {
+    [SerializeField] protected Avatar m_target;
     [SerializeField] private int m_inventorySize;
     [SerializeField] protected InventorySystemModel m_inventorySystem;
+    protected BoxCollider2D m_targetHitBoxCollider;
 
     //Getter
     public InventorySystemModel InventorySystem => m_inventorySystem;
@@ -18,5 +20,11 @@ public class InventoryHolder : MonoBehaviour
 
     private void Start() {
         m_inventorySystem = new InventorySystemModel(m_inventorySize);
+        m_targetHitBoxCollider = GetComponent<BoxCollider2D>();
+    }
+
+    protected virtual void Update() 
+    {
+        transform.position = m_target.transform.position;
     }
 }
