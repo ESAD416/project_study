@@ -59,9 +59,11 @@ public class Movement_Enemy : MonoBehaviour
     /// </summary>
     public bool isMoving {
         get {
-            return m_movement.x != 0 || m_movement.y != 0;
+            return (m_movement.x != 0 || m_movement.y != 0) && m_moveSpeed > 0f;
         }
     }
+
+    public bool CanMove = true;
 
     # endregion
 

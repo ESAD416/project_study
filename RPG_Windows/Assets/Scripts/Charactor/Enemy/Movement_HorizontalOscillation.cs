@@ -88,7 +88,7 @@ public class Movement_HorizontalOscillation : Movement_Enemy
 
     private void OnTriggerEnter2D(Collider2D trig)
 	{
-		if (trig.gameObject.tag == "Enemy_Turn"){
+		if (trig.CompareTag("Enemy_Turn")){
 			if (moveRight){
 				moveRight = false;
 			}

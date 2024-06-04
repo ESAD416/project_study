@@ -1,10 +1,13 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using UniRx;
 using UnityEngine;
 
 public class BossStage_2 : Attack
 {
     [Header("關卡物件")]
+    [SerializeField] private ColliderTrigger m_bossVisableRange;
     [SerializeField] private Boss boss;
     [SerializeField] private Avatar player;
     [SerializeField] private AOECtrl indicatorCtrl;
@@ -15,16 +18,37 @@ public class BossStage_2 : Attack
     [SerializeField] private int m_countOfRandomLaunches = 2;
     private float m_delayTime = 1f;
     private Coroutine m_attackRoutine;
-    private float m_timeToStartBattle = 3f;
+    private float m_timeToStartBattle = 5f;
+    private float m_timeToShowAndHideBossUI = 3f;
+    
 
     // Start is called before the first frame update
     private void Start()
     {
-        Invoke("StartBattle", m_timeToStartBattle);
+        var healthBar = GetComponent<HealthSystem>().HealthBar;
+        if(healthBar) healthBar.HideHealthBarUI();
+
+        m_bossVisableRange.OnTargetEnterTriggerEvent.AddListener(OnPlayerEnterFight);
     }
 
     protected override void Update()
     {
+    }
+
+    protected void OnPlayerEnterFight() {
+        // Animation 戰鬥前動畫。duration : 1.5f
+        Observable.Timer(TimeSpan.FromSeconds(1f))
+            .Subscribe(_ => boss.Animator.SetTrigger("fadeIn"))
+            .AddTo(this);
+        
+
+        Observable.Timer(TimeSpan.FromSeconds(m_timeToShowAndHideBossUI +1f))
+            .Subscribe(_ => DelayShowBossHealthUI())
+            .AddTo(this);
+
+        Observable.Timer(TimeSpan.FromSeconds(m_timeToStartBattle))
+            .Subscribe(_ => DelayStartBattle())
+            .AddTo(this);
     }
 
     private void NextBossState() {
@@ -32,9 +56,9 @@ public class BossStage_2 : Attack
             case BossStateMachine.BossState.BeforeStart: 
                 boss.SetCurrentBossState(boss.DuringBattle);
                 StopBattle();
-                AttackSimultaneouslyProcess();
+                //AttackSimultaneouslyProcess();
                 //AttackSeparatelyProcess(0.5f);
-                //AttackByTrailProcess(m_attackRate);
+                AttackByTrailProcess(m_attackRate);
                 break;
             case BossStateMachine.BossState.DuringBattle:
                 StopBattle();
@@ -52,7 +76,12 @@ public class BossStage_2 : Attack
 
     #region 攻擊 啟動/關閉
 
-    private void StartBattle() {
+    public void DelayShowBossHealthUI() {
+        var healthBar = GetComponent<HealthSystem>().HealthBar;
+        if(healthBar) healthBar.ShowHealthBarUI();
+    }
+
+    private void DelayStartBattle() {
         Debug.Log("StartBattle");
         NextBossState();
     }
@@ -216,6 +245,7 @@ public class BossStage_2 : Attack
             explosion.GetComponent<AreaExplosion>().SetDuration(1f);
 
             explosion.GetComponent<HitBox_Overlap2D>().SetAttacker(this);
+            explosion.GetComponent<HitBox_Overlap2D>().DetectTagName = "Player";
             
             explosion.SetActive(true);
         }
@@ -251,6 +281,7 @@ public class BossStage_2 : Attack
                 explosion.GetComponent<AreaExplosion>().SetDuration(1f);
 
                 explosion.GetComponent<HitBox_Overlap2D>().SetAttacker(this);
+                explosion.GetComponent<HitBox_Overlap2D>().DetectTagName = "Player";
                 
                 explosion.SetActive(true);
             }

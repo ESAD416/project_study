@@ -100,6 +100,9 @@ public class DetectorEditor : Editor
                 Handles.DrawWireDisc(adjustOverlap2D.transform.position, Vector3.back, Radius.floatValue);
                 break;
             case 1:
+                // 计算旋转矩阵
+                //Handles.matrix  = Matrix4x4.TRS(adjustOverlap2D.transform.position, Quaternion.Euler(0, 0, Angle.floatValue), Vector3.one);
+                // 绘制旋转后的线框立方体
                 Handles.DrawWireCube(adjustOverlap2D.transform.position, BoxSize.vector2Value);
                 break;
             case 2:
@@ -209,6 +212,9 @@ public class HitboxEditor : Editor {
                 Handles.DrawWireDisc(adjustOverlap2D.transform.position, Vector3.back, Radius.floatValue);
                 break;
             case 1:
+                // 计算旋转矩阵
+                //Handles.matrix  = Matrix4x4.TRS(adjustOverlap2D.transform.position, Quaternion.Euler(0, 0, Angle.floatValue), Vector3.one);
+                // 绘制旋转后的线框立方体
                 Handles.DrawWireCube(adjustOverlap2D.transform.position, BoxSize.vector2Value);
                 break;
             case 2:
@@ -319,6 +325,9 @@ public class EnemyPatrolDetectorEditor : Editor {
                 Handles.DrawWireDisc(adjustOverlap2D.transform.position, Vector3.back, Radius.floatValue);
                 break;
             case 1:
+                // 计算旋转矩阵
+                //Handles.matrix  = Matrix4x4.TRS(adjustOverlap2D.transform.position, Quaternion.Euler(0, 0, Angle.floatValue), Vector3.one);
+                // 绘制旋转后的线框立方体
                 Handles.DrawWireCube(adjustOverlap2D.transform.position, BoxSize.vector2Value);
                 break;
             case 2:

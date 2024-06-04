@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class DirectProjectile : MonoBehaviour
 {
-    public Collider2D projectileHitBox;
     public float speed;
     public float duration;
     public Vector3 referenceAxis;
@@ -19,14 +18,19 @@ public class DirectProjectile : MonoBehaviour
         transform.position += launchDirection * speed * Time.deltaTime;
     }
 
-    protected virtual void OnCollisionEnter2D(Collision2D other) {
-        //Destroy(gameObject);
-        //Debug.Log("OnCollisionEnter2D Destory Projectile");
-        //gameObject.SetActive(false);
-    }
-
     protected virtual void OnTriggerEnter2D(Collider2D other) {
-        
+        int hittableLayerMask = 1 << LayerMask.NameToLayer("Hittable");
+        if (other.CompareTag("Enemies") && (hittableLayerMask & 1 << other.gameObject.layer) > 0)
+        {
+            Debug.Log("OnTriggerEnter2D Destory Projectile");
+            //Destroy(gameObject);
+            DestoryProjectile();
+        }
+        // if(other.gameObject.tag == "Player") {
+        //     Debug.Log("OnTriggerEnter2D Destory Projectile");
+        //     //Destroy(gameObject);
+        //     DestoryProjectile();
+        // }
     }
 
     public virtual void SetDirection(Vector3 direction) {

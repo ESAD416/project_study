@@ -35,7 +35,7 @@ public class BossFight_1 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        colliderTrigger.OnPlayerEnterTriggerEvent.AddListener(OnPlayerEnterFight);
+        colliderTrigger.OnTargetEnterTriggerEvent.AddListener(OnPlayerEnterFight);
     }
 
     // Update is called once per frame
@@ -47,7 +47,7 @@ public class BossFight_1 : MonoBehaviour
 
     protected void OnPlayerEnterFight() {
         Debug.Log("OnPlayerEnterFight");
-        colliderTrigger.OnPlayerEnterTriggerEvent.RemoveListener(OnPlayerEnterFight);
+        colliderTrigger.OnTargetEnterTriggerEvent.RemoveListener(OnPlayerEnterFight);
         Invoke("StartBattle", timeToStartBattle);
     }
 

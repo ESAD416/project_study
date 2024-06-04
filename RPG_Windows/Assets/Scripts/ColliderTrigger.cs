@@ -6,33 +6,42 @@ using UnityEngine.Events;
 
 public class ColliderTrigger : MonoBehaviour
 {
-    public UnityEvent OnPlayerEnterColliderEvent, OnPlayerExitColliderEvent;
-    public UnityEvent OnPlayerEnterTriggerEvent, OnPlayerExitTriggerEvent;
+    public string TargetTagName = string.Empty;
+    public LayerMask TargetLayerMask;
+    public UnityEvent OnTargetEnterColliderEvent, OnTargetExitColliderEvent;
+    public UnityEvent OnTargetEnterTriggerEvent, OnTargetExitTriggerEvent;
 
 
-    protected void OnCollisionEnter2D(Collision2D otherCollider) {
-        Debug.Log("ColliderTrigger OnCollisionEnter2D");
-        OnPlayerEnterColliderEvent?.Invoke();
+    protected void OnCollisionEnter2D(Collision2D otherCollision) {
+        if(otherCollision.collider.CompareTag(TargetTagName) && (TargetLayerMask & 1 << otherCollision.gameObject.layer) > 0) {
+            Debug.Log("Target OnCollisionEnter2D targetTagName: "+otherCollision.collider.tag+", TargetLayerMask: "+LayerMask.LayerToName(otherCollision.gameObject.layer));
+            OnTargetEnterColliderEvent?.Invoke();
+        
+        }
+
     }
 
-    protected void OnCollisionExit2D(Collision2D other) {
-        Debug.Log("ColliderTrigger OnCollisionEnter2D");
-        OnPlayerEnterColliderEvent?.Invoke();
+    protected void OnCollisionExit2D(Collision2D otherCollision) {
+        if(otherCollision.collider.CompareTag(TargetTagName) && (TargetLayerMask & 1 << otherCollision.gameObject.layer) > 0) {
+            Debug.Log("Target OnCollisionExit2D targetTagName: "+otherCollision.collider.tag+", TargetLayerMask: "+LayerMask.LayerToName(otherCollision.gameObject.layer));
+            OnTargetEnterColliderEvent?.Invoke();
+                
+        }
     }
 
     protected void OnTriggerEnter2D(Collider2D otherCollider) {
-        // if(otherCollider.gameObject.tag == "Player")
-        Debug.Log("ColliderTrigger OnTriggerEnter2D");
-        OnPlayerEnterTriggerEvent?.Invoke();
-        // Player player = otherCollider.GetComponent<Player>();
-        // if(player != null) {
-        //     // Player inside trigger area
-        //     Debug.Log("ColliderTrigger player OnTriggerEnter2D");
-            
-        // }
+        if(otherCollider.CompareTag(TargetTagName) && (TargetLayerMask & 1 << otherCollider.gameObject.layer) > 0) {
+            Debug.Log("Target OnTriggerEnter2D targetTagName: "+otherCollider.tag+", TargetLayerMask: "+LayerMask.LayerToName(otherCollider.gameObject.layer));
+
+            OnTargetEnterTriggerEvent?.Invoke();
+        }
     }
 
     protected void OnTriggerExit2D(Collider2D otherCollider) {
-
+        if(otherCollider.CompareTag(TargetTagName) && (TargetLayerMask & 1 << otherCollider.gameObject.layer) > 0) {
+            Debug.Log("Target OnTriggerExit2D targetTagName: "+otherCollider.tag+", TargetLayerMask: "+LayerMask.LayerToName(otherCollider.gameObject.layer));
+            
+            OnTargetEnterTriggerEvent?.Invoke();
+        }
     }
 }

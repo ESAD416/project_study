@@ -35,13 +35,26 @@ public class HitSystem_Lamniat : HitSystem_Avatar
     }
 
     protected override IEnumerator TakeHit(Attack attacker) 
-    {    
+    {   
+        Debug.Log("Lamniat TakeHit start"); 
+
+        if(IsIgnoreHit) yield break;
+
+        if(IsInvulnerable)
+            yield break;
+        else {
+            if(invulnerableDuration > 0) {
+                invulnerableElapsed = 0f;
+                IsInvulnerable = true;
+            }
+        }
+
         IsTakingHit = true;
         m_targetMovement.CanMove = false;
 
         if(m_target != null) {
             if(m_target.CurrentBaseState.State.Equals(BaseStateMachine_Charactor.BaseState.Move)) {
-                Debug.Log("TakeHit: SetMovementAfterTrigger "+m_targetMovement.Movement);
+                Debug.Log("Lamniat TakeHit: SetMovementAfterTrigger "+m_targetMovement.Movement);
                 m_targetMovement.SetMovementAfterTrigger(m_targetMovement.Movement);
             }
 
@@ -51,33 +64,39 @@ public class HitSystem_Lamniat : HitSystem_Avatar
 
                 yield return new WaitForSeconds(m_targetDodge.DodgeClipTime);
             } else {
-                if(isInvulnerable)
-                    yield break;
-                else if(!isInvulnerable) isInvulnerable = true;
-                
-                
                 m_target.SetCurrentBaseState(m_target.Hurt);
 
-                var dir = SetAttackForceDir(attacker.transform);
                 if(!isHyperArmor && m_targetKnockbackFeedback != null) {
+                    var dir = SetAttackForceDir(attacker.transform);
                     m_targetKnockbackFeedback.ActiveFeedbackByDir(dir);
-                    Invoke("SetHurtTrigger", m_targetKnockbackFeedback.HitRecoveryTime);
-                } else {
-                    SetHurtTrigger();
-                }
+                } 
 
                 attacker.DamageSystem.OnDamage(m_targetHealthSystem);
                 
-                yield return new WaitForSeconds(invulnerableDuration);  // hardcasted casted time for debugged
+                yield return new WaitForSeconds(m_targetKnockbackFeedback.KnockbackDuration);  // hardcasted casted time for debugged
             }
         }
+
+        Debug.Log("Lamniat TakeHit end");
         
         FinishTakeHit();
     }
 
     protected override IEnumerator TakeHit(DamageSystem damageSystem, Transform attackedLocation, int damageCounter = 1) 
     {
-        Debug.Log("TakeHit start");
+        Debug.Log("Lamniat TakeHit start");
+
+        if(IsIgnoreHit) yield break;
+
+        if(IsInvulnerable)
+            yield break;
+        else {
+            if(invulnerableDuration > 0) {
+                invulnerableElapsed = 0f;
+                IsInvulnerable = true;
+            }
+        }
+
         IsTakingHit = true;
         m_targetMovement.CanMove = false;
 
@@ -93,40 +112,30 @@ public class HitSystem_Lamniat : HitSystem_Avatar
 
                 yield return new WaitForSeconds(m_targetDodge.DodgeClipTime);
             } else {
-                if(isInvulnerable) {
-                    yield break;
-                }
-                else if(!isInvulnerable) isInvulnerable = true;
-
-
                 m_target.SetCurrentBaseState(m_target.Hurt);
 
-                var dir = SetAttackForceDir(attackedLocation);
                 if(!isHyperArmor && m_targetKnockbackFeedback != null) {
+                    var dir = SetAttackForceDir(attackedLocation);
                     m_targetKnockbackFeedback.ActiveFeedbackByDir(dir);
-                    Invoke("SetHurtTrigger", m_targetKnockbackFeedback.HitRecoveryTime);
-                } else {
-                    SetHurtTrigger();
-                }
+                } 
 
                 damageSystem.OnDamage(m_targetHealthSystem);
                 
-                yield return new WaitForSeconds(invulnerableDuration);  // hardcasted casted time for debugged
+                yield return new WaitForSeconds(m_targetKnockbackFeedback.KnockbackDuration);  // hardcasted casted time for debugged
             }
         }
-        Debug.Log("TakeHit end");
+        Debug.Log("Lamniat TakeHit end");
 
         FinishTakeHit();
     }
 
     protected override void FinishTakeHit() {
-        Debug.Log("HitSystem_Avatar FinishTakeHit start");
+        Debug.Log("Lamniat FinishTakeHit start");
         if(takeHitRoutine != null) {
             StopCoroutine(takeHitRoutine);
         }
 
         IsTakingHit = false;
-        isInvulnerable = false;
         m_targetMovement.CanMove = true;
         
         //m_targetMovement.SetMovement(m_targetMovement.MovementAfterTrigger);
@@ -135,7 +144,7 @@ public class HitSystem_Lamniat : HitSystem_Avatar
         if(m_targetMovement.IsMoving) m_target.SetCurrentBaseState(m_target.Move);
         else m_target.SetCurrentBaseState(m_target.Idle);
         
-        Debug.Log("HitSystem_Avatar FinishTakeHit end");
+        Debug.Log("Lamniat FinishTakeHit end");
     }
 
     protected Vector3 SetAttackForceDir(Transform attackedLocation) {
@@ -150,6 +159,8 @@ public class HitSystem_Lamniat : HitSystem_Avatar
 
         return dir;
     }
+
+
 
     protected bool DodgedTheHit() 
     {

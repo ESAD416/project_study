@@ -23,6 +23,7 @@ public class MoveState_Boss : BaseStateMachine_Enemy
     public override void OnUpdate()
     {
         // OnUpdate
+        AnimeUtils.ActivateAnimatorLayer(this.currentEnemy.Animator, "MoveLayer");
     }
 
     public override void OnFixedUpdate()

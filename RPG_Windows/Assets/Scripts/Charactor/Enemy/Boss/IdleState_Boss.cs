@@ -23,6 +23,7 @@ public class IdleState_Boss : BaseStateMachine_Enemy
     public override void OnUpdate()
     {
         // OnUpdate
+        AnimeUtils.ActivateAnimatorLayer(this.currentEnemy.Animator, "IdleLayer");
     }
 
     public override void OnFixedUpdate()

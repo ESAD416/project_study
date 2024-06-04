@@ -13,6 +13,11 @@ public class DuringBattleState_Boss : BossStateMachine
     public override void OnEnter()
     {
         // OnEnter
+        this.currentEnemy.EnemyMovement.SetMoveSpeed(5f);
+        this.currentEnemy.SetCurrentBaseState(this.currentEnemy.Move);
+
+        var hitSystem = this.currentEnemy.GetComponent<HitSystem_Enemy>();
+        if(hitSystem) hitSystem.IsIgnoreHit = false;
     }
     public override void OnEnter(Enemy boss2)
     {

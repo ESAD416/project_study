@@ -52,7 +52,7 @@ public class Enemy : Charactor
     protected override void Awake()
     {
         base.Awake();
-        m_idle = new IdleState_Boss(this);
+        m_idle = new IdleState_Enemy(this);
         m_move = new MoveState_Enemy(this);
         m_attack = new AttackState_Enemy(this);
         m_hurt = new HurtState_Enemy(this);

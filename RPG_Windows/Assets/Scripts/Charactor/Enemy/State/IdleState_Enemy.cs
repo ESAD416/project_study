@@ -29,5 +29,7 @@ public class IdleState_Enemy : BaseStateMachine_Enemy
 
     public override void OnUpdate()
     {
+        Debug.Log("IdleState_Enemy OnUpdate");
+        AnimeUtils.ActivateAnimatorLayer(this.currentEnemy.Animator, "IdleLayer");
     }
 }

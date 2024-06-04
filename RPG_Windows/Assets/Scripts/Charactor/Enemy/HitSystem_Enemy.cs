@@ -16,40 +16,43 @@ public class HitSystem_Enemy : HitSystem
     }
 
     protected override IEnumerator TakeHit(Attack attacker) {
-        Debug.Log("TakeHit start");
-        IsTakingHit = true;
+        Debug.Log("Enemy TakeHit start");
+        
+        if(IsIgnoreHit) yield break;
 
-        var enemyTakenHit = GetComponent<Enemy>();
-        if(enemyTakenHit != null) {
-            Debug.Log("enemyTakenHit start");
-            if(isInvulnerable)
-                yield break;
-            else if(!isInvulnerable) isInvulnerable = true;
-
-            m_target.SetCurrentBaseState(m_target.Hurt);
-
-            foreach (Collider2D hitCollider in attacker.OnHit)
-            {
-                // 獲取碰撞器的中心位置
-                Vector2 hitPosition = hitCollider.bounds.center;
-
-                // 獲取碰撞的相對位置
-                Vector2 relativeHitPosition = hitCollider.transform.InverseTransformPoint(attacker.transform.position);
-
-                // 在這裡使用碰撞位置進行後續處理
-                Debug.Log("Hit at position: " + hitPosition);
-                Debug.Log("Relative hit position: " + relativeHitPosition);
-
-                ViewHitEffect(new Vector3(hitPosition.x, hitPosition.y, 99));
+        if(IsInvulnerable)
+            yield break;
+        else {
+            if(invulnerableDuration > 0) {
+                invulnerableElapsed = 0f;
+                IsInvulnerable = true;
             }
+        }
+
+        IsTakingHit = true;
+        if(m_target != null) {
+            //根據有無Hurt_State決定是否新增
+            //m_target.SetCurrentBaseState(m_target.Hurt);
+
+            // foreach (Collider2D hitCollider in attacker.OnHit)
+            // {
+            //     // 獲取碰撞器的中心位置
+            //     Vector2 hitPosition = hitCollider.bounds.center;
+
+            //     // 獲取碰撞的相對位置
+            //     Vector2 relativeHitPosition = hitCollider.transform.InverseTransformPoint(attacker.transform.position);
+
+            //     // 在這裡使用碰撞位置進行後續處理
+            //     Debug.Log("Hit at position: " + hitPosition);
+            //     Debug.Log("Relative hit position: " + relativeHitPosition);
+
+            //     ViewHitEffect(new Vector3(hitPosition.x, hitPosition.y, 99));
+            // }
 
             
-            var dir = SetAttackForceDir(attacker.transform);
             if(!isHyperArmor && m_targetKnockbackFeedback != null) {
+                var dir = SetAttackForceDir(attacker.transform);
                 m_targetKnockbackFeedback.ActiveFeedbackByDir(dir);
-                Invoke("SetHurtTrigger", m_targetKnockbackFeedback.HitRecoveryTime);
-            } else {
-                m_targetAnimator?.SetTrigger("hurt");
             }
 
             attacker.DamageSystem.OnDamage(m_targetHealthSystem);
@@ -64,30 +67,33 @@ public class HitSystem_Enemy : HitSystem
     }
 
     protected override IEnumerator TakeHit(DamageSystem damageSystem, Transform attackedLocation, int damageCounter = 1) {
+        Debug.Log("Enemy TakeHit start");
+
+        if(IsIgnoreHit) yield break;
+
+        if(IsInvulnerable)
+            yield break;
+        else {
+            if(invulnerableDuration > 0) {
+                invulnerableElapsed = 0f;
+                IsInvulnerable = true;
+            }
+        }
         
         IsTakingHit = true;
 
-        var enemyTakenHit = GetComponent<Enemy>();
-        if(enemyTakenHit != null) {
-            if(isInvulnerable)
-                yield break;
-            else if(!isInvulnerable) isInvulnerable = true;
-
-            m_target.SetCurrentBaseState(m_target.Hurt);
-
-            var dir = SetAttackForceDir(attackedLocation);
+        if(m_target != null) {
+            //根據有無Hurt_State決定是否新增
+            //m_target.SetCurrentBaseState(m_target.Hurt);
 
             if(!isHyperArmor && m_targetKnockbackFeedback != null) {
+                var dir = SetAttackForceDir(attackedLocation);
                 m_targetKnockbackFeedback.ActiveFeedbackByDir(dir);
-                Invoke("SetHurtTrigger", m_targetKnockbackFeedback.HitRecoveryTime);
-            } else {
-                m_targetAnimator?.SetTrigger("hurt");
             }
 
             damageSystem.OnDamage(m_targetHealthSystem);
             
             yield return new WaitForSeconds(invulnerableDuration);  // hardcasted casted time for debugged
-
         }
         
         FinishTakeHit();
@@ -112,7 +118,7 @@ public class HitSystem_Enemy : HitSystem
         }
 
         IsTakingHit = false;
-        isInvulnerable = false;
+        IsInvulnerable = false;
 
         if(m_targetMovement != null && m_targetMovement.isMoving) m_target.SetCurrentBaseState(m_target.Move);
         else m_target.SetCurrentBaseState(m_target.Idle);
@@ -120,8 +126,4 @@ public class HitSystem_Enemy : HitSystem
         Debug.Log("FinishTakeHit");
     }
 
-    private void SetHurtTrigger()
-    {
-        m_targetAnimator?.SetTrigger("hurt");
-    }
 }

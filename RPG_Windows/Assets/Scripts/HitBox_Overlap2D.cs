@@ -26,7 +26,7 @@ public class HitBox_Overlap2D : Detector_Overlap2D
         base.Update();
         if(counterElapsed >= OnHitCheckCount) {
             // m_attacker.SetOverlapDetected(new Collider2D[0]);
-            Debug.Log("attack already hit");
+            //Debug.Log("attack already hit");
             return;
         }
 
@@ -34,7 +34,7 @@ public class HitBox_Overlap2D : Detector_Overlap2D
             //m_attacker.SetOverlapDetected(OverlapDetected);
             SetOnHit();
             counterElapsed++;
-            Debug.Log("attack set hit");
+            //Debug.Log("attack set hit");
         }
 
         if(counterElapsed > 0) UpdateTimer();

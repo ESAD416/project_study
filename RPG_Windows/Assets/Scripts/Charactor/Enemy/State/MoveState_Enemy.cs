@@ -29,5 +29,6 @@ public class MoveState_Enemy : BaseStateMachine_Enemy
 
     public override void OnUpdate()
     {
+        
     }
 }

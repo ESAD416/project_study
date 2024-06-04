@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7166797182690551794}
   - component: {fileID: 3848014601159269738}
   - component: {fileID: 3388836113431582616}
+  - component: {fileID: 2441512060806240149}
   m_Layer: 0
   m_Name: Projectile_Bullet
   m_TagString: Untagged
@@ -29,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 8030029653607017949}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.555, y: 1.416, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -171,7 +172,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f886891ab2df7334cba2d8f9601f8c4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectileHitBox: {fileID: 3848014601159269738}
   speed: 20
   duration: 5
   referenceAxis: {x: 0, y: 0, z: 0}
+--- !u!114 &2441512060806240149
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8030029653607017949}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e2a066ccce13b247a98e49887813cbc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OverlapDetected: []
+  DetectTagName: 
+  TargetLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  HandlesColor: {r: 1, g: 0, b: 0, a: 1}
+  Radius: 0.5
+  BoxSize: {x: 0.5, y: 0.7}
+  Angle: 0
+  Origin: {x: 0, y: 0}
+  Diagonal: {x: 1, y: 1}
+  DetectSelectedIndex: 0
+  AreaSelectedIndex: 1
+  m_attacker: {fileID: 0}
+  OnHitCheckCount: 1
+  OnHitCheckDelay: 0.5

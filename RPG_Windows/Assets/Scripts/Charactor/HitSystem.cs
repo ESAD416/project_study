@@ -16,6 +16,7 @@ public class HitSystem : MonoBehaviour
     /// 正在受擊
     /// </summary>
     public bool IsTakingHit = false;
+    public bool IsIgnoreHit = false;
 
     [SerializeField] protected float onHitDelay;
     public float OnHitDelay => onHitDelay;
@@ -25,11 +26,12 @@ public class HitSystem : MonoBehaviour
     /// <summary>
     /// 是否無敵狀態
     /// </summary>
-    [SerializeField] protected bool isInvulnerable = false;
+   public bool IsInvulnerable = false;
     /// <summary>
     /// 無敵持續時間
     /// </summary>
     [SerializeField] protected float invulnerableDuration;
+    protected float invulnerableElapsed;
 
 
     [Header("霸體參數")]
@@ -41,6 +43,18 @@ public class HitSystem : MonoBehaviour
     protected Coroutine takeHitRoutine = null;
 
     #endregion
+
+
+    protected virtual void Update() {
+        if(IsInvulnerable) {
+            invulnerableElapsed += Time.deltaTime;
+            if(invulnerableElapsed >= invulnerableDuration) {
+                invulnerableElapsed = invulnerableDuration;
+                IsInvulnerable = false;
+            }
+        }
+    }
+    
 
     public virtual void TakeHiProcess(Attack attacker) {
         Debug.Log("TakeHit attacker: "+attacker.name);
@@ -57,25 +71,11 @@ public class HitSystem : MonoBehaviour
     {
         IsTakingHit = true;
         
-        var charactorTakenHit = GetComponent<Charactor>();
-        var breakableTakenHit = GetComponent<BreakableObjects>();
-        if(charactorTakenHit != null) {
-            if(isInvulnerable)
-                yield break;
-            else if(!isInvulnerable) isInvulnerable = true;
-
-            //OnHitEventBegin?.Invoke();
-            if(!isHyperArmor && m_targetKnockbackFeedback != null) {
-                m_targetKnockbackFeedback.ActiveFeedback(attacker.transform.position);
-            }
-
-            attacker.DamageSystem.OnDamage(m_targetHealthSystem);
+        // TODO
             
-            yield return new WaitForSeconds(invulnerableDuration);  // hardcasted casted time for debugged
+        yield return new WaitForSeconds(invulnerableDuration);  // hardcasted casted time for debugged
 
-        } else if(breakableTakenHit) {
-            // TODO
-        }
+        // TODO
         
         FinishTakeHit();
     }
@@ -84,26 +84,11 @@ public class HitSystem : MonoBehaviour
     {
         IsTakingHit = true;
 
-        var charactorTakenHit = GetComponent<Charactor>();
-        var breakableTakenHit = GetComponent<BreakableObjects>();
-        if(charactorTakenHit != null) {
-            if(isInvulnerable)
-                yield break;
-            else if(!isInvulnerable) isInvulnerable = true;
-
-            //OnHitEventBegin?.Invoke();
-
-            if(!isHyperArmor && m_targetKnockbackFeedback != null) {
-                m_targetKnockbackFeedback.ActiveFeedback(attackedLocation.position);
-            }
-
-            damageSystem.OnDamage(m_targetHealthSystem);
+        // TODO
             
-            yield return new WaitForSeconds(invulnerableDuration);  // hardcasted casted time for debugged
+        yield return new WaitForSeconds(invulnerableDuration);  // hardcasted casted time for debugged
 
-        } else if(breakableTakenHit) {
-            // TODO
-        }
+        // TODO
         
         FinishTakeHit();
     }
@@ -115,7 +100,7 @@ public class HitSystem : MonoBehaviour
         }
 
         IsTakingHit = false;
-        isInvulnerable = false;
+        IsInvulnerable = false;
         
         //OnHitEventEnd?.Invoke();
         
@@ -127,8 +112,6 @@ public class HitSystem : MonoBehaviour
         if(projectile != null) {
 
             // TODO
-
-
             projectile.SetActive(true);
             StartCoroutine(HitEffectPool.instance.DestroyHitEffectObjects(projectile));
         }

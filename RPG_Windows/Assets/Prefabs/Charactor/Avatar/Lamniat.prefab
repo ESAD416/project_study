@@ -242,7 +242,7 @@ GameObject:
   - component: {fileID: 8257223049667984321}
   - component: {fileID: 4604822099587876816}
   - component: {fileID: 1544835072995726476}
-  m_Layer: 6
+  m_Layer: 2
   m_Name: _Avatar
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -263,6 +263,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4867445477299163862}
+  - {fileID: 5219308032572020318}
+  - {fileID: 8282674558001548522}
   - {fileID: 5324282967277193621}
   - {fileID: 4390518390986950108}
   m_Father: {fileID: 2019717666937394243}
@@ -611,7 +613,7 @@ MonoBehaviour:
   m_target_rb2d: {fileID: 2239150281869721669}
   m_targetCenter: {fileID: 6102871184667363047}
   m_thrust: 10
-  m_hitRecoveryTime: 0.2
+  m_knockbackDuration: 0.5
   OnBegin:
     m_PersistentCalls:
       m_Calls:
@@ -675,9 +677,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5324282967277193621}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: _MeleeHitBox
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -711,8 +713,8 @@ GameObject:
   - component: {fileID: 4242724897177855617}
   - component: {fileID: 6535917294588118982}
   - component: {fileID: 2516920181635995299}
-  m_Layer: 0
-  m_Name: _Lootbox
+  m_Layer: 6
+  m_Name: _VisableBox
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -731,7 +733,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2019717666937394243}
+  m_Father: {fileID: 4485576792614724507}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &4242724897177855617
 Rigidbody2D:
@@ -869,6 +871,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   OverlapDetected: []
+  DetectTagName: 
   TargetLayer:
     serializedVersion: 2
     m_Bits: 512
@@ -894,7 +897,7 @@ GameObject:
   - component: {fileID: 2019717666937394243}
   m_Layer: 0
   m_Name: Lamniat
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -913,8 +916,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4485576792614724507}
-  - {fileID: 5219308032572020318}
-  - {fileID: 8282674558001548522}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3586121829847969275
@@ -965,6 +966,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   OverlapDetected: []
+  DetectTagName: 
   TargetLayer:
     serializedVersion: 2
     m_Bits: 512
@@ -1103,7 +1105,7 @@ GameObject:
   - component: {fileID: 1200671992489147965}
   - component: {fileID: 7997118180458007463}
   m_Layer: 8
-  m_Name: _Hurtbox
+  m_Name: _HurtBox
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1122,7 +1124,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2019717666937394243}
+  m_Father: {fileID: 4485576792614724507}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &3684277014473392863
 Rigidbody2D:
@@ -1372,7 +1374,7 @@ GameObject:
   - component: {fileID: 4390518390986950108}
   - component: {fileID: 3197155796334187150}
   - component: {fileID: 2503326067565993573}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: _ShooterLine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1526,7 +1528,7 @@ GameObject:
   - component: {fileID: 3986059136654441034}
   - component: {fileID: 5460683204752076028}
   - component: {fileID: 7476441659952406539}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: _Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}

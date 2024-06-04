@@ -22,6 +22,7 @@ public class Boss : Enemy
     protected override void Awake() {
         m_Coordinate = transform.position;
         
+        
         m_idle = new IdleState_Boss(this);
         m_move = new MoveState_Boss(this);
         // m_attack = new AttackState_Boss(this);
@@ -46,7 +47,6 @@ public class Boss : Enemy
 
     protected override void Update() {
         m_currentBossState.OnUpdate();
-
         m_currentBaseState.OnUpdate();
 
         m_Center = m_CenterObj?.position ?? Vector3.zero;
@@ -62,30 +62,6 @@ public class Boss : Enemy
         m_currentBossState.OnExit();
 
         m_currentBaseState.OnExit();
-    }
-
-    private void OnDamaged() {
-        // Area took damage
-        // switch(stage) {
-        //     case Stage.Stage1:
-        //         if(boss.HealthSystem.GetCurrHealthNormalized() <= 0.7f) {
-        //             // if under 70% health
-        //             StartNextStage();
-        //         }
-        //         break;
-        //     case Stage.Stage2:
-        //         if(boss.HealthSystem.GetCurrHealthNormalized() <= 0.5f) {
-        //             // if under 50% health
-        //             StartNextStage();
-        //         }
-        //         break;
-        //     case Stage.Stage3:
-        //         if(boss.HealthSystem.GetCurrHealthNormalized() <= 0.2f) {
-        //             // if under 20% health
-        //             StartNextStage();
-        //         }
-        //         break;
-        // }
     }
     
 }

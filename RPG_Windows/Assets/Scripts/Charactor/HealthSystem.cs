@@ -5,6 +5,10 @@ using UnityEngine.Events;
 
 public class HealthSystem : MonoBehaviour
 {
+    [Header("基本物件")]
+    [SerializeField] private HealthBar m_healthBar;
+    public HealthBar HealthBar => m_healthBar;
+
     [Header("基本參數")]
     [SerializeField] private float m_maxHealth = 100;
     /// <summary>

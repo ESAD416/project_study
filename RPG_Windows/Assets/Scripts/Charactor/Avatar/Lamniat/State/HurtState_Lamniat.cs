@@ -12,6 +12,7 @@ public class HurtState_Lamniat : BaseStateMachine_Avatar
     public override void OnEnter()
     {
         // OnEnter
+        this.currentAvatar.Animator?.SetTrigger("hurt");
     }
     public override void OnEnter(Avatar avatar)
     {
@@ -21,6 +22,7 @@ public class HurtState_Lamniat : BaseStateMachine_Avatar
 
     public override void OnUpdate()
     {
+        //AnimeUtils.ActivateAnimatorLayer(this.currentAvatar.Animator, "TriggerLayer");
     }
 
     public override void OnFixedUpdate()

@@ -24,7 +24,7 @@ public class DodgeState_Lamniat : BaseStateMachine_Avatar
 
     public override void OnUpdate()
     {
-        AnimeUtils.ActivateAnimatorLayer(this.currentAvatar.Animator, "TriggerLayer");
+        //AnimeUtils.ActivateAnimatorLayer(this.currentAvatar.Animator, "TriggerLayer");
     }
 
     public override void OnFixedUpdate()

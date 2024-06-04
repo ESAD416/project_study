@@ -242,11 +242,14 @@ public class Combat_Lamniat : Combat_Avatar
         Debug.Log("Shoot m_ShootDir "+m_ShootDir);
         GameObject bullet = Instantiate(m_bulletPrefab, m_avatar.Center, transform.rotation);
         bullet.GetComponent<Projectile_Bullet>().SetDirection(m_ShootDir);
+        bullet.GetComponent<HitBox_Overlap2D>().SetAttacker(this);
+        bullet.GetComponent<HitBox_Overlap2D>().DetectTagName = "Enemies";
+
         var angle = Vector3.Angle(m_ShootDir, bullet.GetComponent<Projectile_Bullet>().referenceAxis);
+        bullet.GetComponent<HitBox_Overlap2D>().Angle = m_ShootDir.x > 0 ? -angle : angle;
+
         var quaternion = m_ShootDir.x > 0 ? Quaternion.Euler(0, 0, -angle) : Quaternion.Euler(0, 0, angle);
         bullet.transform.rotation = quaternion;
-
-
     }
 
     public void FinishShoot() {

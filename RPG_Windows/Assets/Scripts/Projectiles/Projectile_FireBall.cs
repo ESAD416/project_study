@@ -16,7 +16,7 @@ public class Projectile_FireBall : DirectProjectile
 
     protected override void OnTriggerEnter2D(Collider2D other) 
     {
-        if(other.gameObject.tag == "Player") {
+        if(other.CompareTag("Player")) {
             Debug.Log("OnTriggerEnter2D Destory Projectile");
             //Destroy(gameObject);
             base.DestoryProjectile();

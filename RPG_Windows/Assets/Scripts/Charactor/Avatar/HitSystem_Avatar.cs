@@ -19,13 +19,11 @@ public class HitSystem_Avatar : HitSystem
         m_targetHitBoxCollider = GetComponent<BoxCollider2D>();
     }
 
-    protected virtual void Update() 
+    protected override void Update() 
     {
-        transform.position = m_target.transform.position;
-    }
+        base.Update();
 
-    protected void SetHurtTrigger()
-    {
-        m_targetAnimator?.SetTrigger("hurt");
+        
+        transform.position = m_target.transform.position;
     }
 }

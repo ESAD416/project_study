@@ -11,8 +11,8 @@ public class KnockbackFeedback : MonoBehaviour
 
     [SerializeField] private float m_thrust = 5;
 
-    [SerializeField] private float m_hitRecoveryTime = 0.2f;
-    public float HitRecoveryTime => this.m_hitRecoveryTime;
+    [SerializeField] private float m_knockbackDuration = 0.25f;
+    public float KnockbackDuration => this.m_knockbackDuration;
 
     public UnityEvent OnBegin, OnDone;
 
@@ -44,8 +44,9 @@ public class KnockbackFeedback : MonoBehaviour
     }
 
     private IEnumerator EndProcess() {
-        yield return new WaitForSeconds(m_hitRecoveryTime);  // hardcasted casted time for debugged
-        m_target_rb2d.velocity = Vector3.zero;
+        yield return new WaitForSeconds(m_knockbackDuration);  // hardcasted casted time for debugged
+        // yield return null;
+        //m_target_rb2d.velocity = Vector3.zero;
         OnDone?.Invoke();
     }
 }

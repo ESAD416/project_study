@@ -42,10 +42,10 @@ public class Avatar_Lamniat : Avatar
         base.Start();
 
         // 射線的除外遮罩
-        int playerLayerMask = 1 << LayerMask.NameToLayer("Player");
+        int ignoreRaycastLayerMask = 1 << LayerMask.NameToLayer("Ignore Raycast");
         int mapRangeLayerMask = 1 << LayerMask.NameToLayer("MapRange");
         int hittableLayerMask = 1 << LayerMask.NameToLayer("Hittable");
-        raycastLayerMask = ~(playerLayerMask | mapRangeLayerMask | hittableLayerMask);
+        raycastLayerMask = ~(ignoreRaycastLayerMask | mapRangeLayerMask | hittableLayerMask);
         
     }
 
