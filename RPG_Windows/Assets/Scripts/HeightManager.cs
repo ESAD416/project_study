@@ -8,6 +8,9 @@ using Fungus;
 
 public class HeightManager : MonoBehaviour
 {
+    public static HeightManager instance;
+
+
     [SerializeField] private Avatar m_avatar;
     [SerializeField] private Tilemap[] mapLevels;
     [SerializeField] private Collider2D[] tilemapColliders;
@@ -22,16 +25,10 @@ public class HeightManager : MonoBehaviour
 
     private void Awake() 
     {
-        
-        // dataFromTiles = new Dictionary<Tile, TileData>();
-        // foreach(TileData data in defaultTileDatas) {
-        //     foreach(Tile tile in data.tiles) {
-        //         //Debug.Log("tile name: "+tile.name);
-        //         dataFromTiles.Add(tile, data);
-        //     }
-        // }
-
-        // mapColliders = mapGrid.GetComponentsInChildren<Collider2D>().Where(c => c.GetType() != typeof(CompositeCollider2D)).ToArray();
+        if(instance == null) 
+        {
+            instance = this;
+        }
     }
 
     void Start()

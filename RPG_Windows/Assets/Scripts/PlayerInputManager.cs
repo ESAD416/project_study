@@ -8,7 +8,6 @@ public class PlayerInputManager : MonoBehaviour
     public static PlayerInputManager instance;
 
     private PlayerInput input;
-
     /// <summary>
     /// 可操作角色的使用者輸入
     /// </summary>
@@ -39,7 +38,13 @@ public class PlayerInputManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Debug.Log("actionMaps counts: "+m_inputControls.asset.actionMaps.Count);
         
+
+        m_inputControls.Lamniat_Land.PauseGame.performed += content => {
+            EnableUIAction();
+            MenuManager.instance.Pause();
+        };
     }
 
     // Update is called once per frame
@@ -61,5 +66,20 @@ public class PlayerInputManager : MonoBehaviour
                 controlDevice = Constant.ControlDevice.Gamepad;
                 break;
         }
+    }
+
+    public void EnableLamniatLandAction() {
+        foreach (var actionMap in m_inputControls.asset.actionMaps) {
+            actionMap.Disable();
+        }
+        m_inputControls.Lamniat_Land.Enable();
+    }    
+
+    public void EnableUIAction() {
+        foreach (var actionMap in m_inputControls.asset.actionMaps) {
+            actionMap.Disable();
+        }
+        m_inputControls.UI.Enable();
+
     }
 }

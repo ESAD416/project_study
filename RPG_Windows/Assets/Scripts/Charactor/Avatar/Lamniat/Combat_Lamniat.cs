@@ -40,18 +40,18 @@ public class Combat_Lamniat : Combat_Avatar
     protected override void Start() {
         #region InputSystem事件設定
 
-        m_inputManager.InputCtrl.Lamniat_Land.Melee.performed += content => {
+        PlayerInputManager.instance.InputCtrl.Lamniat_Land.Melee.performed += content => {
             Debug.Log("Lamniat_Land.Melee.started");
             SetToAttackState();
 
             if(m_getMeleeInput) m_avatarAnimator.SetTrigger("melee");
         };
 
-        m_inputManager.InputCtrl.Lamniat_Land.Shoot.performed += content => {
+        PlayerInputManager.instance.InputCtrl.Lamniat_Land.Shoot.performed += content => {
             Debug.Log("Lamniat_Land.Shoot.started");
             SetToAttackState();
             
-            if(m_inputManager.ControlDevice == Constant.ControlDevice.KeyboardMouse) {
+            if(PlayerInputManager.instance.ControlDevice == Constant.ControlDevice.KeyboardMouse) {
                 if(m_ShootDir.x < 0) {
                     // Left
                     m_avatar.SprtRenderer.flipX = true;
@@ -65,25 +65,25 @@ public class Combat_Lamniat : Combat_Avatar
             IsShooting = true;
         };
 
-        m_inputManager.InputCtrl.Lamniat_Land.Shoot_Hold.performed += content => {
+        PlayerInputManager.instance.InputCtrl.Lamniat_Land.Shoot_Hold.performed += content => {
             Debug.Log("Lamniat_Land.Shoot_Hold.started");
             //m_isHoldShoot = true;
             
         };
 
-        m_inputManager.InputCtrl.Lamniat_Land.Shoot_Hold.canceled += content => {
+        PlayerInputManager.instance.InputCtrl.Lamniat_Land.Shoot_Hold.canceled += content => {
             //Debug.Log("Lamniat_Land.Shoot_Hold.canceled");
             //m_isHoldShoot = false;
         };
 
-        m_inputManager.InputCtrl.Lamniat_Land.AimAt_GamePad.performed += content => {
+        PlayerInputManager.instance.InputCtrl.Lamniat_Land.AimAt_GamePad.performed += content => {
             //Debug.Log("Lamniat_Land.AimAt_GamePad.started");
             var inputVecter2 = content.ReadValue<Vector2>();
 
             m_AimDir = inputVecter2;
         };
 
-        m_inputManager.InputCtrl.Lamniat_Land.AimAt_Mouse.performed += content => {
+        PlayerInputManager.instance.InputCtrl.Lamniat_Land.AimAt_Mouse.performed += content => {
             var inputVecter2 = content.ReadValue<Vector2>();
             //Debug.Log("Lamniat_Land.AimAt_Mouse.inputVecter2: "+inputVecter2);
 
@@ -195,7 +195,7 @@ public class Combat_Lamniat : Combat_Avatar
     }
 
     public void SetShootDir() {
-        switch(m_inputManager.ControlDevice) {
+        switch(PlayerInputManager.instance.ControlDevice) {
             case Constant.ControlDevice.KeyboardMouse:
                 Ray ray = Camera.main.ScreenPointToRay(m_AimDir);
                 Plane groundPlane = new Plane(Vector3.forward, Vector3.zero);

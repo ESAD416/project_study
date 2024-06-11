@@ -10,7 +10,6 @@ public class Combat_Avatar : Attack
     [Header("Combat_Avatar 物件")]
     [SerializeField] protected Avatar m_avatar;
     [SerializeField] protected Movement_Avatar m_avatarMovement;
-    [SerializeField] protected PlayerInputManager m_inputManager;
 
     
     protected Animator m_avatarAnimator;

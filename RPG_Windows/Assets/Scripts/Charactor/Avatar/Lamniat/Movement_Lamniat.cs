@@ -25,7 +25,7 @@ public class Movement_Lamniat : Movement_Avatar
     {
         #region InputSystem事件設定
 
-        m_inputManager.InputCtrl.Lamniat_Land.Move.performed += content => {
+        PlayerInputManager.instance.InputCtrl.Lamniat_Land.Move.performed += content => {
             //Debug.Log("Lamniat_Land.Move.started");
             var inputVecter2 = content.ReadValue<Vector2>();
             m_facingDir = inputVecter2;
@@ -39,7 +39,7 @@ public class Movement_Lamniat : Movement_Avatar
             }
         };
 
-        m_inputManager.InputCtrl.Lamniat_Land.Move.canceled += content => {
+        PlayerInputManager.instance.InputCtrl.Lamniat_Land.Move.canceled += content => {
             m_movement = Vector2.zero;
             if(m_previousMovement != Vector2.zero) m_previousMovement = Vector2.zero;
             if(m_LamiatJump.IsJumping) m_avatar.SetCurrentBaseState(m_avatar.Jump);

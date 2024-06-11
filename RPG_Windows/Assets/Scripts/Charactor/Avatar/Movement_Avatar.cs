@@ -11,7 +11,6 @@ public class Movement_Avatar : MonoBehaviour
     [SerializeField] protected Avatar m_avatar;
     [SerializeField] protected HeightManager m_HeightManager;
     public HeightManager HeightManager => this.m_HeightManager;
-    [SerializeField] protected PlayerInputManager m_inputManager;
     protected Rigidbody2D m_avatarRdbd;
     protected SpriteRenderer m_avatarSprtRenderer;
     protected Animator m_avatarAnimator;

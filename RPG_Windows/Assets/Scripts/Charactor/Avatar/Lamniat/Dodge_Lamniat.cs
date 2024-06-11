@@ -11,11 +11,11 @@ public class Dodge_Lamniat : Dodge_Avatar
     }
 
     protected override void Start() {
-        m_inputManager.InputCtrl.Lamniat_Land.Dodge.performed += content => {
+        PlayerInputManager.instance.InputCtrl.Lamniat_Land.Dodge.performed += content => {
             IsDodging = true;
         };
 
-        m_inputManager.InputCtrl.Lamniat_Land.Dodge.canceled += content => {
+        PlayerInputManager.instance.InputCtrl.Lamniat_Land.Dodge.canceled += content => {
             IsDodging = false;
         };
     }
