@@ -16,12 +16,6 @@ public class Avatar : Charactor
     /// </summary>
     public Movement_Avatar AvatarMovement =>this.m_avatarMovement;
 
-    protected AvatarInputActionsControls m_inputControls;
-    /// <summary>
-    /// 可操作角色的使用者輸入
-    /// </summary>
-    public AvatarInputActionsControls InputCtrl => this.m_inputControls;
-
     public bool OnStairs;
 
     #endregion

@@ -24,9 +24,8 @@ public class Movement_Lamniat : Movement_Avatar
     protected override void Start() 
     {
         #region InputSystem事件設定
-        m_inputControls = m_avatar.InputCtrl;
 
-        m_inputControls.Lamniat_Land.Move.performed += content => {
+        m_inputManager.InputCtrl.Lamniat_Land.Move.performed += content => {
             //Debug.Log("Lamniat_Land.Move.started");
             var inputVecter2 = content.ReadValue<Vector2>();
             m_facingDir = inputVecter2;
@@ -40,7 +39,7 @@ public class Movement_Lamniat : Movement_Avatar
             }
         };
 
-        m_inputControls.Lamniat_Land.Move.canceled += content => {
+        m_inputManager.InputCtrl.Lamniat_Land.Move.canceled += content => {
             m_movement = Vector2.zero;
             if(m_previousMovement != Vector2.zero) m_previousMovement = Vector2.zero;
             if(m_LamiatJump.IsJumping) m_avatar.SetCurrentBaseState(m_avatar.Jump);

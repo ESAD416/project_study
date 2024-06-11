@@ -14,7 +14,7 @@ public class ColliderTrigger : MonoBehaviour
 
     protected void OnCollisionEnter2D(Collision2D otherCollision) {
         if(otherCollision.collider.CompareTag(TargetTagName) && (TargetLayerMask & 1 << otherCollision.gameObject.layer) > 0) {
-            Debug.Log("Target OnCollisionEnter2D targetTagName: "+otherCollision.collider.tag+", TargetLayerMask: "+LayerMask.LayerToName(otherCollision.gameObject.layer));
+            Debug.Log("Target OnCollisionEnter2D target: "+otherCollision.collider.name+", TargetLayerMask: "+LayerMask.LayerToName(otherCollision.gameObject.layer));
             OnTargetEnterColliderEvent?.Invoke();
         
         }
@@ -23,7 +23,7 @@ public class ColliderTrigger : MonoBehaviour
 
     protected void OnCollisionExit2D(Collision2D otherCollision) {
         if(otherCollision.collider.CompareTag(TargetTagName) && (TargetLayerMask & 1 << otherCollision.gameObject.layer) > 0) {
-            Debug.Log("Target OnCollisionExit2D targetTagName: "+otherCollision.collider.tag+", TargetLayerMask: "+LayerMask.LayerToName(otherCollision.gameObject.layer));
+            Debug.Log("Target OnCollisionExit2D target: "+otherCollision.collider.name+", TargetLayerMask: "+LayerMask.LayerToName(otherCollision.gameObject.layer));
             OnTargetEnterColliderEvent?.Invoke();
                 
         }
@@ -31,7 +31,7 @@ public class ColliderTrigger : MonoBehaviour
 
     protected void OnTriggerEnter2D(Collider2D otherCollider) {
         if(otherCollider.CompareTag(TargetTagName) && (TargetLayerMask & 1 << otherCollider.gameObject.layer) > 0) {
-            Debug.Log("Target OnTriggerEnter2D targetTagName: "+otherCollider.tag+", TargetLayerMask: "+LayerMask.LayerToName(otherCollider.gameObject.layer));
+            Debug.Log("Target OnTriggerEnter2D target: "+otherCollider.name+", TargetLayerMask: "+LayerMask.LayerToName(otherCollider.gameObject.layer));
 
             OnTargetEnterTriggerEvent?.Invoke();
         }
@@ -39,7 +39,7 @@ public class ColliderTrigger : MonoBehaviour
 
     protected void OnTriggerExit2D(Collider2D otherCollider) {
         if(otherCollider.CompareTag(TargetTagName) && (TargetLayerMask & 1 << otherCollider.gameObject.layer) > 0) {
-            Debug.Log("Target OnTriggerExit2D targetTagName: "+otherCollider.tag+", TargetLayerMask: "+LayerMask.LayerToName(otherCollider.gameObject.layer));
+            Debug.Log("Target OnTriggerExit2D target: "+otherCollider.name+", TargetLayerMask: "+LayerMask.LayerToName(otherCollider.gameObject.layer));
             
             OnTargetEnterTriggerEvent?.Invoke();
         }

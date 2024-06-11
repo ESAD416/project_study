@@ -8,9 +8,8 @@ public class Dodge_Avatar : MonoBehaviour
 
     [Header("基本物件")]
     [SerializeField] protected Avatar m_avatar;
-    [SerializeField] protected Movement_Avatar m_avatarMovement;
+    [SerializeField] protected PlayerInputManager m_inputManager;
     protected Animator m_avatarAnimator;
-    protected AvatarInputActionsControls m_inputControls;
 
     #endregion
 

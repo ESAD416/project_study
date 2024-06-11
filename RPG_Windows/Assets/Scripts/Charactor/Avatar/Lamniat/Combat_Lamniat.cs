@@ -23,9 +23,9 @@ public class Combat_Lamniat : Combat_Avatar
     public Vector2 ShootDir => this.m_ShootDir;
 
     [Header("Lamniat近戰物件")]
-    private HitBox_Overlap2D enabledMeleeHitbox;
     [SerializeField] protected HitBox_Overlap2D m_hitBox_left;
     [SerializeField] protected HitBox_Overlap2D m_hitBox_right;
+    private HitBox_Overlap2D enabledMeleeHitbox;
 
     [Header("Lamniat遠程物件")]
     [SerializeField] protected GameObject m_bulletPrefab;
@@ -39,20 +39,19 @@ public class Combat_Lamniat : Combat_Avatar
 
     protected override void Start() {
         #region InputSystem事件設定
-        m_inputControls = m_avatar.InputCtrl;
 
-        m_inputControls.Lamniat_Land.Melee.performed += content => {
+        m_inputManager.InputCtrl.Lamniat_Land.Melee.performed += content => {
             Debug.Log("Lamniat_Land.Melee.started");
             SetToAttackState();
 
             if(m_getMeleeInput) m_avatarAnimator.SetTrigger("melee");
         };
 
-        m_inputControls.Lamniat_Land.Shoot.performed += content => {
+        m_inputManager.InputCtrl.Lamniat_Land.Shoot.performed += content => {
             Debug.Log("Lamniat_Land.Shoot.started");
             SetToAttackState();
             
-            if(controlDevice == Constant.ControlDevice.KeyboardMouse) {
+            if(m_inputManager.ControlDevice == Constant.ControlDevice.KeyboardMouse) {
                 if(m_ShootDir.x < 0) {
                     // Left
                     m_avatar.SprtRenderer.flipX = true;
@@ -66,25 +65,25 @@ public class Combat_Lamniat : Combat_Avatar
             IsShooting = true;
         };
 
-        m_inputControls.Lamniat_Land.Shoot_Hold.performed += content => {
+        m_inputManager.InputCtrl.Lamniat_Land.Shoot_Hold.performed += content => {
             Debug.Log("Lamniat_Land.Shoot_Hold.started");
             //m_isHoldShoot = true;
             
         };
 
-        m_inputControls.Lamniat_Land.Shoot_Hold.canceled += content => {
+        m_inputManager.InputCtrl.Lamniat_Land.Shoot_Hold.canceled += content => {
             //Debug.Log("Lamniat_Land.Shoot_Hold.canceled");
             //m_isHoldShoot = false;
         };
 
-        m_inputControls.Lamniat_Land.AimAt_GamePad.performed += content => {
+        m_inputManager.InputCtrl.Lamniat_Land.AimAt_GamePad.performed += content => {
             //Debug.Log("Lamniat_Land.AimAt_GamePad.started");
             var inputVecter2 = content.ReadValue<Vector2>();
 
             m_AimDir = inputVecter2;
         };
 
-        m_inputControls.Lamniat_Land.AimAt_Mouse.performed += content => {
+        m_inputManager.InputCtrl.Lamniat_Land.AimAt_Mouse.performed += content => {
             var inputVecter2 = content.ReadValue<Vector2>();
             //Debug.Log("Lamniat_Land.AimAt_Mouse.inputVecter2: "+inputVecter2);
 
@@ -131,20 +130,7 @@ public class Combat_Lamniat : Combat_Avatar
         // m_avatarAnimator.SetBool("isTakingAim", IsAiming);
     }
 
-    public void OnDeviceChange(PlayerInput input) {
-        Debug.Log("OnDeviceChange: "+input.currentControlScheme);
-        switch(input.currentControlScheme) {
-            case "Keyboard & Mouse":
-                controlDevice = Constant.ControlDevice.KeyboardMouse;
-                break;
-            // case "Mobile":
-            //     controlDevice = Constant.ControlDevice.Mobile;
-            //     break;
-            default:
-                controlDevice = Constant.ControlDevice.Gamepad;
-                break;
-        }
-    }
+
 
     public void Melee() {
         //TODO Set Melee para
@@ -209,7 +195,7 @@ public class Combat_Lamniat : Combat_Avatar
     }
 
     public void SetShootDir() {
-        switch(controlDevice) {
+        switch(m_inputManager.ControlDevice) {
             case Constant.ControlDevice.KeyboardMouse:
                 Ray ray = Camera.main.ScreenPointToRay(m_AimDir);
                 Plane groundPlane = new Plane(Vector3.forward, Vector3.zero);

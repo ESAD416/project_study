@@ -7,8 +7,9 @@ public class DynamicJump_Lamniat : MonoBehaviour
 {
     [Header("DynamicJump_Lamniat 基本物件")]
     [SerializeField] protected Avatar_Lamniat m_Lamniat;
-    [SerializeField] protected HeightManager m_HeightManager;
     [SerializeField] protected Movement_Lamniat m_LamniatMovement;
+
+    private HeightManager m_HeightManager;
 
     [Header("DynamicJump_Lamniat 基本參數")]
     public bool IsJumping;
@@ -65,8 +66,9 @@ public class DynamicJump_Lamniat : MonoBehaviour
         Debug.Log("targetFrameRate: "+Application.targetFrameRate);
         Debug.Log("vSyncCount: "+QualitySettings.vSyncCount);
     }
+
     void Start() {
-        //InvokeRepeating("SetParameterByFPS", 1, 1);
+        m_HeightManager = m_LamniatMovement.HeightManager;
     }
 
     void Update() {

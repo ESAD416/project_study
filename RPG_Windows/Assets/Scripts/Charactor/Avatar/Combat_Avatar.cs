@@ -10,11 +10,10 @@ public class Combat_Avatar : Attack
     [Header("Combat_Avatar 物件")]
     [SerializeField] protected Avatar m_avatar;
     [SerializeField] protected Movement_Avatar m_avatarMovement;
-    [SerializeField] protected Dodge_Avatar m_avatarDodge;
-    [SerializeField] protected Constant.ControlDevice controlDevice;
+    [SerializeField] protected PlayerInputManager m_inputManager;
+
     
     protected Animator m_avatarAnimator;
-    protected AvatarInputActionsControls m_inputControls;
 
     #endregion
 

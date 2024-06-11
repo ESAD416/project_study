@@ -10,10 +10,11 @@ public class Movement_Avatar : MonoBehaviour
     [Header("Movement_Avatar 物件")]
     [SerializeField] protected Avatar m_avatar;
     [SerializeField] protected HeightManager m_HeightManager;
+    public HeightManager HeightManager => this.m_HeightManager;
+    [SerializeField] protected PlayerInputManager m_inputManager;
     protected Rigidbody2D m_avatarRdbd;
     protected SpriteRenderer m_avatarSprtRenderer;
     protected Animator m_avatarAnimator;
-    protected AvatarInputActionsControls m_inputControls;
 
     #endregion
     

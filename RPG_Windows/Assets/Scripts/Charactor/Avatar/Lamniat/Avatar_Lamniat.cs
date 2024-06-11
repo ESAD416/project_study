@@ -21,6 +21,7 @@ public class Avatar_Lamniat : Avatar
 
     protected override void Awake() {
         base.Awake();
+        //Debug.Log("controlTarget.InputCtrl asset: "+m_inputControls.asset);
     }
     protected override void OnEnable() 
     {
@@ -33,8 +34,8 @@ public class Avatar_Lamniat : Avatar
         m_hurt = new HurtState_Lamniat(this);
         m_dead = new DeadState_Lamniat(this);
         
-        m_inputControls = new AvatarInputActionsControls();
-        m_inputControls.Lamniat_Land.Enable();
+        //m_inputControls = new AvatarInputActionsControls();
+        //m_inputControls.Lamniat_Land.Enable();
         base.OnEnable();
     }
 
