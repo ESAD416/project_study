@@ -234,6 +234,7 @@ GameObject:
   - component: {fileID: 2239150281869721669}
   - component: {fileID: 2031992903498546017}
   - component: {fileID: 4424307667916199580}
+  - component: {fileID: 2746552256657325116}
   - component: {fileID: 1544835072995726476}
   m_Layer: 2
   m_Name: _Avatar
@@ -357,9 +358,33 @@ MonoBehaviour:
   m_Coordinate: {x: 0, y: 0, z: 0}
   m_currHeight: 0
   m_lastHeight: 0
-  m_avatarMovement: {fileID: 0}
+  m_avatarMovement: {fileID: 6012428366774913337}
   OnStairs: 0
   m_raycastStart: {x: 0, y: 0, z: 0}
+--- !u!114 &2746552256657325116
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 453210872258196132}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0aaff58000369f64c9c1933216ab1e4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Lamniat: {fileID: 4424307667916199580}
+  m_LamniatMovement: {fileID: 6012428366774913337}
+  IsJumping: 0
+  CanJump: 0
+  OnHeightObjCollisionExit: 0
+  m_jumpingTimeElapsed: 0
+  JumpCounter: 0
+  HeightIncreaseCount: 10
+  JumpFallingCount: 25
+  HeightDecreaseCount: 40
+  HeightDecreaseCountExponential: 10
+  HeightChangeCount: 0
 --- !u!114 &1544835072995726476
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -379,7 +404,7 @@ MonoBehaviour:
   OnBegin:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 6012428366774913337}
         m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
         m_MethodName: set_enabled
         m_Mode: 6
@@ -391,7 +416,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 4295372707830558833}
         m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
         m_MethodName: set_enabled
         m_Mode: 6
@@ -406,7 +431,7 @@ MonoBehaviour:
   OnDone:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 6012428366774913337}
         m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
         m_MethodName: set_enabled
         m_Mode: 6
@@ -418,7 +443,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 4295372707830558833}
         m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
         m_MethodName: set_enabled
         m_Mode: 6
@@ -798,8 +823,6 @@ MonoBehaviour:
   m_attackRate: 0
   m_avatar: {fileID: 4424307667916199580}
   m_avatarMovement: {fileID: 6012428366774913337}
-  m_inputManager: {fileID: 0}
-  controlDevice: 0
   IsAttacking: 0
   CanAttack: 0
   IsPreAttacking: 0
@@ -1159,7 +1182,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8145445147938533778}
   - component: {fileID: 6012428366774913337}
-  - component: {fileID: 3298996824120951467}
   m_Layer: 2
   m_Name: _Movement
   m_TagString: Untagged
@@ -1196,7 +1218,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_avatar: {fileID: 4424307667916199580}
   m_HeightManager: {fileID: 0}
-  m_inputManager: {fileID: 0}
   m_moveSpeed: 25
   m_acceleration: 100
   m_jumpingMoveSpeed: 25
@@ -1204,33 +1225,9 @@ MonoBehaviour:
   m_movementAfterTrigger: {x: 0, y: 0}
   CanMove: 1
   m_facingDir: {x: 1, y: 0}
-  m_LamiatJump: {fileID: 3298996824120951467}
-  m_LamiatCombat: {fileID: 0}
+  m_LamiatJump: {fileID: 2746552256657325116}
+  m_LamiatCombat: {fileID: 4295372707830558833}
   SetFirstMoveWhileJumping: 0
---- !u!114 &3298996824120951467
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6256682573208914272}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0aaff58000369f64c9c1933216ab1e4e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Lamniat: {fileID: 4424307667916199580}
-  m_LamniatMovement: {fileID: 6012428366774913337}
-  IsJumping: 0
-  CanJump: 0
-  OnHeightObjCollisionExit: 0
-  m_jumpingTimeElapsed: 0
-  JumpCounter: 0
-  HeightIncreaseCount: 10
-  JumpFallingCount: 25
-  HeightDecreaseCount: 40
-  HeightDecreaseCountExponential: 10
-  HeightChangeCount: 0
 --- !u!1 &6314479320242778158
 GameObject:
   m_ObjectHideFlags: 0
@@ -1695,7 +1692,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_avatar: {fileID: 4424307667916199580}
-  m_inputManager: {fileID: 0}
   IsDodging: 0
   m_dodgeClipTime: 0
 --- !u!1 &8694040049504401657

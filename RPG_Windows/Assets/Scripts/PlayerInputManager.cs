@@ -8,13 +8,15 @@ public class PlayerInputManager : MonoBehaviour
     public static PlayerInputManager instance;
 
     private PlayerInput input;
-    /// <summary>
-    /// 可操作角色的使用者輸入
-    /// </summary>
+    
     protected AvatarInputActionsControls m_inputControls;
+    /// <summary>
+    /// 預設的可操作角色InputActionAsset
+    /// </summary>
     public AvatarInputActionsControls InputCtrl => this.m_inputControls;
+    
 
-    [SerializeField] protected Constant.ControlDevice controlDevice;
+    [SerializeField] private Constant.ControlDevice controlDevice;
     public Constant.ControlDevice ControlDevice => this.controlDevice;
 
     private void Awake() {
@@ -39,10 +41,10 @@ public class PlayerInputManager : MonoBehaviour
     void Start()
     {
         Debug.Log("actionMaps counts: "+m_inputControls.asset.actionMaps.Count);
-        
 
         m_inputControls.Lamniat_Land.PauseGame.performed += content => {
-            EnableUIAction();
+            MenuManager.instance.OnPauseCallback.AddListener(EnableUIAction);
+            MenuManager.instance.OnResumeCallback.AddListener(EnableLamniatLandAction);
             MenuManager.instance.Pause();
         };
     }

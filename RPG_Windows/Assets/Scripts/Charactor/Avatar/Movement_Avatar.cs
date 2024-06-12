@@ -9,8 +9,6 @@ public class Movement_Avatar : MonoBehaviour
 
     [Header("Movement_Avatar 物件")]
     [SerializeField] protected Avatar m_avatar;
-    [SerializeField] protected HeightManager m_HeightManager;
-    public HeightManager HeightManager => this.m_HeightManager;
     protected Rigidbody2D m_avatarRdbd;
     protected SpriteRenderer m_avatarSprtRenderer;
     protected Animator m_avatarAnimator;
@@ -175,7 +173,7 @@ public class Movement_Avatar : MonoBehaviour
         // 四個角都碰到，offset就會相加並互相抵銷
         // 跟跳躍的數值差在，位移速度會比較快一點
 
-        Tilemap currentTilemap = m_HeightManager.GetCurrentTilemapByAvatarHeight(m_avatar.CurrentHeight);
+        Tilemap currentTilemap = HeightManager.instance.GetCurrentTilemapByAvatarHeight(m_avatar.CurrentHeight);
         Vector3Int body_bottom_left = currentTilemap.WorldToCell(new Vector3(m_avatar.BodyCollider.bounds.min.x, m_avatar.BodyCollider.bounds.min.y));
         Vector3Int body_top_right = currentTilemap.WorldToCell(new Vector3(m_avatar.BodyCollider.bounds.max.x, m_avatar.BodyCollider.bounds.max.y));
         Vector3Int body_bottom_right = currentTilemap.WorldToCell(new Vector3(m_avatar.BodyCollider.bounds.max.x, m_avatar.BodyCollider.bounds.min.y));

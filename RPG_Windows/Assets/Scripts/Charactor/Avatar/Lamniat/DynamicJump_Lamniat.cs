@@ -9,8 +9,6 @@ public class DynamicJump_Lamniat : MonoBehaviour
     [SerializeField] protected Avatar_Lamniat m_Lamniat;
     [SerializeField] protected Movement_Lamniat m_LamniatMovement;
 
-    private HeightManager m_HeightManager;
-
     [Header("DynamicJump_Lamniat 基本參數")]
     public bool IsJumping;
     public bool CanJump;
@@ -68,7 +66,6 @@ public class DynamicJump_Lamniat : MonoBehaviour
     }
 
     void Start() {
-        m_HeightManager = m_LamniatMovement.HeightManager;
     }
 
     void Update() {
@@ -120,11 +117,11 @@ public class DynamicJump_Lamniat : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D trigger)
     {
-        // Debug.Log("trigger Enter transform: "+transform.gameObject.name);
-        // Debug.Log("trigger Enter trigger: "+trigger.gameObject.name);
+        Debug.Log("trigger Enter transform: "+transform.gameObject.name);
+        Debug.Log("trigger Enter trigger: "+trigger.gameObject.name);
         if (trigger.gameObject.CompareTag("Map_Jump_Trigger")) 
         {
-            if (m_Lamniat.RaycastHit.collider == null || m_Lamniat.RaycastHit.collider.gameObject.name != trigger.gameObject.name) {
+            if (m_Lamniat.RaycastHitJumpTrigger.collider == null || m_Lamniat.RaycastHitJumpTrigger.collider.gameObject.name != trigger.gameObject.name) {
                 return;
             }
             Debug.Log("trigger name: "+trigger.gameObject.name);
@@ -156,7 +153,7 @@ public class DynamicJump_Lamniat : MonoBehaviour
         //Debug.Log("trigger stay trigger: "+trigger.gameObject.name);
         if (trigger.gameObject.CompareTag("Map_Jump_Trigger")) 
         {
-            if (m_Lamniat.RaycastHit.collider == null || m_Lamniat.RaycastHit.collider.gameObject.name != trigger.gameObject.name) {
+            if (m_Lamniat.RaycastHitJumpTrigger.collider == null || m_Lamniat.RaycastHitJumpTrigger.collider.gameObject.name != trigger.gameObject.name) {
                 return;
             }
             Debug.Log("trigger name: "+trigger.gameObject.name);
@@ -209,7 +206,7 @@ public class DynamicJump_Lamniat : MonoBehaviour
         }
         else if (JumpCounter >= HeightDecreaseCount) 
         {
-            Tilemap currentTilemap = m_HeightManager.GetCurrentTilemapByAvatarHeight(m_Lamniat.CurrentHeight);
+            Tilemap currentTilemap = HeightManager.instance.GetCurrentTilemapByAvatarHeight(m_Lamniat.CurrentHeight);
             if (TileUtils.HasTileAtPlayerPosition(currentTilemap, m_Lamniat.BodyCollider.bounds))
             {
                 Debug.Log("FinishJump");
@@ -250,7 +247,7 @@ public class DynamicJump_Lamniat : MonoBehaviour
                 if (JumpCounter >= HeightDecreaseCount && !HasDownStep)
                 {
                     var level = m_Lamniat.CurrentHeight - 1;
-                    if(level < m_HeightManager.MinimumLevel) level = 0;
+                    if(level < HeightManager.instance.MinimumLevel) level = 0;
                     m_Lamniat.SetCurrentHeight(level); // 否则回到level 0
                     HeightChangeCount = JumpCounter;
                     HasDownStep = true;
@@ -259,7 +256,7 @@ public class DynamicJump_Lamniat : MonoBehaviour
                 else if (JumpCounter - HeightChangeCount >= HeightDecreaseCountExponential)
                 {
                     var level = m_Lamniat.CurrentHeight - 1;
-                    if(level < m_HeightManager.MinimumLevel) level = 0;
+                    if(level < HeightManager.instance.MinimumLevel) level = 0;
                     m_Lamniat.SetCurrentHeight(level); // 否则回到level 0
                     HeightChangeCount = JumpCounter;
                     Debug.Log("level--");
@@ -312,7 +309,7 @@ public class DynamicJump_Lamniat : MonoBehaviour
         // 只碰到一個角，就往斜向位移
         // 碰到兩個角，就往X或Y方向移動
         // 四個角都碰到，offset就會相加並互相抵銷
-        Tilemap currentTilemap = m_HeightManager.GetCurrentTilemapByAvatarHeight(m_Lamniat.CurrentHeight);
+        Tilemap currentTilemap = HeightManager.instance.GetCurrentTilemapByAvatarHeight(m_Lamniat.CurrentHeight);
 
         // 與BodyCollider範圍相比有縮小
         Bounds b = m_Lamniat.BodyCollider.bounds;
@@ -358,7 +355,7 @@ public class DynamicJump_Lamniat : MonoBehaviour
             //Debug.Log("FixJumpCornersWhileDownStep return");
             return;
         }
-        Tilemap downHeightTilemap = m_HeightManager.GetCurrentTilemapByAvatarHeight(m_Lamniat.CurrentHeight-1);
+        Tilemap downHeightTilemap = HeightManager.instance.GetCurrentTilemapByAvatarHeight(m_Lamniat.CurrentHeight-1);
 
         // 與BodyCollider範圍相比有縮小
         Bounds b = m_Lamniat.BodyCollider.bounds;
@@ -380,7 +377,7 @@ public class DynamicJump_Lamniat : MonoBehaviour
         // Debug.Log("topLeft: "+tl);
         // Debug.Log("topRight: "+tr);
 
-        Tilemap currentTilemap = m_HeightManager.GetCurrentTilemapByAvatarHeight(m_Lamniat.CurrentHeight);
+        Tilemap currentTilemap = HeightManager.instance.GetCurrentTilemapByAvatarHeight(m_Lamniat.CurrentHeight);
         if (TileUtils.HasTileAtPosition(downHeightTilemap, body_bottom_left_expand) && 
             TileUtils.HasTileAtPosition(downHeightTilemap, body_bottom_right_expand) && 
             TileUtils.HasTileAtPosition(downHeightTilemap, body_top_left_expand) && 

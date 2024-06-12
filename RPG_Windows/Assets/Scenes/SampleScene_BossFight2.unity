@@ -5421,7 +5421,6 @@ MonoBehaviour:
   tilemapColliders: []
   tilemapTriggers: []
   minimumLevel: 0
-  defaultTileDatas: []
 --- !u!156049354 &186638871
 Grid:
   m_ObjectHideFlags: 0
@@ -30305,7 +30304,7 @@ MonoBehaviour:
   m_XRTrackingOrigin: {fileID: 0}
   m_ActionsAsset: {fileID: -944628639613478452, guid: 65c5b6475dacd6d4886ae6b516109669, type: 3}
   m_PointAction: {fileID: -8906523223167636934, guid: 65c5b6475dacd6d4886ae6b516109669, type: 3}
-  m_MoveAction: {fileID: -3283945542194210987, guid: 65c5b6475dacd6d4886ae6b516109669, type: 3}
+  m_MoveAction: {fileID: 2092962341476481028, guid: 65c5b6475dacd6d4886ae6b516109669, type: 3}
   m_SubmitAction: {fileID: -7310383235004113514, guid: 65c5b6475dacd6d4886ae6b516109669, type: 3}
   m_CancelAction: {fileID: -2778675735917730405, guid: 65c5b6475dacd6d4886ae6b516109669, type: 3}
   m_LeftClickAction: {fileID: 4061421627483845373, guid: 65c5b6475dacd6d4886ae6b516109669, type: 3}
@@ -30488,10 +30487,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4287a1020d240f4c8ff70dd11fdef20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_inputManager: {fileID: 1826904275}
   m_pauseMenuPanel: {fileID: 1414110658}
   m_pauseFirstOption: {fileID: 2103024792}
   GameIsPaused: 0
+  OnPauseCallback:
+    m_PersistentCalls:
+      m_Calls: []
+  OnResumeCallback:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1526875627
 GameObject:
   m_ObjectHideFlags: 0
@@ -30752,7 +30756,7 @@ GameObject:
   - component: {fileID: 1562104491}
   - component: {fileID: 1562104490}
   m_Layer: 5
-  m_Name: Button (1)
+  m_Name: SettingBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30791,10 +30795,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 0
+    m_Mode: 4
     m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_SelectOnUp: {fileID: 2103024794}
+    m_SelectOnDown: {fileID: 2002080988}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
@@ -30802,7 +30806,7 @@ MonoBehaviour:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 0.23529412}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.39215687}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_SelectedColor: {r: 1, g: 1, b: 0, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -32344,7 +32348,7 @@ GameObject:
   - component: {fileID: 2002080989}
   - component: {fileID: 2002080988}
   m_Layer: 5
-  m_Name: Button (2)
+  m_Name: MainMenuBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32383,10 +32387,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_SelectOnUp: {fileID: 1562104490}
+    m_SelectOnDown: {fileID: 2103024794}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
@@ -32394,7 +32398,7 @@ MonoBehaviour:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 0.23529412}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.39215687}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_SelectedColor: {r: 1, g: 1, b: 0, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -42347,7 +42351,7 @@ GameObject:
   - component: {fileID: 2103024797}
   - component: {fileID: 2103024794}
   m_Layer: 5
-  m_Name: Button
+  m_Name: ResumeBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -42386,10 +42390,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 0
+    m_Mode: 4
     m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_SelectOnUp: {fileID: 2002080988}
+    m_SelectOnDown: {fileID: 1562104490}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
@@ -42397,7 +42401,7 @@ MonoBehaviour:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 0.23529412}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.39215687}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_SelectedColor: {r: 1, g: 0.99894536, b: 0, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -42416,7 +42420,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2103024797}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1518914489}
+        m_TargetAssemblyTypeName: MenuManager, Assembly-CSharp
+        m_MethodName: Resume
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!222 &2103024796
 CanvasRenderer:
   m_ObjectHideFlags: 0

@@ -100,7 +100,7 @@ public class Movement_Lamniat : Movement_Avatar
                 if (m_LamiatJump.JumpCounter > m_LamiatJump.HeightIncreaseCount)
                 {
                     // 實現減速(通常只有下往上跳會觸發)
-                    Tilemap currentTilemap = m_HeightManager.GetCurrentTilemapByAvatarHeight(m_avatar.CurrentHeight);
+                    Tilemap currentTilemap = HeightManager.instance.GetCurrentTilemapByAvatarHeight(m_avatar.CurrentHeight);
                     if(TileUtils.HasTileAtPlayerPosition(currentTilemap, m_avatar.BodyCollider.bounds)) 
                     {
                         m_firstMoveVelocityWhileJumping.x = m_firstMoveVelocityWhileJumping.x / 1.5f;

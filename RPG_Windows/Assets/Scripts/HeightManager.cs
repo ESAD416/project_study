@@ -10,18 +10,12 @@ public class HeightManager : MonoBehaviour
 {
     public static HeightManager instance;
 
-
     [SerializeField] private Avatar m_avatar;
     [SerializeField] private Tilemap[] mapLevels;
     [SerializeField] private Collider2D[] tilemapColliders;
     [SerializeField] private Collider2D[] tilemapTriggers;
     [SerializeField] private int minimumLevel = 0;
     public int MinimumLevel => minimumLevel;
-
-
-    public List<TileData> defaultTileDatas;
-    private Tilemap[] levels;
-    private Dictionary<Tile, TileData> dataFromTiles;
 
     private void Awake() 
     {

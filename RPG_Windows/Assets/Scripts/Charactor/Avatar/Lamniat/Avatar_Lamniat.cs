@@ -13,9 +13,9 @@ public class Avatar_Lamniat : Avatar
     #region Raycast物件
     [SerializeField] private Vector3 m_raycastStart;
     public Vector3 RaycastStart => this.m_raycastStart;
-    private RaycastHit2D m_raycastHit;
-    public RaycastHit2D RaycastHit => this.m_raycastHit;
-    private int raycastLayerMask;
+    private RaycastHit2D m_raycastHitJumpTrigger;
+    public RaycastHit2D RaycastHitJumpTrigger => this.m_raycastHitJumpTrigger;
+    private int raycastJumpTriggerLayerMask;
 
     #endregion
 
@@ -43,10 +43,12 @@ public class Avatar_Lamniat : Avatar
         base.Start();
 
         // 射線的除外遮罩
-        int ignoreRaycastLayerMask = 1 << LayerMask.NameToLayer("Ignore Raycast");
-        int mapRangeLayerMask = 1 << LayerMask.NameToLayer("MapRange");
-        int hittableLayerMask = 1 << LayerMask.NameToLayer("Hittable");
-        raycastLayerMask = ~(ignoreRaycastLayerMask | mapRangeLayerMask | hittableLayerMask);
+        // int ignoreRaycastLayerMask = 1 << LayerMask.NameToLayer("Ignore Raycast");
+        // int mapRangeLayerMask = 1 << LayerMask.NameToLayer("MapRange");
+        // int hittableLayerMask = 1 << LayerMask.NameToLayer("Hittable");
+        // int visableLayerMask = 1 << LayerMask.NameToLayer("Visable");
+        // raycastJumpTriggerLayerMask = ~(ignoreRaycastLayerMask | mapRangeLayerMask | hittableLayerMask |visableLayerMask);
+        raycastJumpTriggerLayerMask = 1 << LayerMask.NameToLayer("HeightObj");
         
     }
 
@@ -57,9 +59,10 @@ public class Avatar_Lamniat : Avatar
         //Debug.Log("m_currentBaseState: "+m_currentBaseState.State);
 
         m_raycastStart = (Vector2)transform.position + m_bodyCollider.offset ;  // 射线的起点
-        m_raycastHit = Physics2D.Raycast(m_raycastStart, m_avatarMovement.Movement.normalized, 1f, raycastLayerMask);
-        Color color = m_raycastHit.collider != null ? Color.red : Color.green;
+        m_raycastHitJumpTrigger = Physics2D.Raycast(m_raycastStart, m_avatarMovement.Movement.normalized, 1f, raycastJumpTriggerLayerMask);
+        Color color = m_raycastHitJumpTrigger.collider != null ? Color.red : Color.green;
         Debug.DrawLine(m_raycastStart, (Vector2)m_raycastStart + m_avatarMovement.Movement.normalized*1f, color);
+        if(m_raycastHitJumpTrigger.collider != null ) Debug.Log("m_raycastHit: "+m_raycastHitJumpTrigger.collider.name);
 
         float newZPosition = -m_currHeight;
         transform.position = new Vector3(transform.position.x, transform.position.y, newZPosition);

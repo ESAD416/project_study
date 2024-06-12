@@ -173,19 +173,19 @@ public class Combat_Lamniat : Combat_Avatar
     }
 
     public void SetMeleeHitboxDir() {
-        Debug.Log("SetHitboxDir m_avatarMovement.FacingDir: "+m_avatarMovement.FacingDir);
-        Debug.Log("SetHitboxDir m_meleeComboCounter: "+m_meleeComboCounter);
+        // Debug.Log("SetHitboxDir m_avatarMovement.FacingDir: "+m_avatarMovement.FacingDir);
+        // Debug.Log("SetHitboxDir m_meleeComboCounter: "+m_meleeComboCounter);
         UpdateMeleeHitboxsEnabled();
     }
     
     private void UpdateMeleeHitboxsEnabled()
     {
-        Debug.Log("UpdateMeleeHitboxsEnabled set hitbox name: "+enabledMeleeHitbox.gameObject.name);
+        //Debug.Log("UpdateMeleeHitboxsEnabled set hitbox name: "+enabledMeleeHitbox.gameObject.name);
         enabledMeleeHitbox.gameObject.SetActive(true);
 
         var visualEffects = enabledMeleeHitbox.GetComponentsInChildren<VisualEffect>(true);
         foreach(VisualEffect effect in visualEffects) {
-            Debug.Log("effect.gameObject.name: "+effect.gameObject.name);
+            //Debug.Log("effect.gameObject.name: "+effect.gameObject.name);
             if(effect.gameObject.name.Equals("_combo"+m_meleeComboCounter)) {
                 effect.gameObject.SetActive(true);
             } else {
