@@ -15,15 +15,14 @@ public class HitSystem_Avatar : HitSystem
         m_targetAnimator = m_target.Animator;
     }
 
-    protected virtual void Start() {
+    protected override void Start() {
+        base.Start();
         m_targetHitBoxCollider = GetComponent<BoxCollider2D>();
     }
 
     protected override void Update() 
     {
         base.Update();
-
-        
         transform.position = m_target.transform.position;
     }
 }

@@ -20,6 +20,9 @@ public class Movement_Lamniat : Movement_Avatar
     protected override void OnEnable() {
     }
 
+    protected override void OnDisable() {
+    }
+
     // Start is called before the first frame update
     protected override void Start() 
     {
@@ -181,8 +184,50 @@ public class Movement_Lamniat : Movement_Avatar
         m_avatarRdbd.MovePosition(m_avatarRdbd.position + m_moveVelocity * Time.fixedDeltaTime);
     }
     
-    protected override void OnDisable() {
-    }
 
+    protected void FixStandCorners()
+    {
+        // 地面的時候將四個角的位置標記起來
+        // 哪一個角有碰到，就讓給collider一個offset往該角移動
+        // 只碰到一個角，就往斜向位移
+        // 碰到兩個角，就往X或Y方向移動
+        // 四個角都碰到，offset就會相加並互相抵銷
+        // 跟跳躍的數值差在，位移速度會比較快一點
+
+        Tilemap currentTilemap = HeightManager.instance.GetCurrentTilemapByAvatarHeight(m_avatar.CurrentHeight);
+        Vector3Int body_bottom_left = currentTilemap.WorldToCell(new Vector3(m_avatar.BodyCollider.bounds.min.x, m_avatar.BodyCollider.bounds.min.y));
+        Vector3Int body_top_right = currentTilemap.WorldToCell(new Vector3(m_avatar.BodyCollider.bounds.max.x, m_avatar.BodyCollider.bounds.max.y));
+        Vector3Int body_bottom_right = currentTilemap.WorldToCell(new Vector3(m_avatar.BodyCollider.bounds.max.x, m_avatar.BodyCollider.bounds.min.y));
+        Vector3Int body_top_left = currentTilemap.WorldToCell(new Vector3(m_avatar.BodyCollider.bounds.min.x, m_avatar.BodyCollider.bounds.max.y));
+
+        Vector3 offsetPosition = Vector3.zero;
+        
+        if (TileUtils.HasTileAtPosition(currentTilemap, body_bottom_left))
+        {
+            offsetPosition += new Vector3(-0.05f * m_avatar.BodyCollider.size.x, -0.05f * m_avatar.BodyCollider.size.y);
+        }
+        if (TileUtils.HasTileAtPosition(currentTilemap, body_bottom_right))
+        {
+            offsetPosition += new Vector3(0.05f * m_avatar.BodyCollider.size.x, -0.05f * m_avatar.BodyCollider.size.y);
+        }
+        if (TileUtils.HasTileAtPosition(currentTilemap, body_top_left))
+        {
+            offsetPosition += new Vector3(-0.05f * m_avatar.BodyCollider.size.x, 0.05f * m_avatar.BodyCollider.size.y);
+        }
+        if (TileUtils.HasTileAtPosition(currentTilemap, body_top_right))
+        {
+            offsetPosition += new Vector3(0.05f * m_avatar.BodyCollider.size.x, 0.05f * m_avatar.BodyCollider.size.y);
+        }
+
+        if (offsetPosition != Vector3.zero)
+        {
+            Debug.Log("FixStandCorners offsetPosition: " + offsetPosition);
+            offsetPosition.x = Mathf.Clamp(offsetPosition.x, -0.25f * m_avatar.BodyCollider.size.x, 0.25f * m_avatar.BodyCollider.size.x);
+            offsetPosition.y = Mathf.Clamp(offsetPosition.y, -0.25f * m_avatar.BodyCollider.size.y, 0.25f * m_avatar.BodyCollider.size.y);
+            Vector3 fixCornersPosition = transform.position + offsetPosition;
+
+            transform.position = fixCornersPosition;
+        }
+    }
     
 }

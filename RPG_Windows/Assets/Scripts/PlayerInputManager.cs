@@ -42,10 +42,17 @@ public class PlayerInputManager : MonoBehaviour
     {
         Debug.Log("actionMaps counts: "+m_inputControls.asset.actionMaps.Count);
 
-        m_inputControls.Lamniat_Land.PauseGame.performed += content => {
+        m_inputControls.Lamniat_Land.Menu.performed += content => {
             MenuManager.instance.OnPauseCallback.AddListener(EnableUIAction);
             MenuManager.instance.OnResumeCallback.AddListener(EnableLamniatLandAction);
             MenuManager.instance.Pause();
+        };
+
+        m_inputControls.UI.Menu.performed += content => {
+            if(MenuManager.instance.GameIsPaused) MenuManager.instance.Resume();
+        };
+        m_inputControls.UI.Cancel.performed += content => {
+            if(MenuManager.instance.GameIsPaused && MenuManager.instance.OnPausePanel) MenuManager.instance.Resume();
         };
     }
 
@@ -58,7 +65,7 @@ public class PlayerInputManager : MonoBehaviour
     public void OnDeviceChange(PlayerInput input) {
         //Debug.Log("OnDeviceChange: "+input.currentControlScheme);
         switch(input.currentControlScheme) {
-            case "Keyboard & Mouse":
+            case "Keyboard&Mouse":
                 controlDevice = Constant.ControlDevice.KeyboardMouse;
                 break;
             // case "Mobile":

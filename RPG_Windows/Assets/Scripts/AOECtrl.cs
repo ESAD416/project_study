@@ -44,7 +44,7 @@ public class AOECtrl : MonoBehaviour
     }
 
     private void Update() {
-        aC += 0.001f;
+        if(!MenuManager.instance.GameIsPaused) aC += 0.001f;
     }
 
     
@@ -230,10 +230,10 @@ public class AOECtrl : MonoBehaviour
             float frequencyY = 16f;      // Y 軸頻率
             //Debug.Log("Mathf.Sin: "+Mathf.Sin(aC * frequencyY));
             float yOffset = amplitudeY * Mathf.Sin(aC * frequencyY);
-            //Debug.Log("lastTrailedPos: "+lastTrailedPos);
-            //Debug.Log("offset: "+new Vector3(trailOffset * trailDir.x, yOffset, 0f));
+            Debug.Log("lastTrailedPos: "+lastTrailedPos);
+            Debug.Log("offset: "+new Vector3(trailOffset * trailDir.x, yOffset, 0f));
             trailedPos = new Vector3(lastTrailedPos.x + (trailOffset * trailDir.x), -3 + yOffset);
-           // Debug.Log("trailedPos: "+trailedPos);
+            Debug.Log("trailedPos: "+trailedPos);
 
             // 5. 新的位置需確認是否在areaRange內，如果不在則須進行再計算得新的位置
             if(trailedPos.y < areaMin.y) {

@@ -43,7 +43,12 @@ public class HealthSystem : MonoBehaviour
     private void Start()
     {
         SetMaxHealth(m_maxHealth);
+        m_healthBar.SetMaxValue(m_maxHealth);
+
         SetCurrHealth(m_maxHealth);
+        m_healthBar.SetValue(m_maxHealth);
+
+        isDead = false;
     }
 
     // Update is called once per frame
@@ -74,6 +79,7 @@ public class HealthSystem : MonoBehaviour
 
         if(m_currHealth < 0) m_currHealth = 0;
 
+        m_healthBar.SetValue(m_currHealth);
         OnTakenDamage?.Invoke(m_currHealth);
     }
 
@@ -83,6 +89,7 @@ public class HealthSystem : MonoBehaviour
 
         if(m_currHealth > 0) m_currHealth = MaxHealth;
 
+        m_healthBar.SetValue(m_currHealth);
         OnGetHeal?.Invoke(m_currHealth);
     }
 }

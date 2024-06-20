@@ -57,6 +57,8 @@ public class HitSystem_Enemy : HitSystem
 
             attacker.DamageSystem.OnDamage(m_targetHealthSystem);
             
+            if(damageFlash != null) damageFlash.CallDamageFlasher();
+
             yield return new WaitForSeconds(invulnerableDuration);  // hardcasted casted time for debugged
 
             Debug.Log("enemyTakenHit end");
@@ -92,6 +94,8 @@ public class HitSystem_Enemy : HitSystem
             }
 
             damageSystem.OnDamage(m_targetHealthSystem);
+
+            if(damageFlash != null) damageFlash.CallDamageFlasher();
             
             yield return new WaitForSeconds(invulnerableDuration);  // hardcasted casted time for debugged
         }

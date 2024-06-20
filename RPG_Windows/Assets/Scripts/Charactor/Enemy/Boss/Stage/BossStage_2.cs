@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cinemachine;
 using UniRx;
 using UnityEngine;
 
@@ -11,6 +12,8 @@ public class BossStage_2 : Attack
     [SerializeField] private Boss boss;
     [SerializeField] private Avatar player;
     [SerializeField] private AOECtrl indicatorCtrl;
+    [SerializeField] private GameObject collider_beforeBattle;
+    [SerializeField] private GameObject collider_duringBattle;
 
     [Header("關卡參數")]
     [SerializeField] private float m_indicatorDuration = 3f;
@@ -20,7 +23,12 @@ public class BossStage_2 : Attack
     private Coroutine m_attackRoutine;
     private float m_timeToStartBattle = 5f;
     private float m_timeToShowAndHideBossUI = 3f;
-    
+
+    [Header("控制鏡頭")]
+    [SerializeField] private CinemachineVirtualCamera virtualCamera;
+    private CinemachineConfiner confiner;
+    [SerializeField] private PolygonCollider2D defaultMapBound;
+    [SerializeField] private PolygonCollider2D battleMapBound;
 
     // Start is called before the first frame update
     private void Start()
@@ -29,10 +37,16 @@ public class BossStage_2 : Attack
         if(healthBar) healthBar.HideHealthBarUI();
 
         m_bossVisableRange.OnTargetEnterTriggerEvent.AddListener(OnPlayerEnterFight);
+
+        collider_beforeBattle.SetActive(true);
+        collider_duringBattle.SetActive(false);
+
+        confiner = virtualCamera.GetComponent<CinemachineConfiner>();
     }
 
     protected override void Update()
     {
+
     }
 
     protected void OnPlayerEnterFight() {
@@ -47,7 +61,16 @@ public class BossStage_2 : Attack
             .AddTo(this);
 
         Observable.Timer(TimeSpan.FromSeconds(m_timeToStartBattle))
-            .Subscribe(_ => DelayStartBattle())
+            .Subscribe(_ => {
+                DelayStartBattle();
+
+                collider_beforeBattle.SetActive(false);
+                collider_duringBattle.SetActive(true);
+
+                confiner.m_BoundingShape2D = battleMapBound;
+                // 如果你在更改 Bounding Shape 后需要重新计算包围框，可以调用以下方法
+                confiner.InvalidatePathCache();
+            })
             .AddTo(this);
     }
 

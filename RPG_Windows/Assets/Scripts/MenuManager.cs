@@ -7,13 +7,14 @@ using UnityEngine.EventSystems;
 public class MenuManager : MonoBehaviour
 {
     public static MenuManager instance;
+    public bool GameIsPaused = false;
+    public UnityEvent OnPauseCallback, OnResumeCallback;
 
     #region 暫停選單物件
     
     [SerializeField] protected GameObject m_pauseMenuPanel;
     [SerializeField] protected GameObject m_pauseFirstOption;
-    public bool GameIsPaused = false;
-    public UnityEvent OnPauseCallback, OnResumeCallback;
+    public bool OnPausePanel = false;
     
     #endregion
 
@@ -49,21 +50,22 @@ public class MenuManager : MonoBehaviour
 
         Time.timeScale = 0f;
         GameIsPaused = true;
+        OnPausePanel = true;
 
         ActivateCanvas(m_pauseMenuPanel);
         EventSystem.current.SetSelectedGameObject(m_pauseFirstOption);
     }
 
     public void Resume() {
-        Debug.Log("Resume");
         OnResumeCallback.Invoke();
 
         Time.timeScale = 1f;
         GameIsPaused = false;
+        OnPausePanel = false;
 
         DeactivateAllCanvas();
+        RemoveAllEventCallbacks();
         EventSystem.current.SetSelectedGameObject(null);
-        OnResumeCallback.RemoveAllListeners();
     }
 
     #endregion
@@ -82,8 +84,13 @@ public class MenuManager : MonoBehaviour
 
     #endregion
     
-    #region 
+    #region Event Callbacks Remove
 
+    public void RemoveAllEventCallbacks() {
+        // TODO 預計還會有更多的事件
+        OnPauseCallback.RemoveAllListeners();
+        OnResumeCallback.RemoveAllListeners();
+    }
 
 
     #endregion

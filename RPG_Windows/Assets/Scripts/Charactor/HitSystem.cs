@@ -37,12 +37,19 @@ public class HitSystem : MonoBehaviour
     [Header("霸體參數")]
     [SerializeField] protected bool isHyperArmor = false;
 
+
+
+    protected DamageFlash damageFlash;
     /// <summary>
     /// 受擊動作為即時觸發，故宣告一協程進行處理獨立的動作
     /// </summary>
     protected Coroutine takeHitRoutine = null;
 
     #endregion
+
+    protected virtual void Start() {
+        damageFlash = GetComponent<DamageFlash>();
+    }
 
 
     protected virtual void Update() {

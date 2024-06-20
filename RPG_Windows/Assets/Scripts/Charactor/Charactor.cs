@@ -20,7 +20,7 @@ public abstract class Charactor : MonoBehaviour
     /// <summary>
     /// 角色碰撞控制
     /// </summary>
-    [SerializeField] protected BoxCollider2D m_bodyCollider; // 預設使用的是BoxCollider2D
+    [SerializeField] protected BoxCollider2D m_bodyCollider; // 泛型Collider2D
     public BoxCollider2D BodyCollider => this.m_bodyCollider;
     
     [SerializeField] protected SpriteRenderer m_SprtRenderer;
