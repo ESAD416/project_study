@@ -6,9 +6,8 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using static JumpMechanismUtils;
 
-public abstract class Charactor : MonoBehaviour
+public abstract class Charactor<T> : MonoBehaviour where T : Collider2D 
 {
-    
     #region 角色物件
     [Header("Charactor 基本物件")]
     [SerializeField] protected Rigidbody2D m_Rigidbody;
@@ -20,8 +19,8 @@ public abstract class Charactor : MonoBehaviour
     /// <summary>
     /// 角色碰撞控制
     /// </summary>
-    [SerializeField] protected BoxCollider2D m_bodyCollider; // 泛型Collider2D
-    public BoxCollider2D BodyCollider => this.m_bodyCollider;
+    [SerializeField] protected T m_bodyCollider; // 泛型Collider2D
+    public T BodyCollider => this.m_bodyCollider;
     
     [SerializeField] protected SpriteRenderer m_SprtRenderer;
     /// <summary>

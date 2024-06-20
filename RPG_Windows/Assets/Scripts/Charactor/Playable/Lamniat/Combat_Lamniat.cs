@@ -107,7 +107,7 @@ public class Combat_Lamniat : Combat_Avatar
     }
 
     protected void SetToAttackState() {
-        if(m_avatar.CurrentBaseState.State.Equals(BaseStateMachine_Charactor.BaseState.Move)) {
+        if(m_avatar.CurrentBaseState.State.Equals(Constant.BaseState.Move)) {
             m_avatarMovement.SetFacingDir(m_avatarMovement.Movement);
             //m_avatar.SetFacingDir(m_avatar.Movement);
             m_avatarMovement.SetMovementAfterTrigger(m_avatarMovement.Movement);
@@ -115,7 +115,7 @@ public class Combat_Lamniat : Combat_Avatar
 
         m_avatarMovement.CanMove = false;
         if(!IsAttacking) IsAttacking = true;
-        if(!m_avatar.CurrentBaseState.State.Equals(BaseStateMachine_Charactor.BaseState.Attack)) m_avatar.SetCurrentBaseState(m_avatar.Attack);
+        if(!m_avatar.CurrentBaseState.State.Equals(Constant.BaseState.Attack)) m_avatar.SetCurrentBaseState(m_avatar.Attack);
     }
 
     public void SetAnimateCombatPara() 

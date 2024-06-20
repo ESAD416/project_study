@@ -6,7 +6,7 @@ using UnityEngine.Tilemaps;
 public class DynamicJump_Lamniat : MonoBehaviour
 {
     [Header("DynamicJump_Lamniat 基本物件")]
-    [SerializeField] protected Avatar_Lamniat m_Lamniat;
+    [SerializeField] protected Lamniat m_Lamniat;
     [SerializeField] protected Movement_Lamniat m_LamniatMovement;
 
     [Header("DynamicJump_Lamniat 基本參數")]

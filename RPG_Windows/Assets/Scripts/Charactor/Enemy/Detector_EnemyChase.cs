@@ -38,14 +38,14 @@ public class Detector_EnemyChase : Detector_Overlap2D
 
     protected override void Update() {
         base.Update();
-        if(m_enemy.CurrentBaseState.Equals(BaseStateMachine_Enemy.BaseState.Dead)) 
+        if(m_enemy.CurrentBaseState.Equals(Constant.BaseState.Dead)) 
         {
             transform.gameObject.SetActive(false);
         } 
     }
 
     protected void FixedUpdate() {
-        if(!m_enemy.CurrentBaseState.Equals(BaseStateMachine_Enemy.BaseState.Attack))
+        if(!m_enemy.CurrentBaseState.Equals(Constant.BaseState.Attack))
         {
             if(TargetModel != null)
             {
@@ -88,7 +88,7 @@ public class Detector_EnemyChase : Detector_Overlap2D
                 OnTargetDected?.Invoke();
                 var col2d = OverlapDetected[0];
 
-                var charactor = col2d.GetComponent<Charactor>() as Charactor;
+                var charactor = col2d.GetComponent<Charactor<Collider2D>>() as Charactor<Collider2D>;
                 if(charactor != null) {
                     Debug.Log("Target m_CenterObj: "+charactor.m_CenterObj);
                     TargetModel = charactor.m_CenterObj;

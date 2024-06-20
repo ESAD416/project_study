@@ -6,7 +6,7 @@ public class PatrolState_Enemy : EnemyStateMachine
 {
     public PatrolState_Enemy(Enemy enemy) {
         this.currentEnemy = enemy;
-        this.m_eState = EnemyState.Patrol;
+        this.m_eState = Constant.EnemyState.Patrol;
     }
 
     public override void OnEnter()

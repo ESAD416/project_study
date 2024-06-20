@@ -8,7 +8,7 @@ public class Indicator_SectorAiming : MonoBehaviour
     [SerializeField] private LineRenderer m_BisectorLineRenderer;
     [SerializeField] private LineRenderer m_Sector1LineRenderer;
     [SerializeField] private LineRenderer m_Sector2LineRenderer;
-    [SerializeField] private Avatar_Lamniat m_targetAvatar;
+    [SerializeField] private Lamniat m_targetAvatar;
     [SerializeField] private Combat_Lamniat m_targetCombat;
     [SerializeField] private PolygonCollider2D m_mapRange;
     private Vector3 m_StartPos;

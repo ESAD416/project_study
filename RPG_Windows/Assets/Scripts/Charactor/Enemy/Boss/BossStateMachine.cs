@@ -4,12 +4,8 @@ using UnityEngine;
 
 public abstract class BossStateMachine
 {
-    public enum BossState {
-        BeforeStart, DuringBattle, AnimePerformance, BattleFinish
-    }
-
-    protected BossState m_stage;
-    public BossState Stage => m_stage;
+    protected Constant.BossState m_stage;
+    public Constant.BossState Stage => m_stage;
 
     protected Enemy currentEnemy;
 

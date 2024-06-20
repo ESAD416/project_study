@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Interactions;
 using static JumpMechanismUtils;
 
-public class Avatar_Lamniat : Avatar
+public class Lamniat : Player
 {
     [Header("Avatar_Lamniat 基本物件")]
     

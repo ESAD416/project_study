@@ -7,7 +7,7 @@ public class BeforeStartState_Boss : BossStateMachine
 
     public BeforeStartState_Boss(Enemy boss2)
     {
-        this.m_stage = BossState.BeforeStart;
+        this.m_stage = Constant.BossState.BeforeStart;
         this.currentEnemy = boss2;
     }
 

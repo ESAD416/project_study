@@ -6,7 +6,7 @@ public class ChaseState_Enemy : EnemyStateMachine
 {
     public ChaseState_Enemy(Enemy enemy) {
         this.currentEnemy = enemy;
-        this.m_eState = EnemyState.Chase;
+        this.m_eState = Constant.EnemyState.Chase;
     }
 
     public override void OnEnter()

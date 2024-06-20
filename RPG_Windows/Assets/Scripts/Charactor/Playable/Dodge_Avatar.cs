@@ -7,7 +7,7 @@ public class Dodge_Avatar : MonoBehaviour
     #region 基本物件
 
     [Header("基本物件")]
-    [SerializeField] protected Avatar m_avatar;
+    [SerializeField] protected Player m_avatar;
     protected Animator m_avatarAnimator;
 
     #endregion

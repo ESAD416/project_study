@@ -8,7 +8,7 @@ public class Combat_Avatar : Attack
     #region 基本物件
 
     [Header("Combat_Avatar 物件")]
-    [SerializeField] protected Avatar m_avatar;
+    [SerializeField] protected Player m_avatar;
     [SerializeField] protected Movement_Avatar m_avatarMovement;
 
     

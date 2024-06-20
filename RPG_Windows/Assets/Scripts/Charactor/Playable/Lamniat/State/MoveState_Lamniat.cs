@@ -2,27 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MoveState_Lamniat : BaseStateMachine_Avatar
+public class MoveState_Lamniat : BaseStateMachine_Player
 {
-    public MoveState_Lamniat(Avatar avatar)
+    public MoveState_Lamniat(Player avatar)
     {
-        this.currentAvatar = avatar;
-        this.m_bState = BaseState.Move;
+        this.currentPlayer = avatar;
+        this.m_bState = Constant.BaseState.Move;
     }
 
     public override void OnEnter()
     {
         // OnEnter
     }
-    public override void OnEnter(Avatar avatar)
+    public override void OnEnter(Player avatar)
     {
-        this.currentAvatar = avatar;
+        this.currentPlayer = avatar;
         OnEnter();
     }
 
     public override void OnUpdate()
     {
-        AnimeUtils.ActivateAnimatorLayer(this.currentAvatar.Animator, "MoveLayer");
+        AnimeUtils.ActivateAnimatorLayer(this.currentPlayer.Animator, "MoveLayer");
     }
 
     public override void OnFixedUpdate()

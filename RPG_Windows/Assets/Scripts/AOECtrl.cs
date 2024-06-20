@@ -217,7 +217,7 @@ public class AOECtrl : MonoBehaviour
 
     
 
-    public Vector3 GetTrailedAOEPosition(Avatar target) {
+    public Vector3 GetTrailedAOEPosition(Player target) {
         if(trailedPos.Equals(Vector3.zero)) {
             // 第一次的生成
             trailedPos = new Vector3( 0, -3);
@@ -268,7 +268,7 @@ public class AOECtrl : MonoBehaviour
         return trailedPos;
     }
 
-    public Vector3 GetPathFindingAOEPosition(Avatar target) {
+    public Vector3 GetPathFindingAOEPosition(Player target) {
         if(trailedPos.Equals(Vector3.zero)) {
             // 第一次的生成
             trailedPos = new Vector3( 0, -3);

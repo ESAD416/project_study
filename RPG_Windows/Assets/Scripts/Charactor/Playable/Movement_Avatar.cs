@@ -8,7 +8,7 @@ public class Movement_Avatar : MonoBehaviour
     #region 物件
 
     [Header("Movement_Avatar 物件")]
-    [SerializeField] protected Avatar m_avatar;
+    [SerializeField] protected Player m_avatar;
     protected Rigidbody2D m_avatarRdbd;
     protected SpriteRenderer m_avatarSprtRenderer;
     protected Animator m_avatarAnimator;

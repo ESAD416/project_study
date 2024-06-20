@@ -5,7 +5,7 @@ using UnityEngine.Tilemaps;
 public class Stairs_Gateway : MonoBehaviour
 {
 
-    [SerializeField] protected Avatar m_avatar;
+    [SerializeField] protected Player m_avatar;
     [SerializeField] protected StairsController m_stairsCtrl;
     public int SelfHeight;
 

@@ -7,7 +7,7 @@ public class MoveState_Boss : BaseStateMachine_Enemy
     public MoveState_Boss(Enemy boss2) 
     {
         this.currentEnemy = boss2;
-        this.m_bState = BaseState.Move;
+        this.m_bState = Constant.BaseState.Move;
     }
 
     public override void OnEnter()

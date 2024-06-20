@@ -10,7 +10,7 @@ public class BossStage_2 : Attack
     [Header("關卡物件")]
     [SerializeField] private ColliderTrigger m_bossVisableRange;
     [SerializeField] private Boss boss;
-    [SerializeField] private Avatar player;
+    [SerializeField] private Player player;
     [SerializeField] private AOECtrl indicatorCtrl;
     [SerializeField] private GameObject collider_beforeBattle;
     [SerializeField] private GameObject collider_duringBattle;
@@ -76,14 +76,14 @@ public class BossStage_2 : Attack
 
     private void NextBossState() {
         switch(boss.CurrentBossState.Stage) {
-            case BossStateMachine.BossState.BeforeStart: 
+            case Constant.BossState.BeforeStart: 
                 boss.SetCurrentBossState(boss.DuringBattle);
                 StopBattle();
                 //AttackSimultaneouslyProcess();
                 //AttackSeparatelyProcess(0.5f);
                 AttackByTrailProcess(m_attackRate);
                 break;
-            case BossStateMachine.BossState.DuringBattle:
+            case Constant.BossState.DuringBattle:
                 StopBattle();
                 //AttackSeparatelyProcess(0.5f);
                 //InvokeRepeating("LineAttackProcess", 0f, timeBetweenAttacks);

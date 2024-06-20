@@ -53,7 +53,7 @@ public class HitSystem_Lamniat : HitSystem_Avatar
         m_targetMovement.CanMove = false;
 
         if(m_target != null) {
-            if(m_target.CurrentBaseState.State.Equals(BaseStateMachine_Charactor.BaseState.Move)) {
+            if(m_target.CurrentBaseState.State.Equals(Constant.BaseState.Move)) {
                 Debug.Log("Lamniat TakeHit: SetMovementAfterTrigger "+m_targetMovement.Movement);
                 m_targetMovement.SetMovementAfterTrigger(m_targetMovement.Movement);
             }
@@ -101,7 +101,7 @@ public class HitSystem_Lamniat : HitSystem_Avatar
         m_targetMovement.CanMove = false;
 
         if(m_target != null) {
-            if(m_target.CurrentBaseState.State.Equals(BaseStateMachine_Charactor.BaseState.Move)) {
+            if(m_target.CurrentBaseState.State.Equals(Constant.BaseState.Move)) {
                 //m_avatar.SetFacingDir(m_avatar.Movement);
                 m_targetMovement.SetMovementAfterTrigger(m_targetMovement.Movement);
             }

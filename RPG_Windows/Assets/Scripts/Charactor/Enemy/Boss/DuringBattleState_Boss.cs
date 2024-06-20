@@ -6,7 +6,7 @@ public class DuringBattleState_Boss : BossStateMachine
 {
     public DuringBattleState_Boss(Enemy boss2)
     {
-        this.m_stage = BossState.DuringBattle;
+        this.m_stage = Constant.BossState.DuringBattle;
         this.currentEnemy = boss2;
     }
 

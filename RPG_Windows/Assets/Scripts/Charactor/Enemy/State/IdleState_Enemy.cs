@@ -6,7 +6,7 @@ public class IdleState_Enemy : BaseStateMachine_Enemy
 {
     public IdleState_Enemy(Enemy enemy) {
         this.currentEnemy = enemy;
-        this.m_bState = BaseState.Idle;
+        this.m_bState = Constant.BaseState.Idle;
     }
 
     public override void OnEnter()

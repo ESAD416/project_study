@@ -2,12 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AttackState_Lamniat : BaseStateMachine_Avatar
+public class AttackState_Lamniat : BaseStateMachine_Player
 {
-    public AttackState_Lamniat(Avatar avatar) 
+    public AttackState_Lamniat(Player avatar) 
     {
-        this.currentAvatar = avatar;
-        this.m_bState = BaseState.Attack;
+        this.currentPlayer = avatar;
+        this.m_bState = Constant.BaseState.Attack;
     }
 
 
@@ -16,9 +16,9 @@ public class AttackState_Lamniat : BaseStateMachine_Avatar
         // OnEnter
         //this.currentAvatar.Animator?.SetBool("isAttack", true);
     }
-    public override void OnEnter(Avatar avatar)
+    public override void OnEnter(Player avatar)
     {
-        this.currentAvatar = avatar;
+        this.currentPlayer = avatar;
         OnEnter();
     }
 
@@ -28,7 +28,7 @@ public class AttackState_Lamniat : BaseStateMachine_Avatar
         // var moveSpeed = this.currentAvatar.AvatarMovement.MoveSpeed;
         // this.currentAvatar.AvatarMovement.SetMoveVelocity(Vector2.ClampMagnitude(velocity*0f, moveSpeed*0f));
         
-        AnimeUtils.ActivateAnimatorLayer(this.currentAvatar.Animator, "AttackLayer");
+        AnimeUtils.ActivateAnimatorLayer(this.currentPlayer.Animator, "AttackLayer");
     }
 
     public override void OnFixedUpdate()

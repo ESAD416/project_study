@@ -7,7 +7,7 @@ using UnityEngine.Tilemaps;
 
 public class StairsController : MonoBehaviour
 {
-    [SerializeField] protected Avatar m_avatar;
+    [SerializeField] protected Player m_avatar;
     [SerializeField] protected Tilemap[] stairsTunnelsTileMaps;
 
     protected void Start() {

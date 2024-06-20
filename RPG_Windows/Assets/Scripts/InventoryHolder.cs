@@ -8,7 +8,7 @@ using System.Linq;
 [Serializable]
 public class InventoryHolder : MonoBehaviour
 {
-    [SerializeField] protected Avatar m_target;
+    [SerializeField] protected Player m_target;
     [SerializeField] private int m_inventorySize;
     [SerializeField] protected InventorySystemModel m_inventorySystem;
     protected BoxCollider2D m_targetHitBoxCollider;

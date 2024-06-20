@@ -6,7 +6,7 @@ public class Indicator_AimingLine : MonoBehaviour
 {
     private LineRenderer m_lineRenderer;
 
-    [SerializeField] private Avatar_Lamniat m_targetAvatar;
+    [SerializeField] private Lamniat m_targetAvatar;
     [SerializeField] private Combat_Lamniat m_targetCombat;
     [SerializeField] private PolygonCollider2D m_mapRange;
 

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : Charactor
+public class Enemy : Charactor<BoxCollider2D>
 {
     [Header("Enemy 基本物件")]
     [SerializeField] protected Movement_Enemy m_enemyMovement;

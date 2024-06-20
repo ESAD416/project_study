@@ -2,10 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.InputSystem.Interactions;
-using static JumpMechanismUtils;
 
-public class Avatar : Charactor
+public class Player : Charactor<BoxCollider2D>
 {
     #region 可操作角色物件
 
@@ -22,28 +20,28 @@ public class Avatar : Charactor
 
     #region 可操作角色狀態
 
-    protected BaseStateMachine_Avatar m_currentBaseState;
-    public BaseStateMachine_Avatar CurrentBaseState => this.m_currentBaseState;
-    public void SetCurrentBaseState(BaseStateMachine_Avatar state) {
+    protected BaseStateMachine_Player m_currentBaseState;
+    public BaseStateMachine_Player CurrentBaseState => this.m_currentBaseState;
+    public void SetCurrentBaseState(BaseStateMachine_Player state) {
         this.m_currentBaseState.OnExit();
         this.m_currentBaseState = state;
         this.m_currentBaseState.OnEnter(this);
     }
     
-    protected BaseStateMachine_Avatar m_idle;
-    public BaseStateMachine_Avatar Idle => m_idle;
-    protected BaseStateMachine_Avatar m_move;
-    public BaseStateMachine_Avatar Move => m_move;
-    protected BaseStateMachine_Avatar m_attack;
-    public BaseStateMachine_Avatar Attack => m_attack;
-    protected BaseStateMachine_Avatar m_jump;
-    public BaseStateMachine_Avatar Jump => m_jump;
-    protected BaseStateMachine_Avatar m_hurt;
-    public BaseStateMachine_Avatar Hurt => m_hurt;
-    protected BaseStateMachine_Avatar m_dodge;
-    public BaseStateMachine_Avatar Dodge => m_dodge;
-    protected BaseStateMachine_Avatar m_dead;
-    public BaseStateMachine_Avatar Dead => m_dead;
+    protected BaseStateMachine_Player m_idle;
+    public BaseStateMachine_Player Idle => m_idle;
+    protected BaseStateMachine_Player m_move;
+    public BaseStateMachine_Player Move => m_move;
+    protected BaseStateMachine_Player m_attack;
+    public BaseStateMachine_Player Attack => m_attack;
+    protected BaseStateMachine_Player m_jump;
+    public BaseStateMachine_Player Jump => m_jump;
+    protected BaseStateMachine_Player m_hurt;
+    public BaseStateMachine_Player Hurt => m_hurt;
+    protected BaseStateMachine_Player m_dodge;
+    public BaseStateMachine_Player Dodge => m_dodge;
+    protected BaseStateMachine_Player m_dead;
+    public BaseStateMachine_Player Dead => m_dead;
 
     #endregion
 

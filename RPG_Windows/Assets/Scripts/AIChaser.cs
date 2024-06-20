@@ -37,7 +37,7 @@ public class AIChaser : MonoBehaviour
         // if(EnemyAI.isDead) {
         //     transform.gameObject.SetActive(false);
         // } else {
-            if(!EnemyAI.CurrentBaseState.Equals(BaseStateMachine_Enemy.BaseState.Attack)) {
+            if(!EnemyAI.CurrentBaseState.Equals(Constant.BaseState.Attack)) {
                 if(TargetModel != null) {
                     //Debug.Log("TargetModel != null)");
                     targetVisable = CheckTargetVisible();
@@ -79,7 +79,7 @@ public class AIChaser : MonoBehaviour
         Collider2D col = Physics2D.OverlapCircle(transform.position, chaseRadius, targetLayer);
         if(col != null) {
             //Debug.Log("Target transform: "+col.transform);
-            var charactor = col.GetComponent<Charactor>() as Charactor;
+            var charactor = col.GetComponent<Charactor<Collider2D>>() as Charactor<Collider2D>;
             if(charactor != null) {
                 //Debug.Log("Target m_Center: "+charactor.m_Center);
                 TargetModel = charactor.m_CenterObj;

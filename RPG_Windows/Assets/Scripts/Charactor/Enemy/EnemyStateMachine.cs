@@ -4,11 +4,8 @@ using UnityEngine;
 
 public abstract class EnemyStateMachine
 {
-    public enum EnemyState {
-        Patrol, Chase, 
-    }
-    protected EnemyState m_eState;
-    public EnemyState State => m_eState;
+    protected Constant.EnemyState m_eState;
+    public Constant.EnemyState State => m_eState;
 
     protected Enemy currentEnemy;
 

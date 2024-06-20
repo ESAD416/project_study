@@ -6,7 +6,7 @@ public class MoveState_Enemy : BaseStateMachine_Enemy
 {
     public MoveState_Enemy(Enemy enemy) {
         this.currentEnemy = enemy;
-        this.m_bState = BaseState.Move;
+        this.m_bState = Constant.BaseState.Move;
     }
 
     public override void OnEnter()

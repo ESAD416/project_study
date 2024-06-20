@@ -86,8 +86,8 @@ public class Movement_Enemy : MonoBehaviour
     }
 
     protected virtual void FixedUpdate() {
-        if(m_enemy.CurrentBaseState.Equals(BaseStateMachine_Enemy.BaseState.Dead) || 
-           m_enemy.CurrentBaseState.Equals(BaseStateMachine_Enemy.BaseState.Attack)) {
+        if(m_enemy.CurrentBaseState.Equals(Constant.BaseState.Dead) || 
+           m_enemy.CurrentBaseState.Equals(Constant.BaseState.Attack)) {
             SetMovement(Vector3.zero);
         }
         

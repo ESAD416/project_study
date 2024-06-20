@@ -2,21 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DeadState_Lamniat : BaseStateMachine_Avatar
+public class DeadState_Lamniat : BaseStateMachine_Player
 {
-    public DeadState_Lamniat(Avatar avatar)
+    public DeadState_Lamniat(Player avatar)
     { 
-        this.currentAvatar = avatar;
-        this.m_bState = BaseState.Dead;
+        this.currentPlayer = avatar;
+        this.m_bState = Constant.BaseState.Dead;
     }
 
     public override void OnEnter()
     {
         // OnEnter
     }
-    public override void OnEnter(Avatar avatar)
+    public override void OnEnter(Player avatar)
     {
-        this.currentAvatar = avatar;
+        this.currentPlayer = avatar;
         OnEnter();
     }
 

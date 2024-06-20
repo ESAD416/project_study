@@ -8,7 +8,7 @@ using static JumpMechanismUtils;
 public class StaticJump_Lamniat : MonoBehaviour
 {
     [Header("Jump_Lamniat 基本物件")]
-    [SerializeField] protected Avatar_Lamniat m_Lamniat;
+    [SerializeField] protected Lamniat m_Lamniat;
     [SerializeField] protected Movement_Lamniat m_avatarMovement;
     [SerializeField] private HeightManager m_hManager;
     public JumpState jumpState;

@@ -7,7 +7,7 @@ public class DeadState_Boss : BaseStateMachine_Enemy
     public DeadState_Boss(Enemy boss2)
     { 
         this.currentEnemy = boss2;
-        this.m_bState = BaseState.Dead;
+        this.m_bState = Constant.BaseState.Dead;
     }
 
     public override void OnEnter()

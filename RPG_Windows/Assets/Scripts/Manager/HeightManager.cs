@@ -10,7 +10,7 @@ public class HeightManager : MonoBehaviour
 {
     public static HeightManager instance;
 
-    [SerializeField] private Avatar m_avatar;
+    [SerializeField] private Player m_avatar;
     [SerializeField] private Tilemap[] mapLevels;
     [SerializeField] private Collider2D[] tilemapColliders;
     [SerializeField] private Collider2D[] tilemapTriggers;

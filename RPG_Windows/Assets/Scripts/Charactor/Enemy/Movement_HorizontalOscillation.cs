@@ -42,8 +42,8 @@ public class Movement_HorizontalOscillation : Movement_Enemy
     }
 
     protected override void FixedUpdate() {
-        if(!m_enemy.CurrentBaseState.Equals(BaseStateMachine_Enemy.BaseState.Dead)) {
-            if(m_enemy.CurrentEnemyState != null && m_enemy.CurrentEnemyState.State.Equals(EnemyStateMachine.EnemyState.Chase)) {
+        if(!m_enemy.CurrentBaseState.Equals(Constant.BaseState.Dead)) {
+            if(m_enemy.CurrentEnemyState != null && m_enemy.CurrentEnemyState.State.Equals(Constant.EnemyState.Chase)) {
                 // 如果有套用Patrol與Chase索敵模組
                 if(m_movement.x > 0) moveRight = true;
                 else if(m_movement.x < 0) moveRight = false;

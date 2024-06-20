@@ -6,7 +6,7 @@ using UnityEngine.Events;
 public class HitSystem_Avatar : HitSystem
 {
     [Header("HitSystem_Avatar 基本物件")]
-    [SerializeField] protected Avatar m_target;
+    [SerializeField] protected Player m_target;
 
     protected Animator m_targetAnimator;
     protected BoxCollider2D m_targetHitBoxCollider;

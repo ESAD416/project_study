@@ -6,7 +6,7 @@ public class AttackState_Enemy : BaseStateMachine_Enemy
 {
     public AttackState_Enemy(Enemy enemy) {
         this.currentEnemy = enemy;
-        this.m_bState = BaseState.Attack;
+        this.m_bState = Constant.BaseState.Attack;
     }
 
     public override void OnEnter()
