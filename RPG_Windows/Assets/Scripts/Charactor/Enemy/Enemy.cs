@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : Charactor<BoxCollider2D>
+public class Enemy<T> : Charactor<T> where T : Collider2D
 {
     [Header("Enemy 基本物件")]
     [SerializeField] protected Movement_Enemy m_enemyMovement;
@@ -10,38 +10,39 @@ public class Enemy : Charactor<BoxCollider2D>
     [SerializeField] protected HealthBar healthBar;
 
     #region 敵人狀態
-    protected BaseStateMachine_Enemy m_currentBaseState;
-    public BaseStateMachine_Enemy CurrentBaseState => m_currentBaseState;
-    public void SetCurrentBaseState(BaseStateMachine_Enemy state) {
+    protected CharactorStateMachine<Enemy<T>, T> m_currentBaseState;
+    public CharactorStateMachine<Enemy<T>, T> CurrentBaseState => m_currentBaseState;
+    public void SetCurrentBaseState(CharactorStateMachine<Enemy<T>, T> state) {
         this.m_currentBaseState.OnExit();
         this.m_currentBaseState = state;
         this.m_currentBaseState.OnEnter(this);
     }
 
-    protected BaseStateMachine_Enemy m_idle;
-    public BaseStateMachine_Enemy Idle => this.m_idle;
-    protected BaseStateMachine_Enemy m_move;
-    public BaseStateMachine_Enemy Move => this.m_move;
-    protected BaseStateMachine_Enemy m_attack;
-    public BaseStateMachine_Enemy Attack => this.m_attack;
-    protected BaseStateMachine_Enemy m_hurt;
-    public BaseStateMachine_Enemy Hurt => this.m_hurt;
-    protected BaseStateMachine_Enemy m_dead;
-    public BaseStateMachine_Enemy Dead => this.m_dead;
+    protected CharactorStateMachine<Enemy<T>, T> m_idle;
+    public CharactorStateMachine<Enemy<T>, T> Idle => this.m_idle;
+    protected CharactorStateMachine<Enemy<T>, T> m_move;
+    public CharactorStateMachine<Enemy<T>, T> Move => this.m_move;
+    protected CharactorStateMachine<Enemy<T>, T> m_attack;
+    public CharactorStateMachine<Enemy<T>, T> Attack => this.m_attack;
+    protected CharactorStateMachine<Enemy<T>, T> m_hurt;
+    public CharactorStateMachine<Enemy<T>, T> Hurt => this.m_hurt;
+    protected CharactorStateMachine<Enemy<T>, T> m_dead;
+    public CharactorStateMachine<Enemy<T>, T> Dead => this.m_dead;
 
 
-    protected EnemyStateMachine m_currentEnemyState;
-    public EnemyStateMachine CurrentEnemyState => m_currentEnemyState;
-    public void SetCurrentEnemyState(EnemyStateMachine state) {
+    protected EnemyStateMachine<T> m_currentEnemyState;
+    public EnemyStateMachine<T> CurrentEnemyState => m_currentEnemyState;
+    public void SetCurrentEnemyState(EnemyStateMachine<T> state) {
         this.m_currentEnemyState.OnExit();
         this.m_currentEnemyState = state;
+
         this.m_currentEnemyState.OnEnter(this);
     }
 
-    protected EnemyStateMachine m_patrol;
-    public EnemyStateMachine Patrol => this.m_patrol;
-    protected EnemyStateMachine m_chase;
-    public EnemyStateMachine Chase => this.m_chase;
+    protected EnemyStateMachine<T> m_patrol;
+    public EnemyStateMachine<T> Patrol => this.m_patrol;
+    protected EnemyStateMachine<T> m_chase;
+    public EnemyStateMachine<T> Chase => this.m_chase;
 
     #endregion
 
@@ -52,14 +53,14 @@ public class Enemy : Charactor<BoxCollider2D>
     protected override void Awake()
     {
         base.Awake();
-        m_idle = new IdleState_Enemy(this);
-        m_move = new MoveState_Enemy(this);
-        m_attack = new AttackState_Enemy(this);
-        m_hurt = new HurtState_Enemy(this);
-        m_dead = new DeadState_Boss(this);
+        m_idle = new IdleState_Enemy<T>(this);
+        m_move = new MoveState_Enemy<T>(this);
+        m_attack = new AttackState_Enemy<T>(this);
+        m_hurt = new HurtState_Enemy<T>(this);
+        m_dead = new DeadState_Enemy<T>(this);
 
-        m_patrol = new PatrolState_Enemy(this);
-        m_chase = new ChaseState_Enemy(this);
+        m_patrol = new PatrolState_Enemy<T>(this);
+        m_chase = new ChaseState_Enemy<T>(this);
     }
 
     protected override void OnEnable() {

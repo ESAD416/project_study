@@ -3,16 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class Combat_Avatar : Attack
+public class Combat_Player<T> : Attack where T : Collider2D
 {
     #region 基本物件
 
     [Header("Combat_Avatar 物件")]
-    [SerializeField] protected Player m_avatar;
-    [SerializeField] protected Movement_Avatar m_avatarMovement;
-
+    [SerializeField] protected Player<T> m_player;
     
-    protected Animator m_avatarAnimator;
+    protected Movement_Player<T> m_playerMovement;    
+    protected Animator m_playerAnimator;
 
     #endregion
 
@@ -44,13 +43,13 @@ public class Combat_Avatar : Attack
     #endregion
 
     protected virtual void Awake() {
-        m_avatarAnimator = m_avatar.Animator;
+        m_playerMovement = m_player.PlayerMovement;
+        m_playerAnimator = m_player.Animator;
     }
 
     // Start is called before the first frame update
     protected virtual void Start()
     {
-        
     }
 
     // Update is called once per frame
@@ -67,9 +66,9 @@ public class Combat_Avatar : Attack
     protected virtual IEnumerator Attack() {
         Debug.Log("Combat_Avatar attack start");
         IsAttacking = true;
-        m_avatarMovement.CanMove = false;
+        m_playerMovement.CanMove = false;
         
-        m_avatar.SetCurrentBaseState(m_avatar.Attack);
+        m_player.SetCurrentBaseState(m_player.Attack);
         yield return new WaitForSeconds(m_attackClipTime);  // hardcasted casted time for debugged
         FinishAttack();
     }
@@ -80,13 +79,13 @@ public class Combat_Avatar : Attack
         IsAttacking = false;
         IsPreAttacking = false;
         IsPostAttacking = false;
-        m_avatarMovement.CanMove = true;
+        m_playerMovement.CanMove = true;
         
         //m_avatarMovement.SetMovement(m_avatarMovement.MovementAfterTrigger);
-        m_avatarMovement.SetMovementAfterTrigger(Vector3.zero);
+        m_playerMovement.SetMovementAfterTrigger(Vector3.zero);
         
-        if(m_avatarMovement.IsMoving) m_avatar.SetCurrentBaseState(m_avatar.Move);
-        else m_avatar.SetCurrentBaseState(m_avatar.Idle);
+        if(m_playerMovement.IsMoving) m_player.SetCurrentBaseState(m_player.Move);
+        else m_player.SetCurrentBaseState(m_player.Idle);
 
         Debug.Log("Combat_Avatar FinishAttack end");
     }

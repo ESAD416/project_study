@@ -350,16 +350,16 @@ MonoBehaviour:
   m_bodyCollider: {fileID: 2031992903498546017}
   m_SprtRenderer: {fileID: 3986059136654441034}
   m_Animator: {fileID: 5460683204752076028}
-  m_CenterObj: {fileID: 6102871184667363047}
-  m_ButtomObj: {fileID: 7308801898870460718}
-  m_InfoStorage: {fileID: 0}
+  CenterObj: {fileID: 6102871184667363047}
+  ButtomObj: {fileID: 7308801898870460718}
+  InfoStorage: {fileID: 0}
   m_Center: {x: 0, y: 0, z: 0}
   m_Buttom: {x: 0, y: 0, z: 0}
   m_Coordinate: {x: 0, y: 0, z: 0}
   m_currHeight: 0
   m_lastHeight: 0
-  m_avatarMovement: {fileID: 6012428366774913337}
-  OnStairs: 0
+  m_playerMovement: {fileID: 6012428366774913337}
+  CurrentStateName: 0
   m_raycastStart: {x: 0, y: 0, z: 0}
 --- !u!114 &2746552256657325116
 MonoBehaviour:
@@ -374,7 +374,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Lamniat: {fileID: 4424307667916199580}
-  m_LamniatMovement: {fileID: 6012428366774913337}
   IsJumping: 0
   CanJump: 0
   OnHeightObjCollisionExit: 0
@@ -606,7 +605,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c4e4d42570e69a4a91125a0190d6326, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_target: {fileID: 4424307667916199580}
+  m_target: {fileID: 4485576792614724507}
   m_inventorySize: 10
   m_inventorySystem:
     m_inventorySlots: []
@@ -797,8 +796,7 @@ MonoBehaviour:
   m_damageSystem: {fileID: 1628603794216444374}
   m_OnHit: []
   m_attackRate: 0
-  m_avatar: {fileID: 4424307667916199580}
-  m_avatarMovement: {fileID: 6012428366774913337}
+  m_player: {fileID: 4424307667916199580}
   IsAttacking: 0
   CanAttack: 0
   IsPreAttacking: 0
@@ -1113,7 +1111,7 @@ MonoBehaviour:
   IsInvulnerable: 0
   invulnerableDuration: 1.5
   isHyperArmor: 0
-  m_target: {fileID: 4424307667916199580}
+  m_targetPlayer: {fileID: 4424307667916199580}
   m_targetMovement: {fileID: 6012428366774913337}
   m_targetCombat: {fileID: 4295372707830558833}
   m_targetDodge: {fileID: 1791548830530935969}
@@ -1192,7 +1190,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51056361f997c1b4295724d870241d9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_avatar: {fileID: 4424307667916199580}
+  m_player: {fileID: 4424307667916199580}
   m_moveSpeed: 25
   m_acceleration: 100
   m_jumpingMoveSpeed: 25
@@ -1666,7 +1664,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9191d2941d71c9d4c8ae539365fd46e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_avatar: {fileID: 4424307667916199580}
+  m_player: {fileID: 4424307667916199580}
   IsDodging: 0
   m_dodgeClipTime: 0
 --- !u!1 &8694040049504401657

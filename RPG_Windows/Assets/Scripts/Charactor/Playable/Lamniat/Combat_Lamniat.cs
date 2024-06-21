@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.VFX;
 
-public class Combat_Lamniat : Combat_Avatar
+public class Combat_Lamniat : Combat_Player<BoxCollider2D>
 {
     [Header("Lamniat近戰參數")]
     private bool m_getMeleeInput = true;
@@ -33,7 +33,7 @@ public class Combat_Lamniat : Combat_Avatar
 
     protected override void Awake() {
         base.Awake();
-        m_attackClipTime = AnimeUtils.GetAnimateClipTimeInRuntime(m_avatarAnimator, "Lamniat_attack_1_chop_clockwise");
+        m_attackClipTime = AnimeUtils.GetAnimateClipTimeInRuntime(m_playerAnimator, "Lamniat_attack_1_chop_clockwise");
         // Debug.Log("Combat_Lamniat Start SetAnimateClipTime attackClipTime: "+attackClipTime);
     }
 
@@ -44,7 +44,7 @@ public class Combat_Lamniat : Combat_Avatar
             Debug.Log("Lamniat_Land.Melee.started");
             SetToAttackState();
 
-            if(m_getMeleeInput) m_avatarAnimator.SetTrigger("melee");
+            if(m_getMeleeInput) m_playerAnimator.SetTrigger("melee");
         };
 
         PlayerInputManager.instance.InputCtrl.Lamniat_Land.Shoot.performed += content => {
@@ -54,14 +54,14 @@ public class Combat_Lamniat : Combat_Avatar
             if(PlayerInputManager.instance.ControlDevice == Constant.ControlDevice.KeyboardMouse) {
                 if(m_ShootDir.x < 0) {
                     // Left
-                    m_avatar.SprtRenderer.flipX = true;
+                    m_player.SprtRenderer.flipX = true;
                 } else if(m_ShootDir.x > 0) {
                     // Right
-                    m_avatar.SprtRenderer.flipX = false;
+                    m_player.SprtRenderer.flipX = false;
                 } 
             }
 
-            m_avatarAnimator.SetTrigger("shoot");
+            m_playerAnimator.SetTrigger("shoot");
             IsShooting = true;
         };
 
@@ -95,7 +95,7 @@ public class Combat_Lamniat : Combat_Avatar
 
     protected override void Update() {
         base.Update();
-        if(m_avatar.SprtRenderer.flipX) enabledMeleeHitbox = m_hitBox_left;
+        if(m_player.SprtRenderer.flipX) enabledMeleeHitbox = m_hitBox_left;
         else enabledMeleeHitbox = m_hitBox_right;
 
         if(m_meleeComboCounter == 3) m_getMeleeInput = false;
@@ -107,25 +107,25 @@ public class Combat_Lamniat : Combat_Avatar
     }
 
     protected void SetToAttackState() {
-        if(m_avatar.CurrentBaseState.State.Equals(Constant.BaseState.Move)) {
-            m_avatarMovement.SetFacingDir(m_avatarMovement.Movement);
+        if(m_player.CurrentBaseState.State.Equals(Constant.CharactorState.Move)) {
+            m_playerMovement.SetFacingDir(m_playerMovement.Movement);
             //m_avatar.SetFacingDir(m_avatar.Movement);
-            m_avatarMovement.SetMovementAfterTrigger(m_avatarMovement.Movement);
+            m_playerMovement.SetMovementAfterTrigger(m_playerMovement.Movement);
         }
 
-        m_avatarMovement.CanMove = false;
+        m_playerMovement.CanMove = false;
         if(!IsAttacking) IsAttacking = true;
-        if(!m_avatar.CurrentBaseState.State.Equals(Constant.BaseState.Attack)) m_avatar.SetCurrentBaseState(m_avatar.Attack);
+        if(!m_player.CurrentBaseState.State.Equals(Constant.CharactorState.Attack)) m_player.SetCurrentBaseState(m_player.Attack);
     }
 
     public void SetAnimateCombatPara() 
     {
-        m_avatarAnimator.SetBool("isAttacking", IsAttacking);
-        m_avatarAnimator.SetBool("isPreAttacking", IsPreAttacking);
-        m_avatarAnimator.SetBool("isPostAttacking", IsPostAttacking);
-        m_avatarAnimator.SetBool("cancelRecovery", CancelRecovery);
-        m_avatarAnimator.SetBool("cancelRecovery", CancelRecovery);
-        m_avatarAnimator.SetBool("isFlipX", m_avatar.SprtRenderer.flipX);
+        m_playerAnimator.SetBool("isAttacking", IsAttacking);
+        m_playerAnimator.SetBool("isPreAttacking", IsPreAttacking);
+        m_playerAnimator.SetBool("isPostAttacking", IsPostAttacking);
+        m_playerAnimator.SetBool("cancelRecovery", CancelRecovery);
+        m_playerAnimator.SetBool("cancelRecovery", CancelRecovery);
+        m_playerAnimator.SetBool("isFlipX", m_player.SprtRenderer.flipX);
         // m_avatarAnimator.SetBool("isHoldShoot", m_isHoldShoot);
         // m_avatarAnimator.SetBool("isTakingAim", IsAiming);
     }
@@ -144,13 +144,13 @@ public class Combat_Lamniat : Combat_Avatar
         IsPreAttacking = false;
         IsPostAttacking = false;
         CancelRecovery = false;
-        m_avatarMovement.CanMove = true;
+        m_playerMovement.CanMove = true;
 
         //m_avatarMovement.SetMovement(m_avatarMovement.MovementAfterTrigger);
-        m_avatarMovement.SetMovementAfterTrigger(Vector3.zero);
+        m_playerMovement.SetMovementAfterTrigger(Vector3.zero);
         
-        if(m_avatarMovement.IsMoving) m_avatar.SetCurrentBaseState(m_avatar.Move);
-        else m_avatar.SetCurrentBaseState(m_avatar.Idle);
+        if(m_playerMovement.IsMoving) m_player.SetCurrentBaseState(m_player.Move);
+        else m_player.SetCurrentBaseState(m_player.Idle);
 
         m_hitBox_left.GetComponentsInChildren<Transform>(true).ToList().ForEach(h => h.gameObject.SetActive(false));
         m_hitBox_right.GetComponentsInChildren<Transform>(true).ToList().ForEach(h => h.gameObject.SetActive(false));
@@ -202,9 +202,9 @@ public class Combat_Lamniat : Combat_Avatar
                 float rayDistance;
                 if(groundPlane.Raycast(ray, out rayDistance)) {
                     Vector3 point = ray.GetPoint(rayDistance);
-                    Debug.DrawLine(m_avatar.Center, point, Color.blue);
+                    Debug.DrawLine(m_player.Center, point, Color.blue);
                     
-                    m_ShootDir = (point - m_avatar.Center).normalized;
+                    m_ShootDir = (point - m_player.Center).normalized;
                     //Debug.Log("Shoot m_ShootDir "+m_ShootDir);
                 }
                 break;
@@ -214,7 +214,7 @@ public class Combat_Lamniat : Combat_Avatar
                 if(Mathf.Abs(m_AimDir.x) > joystickDeadZone || Mathf.Abs(m_AimDir.y) > joystickDeadZone) {
                     Vector3 aimDir = Vector3.right * m_AimDir.x + Vector3.up * m_AimDir.y;
                     //Color color = m_raycastHit.collider != null ? Color.red : Color.green;
-                    Debug.DrawLine(m_avatar.Center, m_avatar.Center + aimDir, Color.red);
+                    Debug.DrawLine(m_player.Center, m_player.Center + aimDir, Color.red);
                     m_ShootDir = aimDir.normalized;
                 }
                 break;
@@ -226,7 +226,7 @@ public class Combat_Lamniat : Combat_Avatar
     public void Shoot() {
         IsShooting =  true;
         Debug.Log("Shoot m_ShootDir "+m_ShootDir);
-        GameObject bullet = Instantiate(m_bulletPrefab, m_avatar.Center, transform.rotation);
+        GameObject bullet = Instantiate(m_bulletPrefab, m_player.Center, transform.rotation);
         bullet.GetComponent<Projectile_Bullet>().SetDirection(m_ShootDir);
         bullet.GetComponent<HitBox_Overlap2D>().SetAttacker(this);
         bullet.GetComponent<HitBox_Overlap2D>().DetectTagName = "Enemies";
@@ -242,13 +242,13 @@ public class Combat_Lamniat : Combat_Avatar
         Debug.Log("FinishShoot start"); 
         IsAttacking = false;
         IsShooting =false;
-        m_avatarMovement.CanMove = true;
+        m_playerMovement.CanMove = true;
 
         //m_avatarMovement.SetMovement(m_avatarMovement.MovementAfterTrigger);
-        m_avatarMovement.SetMovementAfterTrigger(Vector3.zero);
+        m_playerMovement.SetMovementAfterTrigger(Vector3.zero);
         
-        if(m_avatarMovement.IsMoving) m_avatar.SetCurrentBaseState(m_avatar.Move);
-        else m_avatar.SetCurrentBaseState(m_avatar.Idle);
+        if(m_playerMovement.IsMoving) m_player.SetCurrentBaseState(m_player.Move);
+        else m_player.SetCurrentBaseState(m_player.Idle);
 
         Debug.Log("FinishShoot end");
     }

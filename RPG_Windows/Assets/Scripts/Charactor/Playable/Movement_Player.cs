@@ -3,15 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class Movement_Avatar : MonoBehaviour
+public interface IMovementPlayer {
+    Vector2 Movement { get; }
+}
+
+public class Movement_Player<T> : MonoBehaviour, IMovementPlayer where T : Collider2D
 {
     #region 物件
 
     [Header("Movement_Avatar 物件")]
-    [SerializeField] protected Player m_avatar;
-    protected Rigidbody2D m_avatarRdbd;
-    protected SpriteRenderer m_avatarSprtRenderer;
-    protected Animator m_avatarAnimator;
+    [SerializeField] protected Player<T> m_player;
+    protected Rigidbody2D m_playerRdbd;
+    protected SpriteRenderer m_playerSprtRenderer;
+    protected Animator m_playerAnimator;
 
     #endregion
     
@@ -121,9 +125,9 @@ public class Movement_Avatar : MonoBehaviour
 
     protected virtual void Awake() 
     {
-        m_avatarRdbd = m_avatar.Rigidbody;
-        m_avatarSprtRenderer = m_avatar.SprtRenderer;
-        m_avatarAnimator = m_avatar.Animator;
+        m_playerRdbd = m_player.Rigidbody;
+        m_playerSprtRenderer = m_player.SprtRenderer;
+        m_playerAnimator = m_player.Animator;
     }
 
     protected virtual void OnEnable() {
@@ -144,7 +148,7 @@ public class Movement_Avatar : MonoBehaviour
 
     protected virtual void FixedUpdate() 
     {
-        m_avatarRdbd.velocity = Movement.normalized * MoveSpeed;
+        m_playerRdbd.velocity = m_movement.normalized * MoveSpeed;
     }
 
     protected virtual void OnDisable() {
@@ -161,7 +165,7 @@ public class Movement_Avatar : MonoBehaviour
         dict.Add("facingDirX", m_facingDir.x);
         dict.Add("facingDirY", m_facingDir.y);
 
-        if(m_avatarAnimator != null) AnimeUtils.SetAnimateFloatPara(m_avatarAnimator, dict);
+        if(m_playerAnimator != null) AnimeUtils.SetAnimateFloatPara(m_playerAnimator, dict);
     }
 
     // protected void FixStandCorners()

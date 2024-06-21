@@ -6,7 +6,7 @@ using UnityEngine;
 public class OffScreenIndicatorCtrl : MonoBehaviour
 {
     public CinemachineVirtualCamera virtualMainCam;
-    public Player player;
+    public Player<Collider2D> player;
     public GameObject indicatorPrefab;
     public float checkFrequency = 0.1f;
     public Vector2 offset;

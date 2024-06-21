@@ -7,7 +7,7 @@ public class DynamicJump_Lamniat : MonoBehaviour
 {
     [Header("DynamicJump_Lamniat 基本物件")]
     [SerializeField] protected Lamniat m_Lamniat;
-    [SerializeField] protected Movement_Lamniat m_LamniatMovement;
+    protected Movement_Lamniat m_LamniatMovement;
 
     [Header("DynamicJump_Lamniat 基本參數")]
     public bool IsJumping;
@@ -63,6 +63,8 @@ public class DynamicJump_Lamniat : MonoBehaviour
         Application.targetFrameRate = 100; // FPS鎖幀
         Debug.Log("targetFrameRate: "+Application.targetFrameRate);
         Debug.Log("vSyncCount: "+QualitySettings.vSyncCount);
+
+        m_LamniatMovement = m_Lamniat.PlayerMovement as Movement_Lamniat;
     }
 
     void Start() {
@@ -128,7 +130,7 @@ public class DynamicJump_Lamniat : MonoBehaviour
             Debug.Log("CanJump: "+CanJump);
             if (CanJump)
             {
-                // Debug.Log("trigger Enter jump start");
+                //Debug.Log("trigger Enter jump start");
                 // 触发跳跃逻辑
                 m_Lamniat.SetCurrentBaseState(m_Lamniat.Jump);
                 IsJumping = true;
@@ -206,7 +208,7 @@ public class DynamicJump_Lamniat : MonoBehaviour
         }
         else if (JumpCounter >= HeightDecreaseCount) 
         {
-            Tilemap currentTilemap = HeightManager.instance.GetCurrentTilemapByAvatarHeight(m_Lamniat.CurrentHeight);
+            Tilemap currentTilemap = ColliderManager.instance.GetCurrentTilemapByAvatarHeight(m_Lamniat.CurrentHeight);
             if (TileUtils.HasTileAtPlayerPosition(currentTilemap, m_Lamniat.BodyCollider.bounds))
             {
                 Debug.Log("FinishJump");
@@ -247,7 +249,7 @@ public class DynamicJump_Lamniat : MonoBehaviour
                 if (JumpCounter >= HeightDecreaseCount && !HasDownStep)
                 {
                     var level = m_Lamniat.CurrentHeight - 1;
-                    if(level < HeightManager.instance.MinimumLevel) level = 0;
+                    if(level < ColliderManager.instance.MinimumLevel) level = 0;
                     m_Lamniat.SetCurrentHeight(level); // 否则回到level 0
                     HeightChangeCount = JumpCounter;
                     HasDownStep = true;
@@ -256,7 +258,7 @@ public class DynamicJump_Lamniat : MonoBehaviour
                 else if (JumpCounter - HeightChangeCount >= HeightDecreaseCountExponential)
                 {
                     var level = m_Lamniat.CurrentHeight - 1;
-                    if(level < HeightManager.instance.MinimumLevel) level = 0;
+                    if(level < ColliderManager.instance.MinimumLevel) level = 0;
                     m_Lamniat.SetCurrentHeight(level); // 否则回到level 0
                     HeightChangeCount = JumpCounter;
                     Debug.Log("level--");
@@ -309,7 +311,7 @@ public class DynamicJump_Lamniat : MonoBehaviour
         // 只碰到一個角，就往斜向位移
         // 碰到兩個角，就往X或Y方向移動
         // 四個角都碰到，offset就會相加並互相抵銷
-        Tilemap currentTilemap = HeightManager.instance.GetCurrentTilemapByAvatarHeight(m_Lamniat.CurrentHeight);
+        Tilemap currentTilemap = ColliderManager.instance.GetCurrentTilemapByAvatarHeight(m_Lamniat.CurrentHeight);
 
         // 與BodyCollider範圍相比有縮小
         Bounds b = m_Lamniat.BodyCollider.bounds;
@@ -355,7 +357,7 @@ public class DynamicJump_Lamniat : MonoBehaviour
             //Debug.Log("FixJumpCornersWhileDownStep return");
             return;
         }
-        Tilemap downHeightTilemap = HeightManager.instance.GetCurrentTilemapByAvatarHeight(m_Lamniat.CurrentHeight-1);
+        Tilemap downHeightTilemap = ColliderManager.instance.GetCurrentTilemapByAvatarHeight(m_Lamniat.CurrentHeight-1);
 
         // 與BodyCollider範圍相比有縮小
         Bounds b = m_Lamniat.BodyCollider.bounds;
@@ -377,7 +379,7 @@ public class DynamicJump_Lamniat : MonoBehaviour
         // Debug.Log("topLeft: "+tl);
         // Debug.Log("topRight: "+tr);
 
-        Tilemap currentTilemap = HeightManager.instance.GetCurrentTilemapByAvatarHeight(m_Lamniat.CurrentHeight);
+        Tilemap currentTilemap = ColliderManager.instance.GetCurrentTilemapByAvatarHeight(m_Lamniat.CurrentHeight);
         if (TileUtils.HasTileAtPosition(downHeightTilemap, body_bottom_left_expand) && 
             TileUtils.HasTileAtPosition(downHeightTilemap, body_bottom_right_expand) && 
             TileUtils.HasTileAtPosition(downHeightTilemap, body_top_left_expand) && 

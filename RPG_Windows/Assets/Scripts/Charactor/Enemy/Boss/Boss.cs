@@ -2,22 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Boss : Enemy
+public class Boss : Enemy<CircleCollider2D>
 {
-    private BossStateMachine m_currentBossState;
-    public BossStateMachine CurrentBossState => this.m_currentBossState;
-    public void SetCurrentBossState(BossStateMachine state) {
+    private BossStateMachine<CircleCollider2D> m_currentBossState;
+    public BossStateMachine<CircleCollider2D> CurrentBossState => this.m_currentBossState;
+    public void SetCurrentBossState(BossStateMachine<CircleCollider2D> state) {
         this.m_currentBossState.OnExit();
         this.m_currentBossState = state;
         this.m_currentBossState.OnEnter(this);
     }
 
-    protected BossStateMachine m_beforeStart;
-    public BossStateMachine BeforeStart => this.m_beforeStart;
-    protected BossStateMachine m_duringBattle;
-    public BossStateMachine DuringBattle => this.m_duringBattle;
-    protected BossStateMachine m_battleFinish;
-    public BossStateMachine BattleFinish => this.m_battleFinish;
+    protected BossStateMachine<CircleCollider2D> m_beforeStart;
+    public BossStateMachine<CircleCollider2D> BeforeStart => this.m_beforeStart;
+    protected BossStateMachine<CircleCollider2D> m_duringBattle;
+    public BossStateMachine<CircleCollider2D> DuringBattle => this.m_duringBattle;
+    protected BossStateMachine<CircleCollider2D> m_battleFinish;
+    public BossStateMachine<CircleCollider2D> BattleFinish => this.m_battleFinish;
 
     protected override void Awake() {
         m_Coordinate = transform.position;
@@ -29,9 +29,9 @@ public class Boss : Enemy
         // m_hurt = new HurtState_Boss(this);
         m_dead = new DeadState_Boss(this);
 
-        m_beforeStart = new BeforeStartState_Boss(this);
-        m_duringBattle = new DuringBattleState_Boss(this);
-        m_battleFinish = new BattleFinishState_Boss(this);
+        m_beforeStart = new BeforeStartState<CircleCollider2D>(this);
+        m_duringBattle = new DuringBattleState<CircleCollider2D>(this);
+        m_battleFinish = new BattleFinishState<CircleCollider2D>(this);
     }
     protected override void OnEnable() {
         m_currentBaseState = m_idle;
@@ -49,8 +49,8 @@ public class Boss : Enemy
         m_currentBossState.OnUpdate();
         m_currentBaseState.OnUpdate();
 
-        m_Center = m_CenterObj?.position ?? Vector3.zero;
-        m_Buttom = m_ButtomObj?.position ?? Vector3.zero;
+        m_Center = CenterObj?.position ?? Vector3.zero;
+        m_Buttom = ButtomObj?.position ?? Vector3.zero;
     }
     protected override void FixedUpdate() {
         m_currentBossState.OnFixedUpdate();

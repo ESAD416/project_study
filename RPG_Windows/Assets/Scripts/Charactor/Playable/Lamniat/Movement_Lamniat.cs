@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem.Interactions;
 using UnityEngine.Tilemaps;
 
-public class Movement_Lamniat : Movement_Avatar
+public class Movement_Lamniat : Movement_Player<BoxCollider2D>
 {
     [Header("Movement_Lamniat 物件")]
     [SerializeField] protected DynamicJump_Lamniat m_LamiatJump;
@@ -35,19 +35,20 @@ public class Movement_Lamniat : Movement_Avatar
             m_movement = inputVecter2;
             //m_avatar.SetStatus(Charactor.CharactorStatus.Move);
             if(m_previousMovement == Vector2.zero) m_previousMovement = inputVecter2;
-            if(!m_LamiatJump.IsJumping && !m_LamiatCombat.IsAttacking) m_avatar.SetCurrentBaseState(m_avatar.Move);
-            if(m_avatarSprtRenderer!= null) {
-                var faceLeft = m_avatarSprtRenderer.flipX;
-                m_avatarSprtRenderer.flipX = AnimeUtils.isLeftForHorizontalAnimation(Movement, faceLeft);
+            //Debug.Log("m_LamiatJump.IsJumping :"+m_LamiatJump.IsJumping+", m_LamiatJump.IsAttacking :"+m_LamiatCombat.IsAttacking);
+            if(!m_LamiatJump.IsJumping && !m_LamiatCombat.IsAttacking) m_player.SetCurrentBaseState(m_player.Move);
+            if(m_playerSprtRenderer!= null) {
+                var faceLeft = m_playerSprtRenderer.flipX;
+                m_playerSprtRenderer.flipX = AnimeUtils.isLeftForHorizontalAnimation(Movement, faceLeft);
             }
         };
 
         PlayerInputManager.instance.InputCtrl.Lamniat_Land.Move.canceled += content => {
             m_movement = Vector2.zero;
             if(m_previousMovement != Vector2.zero) m_previousMovement = Vector2.zero;
-            if(m_LamiatJump.IsJumping) m_avatar.SetCurrentBaseState(m_avatar.Jump);
-            else if(m_LamiatCombat.IsAttacking) m_avatar.SetCurrentBaseState(m_avatar.Attack);
-            else m_avatar.SetCurrentBaseState(m_avatar.Idle);
+            if(m_LamiatJump.IsJumping) m_player.SetCurrentBaseState(m_player.Jump);
+            else if(m_LamiatCombat.IsAttacking) m_player.SetCurrentBaseState(m_player.Attack);
+            else m_player.SetCurrentBaseState(m_player.Idle);
         };
 
         #endregion
@@ -103,8 +104,8 @@ public class Movement_Lamniat : Movement_Avatar
                 if (m_LamiatJump.JumpCounter > m_LamiatJump.HeightIncreaseCount)
                 {
                     // 實現減速(通常只有下往上跳會觸發)
-                    Tilemap currentTilemap = HeightManager.instance.GetCurrentTilemapByAvatarHeight(m_avatar.CurrentHeight);
-                    if(TileUtils.HasTileAtPlayerPosition(currentTilemap, m_avatar.BodyCollider.bounds)) 
+                    Tilemap currentTilemap = ColliderManager.instance.GetCurrentTilemapByAvatarHeight(m_player.CurrentHeight);
+                    if(TileUtils.HasTileAtPlayerPosition(currentTilemap, m_player.BodyCollider.bounds)) 
                     {
                         m_firstMoveVelocityWhileJumping.x = m_firstMoveVelocityWhileJumping.x / 1.5f;
                         m_firstMoveVelocityWhileJumping.y = m_firstMoveVelocityWhileJumping.y / 1.5f;
@@ -181,7 +182,7 @@ public class Movement_Lamniat : Movement_Avatar
     protected override void FixedUpdate() 
     {
         //m_avatarRdbd.velocity = m_moveVelocity;
-        m_avatarRdbd.MovePosition(m_avatarRdbd.position + m_moveVelocity * Time.fixedDeltaTime);
+        m_playerRdbd.MovePosition(m_playerRdbd.position + m_moveVelocity * Time.fixedDeltaTime);
     }
     
 
@@ -194,36 +195,36 @@ public class Movement_Lamniat : Movement_Avatar
         // 四個角都碰到，offset就會相加並互相抵銷
         // 跟跳躍的數值差在，位移速度會比較快一點
 
-        Tilemap currentTilemap = HeightManager.instance.GetCurrentTilemapByAvatarHeight(m_avatar.CurrentHeight);
-        Vector3Int body_bottom_left = currentTilemap.WorldToCell(new Vector3(m_avatar.BodyCollider.bounds.min.x, m_avatar.BodyCollider.bounds.min.y));
-        Vector3Int body_top_right = currentTilemap.WorldToCell(new Vector3(m_avatar.BodyCollider.bounds.max.x, m_avatar.BodyCollider.bounds.max.y));
-        Vector3Int body_bottom_right = currentTilemap.WorldToCell(new Vector3(m_avatar.BodyCollider.bounds.max.x, m_avatar.BodyCollider.bounds.min.y));
-        Vector3Int body_top_left = currentTilemap.WorldToCell(new Vector3(m_avatar.BodyCollider.bounds.min.x, m_avatar.BodyCollider.bounds.max.y));
+        Tilemap currentTilemap = ColliderManager.instance.GetCurrentTilemapByAvatarHeight(m_player.CurrentHeight);
+        Vector3Int body_bottom_left = currentTilemap.WorldToCell(new Vector3(m_player.BodyCollider.bounds.min.x, m_player.BodyCollider.bounds.min.y));
+        Vector3Int body_top_right = currentTilemap.WorldToCell(new Vector3(m_player.BodyCollider.bounds.max.x, m_player.BodyCollider.bounds.max.y));
+        Vector3Int body_bottom_right = currentTilemap.WorldToCell(new Vector3(m_player.BodyCollider.bounds.max.x, m_player.BodyCollider.bounds.min.y));
+        Vector3Int body_top_left = currentTilemap.WorldToCell(new Vector3(m_player.BodyCollider.bounds.min.x, m_player.BodyCollider.bounds.max.y));
 
         Vector3 offsetPosition = Vector3.zero;
         
         if (TileUtils.HasTileAtPosition(currentTilemap, body_bottom_left))
         {
-            offsetPosition += new Vector3(-0.05f * m_avatar.BodyCollider.size.x, -0.05f * m_avatar.BodyCollider.size.y);
+            offsetPosition += new Vector3(-0.05f * m_player.BodyCollider.size.x, -0.05f * m_player.BodyCollider.size.y);
         }
         if (TileUtils.HasTileAtPosition(currentTilemap, body_bottom_right))
         {
-            offsetPosition += new Vector3(0.05f * m_avatar.BodyCollider.size.x, -0.05f * m_avatar.BodyCollider.size.y);
+            offsetPosition += new Vector3(0.05f * m_player.BodyCollider.size.x, -0.05f * m_player.BodyCollider.size.y);
         }
         if (TileUtils.HasTileAtPosition(currentTilemap, body_top_left))
         {
-            offsetPosition += new Vector3(-0.05f * m_avatar.BodyCollider.size.x, 0.05f * m_avatar.BodyCollider.size.y);
+            offsetPosition += new Vector3(-0.05f * m_player.BodyCollider.size.x, 0.05f * m_player.BodyCollider.size.y);
         }
         if (TileUtils.HasTileAtPosition(currentTilemap, body_top_right))
         {
-            offsetPosition += new Vector3(0.05f * m_avatar.BodyCollider.size.x, 0.05f * m_avatar.BodyCollider.size.y);
+            offsetPosition += new Vector3(0.05f * m_player.BodyCollider.size.x, 0.05f * m_player.BodyCollider.size.y);
         }
 
         if (offsetPosition != Vector3.zero)
         {
             Debug.Log("FixStandCorners offsetPosition: " + offsetPosition);
-            offsetPosition.x = Mathf.Clamp(offsetPosition.x, -0.25f * m_avatar.BodyCollider.size.x, 0.25f * m_avatar.BodyCollider.size.x);
-            offsetPosition.y = Mathf.Clamp(offsetPosition.y, -0.25f * m_avatar.BodyCollider.size.y, 0.25f * m_avatar.BodyCollider.size.y);
+            offsetPosition.x = Mathf.Clamp(offsetPosition.x, -0.25f * m_player.BodyCollider.size.x, 0.25f * m_player.BodyCollider.size.x);
+            offsetPosition.y = Mathf.Clamp(offsetPosition.y, -0.25f * m_player.BodyCollider.size.y, 0.25f * m_player.BodyCollider.size.y);
             Vector3 fixCornersPosition = transform.position + offsetPosition;
 
             transform.position = fixCornersPosition;

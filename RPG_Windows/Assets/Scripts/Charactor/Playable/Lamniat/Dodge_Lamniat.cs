@@ -2,12 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Dodge_Lamniat : Dodge_Avatar
+public class Dodge_Lamniat : Dodge_Player<BoxCollider2D>
 {
     protected override void Awake() {
         base.Awake();
 
-        m_dodgeClipTime = AnimeUtils.GetAnimateClipTimeInRuntime(m_avatarAnimator, "Lamniat_dodge");
+        m_dodgeClipTime = AnimeUtils.GetAnimateClipTimeInRuntime(m_playerAnimator, "Lamniat_dodge");
     }
 
     protected override void Start() {

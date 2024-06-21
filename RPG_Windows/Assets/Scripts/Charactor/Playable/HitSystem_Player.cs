@@ -3,17 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class HitSystem_Avatar : HitSystem
+public class HitSystem_Player<T> : HitSystem where T : Collider2D
 {
-    [Header("HitSystem_Avatar 基本物件")]
-    [SerializeField] protected Player m_target;
+    [Header("HitSystem_Player 基本物件")]
+    [SerializeField] protected Player<T> m_targetPlayer;
 
     protected Animator m_targetAnimator;
     protected BoxCollider2D m_targetHitBoxCollider;
-
-    protected virtual void Awake() {
-        m_targetAnimator = m_target.Animator;
-    }
 
     protected override void Start() {
         base.Start();
@@ -23,6 +19,6 @@ public class HitSystem_Avatar : HitSystem
     protected override void Update() 
     {
         base.Update();
-        transform.position = m_target.transform.position;
+        transform.position = m_targetPlayer.transform.position;
     }
 }

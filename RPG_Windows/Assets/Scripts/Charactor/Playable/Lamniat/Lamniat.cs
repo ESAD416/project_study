@@ -6,9 +6,9 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Interactions;
 using static JumpMechanismUtils;
 
-public class Lamniat : Player
+public class Lamniat : Player<BoxCollider2D>
 {
-    [Header("Avatar_Lamniat 基本物件")]
+    [Header("Lamniat 基本物件")]
     
     #region Raycast物件
     [SerializeField] private Vector3 m_raycastStart;
@@ -34,8 +34,6 @@ public class Lamniat : Player
         m_hurt = new HurtState_Lamniat(this);
         m_dead = new DeadState_Lamniat(this);
         
-        //m_inputControls = new AvatarInputActionsControls();
-        //m_inputControls.Lamniat_Land.Enable();
         base.OnEnable();
     }
 
@@ -59,9 +57,9 @@ public class Lamniat : Player
         //Debug.Log("m_currentBaseState: "+m_currentBaseState.State);
 
         m_raycastStart = (Vector2)transform.position + m_bodyCollider.offset ;  // 射线的起点
-        m_raycastHitJumpTrigger = Physics2D.Raycast(m_raycastStart, m_avatarMovement.Movement.normalized, 1f, raycastJumpTriggerLayerMask);
+        m_raycastHitJumpTrigger = Physics2D.Raycast(m_raycastStart, m_playerMovement.Movement.normalized, 1f, raycastJumpTriggerLayerMask);
         Color color = m_raycastHitJumpTrigger.collider != null ? Color.red : Color.green;
-        Debug.DrawLine(m_raycastStart, (Vector2)m_raycastStart + m_avatarMovement.Movement.normalized*1f, color);
+        Debug.DrawLine(m_raycastStart, (Vector2)m_raycastStart + m_playerMovement.Movement.normalized*1f, color);
         if(m_raycastHitJumpTrigger.collider != null ) Debug.Log("m_raycastHit: "+m_raycastHitJumpTrigger.collider.name);
 
         float newZPosition = -m_currHeight;

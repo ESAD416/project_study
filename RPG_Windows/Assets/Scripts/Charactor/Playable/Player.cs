@@ -3,45 +3,53 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class Player : Charactor<BoxCollider2D>
+public interface IPlayer : ICharactor 
+{
+    bool OnStairs { get; }
+}
+
+public class Player<T> : Charactor<T>, IPlayer  where T : Collider2D
 {
     #region 可操作角色物件
 
-    [Header("Avatar 基本物件")]
-    [SerializeField] protected Movement_Avatar m_avatarMovement;
+    [Header("Player 基本物件")]
+    [SerializeField] protected Movement_Player<T> m_playerMovement;
     /// <summary>
     /// 可操作角色的移動控制
     /// </summary>
-    public Movement_Avatar AvatarMovement =>this.m_avatarMovement;
+    public Movement_Player<T> PlayerMovement =>this.m_playerMovement;
 
-    public bool OnStairs;
+    protected bool m_onStairs;
+    public bool OnStairs => this.m_onStairs;
+    public void SetOnStairs(bool onStairs) => this.m_onStairs = onStairs;
 
     #endregion
 
-    #region 可操作角色狀態
+    #region 角色狀態
 
-    protected BaseStateMachine_Player m_currentBaseState;
-    public BaseStateMachine_Player CurrentBaseState => this.m_currentBaseState;
-    public void SetCurrentBaseState(BaseStateMachine_Player state) {
+    protected CharactorStateMachine<Player<T>, T> m_currentBaseState;
+    public CharactorStateMachine<Player<T>, T> CurrentBaseState => this.m_currentBaseState;
+    public void SetCurrentBaseState(CharactorStateMachine<Player<T>, T> state) {
         this.m_currentBaseState.OnExit();
         this.m_currentBaseState = state;
         this.m_currentBaseState.OnEnter(this);
     }
+    [SerializeField] private Constant.CharactorState CurrentStateName;
     
-    protected BaseStateMachine_Player m_idle;
-    public BaseStateMachine_Player Idle => m_idle;
-    protected BaseStateMachine_Player m_move;
-    public BaseStateMachine_Player Move => m_move;
-    protected BaseStateMachine_Player m_attack;
-    public BaseStateMachine_Player Attack => m_attack;
-    protected BaseStateMachine_Player m_jump;
-    public BaseStateMachine_Player Jump => m_jump;
-    protected BaseStateMachine_Player m_hurt;
-    public BaseStateMachine_Player Hurt => m_hurt;
-    protected BaseStateMachine_Player m_dodge;
-    public BaseStateMachine_Player Dodge => m_dodge;
-    protected BaseStateMachine_Player m_dead;
-    public BaseStateMachine_Player Dead => m_dead;
+    protected CharactorStateMachine<Player<T>, T> m_idle;
+    public CharactorStateMachine<Player<T>, T> Idle => m_idle;
+    protected CharactorStateMachine<Player<T>, T> m_move;
+    public CharactorStateMachine<Player<T>, T> Move => m_move;
+    protected CharactorStateMachine<Player<T>, T> m_attack;
+    public CharactorStateMachine<Player<T>, T> Attack => m_attack;
+    protected CharactorStateMachine<Player<T>, T> m_jump;
+    public CharactorStateMachine<Player<T>, T> Jump => m_jump;
+    protected CharactorStateMachine<Player<T>, T> m_hurt;
+    public CharactorStateMachine<Player<T>, T> Hurt => m_hurt;
+    protected CharactorStateMachine<Player<T>, T> m_dodge;
+    public CharactorStateMachine<Player<T>, T> Dodge => m_dodge;
+    protected CharactorStateMachine<Player<T>, T> m_dead;
+    public CharactorStateMachine<Player<T>, T> Dead => m_dead;
 
     #endregion
 
@@ -52,12 +60,16 @@ public class Player : Charactor<BoxCollider2D>
     protected override void OnEnable() {
         base.OnEnable();
         
-        m_currHeight = m_InfoStorage.initialHeight;
-        m_lastHeight = m_InfoStorage.initialHeight;
-        transform.position = new Vector3(m_InfoStorage.initialPos.x, m_InfoStorage.initialPos.y);
+        m_currHeight = InfoStorage.initialHeight;
+        m_lastHeight = InfoStorage.initialHeight;
+        transform.position = new Vector3(InfoStorage.initialPos.x, InfoStorage.initialPos.y);
 
         m_currentBaseState = m_idle;
         m_currentBaseState.OnEnter();
+    }
+
+    protected virtual void OnDisable() {
+        m_currentBaseState.OnExit();
     }
 
     protected override void Start() {
@@ -67,8 +79,9 @@ public class Player : Charactor<BoxCollider2D>
     protected override void Update()
     {
         m_currentBaseState.OnUpdate();
+        CurrentStateName = m_currentBaseState.State;
 
-        if(OnStairs) m_SprtRenderer.sortingLayerID = SortingLayer.NameToID("Character");
+        if(m_onStairs) m_SprtRenderer.sortingLayerID = SortingLayer.NameToID("Character");
         else m_SprtRenderer.sortingLayerID = SortingLayer.NameToID("Default");
 
         base.Update();
@@ -85,81 +98,4 @@ public class Player : Charactor<BoxCollider2D>
         base.FixedUpdate();
     }
 
-    protected virtual void OnDisable() {
-        m_currentBaseState.OnExit();
-    }
-
-    /*
-    public void SetRaycastPoint(string raycastPointName = null) {
-        if(raycastPointName != null) {
-            //m_raycastStart = GetComponentInChildren<Transform>().Find(raycastPointName);
-            m_raycastStart = m_raycastStartPosition.Single(r => r.name.Equals(raycastPointName));
-        } else {
-            if(AvatarMovement.Movement.x == 0 && AvatarMovement.Movement.y > 0) {
-                // Up
-                //m_raycastStart = GetComponentInChildren<Transform>().Find("RaycastPoint_Up");
-                m_raycastStart = m_raycastStartPosition.Single(r => r.name.Equals("_Up"));
-            } else if(AvatarMovement.Movement.x == 0 && AvatarMovement.Movement.y < 0) {
-                // Down 
-                //m_raycastStart = GetComponentInChildren<Transform>().Find("RaycastPoint_Down");
-                m_raycastStart = m_raycastStartPosition.Single(r => r.name.Equals("_Down"));
-            } else if(AvatarMovement.Movement.x < 0 && AvatarMovement.Movement.y == 0) {
-                // Left
-                //m_raycastStart = GetComponentInChildren<Transform>().Find("RaycastPoint_Left");
-                m_raycastStart = m_raycastStartPosition.Single(r => r.name.Equals("_Left"));
-            } else if(AvatarMovement.Movement.x > 0 && AvatarMovement.Movement.y == 0) {
-                // Right
-                //m_raycastStart = GetComponentInChildren<Transform>().Find("RaycastPoint_Right");
-                m_raycastStart = m_raycastStartPosition.Single(r => r.name.Equals("_Right"));
-            } else if(AvatarMovement.Movement.x > 0 && AvatarMovement.Movement.y > 0) {
-                // UpRight
-                //m_raycastStart = GetComponentInChildren<Transform>().Find("RaycastPoint_UpRight");
-                m_raycastStart = m_raycastStartPosition.Single(r => r.name.Equals("_UpRight"));
-            } else if(AvatarMovement.Movement.x < 0 && AvatarMovement.Movement.y > 0) {
-                // UpLeft
-                //m_raycastStart = GetComponentInChildren<Transform>().Find("RaycastPoint_UpLeft");
-                m_raycastStart = m_raycastStartPosition.Single(r => r.name.Equals("_UpLeft"));
-            } else if(AvatarMovement.Movement.x > 0 && AvatarMovement.Movement.y < 0) {
-                // DownRight
-                //m_raycastStart = GetComponentInChildren<Transform>().Find("RaycastPoint_DownRight");
-                m_raycastStart = m_raycastStartPosition.Single(r => r.name.Equals("_DownRight"));
-            } else if(AvatarMovement.Movement.x < 0 && AvatarMovement.Movement.y < 0) {
-                // DownLeft
-                //m_raycastStart = GetComponentInChildren<Transform>().Find("RaycastPoint_DownLeft");
-                m_raycastStart = m_raycastStartPosition.Single(r => r.name.Equals("_DownLeft"));
-            }
-        }
-    }
-
-    public bool IsObliqueRaycast() {
-        if(AvatarMovement.Movement.x > 0 && AvatarMovement.Movement.y > 0 || AvatarMovement.Movement.x < 0 && AvatarMovement.Movement.y > 0 ||
-           AvatarMovement.Movement.x > 0 && AvatarMovement.Movement.y < 0 || AvatarMovement.Movement.x < 0 && AvatarMovement.Movement.y < 0) {
-            return true;
-        }
-
-        return false;
-    }
-
-    
-
-    private void HeightSettleOnStair(string stairName) {
-        var stairTriggers = GameObject.FindObjectsOfType(typeof(StairsTrigger)) as StairsTrigger[];
-        StairsTrigger currStair = null;
-        foreach(StairsTrigger stair in stairTriggers) {
-            if(stair.gameObject.name == onStairs) {
-                currStair = stair;
-                break;
-            }
-        }
-
-        if(currStair != null) {
-            m_currHeight = currStair.SetPlayerHeightOnStair();
-            Debug.Log("SetPlayerHeightOnStair player height: "+m_currHeight);
-
-            transform.position = new Vector3(transform.position.x, transform.position.y, m_currHeight);
-        }
-
-    }
-
-    */
 }

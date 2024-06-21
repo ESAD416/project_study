@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HitSystem_Lamniat : HitSystem_Avatar
+public class HitSystem_Lamniat : HitSystem_Player<BoxCollider2D>
 {
     [Header("HitSystem_Lamniat 基本物件")]
     [SerializeField] protected Movement_Lamniat m_targetMovement;
@@ -52,19 +52,19 @@ public class HitSystem_Lamniat : HitSystem_Avatar
         IsTakingHit = true;
         m_targetMovement.CanMove = false;
 
-        if(m_target != null) {
-            if(m_target.CurrentBaseState.State.Equals(Constant.BaseState.Move)) {
+        if(m_targetPlayer != null) {
+            if(m_targetPlayer.CurrentBaseState.State.Equals(Constant.CharactorState.Move)) {
                 Debug.Log("Lamniat TakeHit: SetMovementAfterTrigger "+m_targetMovement.Movement);
                 m_targetMovement.SetMovementAfterTrigger(m_targetMovement.Movement);
             }
 
             bool dodged = DodgedTheHit();
             if(dodged) {
-                m_target.SetCurrentBaseState(m_target.Dodge);
+                m_targetPlayer.SetCurrentBaseState(m_targetPlayer.Dodge);
 
                 yield return new WaitForSeconds(m_targetDodge.DodgeClipTime);
             } else {
-                m_target.SetCurrentBaseState(m_target.Hurt);
+                m_targetPlayer.SetCurrentBaseState(m_targetPlayer.Hurt);
 
                 if(!isHyperArmor && m_targetKnockbackFeedback != null) {
                     var dir = SetAttackForceDir(attacker.transform);
@@ -100,19 +100,19 @@ public class HitSystem_Lamniat : HitSystem_Avatar
         IsTakingHit = true;
         m_targetMovement.CanMove = false;
 
-        if(m_target != null) {
-            if(m_target.CurrentBaseState.State.Equals(Constant.BaseState.Move)) {
+        if(m_targetPlayer != null) {
+            if(m_targetPlayer.CurrentBaseState.State.Equals(Constant.CharactorState.Move)) {
                 //m_avatar.SetFacingDir(m_avatar.Movement);
                 m_targetMovement.SetMovementAfterTrigger(m_targetMovement.Movement);
             }
 
             bool dodged = DodgedTheHit();
             if(dodged) {
-                m_target.SetCurrentBaseState(m_target.Dodge);
+                m_targetPlayer.SetCurrentBaseState(m_targetPlayer.Dodge);
 
                 yield return new WaitForSeconds(m_targetDodge.DodgeClipTime);
             } else {
-                m_target.SetCurrentBaseState(m_target.Hurt);
+                m_targetPlayer.SetCurrentBaseState(m_targetPlayer.Hurt);
 
                 if(!isHyperArmor && m_targetKnockbackFeedback != null) {
                     var dir = SetAttackForceDir(attackedLocation);
@@ -141,8 +141,8 @@ public class HitSystem_Lamniat : HitSystem_Avatar
         //m_targetMovement.SetMovement(m_targetMovement.MovementAfterTrigger);
         m_targetMovement.SetMovementAfterTrigger(Vector3.zero);
 
-        if(m_targetMovement.IsMoving) m_target.SetCurrentBaseState(m_target.Move);
-        else m_target.SetCurrentBaseState(m_target.Idle);
+        if(m_targetMovement.IsMoving) m_targetPlayer.SetCurrentBaseState(m_targetPlayer.Move);
+        else m_targetPlayer.SetCurrentBaseState(m_targetPlayer.Idle);
         
         Debug.Log("Lamniat FinishTakeHit end");
     }
@@ -150,9 +150,9 @@ public class HitSystem_Lamniat : HitSystem_Avatar
     protected Vector3 SetAttackForceDir(Transform attackedLocation) {
         var dir = Vector3.zero;
 
-        if(attackedLocation.position.x > m_target.transform.position.x) dir = Vector3.left;
-        else if(attackedLocation.position.x < m_target.transform.position.x) dir = Vector3.right;
-        else if(attackedLocation.position.x == m_target.transform.position.x) {
+        if(attackedLocation.position.x > m_targetPlayer.transform.position.x) dir = Vector3.left;
+        else if(attackedLocation.position.x < m_targetPlayer.transform.position.x) dir = Vector3.right;
+        else if(attackedLocation.position.x == m_targetPlayer.transform.position.x) {
             if(m_targetMovement.FacingDir.x > 0 ) dir = Vector3.left;
             else if(m_targetMovement.FacingDir.x < 0) dir = Vector3.right;
         }

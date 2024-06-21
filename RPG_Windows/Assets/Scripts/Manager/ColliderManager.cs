@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using UnityEngine.InputSystem;
-using Fungus;
 
-public class HeightManager : MonoBehaviour
+public class ColliderManager : MonoBehaviour
 {
-    public static HeightManager instance;
+    public static ColliderManager instance;
 
-    [SerializeField] private Player m_avatar;
+    [SerializeField] private MonoBehaviour m_player;
+    protected IPlayer player;
     [SerializeField] private Tilemap[] mapLevels;
     [SerializeField] private Collider2D[] tilemapColliders;
     [SerializeField] private Collider2D[] tilemapTriggers;
@@ -23,6 +22,8 @@ public class HeightManager : MonoBehaviour
         {
             instance = this;
         }
+
+        player = m_player as IPlayer;
     }
 
     void Start()
@@ -34,9 +35,9 @@ public class HeightManager : MonoBehaviour
 
     void Update()
     {
-        if(m_avatar != null) 
+        if(player != null) 
         {
-            if(m_avatar.OnStairs)
+            if(player.OnStairs)
                 DisableTilemapCollision();
             else
                 UpdateTilemapCollision();
@@ -59,12 +60,12 @@ public class HeightManager : MonoBehaviour
     {
         foreach(var collider2D in tilemapColliders) {
             var heightLevel = collider2D.GetComponent<HeightOfLevel>() as HeightOfLevel;
-            if(heightLevel != null) collider2D.gameObject.SetActive(m_avatar.CurrentHeight == heightLevel.GetSelfHeight());
+            if(heightLevel != null) collider2D.gameObject.SetActive(player.CurrentHeight == heightLevel.GetSelfHeight());
         }
 
         foreach(var trigger2D in tilemapTriggers) {
             var heightLevel = trigger2D.GetComponent<HeightOfLevel>() as HeightOfLevel;
-            if(heightLevel != null) trigger2D.gameObject.SetActive(m_avatar.CurrentHeight == heightLevel.GetSelfHeight());
+            if(heightLevel != null) trigger2D.gameObject.SetActive(player.CurrentHeight == heightLevel.GetSelfHeight());
         }
         
 

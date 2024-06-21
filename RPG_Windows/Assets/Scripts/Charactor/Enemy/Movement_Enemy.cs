@@ -7,7 +7,7 @@ public class Movement_Enemy : MonoBehaviour
     #region 基本物件
 
     [Header("Movement_Enemy 基本物件")]
-    [SerializeField] protected Enemy m_enemy;
+    [SerializeField] protected Enemy<Collider2D> m_enemy;
     [SerializeField] protected Detector_EnemyChase m_detector_chaser;
     protected Rigidbody2D m_enemyRdbd;
     protected SpriteRenderer m_enemySprtRenderer;
@@ -86,8 +86,8 @@ public class Movement_Enemy : MonoBehaviour
     }
 
     protected virtual void FixedUpdate() {
-        if(m_enemy.CurrentBaseState.Equals(Constant.BaseState.Dead) || 
-           m_enemy.CurrentBaseState.Equals(Constant.BaseState.Attack)) {
+        if(m_enemy.CurrentBaseState.Equals(Constant.CharactorState.Dead) || 
+           m_enemy.CurrentBaseState.Equals(Constant.CharactorState.Attack)) {
             SetMovement(Vector3.zero);
         }
         

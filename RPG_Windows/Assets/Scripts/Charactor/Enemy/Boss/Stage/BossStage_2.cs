@@ -10,7 +10,7 @@ public class BossStage_2 : Attack
     [Header("關卡物件")]
     [SerializeField] private ColliderTrigger m_bossVisableRange;
     [SerializeField] private Boss boss;
-    [SerializeField] private Player player;
+    [SerializeField] private Player<Collider2D> player;
     [SerializeField] private AOECtrl indicatorCtrl;
     [SerializeField] private GameObject collider_beforeBattle;
     [SerializeField] private GameObject collider_duringBattle;
@@ -75,7 +75,7 @@ public class BossStage_2 : Attack
     }
 
     private void NextBossState() {
-        switch(boss.CurrentBossState.Stage) {
+        switch(boss.CurrentBossState.State) {
             case Constant.BossState.BeforeStart: 
                 boss.SetCurrentBossState(boss.DuringBattle);
                 StopBattle();
@@ -181,7 +181,7 @@ public class BossStage_2 : Attack
         // 每個AOE攻擊的時段需要不同時地進行
         while(true) {
             // 1. 動態生成攻擊點
-            Vector3 pos = indicatorCtrl.GetTrailedAOEPosition(player);
+            Vector3 pos = indicatorCtrl.GetTrailedAOEPosition();
              // 2. 顯示指示器
             StartCoroutine(DisplayIndicator(pos));
             // 3. 控制攻擊的動畫與傷害機制 etc.

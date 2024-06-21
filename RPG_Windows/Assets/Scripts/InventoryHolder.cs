@@ -8,7 +8,7 @@ using System.Linq;
 [Serializable]
 public class InventoryHolder : MonoBehaviour
 {
-    [SerializeField] protected Player m_target;
+    [SerializeField] protected Transform m_target;
     [SerializeField] private int m_inventorySize;
     [SerializeField] protected InventorySystemModel m_inventorySystem;
     protected BoxCollider2D m_targetHitBoxCollider;
@@ -18,6 +18,9 @@ public class InventoryHolder : MonoBehaviour
 
     public static UnityAction<InventorySystemModel> OnDynamicInventoryDisplayRequested;
 
+    private void Awake() {
+    }
+
     private void Start() {
         m_inventorySystem = new InventorySystemModel(m_inventorySize);
         m_targetHitBoxCollider = GetComponent<BoxCollider2D>();
@@ -25,6 +28,6 @@ public class InventoryHolder : MonoBehaviour
 
     protected virtual void Update() 
     {
-        transform.position = m_target.transform.position;
+        transform.position = m_target.position;
     }
 }

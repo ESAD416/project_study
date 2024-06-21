@@ -4,13 +4,13 @@ using System.Linq;
 using UnityEngine;
 using static JumpMechanismUtils;
 
-public class Jump_Lamniat : MonoBehaviour
+public class Jump_Lamniat<T> : MonoBehaviour where T : Collider2D
 {
     [Header("Jump_Lamniat 基本物件")]
     [SerializeField] protected Lamniat m_Lamniat;
     [SerializeField] protected Movement_Lamniat m_avatarMovement;
     [SerializeField] private ColliderTrigger jumpPoint;
-    [SerializeField] private HeightManager m_hManager;
+    [SerializeField] private ColliderManager m_hManager;
     public JumpState jumpState;
     protected Rigidbody2D m_LamniatRdbd;
     protected SpriteRenderer m_LamniatSprtRenderer;

@@ -7,7 +7,7 @@ using Cinemachine;
 public class AOECtrl : MonoBehaviour
 {
     [Header("基本物件")]
-    [SerializeField] private Enemy boss;
+    [SerializeField] private Enemy<Collider2D> boss;
     [SerializeField] private GameObject areaIndicatorPrefab;
     private float areaIndicatorRadius = 2.048f;  // 根據areaIndicator Sprite Renderer的Bounds與Scale計算得出
 
@@ -217,7 +217,7 @@ public class AOECtrl : MonoBehaviour
 
     
 
-    public Vector3 GetTrailedAOEPosition(Player target) {
+    public Vector3 GetTrailedAOEPosition() {
         if(trailedPos.Equals(Vector3.zero)) {
             // 第一次的生成
             trailedPos = new Vector3( 0, -3);
@@ -268,7 +268,7 @@ public class AOECtrl : MonoBehaviour
         return trailedPos;
     }
 
-    public Vector3 GetPathFindingAOEPosition(Player target) {
+    public Vector3 GetPathFindingAOEPosition() {
         if(trailedPos.Equals(Vector3.zero)) {
             // 第一次的生成
             trailedPos = new Vector3( 0, -3);

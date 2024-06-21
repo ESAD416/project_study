@@ -7,7 +7,7 @@ public class AIChaser : MonoBehaviour
     [Header("Chaser Parameters")]
     [Range(.1f, 5)]
     public float chaseRadius;
-    [SerializeField] private Enemy EnemyAI;
+    [SerializeField] private Enemy<Collider2D> EnemyAI;
     [SerializeField] private LayerMask targetLayer;
     [SerializeField] private LayerMask visibilityLayer;
     public bool targetVisable;
@@ -37,7 +37,7 @@ public class AIChaser : MonoBehaviour
         // if(EnemyAI.isDead) {
         //     transform.gameObject.SetActive(false);
         // } else {
-            if(!EnemyAI.CurrentBaseState.Equals(Constant.BaseState.Attack)) {
+            if(!EnemyAI.CurrentBaseState.Equals(Constant.CharactorState.Attack)) {
                 if(TargetModel != null) {
                     //Debug.Log("TargetModel != null)");
                     targetVisable = CheckTargetVisible();
@@ -82,7 +82,7 @@ public class AIChaser : MonoBehaviour
             var charactor = col.GetComponent<Charactor<Collider2D>>() as Charactor<Collider2D>;
             if(charactor != null) {
                 //Debug.Log("Target m_Center: "+charactor.m_Center);
-                TargetModel = charactor.m_CenterObj;
+                TargetModel = charactor.CenterObj;
             }
             else {
                 TargetModel = col.transform;

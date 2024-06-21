@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 public class Detector_EnemyPatrol : Detector_Overlap2D
 {
-    [SerializeField] protected Enemy m_enemy;
+    [SerializeField] protected Enemy<Collider2D> m_enemy;
     public UnityEvent OnTargetDected;
 
     protected override void Update() {

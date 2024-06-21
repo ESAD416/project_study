@@ -2,13 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Dodge_Avatar : MonoBehaviour
+public class Dodge_Player<T> : MonoBehaviour where T : Collider2D
 {
     #region 基本物件
 
     [Header("基本物件")]
-    [SerializeField] protected Player m_avatar;
-    protected Animator m_avatarAnimator;
+    [SerializeField] private Player<T> m_player;
+
+    protected Animator m_playerAnimator;
 
     #endregion
 
@@ -23,7 +24,7 @@ public class Dodge_Avatar : MonoBehaviour
 
     protected virtual void Awake() 
     {
-        m_avatarAnimator = m_avatar.Animator;
+        m_playerAnimator = m_player.Animator;
     }
 
     // Start is called before the first frame update

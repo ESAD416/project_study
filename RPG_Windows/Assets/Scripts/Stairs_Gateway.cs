@@ -2,10 +2,10 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class Stairs_Gateway : MonoBehaviour
+public class Stairs_Gateway<T> : MonoBehaviour where T : Collider2D
 {
 
-    [SerializeField] protected Player m_avatar;
+    [SerializeField] protected Player<T> m_player;
     [SerializeField] protected StairsController m_stairsCtrl;
     public int SelfHeight;
 
@@ -17,12 +17,12 @@ public class Stairs_Gateway : MonoBehaviour
         // Debug.Log("Stairs_Gateway OnTriggerEnter2D layer: "+otherCollider.gameObject.layer);
         // Debug.Log("Stairs_Gateway OnTriggerEnter2D Hittable layer: "+LayerMask.NameToLayer("Hittable"));
         if(otherCollider.CompareTag("Player") && otherCollider.gameObject.layer !=  LayerMask.NameToLayer("Hittable")) {
-            if(m_avatar.OnStairs) {
+            if(m_player.OnStairs) {
                 Debug.Log("Stairs_Gateway OnTriggerEnter2D name: "+otherCollider.gameObject.name);
-                if(!m_stairsCtrl.OnStairsAtPlayerPosition(m_avatar.BodyCollider.bounds, true)) {
-                    m_avatar.SetCurrentHeight(SelfHeight);
-                    m_avatar.SetLastHeight(SelfHeight);
-                    m_avatar.OnStairs = false;
+                if(!m_stairsCtrl.OnStairsAtPlayerPosition(m_player.BodyCollider.bounds, true)) {
+                    m_player.SetCurrentHeight(SelfHeight);
+                    m_player.SetLastHeight(SelfHeight);
+                    m_player.SetOnStairs(false);
                 }
             }
  
@@ -32,10 +32,10 @@ public class Stairs_Gateway : MonoBehaviour
 
     protected void OnTriggerExit2D(Collider2D otherCollider) {
         if(otherCollider.CompareTag("Player") && otherCollider.gameObject.layer !=  LayerMask.NameToLayer("Hittable") ) {
-            if(!m_avatar.OnStairs) {
+            if(!m_player.OnStairs) {
                 Debug.Log("Stairs_Gateway OnTriggerEnter2D name: "+otherCollider.gameObject.name);
-                if(m_stairsCtrl.OnStairsAtPlayerPosition(m_avatar.BodyCollider.bounds)) {
-                    m_avatar.OnStairs = true;
+                if(m_stairsCtrl.OnStairsAtPlayerPosition(m_player.BodyCollider.bounds)) {
+                    m_player.SetOnStairs(true);
                 }
             } 
         }

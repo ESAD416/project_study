@@ -10,14 +10,12 @@ public static class Constant
         TouchScreen
     };
 
-    public enum BaseState {
+    public enum CharactorState {
         Idle, Move, Attack, Jump, Dodge, Hurt, Dead,
     }
-
     public enum EnemyState {
         Patrol, Chase, 
     }
-
     public enum BossState {
         BeforeStart, DuringBattle, AnimePerformance, BattleFinish
     }

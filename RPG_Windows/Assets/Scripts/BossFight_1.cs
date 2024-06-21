@@ -15,14 +15,14 @@ public class BossFight_1 : MonoBehaviour
 
     [SerializeField] private ColliderTrigger colliderTrigger;
     private Stage stage;
-    private Enemy boss;
+    private Enemy<Collider2D> boss;
     private float timeToStartBattle = 3f;
     private float indicatorDuration = 3f;
     private float projectileDuration = 2.5f;
     private float delayTime = 1f;
     private int countOfLaunches = 2;
     
-    [SerializeField] private Player player;
+    [SerializeField] private Player<Collider2D> player;
 
     [SerializeField] private DynamicOffsets attackOffsets;
     

@@ -6,7 +6,20 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using static JumpMechanismUtils;
 
-public abstract class Charactor<T> : MonoBehaviour where T : Collider2D 
+public interface ICharactor {
+    Rigidbody2D Rigidbody { get; }
+    SpriteRenderer SprtRenderer { get; }
+    Animator Animator { get; }
+
+    Vector3 Center { get; }
+    Vector3 Buttom { get; }
+    Vector3 Coordinate { get; }
+
+    int CurrentHeight { get; }
+    int LastHeight { get; }
+}
+
+public abstract class Charactor<T> : MonoBehaviour, ICharactor where T : Collider2D 
 {
     #region 角色物件
     [Header("Charactor 基本物件")]
@@ -37,15 +50,15 @@ public abstract class Charactor<T> : MonoBehaviour where T : Collider2D
     /// <summary>
     /// 角色中心Transform
     /// </summary>
-    public Transform m_CenterObj;
+    public Transform CenterObj;
     /// <summary>
     /// 角色底部Transform
     /// </summary>
-    public Transform m_ButtomObj;
+    public Transform ButtomObj;
     /// <summary>
     /// 角色相關資訊存取
     /// </summary>
-    public CharactorData m_InfoStorage;
+    public CharactorData InfoStorage;
 
     #endregion
     
@@ -112,8 +125,8 @@ public abstract class Charactor<T> : MonoBehaviour where T : Collider2D
     protected virtual void Update()
     {
         //Debug.Log("takeHitRoutine == null: "+(takeHitRoutine == null));
-        m_Center = m_CenterObj?.position ?? Vector3.zero;
-        m_Buttom = m_ButtomObj?.position ?? Vector3.zero;
+        m_Center = CenterObj?.position ?? Vector3.zero;
+        m_Buttom = ButtomObj?.position ?? Vector3.zero;
 
         //UpdateCoordinate();
     }

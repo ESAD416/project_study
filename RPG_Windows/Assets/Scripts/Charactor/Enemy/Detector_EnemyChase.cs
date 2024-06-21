@@ -6,7 +6,7 @@ using UnityEngine.Events;
 public class Detector_EnemyChase : Detector_Overlap2D
 {
     public LayerMask VisibilityLayer;
-    [SerializeField] protected Enemy m_enemy;
+    [SerializeField] protected Enemy<Collider2D> m_enemy;
     [SerializeField] protected Movement_Enemy m_enemyMovement;
 
     public bool targetVisable;
@@ -38,14 +38,14 @@ public class Detector_EnemyChase : Detector_Overlap2D
 
     protected override void Update() {
         base.Update();
-        if(m_enemy.CurrentBaseState.Equals(Constant.BaseState.Dead)) 
+        if(m_enemy.CurrentBaseState.Equals(Constant.CharactorState.Dead)) 
         {
             transform.gameObject.SetActive(false);
         } 
     }
 
     protected void FixedUpdate() {
-        if(!m_enemy.CurrentBaseState.Equals(Constant.BaseState.Attack))
+        if(!m_enemy.CurrentBaseState.Equals(Constant.CharactorState.Attack))
         {
             if(TargetModel != null)
             {
@@ -90,8 +90,8 @@ public class Detector_EnemyChase : Detector_Overlap2D
 
                 var charactor = col2d.GetComponent<Charactor<Collider2D>>() as Charactor<Collider2D>;
                 if(charactor != null) {
-                    Debug.Log("Target m_CenterObj: "+charactor.m_CenterObj);
-                    TargetModel = charactor.m_CenterObj;
+                    Debug.Log("Target m_CenterObj: "+charactor.CenterObj);
+                    TargetModel = charactor.CenterObj;
                 }
                 else {
                     TargetModel = col2d.transform;
