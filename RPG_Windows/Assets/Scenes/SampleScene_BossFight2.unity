@@ -138,7 +138,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &28372323
 Transform:
   m_ObjectHideFlags: 0
@@ -9618,7 +9618,6 @@ Transform:
   m_Children:
   - {fileID: 477873383}
   - {fileID: 499398705}
-  - {fileID: 1413215726}
   - {fileID: 1387906178}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -9835,7 +9834,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &428978840
 RectTransform:
   m_ObjectHideFlags: 0
@@ -10661,7 +10660,7 @@ MonoBehaviour:
   Diagonal: {x: 1, y: 1}
   DetectSelectedIndex: 0
   AreaSelectedIndex: 0
-  m_enemy: {fileID: 1775921693}
+  m_enemy: {fileID: 0}
   OnTargetDected:
     m_PersistentCalls:
       m_Calls:
@@ -11016,11 +11015,11 @@ Transform:
   m_GameObject: {fileID: 728844148}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -8, y: 5, z: 0}
+  m_LocalPosition: {x: -8, y: -0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1446191129}
+  m_Father: {fileID: 1474001435}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &728844150
 BoxCollider2D:
@@ -23370,8 +23369,8 @@ MonoBehaviour:
   VisibilityLayer:
     serializedVersion: 2
     m_Bits: 448
-  m_enemy: {fileID: 1775921693}
-  m_enemyMovement: {fileID: 1775921692}
+  m_enemy: {fileID: 0}
+  m_enemyMovement: {fileID: 0}
   targetVisable: 0
   chaseModeDelay: 1
   target: {fileID: 0}
@@ -24074,7 +24073,6 @@ MonoBehaviour:
   followOffset: {x: 0, y: 0, z: -10}
   smoothOffsetY: 500
   smoothOffsetX: 500
-  originalSmoothOffsetY: 0
 --- !u!4 &1089234520
 Transform:
   m_ObjectHideFlags: 0
@@ -27624,11 +27622,11 @@ Transform:
   m_GameObject: {fileID: 1163971022}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 8, y: 5, z: 0}
+  m_LocalPosition: {x: 8, y: -0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1446191129}
+  m_Father: {fileID: 1474001435}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &1163971024
 BoxCollider2D:
@@ -28248,7 +28246,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1413215726
 Transform:
   m_ObjectHideFlags: 0
@@ -28257,7 +28255,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1413215725}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -8.17, y: -2.31, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -28265,7 +28263,7 @@ Transform:
   - {fileID: 1775921687}
   - {fileID: 206334574}
   - {fileID: 1111372392}
-  m_Father: {fileID: 263081889}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1414110658
 GameObject:
@@ -28473,11 +28471,10 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1460614679}
+  - {fileID: 1474001435}
   - {fileID: 1068894817}
   - {fileID: 1021120031}
   - {fileID: 1885775182}
-  - {fileID: 728844149}
-  - {fileID: 1163971023}
   - {fileID: 2095041199}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -28488,7 +28485,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1446191128}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fcc97cbd49cb4674bb9e9af3b2f8d55b, type: 3}
   m_Name: 
@@ -28498,7 +28495,6 @@ MonoBehaviour:
   m_attackRate: 0.5
   m_bossVisableRange: {fileID: 2095041200}
   boss: {fileID: 1460614681}
-  player: {fileID: 0}
   indicatorCtrl: {fileID: 1068894818}
   collider_beforeBattle: {fileID: 774404940}
   collider_duringBattle: {fileID: 1155335850}
@@ -33552,7 +33548,6 @@ GameObject:
   - component: {fileID: 1460614683}
   - component: {fileID: 1460614682}
   - component: {fileID: 1460614681}
-  - component: {fileID: 1460614680}
   - component: {fileID: 1460614684}
   - component: {fileID: 1460614685}
   m_Layer: 8
@@ -33581,29 +33576,6 @@ Transform:
   - {fileID: 730254088}
   m_Father: {fileID: 1446191129}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1460614680
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1460614678}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 46b371a01060be7488b887d9252c3613, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_enemy: {fileID: 0}
-  m_detector_chaser: {fileID: 0}
-  defaultMovement: {x: -1, y: 0, z: 0}
-  m_moveSpeed: 5
-  m_movement: {x: 0, y: 0, z: 0}
-  m_facingDir: {x: 0, y: -1}
-  CanMove: 1
-  moveRight: 0
-  m_leftDetector_Patrol: {fileID: 0}
-  m_rightDetector_Patrol: {fileID: 0}
-  pathTurn: []
 --- !u!114 &1460614681
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -33620,16 +33592,17 @@ MonoBehaviour:
   m_bodyCollider: {fileID: 0}
   m_SprtRenderer: {fileID: 1681162783}
   m_Animator: {fileID: 1681162784}
-  CenterObj: {fileID: 0}
-  ButtomObj: {fileID: 0}
+  CenterObj: {fileID: 1169824244}
+  ButtomObj: {fileID: 102977124}
   InfoStorage: {fileID: 0}
   m_Center: {x: 0, y: 0, z: 0}
   m_Buttom: {x: 0, y: 0, z: 0}
   m_Coordinate: {x: 0, y: 0, z: 0}
   m_currHeight: 0
   m_lastHeight: 0
-  m_enemyMovement: {fileID: 1460614680}
-  healthBar: {fileID: 0}
+  m_currBaseStateName: 0
+  m_enemyMovement: {fileID: 0}
+  m_currEnemyStateName: 0
   isPatroling: 0
   isChasing: 0
 --- !u!58 &1460614682
@@ -33715,7 +33688,7 @@ MonoBehaviour:
   invulnerableDuration: 0
   isHyperArmor: 0
   m_target: {fileID: 0}
-  m_targetMovement: {fileID: 1460614680}
+  m_targetMovement: {fileID: 0}
 --- !u!114 &1460614685
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -33732,6 +33705,62 @@ MonoBehaviour:
   flashDuration: 0.25
   spriteRenderers:
   - {fileID: 1681162783}
+--- !u!1 &1474001433
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1474001435}
+  - component: {fileID: 1474001436}
+  m_Layer: 8
+  m_Name: _Movement
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1474001435
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1474001433}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 5.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 728844149}
+  - {fileID: 1163971023}
+  m_Father: {fileID: 1446191129}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1474001436
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1474001433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46b371a01060be7488b887d9252c3613, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_target: {fileID: 0}
+  m_moveSpeed: 11
+  m_movement: {x: 0, y: 0, z: 0}
+  defaultMovement: {x: -1, y: 0, z: 0}
+  m_facingDir: {x: 0, y: -1}
+  CanMove: 1
+  MoveRight: 0
+  pathTurn:
+  - {fileID: 728844149}
+  - {fileID: 1163971023}
 --- !u!1 &1481818253
 GameObject:
   m_ObjectHideFlags: 0
@@ -33898,7 +33927,7 @@ MonoBehaviour:
   Diagonal: {x: 1, y: 1}
   DetectSelectedIndex: 0
   AreaSelectedIndex: 0
-  m_enemy: {fileID: 1775921693}
+  m_enemy: {fileID: 0}
   OnTargetDected:
     m_PersistentCalls:
       m_Calls:
@@ -35305,7 +35334,6 @@ GameObject:
   - component: {fileID: 1775921687}
   - component: {fileID: 1775921691}
   - component: {fileID: 1775921690}
-  - component: {fileID: 1775921693}
   - component: {fileID: 1775921692}
   - component: {fileID: 1775921694}
   - component: {fileID: 1775921695}
@@ -35344,7 +35372,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1775921686}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ef64173f5e1691245a279fdef620bba1, type: 3}
   m_Name: 
@@ -35467,31 +35495,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46b371a01060be7488b887d9252c3613, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_enemy: {fileID: 1775921693}
-  m_detector_chaser: {fileID: 978018467}
-  defaultMovement: {x: -1, y: 0, z: 0}
+  m_target: {fileID: 0}
   m_moveSpeed: 5
   m_movement: {x: 0, y: 0, z: 0}
+  defaultMovement: {x: -1, y: 0, z: 0}
   m_facingDir: {x: 0, y: -1}
   CanMove: 1
-  moveRight: 0
-  m_leftDetector_Patrol: {fileID: 545469557}
-  m_rightDetector_Patrol: {fileID: 1484209582}
+  MoveRight: 0
   pathTurn:
   - {fileID: 206334574}
   - {fileID: 1111372392}
---- !u!114 &1775921693
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1775921686}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e5eb7c864b2e8bd418340354addb4e01, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1775921694
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35499,7 +35512,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1775921686}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fd50083ee31969140b2a344481aba170, type: 3}
   m_Name: 
@@ -35521,7 +35534,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1775921686}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f9acd25bd9a61c249b46975fedb0bba0, type: 3}
   m_Name: 
@@ -35534,8 +35547,8 @@ MonoBehaviour:
   IsInvulnerable: 0
   invulnerableDuration: 0
   isHyperArmor: 0
-  m_target: {fileID: 1775921693}
-  m_targetMovement: {fileID: 1775921692}
+  m_target: {fileID: 0}
+  m_targetMovement: {fileID: 0}
 --- !u!1 &1791242195
 GameObject:
   m_ObjectHideFlags: 0
@@ -46560,6 +46573,7 @@ SceneRoots:
   - {fileID: 1569567304}
   - {fileID: 7097799775144810727}
   - {fileID: 263081889}
+  - {fileID: 1413215726}
   - {fileID: 1446191129}
   - {fileID: 1696049600}
   - {fileID: 1064822884}

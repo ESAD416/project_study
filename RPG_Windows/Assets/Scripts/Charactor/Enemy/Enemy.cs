@@ -2,42 +2,51 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy<T> : Charactor<T> where T : Collider2D
+public interface IEnemy : ICharactor 
+{
+    public Constant.CharactorState CurrentEnemyStateName { get; }
+}
+
+public class Enemy<T> : Charactor<T>, IEnemy where T : Collider2D
 {
     [Header("Enemy 基本物件")]
-    [SerializeField] protected Movement_Enemy m_enemyMovement;
-    public Movement_Enemy EnemyMovement => m_enemyMovement;
-    [SerializeField] protected HealthBar healthBar;
+    [SerializeField] protected Movement_Base m_enemyMovement;
+    public Movement_Enemy EnemyMovement => m_enemyMovement as Movement_Enemy;
 
     #region 敵人狀態
-    protected CharactorStateMachine<Enemy<T>, T> m_currentBaseState;
-    public CharactorStateMachine<Enemy<T>, T> CurrentBaseState => m_currentBaseState;
+    protected new CharactorStateMachine<Enemy<T>, T> m_currentBaseState;
+    public new CharactorStateMachine<Enemy<T>, T> CurrentBaseState => m_currentBaseState;
     public void SetCurrentBaseState(CharactorStateMachine<Enemy<T>, T> state) {
-        this.m_currentBaseState.OnExit();
+        this.m_currentBaseState?.OnExit();
         this.m_currentBaseState = state;
         this.m_currentBaseState.OnEnter(this);
     }
 
-    protected CharactorStateMachine<Enemy<T>, T> m_idle;
-    public CharactorStateMachine<Enemy<T>, T> Idle => this.m_idle;
-    protected CharactorStateMachine<Enemy<T>, T> m_move;
-    public CharactorStateMachine<Enemy<T>, T> Move => this.m_move;
-    protected CharactorStateMachine<Enemy<T>, T> m_attack;
-    public CharactorStateMachine<Enemy<T>, T> Attack => this.m_attack;
-    protected CharactorStateMachine<Enemy<T>, T> m_hurt;
-    public CharactorStateMachine<Enemy<T>, T> Hurt => this.m_hurt;
-    protected CharactorStateMachine<Enemy<T>, T> m_dead;
-    public CharactorStateMachine<Enemy<T>, T> Dead => this.m_dead;
+    protected new CharactorStateMachine<Enemy<T>, T> m_idle;
+    public new CharactorStateMachine<Enemy<T>, T> Idle => m_idle;
+    protected new CharactorStateMachine<Enemy<T>, T> m_move;
+    public new CharactorStateMachine<Enemy<T>, T> Move => m_move;
+    protected new CharactorStateMachine<Enemy<T>, T> m_attack;
+    public new CharactorStateMachine<Enemy<T>, T> Attack => m_attack;
+    protected new CharactorStateMachine<Enemy<T>, T> m_jump;
+    public new CharactorStateMachine<Enemy<T>, T> Jump => m_jump;
+    protected new CharactorStateMachine<Enemy<T>, T> m_hurt;
+    public new CharactorStateMachine<Enemy<T>, T> Hurt => m_hurt;
+    protected new CharactorStateMachine<Enemy<T>, T> m_dodge;
+    public new CharactorStateMachine<Enemy<T>, T> Dodge => m_dodge;
+    protected new CharactorStateMachine<Enemy<T>, T> m_dead;
+    public new CharactorStateMachine<Enemy<T>, T> Dead => m_dead;
 
 
     protected EnemyStateMachine<T> m_currentEnemyState;
     public EnemyStateMachine<T> CurrentEnemyState => m_currentEnemyState;
     public void SetCurrentEnemyState(EnemyStateMachine<T> state) {
-        this.m_currentEnemyState.OnExit();
+        this.m_currentEnemyState?.OnExit();
         this.m_currentEnemyState = state;
-
         this.m_currentEnemyState.OnEnter(this);
     }
+    [SerializeField] protected Constant.CharactorState m_currEnemyStateName;
+    public Constant.CharactorState CurrentEnemyStateName => this.m_currEnemyStateName;
 
     protected EnemyStateMachine<T> m_patrol;
     public EnemyStateMachine<T> Patrol => this.m_patrol;
@@ -63,15 +72,17 @@ public class Enemy<T> : Charactor<T> where T : Collider2D
         m_chase = new ChaseState_Enemy<T>(this);
     }
 
-    protected override void OnEnable() {
-        base.OnEnable();
-
+    protected virtual void OnEnable() {
         m_currentBaseState = m_idle;
         m_currentBaseState.OnEnter();
 
         m_currentEnemyState = m_patrol;
         m_currentEnemyState.OnEnter();
+    }
 
+    protected virtual void OnDisable() {
+        m_currentBaseState?.OnExit();
+        m_currentEnemyState?.OnExit();
     }
 
     // Start is called before the first frame update
@@ -86,6 +97,8 @@ public class Enemy<T> : Charactor<T> where T : Collider2D
     protected override void Update() {
         //Debug.Log("moveSpeed: "+moveSpeed);
         m_currentBaseState.OnUpdate();
+        m_currBaseStateName = m_currentBaseState.State;
+
         m_currentEnemyState.OnUpdate();
 
         base.Update();
@@ -99,10 +112,7 @@ public class Enemy<T> : Charactor<T> where T : Collider2D
         base.FixedUpdate();
     }
 
-    protected virtual void OnDisable() {
-        m_currentBaseState.OnExit();
-        m_currentEnemyState.OnExit();
-    }
+
 
     public virtual void OnAttack() {
         Debug.Log("Enemy_Abstract onAttack: ");
@@ -112,9 +122,4 @@ public class Enemy<T> : Charactor<T> where T : Collider2D
         //attackRoutine = StartCoroutine(Attack());
     }
 
-    // public override void DmgCalculate(int damage)
-    // {
-    //     base.DmgCalculate(damage);
-    //     healthBar.SetHealth(currHealth, maxHealth);
-    // }
 }

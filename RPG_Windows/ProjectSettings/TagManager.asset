@@ -5,8 +5,6 @@ TagManager:
   serializedVersion: 2
   tags:
   - Stairs
-  - Enemies
-  - Enemy_Turn
   - BreakableObj
   - Map_Collision
   - Map_Jump_Trigger

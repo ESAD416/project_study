@@ -55,7 +55,6 @@ public class HitSystem_Lamniat : HitSystem_Player<BoxCollider2D>
         if(m_targetPlayer != null) {
             if(m_targetPlayer.CurrentBaseState.State.Equals(Constant.CharactorState.Move)) {
                 Debug.Log("Lamniat TakeHit: SetMovementAfterTrigger "+m_targetMovement.Movement);
-                m_targetMovement.SetMovementAfterTrigger(m_targetMovement.Movement);
             }
 
             bool dodged = DodgedTheHit();
@@ -103,7 +102,6 @@ public class HitSystem_Lamniat : HitSystem_Player<BoxCollider2D>
         if(m_targetPlayer != null) {
             if(m_targetPlayer.CurrentBaseState.State.Equals(Constant.CharactorState.Move)) {
                 //m_avatar.SetFacingDir(m_avatar.Movement);
-                m_targetMovement.SetMovementAfterTrigger(m_targetMovement.Movement);
             }
 
             bool dodged = DodgedTheHit();
@@ -139,7 +137,6 @@ public class HitSystem_Lamniat : HitSystem_Player<BoxCollider2D>
         m_targetMovement.CanMove = true;
         
         //m_targetMovement.SetMovement(m_targetMovement.MovementAfterTrigger);
-        m_targetMovement.SetMovementAfterTrigger(Vector3.zero);
 
         if(m_targetMovement.IsMoving) m_targetPlayer.SetCurrentBaseState(m_targetPlayer.Move);
         else m_targetPlayer.SetCurrentBaseState(m_targetPlayer.Idle);

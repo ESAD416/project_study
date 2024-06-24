@@ -10,7 +10,6 @@ public class BossStage_2 : Attack
     [Header("關卡物件")]
     [SerializeField] private ColliderTrigger m_bossVisableRange;
     [SerializeField] private Boss boss;
-    [SerializeField] private Player<Collider2D> player;
     [SerializeField] private AOECtrl indicatorCtrl;
     [SerializeField] private GameObject collider_beforeBattle;
     [SerializeField] private GameObject collider_duringBattle;

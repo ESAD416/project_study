@@ -82,7 +82,6 @@ public class Combat_Player<T> : Attack where T : Collider2D
         m_playerMovement.CanMove = true;
         
         //m_avatarMovement.SetMovement(m_avatarMovement.MovementAfterTrigger);
-        m_playerMovement.SetMovementAfterTrigger(Vector3.zero);
         
         if(m_playerMovement.IsMoving) m_player.SetCurrentBaseState(m_player.Move);
         else m_player.SetCurrentBaseState(m_player.Idle);

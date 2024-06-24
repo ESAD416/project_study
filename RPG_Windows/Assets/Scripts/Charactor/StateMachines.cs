@@ -19,6 +19,7 @@ public abstract class CharactorStateMachine<T1, T2>
     public abstract void OnExit();
 }
 
+
 #region 角色基本狀態機 for Player
 
 public abstract class CharactorStateMachine_Player<T> : CharactorStateMachine<Player<T>, T> where T : Collider2D 
@@ -335,7 +336,7 @@ public class IdleState_Enemy<T> : CharactorStateMachine_Enemy<T> where T : Colli
     }
     public override void OnUpdate()
     {
-        Debug.Log("IdleState_Enemy OnUpdate");
+        // Debug.Log("IdleState_Enemy OnUpdate");
         AnimeUtils.ActivateAnimatorLayer(this.m_currentCharactor.Animator, "IdleLayer");
     }
 }
@@ -519,6 +520,7 @@ public class DeadState_Enemy<T> : CharactorStateMachine_Enemy<T> where T : Colli
 }
 
 #endregion
+
 
 #region 基本狀態機 for Boss
 

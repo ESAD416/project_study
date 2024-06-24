@@ -25,7 +25,6 @@ public class Lamniat : Player<BoxCollider2D>
     }
     protected override void OnEnable() 
     {
-
         m_idle = new IdleState_Lamniat(this);
         m_move = new MoveState_Lamniat(this);
         m_attack = new AttackState_Lamniat(this);

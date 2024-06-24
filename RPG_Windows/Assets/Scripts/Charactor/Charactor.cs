@@ -17,6 +17,8 @@ public interface ICharactor {
 
     int CurrentHeight { get; }
     int LastHeight { get; }
+
+    public Constant.CharactorState CurrentBaseStateName { get; }
 }
 
 public abstract class Charactor<T> : MonoBehaviour, ICharactor where T : Collider2D 
@@ -85,19 +87,7 @@ public abstract class Charactor<T> : MonoBehaviour, ICharactor where T : Collide
 
     #endregion
 
-    #region 移動參數
-    /// <summary>
-    /// 角色目前是否能移動
-    /// </summary>
-    // public bool cantMove {
-    //     get {
-    //         bool jumpingUpButNotFinish = isJumping && jumpState == JumpState.JumpUp && jumpIncrement < 1f;
-    //         return jumpingUpButNotFinish || jumpHitColli || (isTakingHit && !hyperArmor);
-    //     }
-    // }
-    #endregion
-
-    #region 跳躍參數
+    #region 高度參數
     [Header("")]
     [SerializeField] protected int m_currHeight = 0;
     public int CurrentHeight => m_currHeight;
@@ -108,12 +98,38 @@ public abstract class Charactor<T> : MonoBehaviour, ICharactor where T : Collide
     public void SetLastHeight(int height) => this.m_lastHeight = height;
     
     #endregion
+
+    #region 角色狀態
+
+    protected CharactorStateMachine<Charactor<T>, T> m_currentBaseState;
+    public CharactorStateMachine<Charactor<T>, T> CurrentBaseState => this.m_currentBaseState;
+    public void SetCurrentBaseState(CharactorStateMachine<Charactor<T>, T> state) {
+        this.m_currentBaseState?.OnExit();
+        this.m_currentBaseState = state;
+        this.m_currentBaseState.OnEnter(this);
+    }
+    [SerializeField] protected Constant.CharactorState m_currBaseStateName;
+    public Constant.CharactorState CurrentBaseStateName => this.m_currBaseStateName;
+
+    protected CharactorStateMachine<Charactor<T>, T> m_idle;
+    public CharactorStateMachine<Charactor<T>, T> Idle => m_idle;
+    protected CharactorStateMachine<Charactor<T>, T> m_move;
+    public CharactorStateMachine<Charactor<T>, T> Move => m_move;
+    protected CharactorStateMachine<Charactor<T>, T> m_attack;
+    public CharactorStateMachine<Charactor<T>, T> Attack => m_attack;
+    protected CharactorStateMachine<Charactor<T>, T> m_jump;
+    public CharactorStateMachine<Charactor<T>, T> Jump => m_jump;
+    protected CharactorStateMachine<Charactor<T>, T> m_hurt;
+    public CharactorStateMachine<Charactor<T>, T> Hurt => m_hurt;
+    protected CharactorStateMachine<Charactor<T>, T> m_dodge;
+    public CharactorStateMachine<Charactor<T>, T> Dodge => m_dodge;
+    protected CharactorStateMachine<Charactor<T>, T> m_dead;
+    public CharactorStateMachine<Charactor<T>, T> Dead => m_dead;
+
+    #endregion
     
     protected virtual void Awake() {
         m_Coordinate = transform.position;
-    }
-
-    protected virtual void OnEnable() {
     }
 
     // Start is called before the first frame update

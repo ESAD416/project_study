@@ -2,8 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Movement_Enemy : MonoBehaviour
+public class Movement_Enemy : Movement_Base
 {
+    /// <summary>
+    /// 角色目前是否為移動中
+    /// </summary>
+    public new bool IsMoving {
+        get {
+            return m_movement != Vector2.zero && m_moveSpeed > 0f;
+        }
+    }
+
+    [Header("Movement_Enemy 基本參數")]
+    [SerializeField] protected Vector3 defaultMovement = Vector3.left;
+
+
     #region 基本物件
 
     [Header("Movement_Enemy 基本物件")]
@@ -14,58 +27,6 @@ public class Movement_Enemy : MonoBehaviour
     protected Animator m_enemyAnimator;
 
     #endregion
-
-    #region 基本參數
-
-    [Header("Movement_Enemy 基本參數")]
-    [SerializeField] protected Vector3 defaultMovement = Vector3.left;
-    [SerializeField] protected float m_moveSpeed = 11f;
-    /// <summary>
-    /// 角色移速
-    /// </summary>
-    public float MoveSpeed => m_moveSpeed;
-    /// <summary>
-    /// 更改角色移速
-    /// </summary>
-    public void SetMoveSpeed(float speed) {
-        this.m_moveSpeed = speed;
-    }
-    
-    [SerializeField] protected Vector3 m_movement = Vector3.zero;
-    /// <summary>
-    /// 角色移動向量
-    /// </summary>
-    public Vector3 Movement => m_movement;
-    /// <summary>
-    /// 更改角色向量
-    /// </summary>
-    public void SetMovement(Vector3 vector3) {
-        // Debug.Log("SetMovement: "+vector3);
-        this.m_movement = vector3;
-    }
-    /// <summary>
-    /// 角色面向方向
-    /// </summary>
-    [SerializeField] protected Vector2 m_facingDir = Vector2.down;
-    public Vector2 FacingDir => m_facingDir;
-    /// <summary>
-    /// 更改角色面向方向
-    /// </summary>
-    public void SetFacingDir(Vector2 vector2) {
-        this.m_facingDir = vector2;
-    }
-    /// <summary>
-    /// 角色目前是否為移動中
-    /// </summary>
-    public bool isMoving {
-        get {
-            return (m_movement.x != 0 || m_movement.y != 0) && m_moveSpeed > 0f;
-        }
-    }
-
-    public bool CanMove = true;
-
-    # endregion
 
     protected virtual void Awake() {
         m_enemyRdbd = m_enemy.Rigidbody;

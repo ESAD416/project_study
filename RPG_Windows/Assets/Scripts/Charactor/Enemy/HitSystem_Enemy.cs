@@ -124,7 +124,7 @@ public class HitSystem_Enemy : HitSystem
         IsTakingHit = false;
         IsInvulnerable = false;
 
-        if(m_targetMovement != null && m_targetMovement.isMoving) m_target.SetCurrentBaseState(m_target.Move);
+        if(m_targetMovement != null && m_targetMovement.IsMoving) m_target.SetCurrentBaseState(m_target.Move);
         else m_target.SetCurrentBaseState(m_target.Idle);
         
         Debug.Log("FinishTakeHit");

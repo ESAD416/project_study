@@ -110,7 +110,6 @@ public class Combat_Lamniat : Combat_Player<BoxCollider2D>
         if(m_player.CurrentBaseState.State.Equals(Constant.CharactorState.Move)) {
             m_playerMovement.SetFacingDir(m_playerMovement.Movement);
             //m_avatar.SetFacingDir(m_avatar.Movement);
-            m_playerMovement.SetMovementAfterTrigger(m_playerMovement.Movement);
         }
 
         m_playerMovement.CanMove = false;
@@ -147,7 +146,6 @@ public class Combat_Lamniat : Combat_Player<BoxCollider2D>
         m_playerMovement.CanMove = true;
 
         //m_avatarMovement.SetMovement(m_avatarMovement.MovementAfterTrigger);
-        m_playerMovement.SetMovementAfterTrigger(Vector3.zero);
         
         if(m_playerMovement.IsMoving) m_player.SetCurrentBaseState(m_player.Move);
         else m_player.SetCurrentBaseState(m_player.Idle);
@@ -245,7 +243,6 @@ public class Combat_Lamniat : Combat_Player<BoxCollider2D>
         m_playerMovement.CanMove = true;
 
         //m_avatarMovement.SetMovement(m_avatarMovement.MovementAfterTrigger);
-        m_playerMovement.SetMovementAfterTrigger(Vector3.zero);
         
         if(m_playerMovement.IsMoving) m_player.SetCurrentBaseState(m_player.Move);
         else m_player.SetCurrentBaseState(m_player.Idle);
