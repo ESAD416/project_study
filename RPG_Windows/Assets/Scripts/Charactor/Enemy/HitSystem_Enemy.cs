@@ -6,7 +6,7 @@ public class HitSystem_Enemy : HitSystem
 {
     [Header("Enemy基本物件")]
     [SerializeField] protected Enemy<Collider2D> m_target;
-    [SerializeField] protected Movement_Enemy m_targetMovement;
+    [SerializeField] protected Movement_Base m_targetMovement;
 
 
     private Animator m_targetAnimator;

@@ -94,7 +94,7 @@ public abstract class Movement_Base : MonoBehaviour
     /// </summary>
     public bool IsMoving {
         get {
-            return this.m_movement != Vector2.zero;
+            return this.m_targetRdbd.velocity != Vector2.zero;
         }
     }
     /// <summary>
@@ -106,4 +106,40 @@ public abstract class Movement_Base : MonoBehaviour
 
     #endregion
 
+    [Header("Movement 目標對象")]
+    [SerializeField] protected MonoBehaviour m_movingTarget;
+    protected ICharactor movingTarget;
+    protected Rigidbody2D m_targetRdbd;
+    protected SpriteRenderer m_targetSprtRenderer;
+    protected Animator m_targetAnimator;
+
+    protected virtual void Awake() {
+        movingTarget = m_movingTarget as ICharactor;
+        
+        m_targetRdbd = movingTarget.Rigidbody;
+        m_targetSprtRenderer = movingTarget.SprtRenderer;
+        m_targetAnimator = movingTarget.Animator;
+    }
+
+    protected virtual void OnEnable() {
+        StartMovement();
+    }
+
+    protected virtual void OnDisable() {
+        StopMovement();
+    }
+
+    protected virtual void FixedUpdate() {
+        if(CanMove) m_targetRdbd.velocity = m_movement.normalized * MoveSpeed;
+        //Debug.Log("velocity: "+m_targetRdbd.velocity);
+    }
+
+    public void StartMovement() {
+        CanMove = true;
+    }
+
+    public void StopMovement() {
+        CanMove = false;
+        m_targetRdbd.velocity = Vector2.zero;
+    }
 }

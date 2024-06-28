@@ -21,14 +21,14 @@ public class Movement_Enemy : Movement_Base
 
     [Header("Movement_Enemy 基本物件")]
     [SerializeField] protected Enemy<Collider2D> m_enemy;
-    [SerializeField] protected Detector_EnemyChase m_detector_chaser;
+    [SerializeField] protected Detector_EnemyPursuing m_detector_chaser;
     protected Rigidbody2D m_enemyRdbd;
     protected SpriteRenderer m_enemySprtRenderer;
     protected Animator m_enemyAnimator;
 
     #endregion
 
-    protected virtual void Awake() {
+    protected override void Awake() {
         m_enemyRdbd = m_enemy.Rigidbody;
         m_enemySprtRenderer = m_enemy.SprtRenderer;
         m_enemyAnimator = m_enemy.Animator;
@@ -46,13 +46,14 @@ public class Movement_Enemy : Movement_Base
         if(m_enemyAnimator != null) m_enemyAnimator.SetFloat("moveSpeed", m_moveSpeed);
     }
 
-    protected virtual void FixedUpdate() {
+    protected override void FixedUpdate() {
         if(m_enemy.CurrentBaseState.Equals(Constant.CharactorState.Dead) || 
            m_enemy.CurrentBaseState.Equals(Constant.CharactorState.Attack)) {
             SetMovement(Vector3.zero);
         }
         
-        Move();
+        base.FixedUpdate();
+        //Move();
 
         // if(!cantMove) {
         //     if(isJumping && jumpState == JumpState.JumpUp) {

@@ -610,6 +610,9 @@ public class PatrolState_Enemy<T> : EnemyStateMachine<T> where T : Collider2D
     public override void OnEnter()
     {
         // OnEnter
+        // bool temp = this.currentEnemy.EnemyPursuingMovement.Equals(this.currentEnemy.EnemyCurrentMovement);
+        // Debug.Log("PatrolState_Enemy isCurrentMovement: "+temp);
+        this.currentEnemy.ChangeMovement(this.currentEnemy.EnemyPatrolMovement);
     }
 
     public override void OnUpdate()
@@ -628,11 +631,11 @@ public class PatrolState_Enemy<T> : EnemyStateMachine<T> where T : Collider2D
     }
 }
 
-public class ChaseState_Enemy<T> : EnemyStateMachine<T> where T : Collider2D
+public class PursuingState_Enemy<T> : EnemyStateMachine<T> where T : Collider2D
 {
-    public ChaseState_Enemy(Enemy<T> enemy) {
+    public PursuingState_Enemy(Enemy<T> enemy) {
         this.currentEnemy = enemy;
-        this.m_eState = Constant.EnemyState.Chase;
+        this.m_eState = Constant.EnemyState.Pursuing;
     }
 
     public override void OnEnter(Enemy<T> enemy)
@@ -643,6 +646,7 @@ public class ChaseState_Enemy<T> : EnemyStateMachine<T> where T : Collider2D
     public override void OnEnter()
     {
         // OnEnter
+        this.currentEnemy.ChangeMovement(this.currentEnemy.EnemyPursuingMovement);
     }
 
     public override void OnUpdate()
@@ -691,7 +695,7 @@ public class BeforeStartState<T> : BossStateMachine<T> where T : Collider2D
     public override void OnEnter()
     {
         // OnEnter
-        this.currentBoss.EnemyMovement.SetMoveSpeed(0f);
+        this.currentBoss.EnemyCurrentMovement.StopMovement();
         this.currentBoss.SetCurrentBaseState(this.currentBoss.Idle);
 
         var hitSystem = this.currentBoss.GetComponent<HitSystem_Enemy>();
@@ -735,7 +739,8 @@ public class DuringBattleState<T> : BossStateMachine<T> where T : Collider2D
     public override void OnEnter()
     {
         // OnEnter
-        this.currentBoss.EnemyMovement.SetMoveSpeed(5f);
+        this.currentBoss.EnemyCurrentMovement.SetMoveSpeed(5f);
+        this.currentBoss.EnemyCurrentMovement.StartMovement();
         this.currentBoss.SetCurrentBaseState(this.currentBoss.Move);
 
         var hitSystem = this.currentBoss.GetComponent<HitSystem_Enemy>();

@@ -342,9 +342,9 @@ public class EnemyPatrolDetectorEditor : Editor {
     }
 }
 
-[CustomEditor(typeof(Detector_EnemyChase))]
-public class EnemyChaseDetectorEditor : Editor {
-    private Detector_EnemyChase adjustOverlap2D;
+[CustomEditor(typeof(Detector_EnemyPursuing))]
+public class EnemyPursuingDetectorEditor : Editor {
+    private Detector_EnemyPursuing adjustOverlap2D;
 
     // Overlap 所需要定義的全域變數
     private SerializedProperty Radius;
@@ -359,7 +359,7 @@ public class EnemyChaseDetectorEditor : Editor {
     private string[] areaOptions = new string[] { "Circular", "Box", "Rectangular", "Point"};
 
     private void OnEnable() {
-        adjustOverlap2D = (Detector_EnemyChase)target;
+        adjustOverlap2D = (Detector_EnemyPursuing)target;
 
         Radius = serializedObject.FindProperty("Radius");
         BoxSize = serializedObject.FindProperty("BoxSize");

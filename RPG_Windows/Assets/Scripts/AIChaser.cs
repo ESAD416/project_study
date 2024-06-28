@@ -28,8 +28,8 @@ public class AIChaser : MonoBehaviour
     public bool showGizmos = true;
 
     private void Start() {
-        EnemyAI.isPatroling = false;
-        EnemyAI.isChasing = true;
+        // EnemyAI.IsPatroling = false;
+        // EnemyAI.IsPursuing = true;
         StartCoroutine(Detection());
     }
 
@@ -123,8 +123,8 @@ public class AIChaser : MonoBehaviour
 
         yield return new WaitForSeconds(chaseModeDelay);  // hardcasted casted time for debugged
         if(TargetModel == null) {
-            EnemyAI.isPatroling = true;
-            EnemyAI.isChasing = false;
+            // EnemyAI.IsPatroling = true;
+            // EnemyAI.IsPursuing = false;
             targetVisable = false;
             //EnemyAI.SetDefaultMovement();
             transform.gameObject.SetActive(false);

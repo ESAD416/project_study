@@ -11,6 +11,8 @@ public interface ICharactor {
     SpriteRenderer SprtRenderer { get; }
     Animator Animator { get; }
 
+    Transform CenterObj { get; }
+
     Vector3 Center { get; }
     Vector3 Buttom { get; }
     Vector3 Coordinate { get; }
@@ -53,6 +55,7 @@ public abstract class Charactor<T> : MonoBehaviour, ICharactor where T : Collide
     /// 角色中心Transform
     /// </summary>
     public Transform CenterObj;
+    Transform ICharactor.CenterObj => this.CenterObj;
     /// <summary>
     /// 角色底部Transform
     /// </summary>
@@ -127,7 +130,7 @@ public abstract class Charactor<T> : MonoBehaviour, ICharactor where T : Collide
     public CharactorStateMachine<Charactor<T>, T> Dead => m_dead;
 
     #endregion
-    
+
     protected virtual void Awake() {
         m_Coordinate = transform.position;
     }

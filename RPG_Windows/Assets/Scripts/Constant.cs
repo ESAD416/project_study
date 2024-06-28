@@ -14,7 +14,7 @@ public static class Constant
         Idle, Move, Attack, Jump, Dodge, Hurt, Dead,
     }
     public enum EnemyState {
-        Patrol, Chase, 
+        Patrol, Pursuing, 
     }
     public enum BossState {
         BeforeStart, DuringBattle, AnimePerformance, BattleFinish

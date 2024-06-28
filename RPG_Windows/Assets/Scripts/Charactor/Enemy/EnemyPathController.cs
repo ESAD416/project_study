@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemyPathController : MonoBehaviour
 {
     [SerializeField] private Enemy<Collider2D> Enemy;
-    [SerializeField] private Detector_EnemyChase Chaser;
+    [SerializeField] private Detector_EnemyPursuing Chaser;
     [SerializeField] private bool isHorizontal;
 
     private Vector3 defaultPos;

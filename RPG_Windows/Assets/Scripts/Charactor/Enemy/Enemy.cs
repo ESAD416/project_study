@@ -4,14 +4,24 @@ using UnityEngine;
 
 public interface IEnemy : ICharactor 
 {
-    public Constant.CharactorState CurrentEnemyStateName { get; }
+    public Constant.EnemyState CurrentEnemyStateName { get; }
+
+    public void SetPatrolingState();
+    public void SetPursuingState();
 }
 
 public class Enemy<T> : Charactor<T>, IEnemy where T : Collider2D
 {
-    [Header("Enemy 基本物件")]
-    [SerializeField] protected Movement_Base m_enemyMovement;
-    public Movement_Enemy EnemyMovement => m_enemyMovement as Movement_Enemy;
+    [Header("Enemy 移動模式")]
+    [SerializeField] protected Movement_Base m_enemyPatrolMovement;
+    public Movement_Base EnemyPatrolMovement => this.m_enemyPatrolMovement;
+    [SerializeField] protected Movement_Base m_enemyPursuingMovement;
+    public Movement_Base EnemyPursuingMovement => this.m_enemyPursuingMovement;
+
+    protected Movement_Base m_enemyCurrentMovement;
+    public Movement_Base EnemyCurrentMovement => this.m_enemyCurrentMovement;
+
+
 
     #region 敵人狀態
     protected new CharactorStateMachine<Enemy<T>, T> m_currentBaseState;
@@ -45,19 +55,36 @@ public class Enemy<T> : Charactor<T>, IEnemy where T : Collider2D
         this.m_currentEnemyState = state;
         this.m_currentEnemyState.OnEnter(this);
     }
-    [SerializeField] protected Constant.CharactorState m_currEnemyStateName;
-    public Constant.CharactorState CurrentEnemyStateName => this.m_currEnemyStateName;
+    [SerializeField] protected Constant.EnemyState m_currEnemyStateName;
+    public Constant.EnemyState CurrentEnemyStateName => this.m_currEnemyStateName;
 
     protected EnemyStateMachine<T> m_patrol;
     public EnemyStateMachine<T> Patrol => this.m_patrol;
-    protected EnemyStateMachine<T> m_chase;
-    public EnemyStateMachine<T> Chase => this.m_chase;
+    protected EnemyStateMachine<T> m_pursuing;
+    public EnemyStateMachine<T> Pursuing => this.m_pursuing;
+
+    public void SetPatrolingState() {
+        this.m_currentEnemyState?.OnExit();
+        this.m_currentEnemyState = m_patrol;
+        this.m_currentEnemyState.OnEnter(this);
+    }
+
+    public void SetPursuingState() {
+        this.m_currentEnemyState?.OnExit();
+        this.m_currentEnemyState = m_pursuing;
+        this.m_currentEnemyState.OnEnter(this);
+    }
 
     #endregion
 
     [Header("Enemy 基本參數")]
-    public bool isPatroling = false;
-    public bool isChasing = false;
+    protected bool m_isPatroling = false;
+    // public bool IsPatroling => this.m_isPatroling;
+    // public void SetIsPatroling(bool isPatroling) => this.m_isPatroling = isPatroling;
+    
+    protected bool m_isPursuing = false;
+    // public bool IsPursuing => this.m_isPursuing;
+    // public void SetIsPursuing(bool isPursuing) => this.m_isPursuing = isPursuing;
 
     protected override void Awake()
     {
@@ -69,10 +96,14 @@ public class Enemy<T> : Charactor<T>, IEnemy where T : Collider2D
         m_dead = new DeadState_Enemy<T>(this);
 
         m_patrol = new PatrolState_Enemy<T>(this);
-        m_chase = new ChaseState_Enemy<T>(this);
+        m_pursuing = new PursuingState_Enemy<T>(this);
     }
 
     protected virtual void OnEnable() {
+        m_enemyPatrolMovement.gameObject.SetActive(true);
+        m_enemyPursuingMovement.gameObject.SetActive(false);
+        m_enemyCurrentMovement = this.m_enemyPatrolMovement;
+
         m_currentBaseState = m_idle;
         m_currentBaseState.OnEnter();
 
@@ -88,6 +119,8 @@ public class Enemy<T> : Charactor<T>, IEnemy where T : Collider2D
     // Start is called before the first frame update
     protected override void Start() {
         base.Start();
+        
+        StartCoroutine(UpdateBaseState());
         //if(m_Animator != null) hitRecoveryTime = AnimeUtils.GetAnimateClipTimeInRuntime(m_Animator, "Hurt");
         //isPatroling = true;
         
@@ -100,6 +133,7 @@ public class Enemy<T> : Charactor<T>, IEnemy where T : Collider2D
         m_currBaseStateName = m_currentBaseState.State;
 
         m_currentEnemyState.OnUpdate();
+        m_currEnemyStateName = m_currentEnemyState.State;
 
         base.Update();
         //m_Animator?.SetFloat("moveSpeed", MoveSpeed);
@@ -120,6 +154,46 @@ public class Enemy<T> : Charactor<T>, IEnemy where T : Collider2D
         //     SetFacingDir(Movement);
         // }
         //attackRoutine = StartCoroutine(Attack());
+    }
+
+    public virtual void InitMovement() {
+        m_enemyCurrentMovement.StopMovement();
+
+        m_enemyPatrolMovement.gameObject.SetActive(true);
+        m_enemyPursuingMovement.gameObject.SetActive(false);
+        m_enemyCurrentMovement = this.m_enemyPatrolMovement;
+
+        m_enemyCurrentMovement.StartMovement();
+    }
+
+    public virtual void ChangeMovement(Movement_Base _movement) {
+        m_enemyPatrolMovement.gameObject.SetActive(false);
+        m_enemyPursuingMovement.gameObject.SetActive(false);
+
+        _movement.gameObject.SetActive(true);
+        m_enemyCurrentMovement = _movement;
+    }
+
+    private IEnumerator UpdateBaseState() {
+        yield return null;  // hardcasted casted time for debugged
+        
+        if(m_enemyCurrentMovement.IsMoving) {
+            m_currentBaseState = m_move;
+        } 
+        else {
+            m_currentBaseState = m_idle;
+        }
+
+        StartCoroutine(UpdateBaseState());
+    }
+
+    private IEnumerator UpdateEnemyState() {
+        yield return null;  // hardcasted casted time for debugged
+        if(m_isPatroling && !m_isPursuing) {
+            m_currentEnemyState = m_patrol;
+        } else if(!m_isPatroling && m_isPursuing) {
+            m_currentEnemyState = m_patrol;
+        }
     }
 
 }

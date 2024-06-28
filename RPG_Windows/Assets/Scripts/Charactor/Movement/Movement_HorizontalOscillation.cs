@@ -8,14 +8,6 @@ public class Movement_HorizontalOscillation : Movement_Base
     public bool MoveRight;
     [SerializeField] protected Vector3 defaultMovement = Vector3.left;
 
-    [Header("Movement_HorizontalOscillation 物件")]
-    [SerializeField] protected MonoBehaviour m_target;
-    private ICharactor target;
-
-    protected Rigidbody2D m_targetRdbd;
-    protected SpriteRenderer m_targetSprtRenderer;
-    protected Animator m_targetAnimator;
-
     [SerializeField] protected List<Transform> pathTurn = new List<Transform>();
     private Vector3 defaultPos;
     private Dictionary<string, Vector3> turnPos = new Dictionary<string, Vector3>();
@@ -23,18 +15,9 @@ public class Movement_HorizontalOscillation : Movement_Base
     // [SerializeField] protected Detector_EnemyPatrol m_leftDetector_Patrol;
     // [SerializeField] protected Detector_EnemyPatrol m_rightDetector_Patrol;
 
-    protected virtual void Awake() {
-        target = m_target as ICharactor;
-
-        m_targetRdbd = target.Rigidbody;
-        m_targetSprtRenderer = target.SprtRenderer;
-        m_targetAnimator = target.Animator;
-    }
-    
-
     protected virtual void Start()
     {
-        defaultPos = m_target.transform.position;
+        defaultPos = m_movingTarget.transform.position;
 
         foreach (Transform trun in pathTurn) 
         {
@@ -64,9 +47,9 @@ public class Movement_HorizontalOscillation : Movement_Base
         if(m_targetSprtRenderer!= null) m_targetSprtRenderer.flipX = MoveRight;
 
 
-        if(target.CurrentBaseStateName.Equals(Constant.CharactorState.Dead) || 
-           target.CurrentBaseStateName.Equals(Constant.CharactorState.Attack)) {
-            SetMovement(Vector3.zero);
+        if(movingTarget.CurrentBaseStateName.Equals(Constant.CharactorState.Dead) || 
+           movingTarget.CurrentBaseStateName.Equals(Constant.CharactorState.Attack)) {
+            CanMove = false;
         }
 
 
@@ -74,7 +57,7 @@ public class Movement_HorizontalOscillation : Movement_Base
         //UpdateTurnPosForHorizontalPath();
     }
 
-    protected virtual void FixedUpdate() {
+    protected override void FixedUpdate() {
         // if(!m_enemy.CurrentBaseState.Equals(Constant.CharactorState.Dead)) {
         //     if(m_enemy.CurrentEnemyState != null && m_enemy.CurrentEnemyState.State.Equals(Constant.EnemyState.Chase)) {
         //         // 如果有套用Patrol與Chase索敵模組
@@ -98,7 +81,7 @@ public class Movement_HorizontalOscillation : Movement_Base
         //     
         // }
 
-        m_targetRdbd.velocity = m_movement.normalized * MoveSpeed;
+        base.FixedUpdate();
     }
 
     public void TurnDir()
@@ -115,17 +98,28 @@ public class Movement_HorizontalOscillation : Movement_Base
         SetMovement(defaultMovement);
     }
 
-    private void UpdateTurnPosForHorizontalPath() {
-        var enemyPos = m_target.transform.position;
+
+    public void UpdateTurnPosForHorizontalPath() {
+        var enemyPos = m_movingTarget.transform.position;
         foreach (Transform turn in pathTurn) {
-                var v = turnPos[turn.gameObject.name];
-                turn.position = enemyPos - v;
-            
+            var v = turnPos[turn.gameObject.name];
+            turn.position = enemyPos - v;
         }
     }
 
-    // private IEnumerator UpdatePathParaEndingDelay() {
-    //     UpdatePathParaForHorizontal();
-    //     yield return new WaitForSeconds(m_detector_chaser.chaseModeDelay);  // hardcasted casted time for debugged
+    
+
+    // private IEnumerator UpdateTurnPosForHorizontalPath() {
+    //     while (true)
+    //     {
+    //         Debug.Log("UpdateTurnPosForHorizontalPath running");
+    //         var enemyPos = m_movingTarget.transform.position;
+    //         foreach (Transform turn in pathTurn) {
+    //                 var v = turnPos[turn.gameObject.name];
+    //                 turn.position = enemyPos - v;
+                
+    //         }
+    //         yield return null; 
+    //     }
     // }
 }

@@ -674,6 +674,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1103529863}
     - target: {fileID: 6012428366774913337, guid: 1dd3b37de7295594491c43c224fbb21f, type: 3}
+      propertyPath: m_movingTarget
+      value: 
+      objectReference: {fileID: 307384744}
+    - target: {fileID: 6012428366774913337, guid: 1dd3b37de7295594491c43c224fbb21f, type: 3}
       propertyPath: m_HeightManager
       value: 
       objectReference: {fileID: 1103529863}
@@ -9469,6 +9473,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 913251619}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &307384744 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4424307667916199580, guid: 1dd3b37de7295594491c43c224fbb21f, type: 3}
+  m_PrefabInstance: {fileID: 126201079}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78d78e88ac33c034fb132a05e0c8bcf1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &309169168
 GameObject:
   m_ObjectHideFlags: 0
@@ -13205,16 +13220,15 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 348767109}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1624397533}
-  - {fileID: 881829888}
   - {fileID: 170510062}
   - {fileID: 1386053808}
-  m_Father: {fileID: 2004610506}
+  m_Father: {fileID: 762633545}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &350395537
 GameObject:
@@ -18626,6 +18640,58 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &545960844
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 545960845}
+  - component: {fileID: 545960846}
+  m_Layer: 0
+  m_Name: _Movement_P
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &545960845
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 545960844}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 762633545}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &545960846
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 545960844}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d2c2e7c1676c9340a699336ae8b33f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_moveSpeed: 5
+  m_acceleration: 100
+  m_jumpingMoveSpeed: 25
+  m_movement: {x: 0, y: 0}
+  m_facingDir: {x: 0, y: -1}
+  CanMove: 1
+  m_movingTarget: {fileID: 2004610514}
+  m_detector: {fileID: 881829889}
 --- !u!1 &566803294
 GameObject:
   m_ObjectHideFlags: 0
@@ -19341,6 +19407,8 @@ Transform:
   m_Children:
   - {fileID: 2004610506}
   - {fileID: 768345198}
+  - {fileID: 545960845}
+  - {fileID: 348767110}
   - {fileID: 1624639501}
   - {fileID: 653747159}
   m_Father: {fileID: 0}
@@ -19395,9 +19463,9 @@ MonoBehaviour:
   m_movement: {x: 0, y: 0}
   m_facingDir: {x: 0, y: -1}
   CanMove: 1
+  m_movingTarget: {fileID: 2004610514}
   MoveRight: 0
   defaultMovement: {x: -1, y: 0, z: 0}
-  m_target: {fileID: 2004610514}
   pathTurn:
   - {fileID: 1624639501}
   - {fileID: 653747159}
@@ -19852,12 +19920,12 @@ GameObject:
   - component: {fileID: 881829888}
   - component: {fileID: 881829889}
   m_Layer: 0
-  m_Name: Chaser
+  m_Name: _Pursuing
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &881829888
 Transform:
   m_ObjectHideFlags: 0
@@ -19867,11 +19935,11 @@ Transform:
   m_GameObject: {fileID: 881829887}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.045, y: 0.17499995, z: 0}
+  m_LocalPosition: {x: 0.045000076, y: 0.17499995, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 348767110}
+  m_Father: {fileID: 2004610506}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &881829889
 MonoBehaviour:
@@ -19886,7 +19954,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   OverlapDetected: []
-  DetectTagName: 
+  DetectTagName: Player
   TargetLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -19898,15 +19966,26 @@ MonoBehaviour:
   Diagonal: {x: 1, y: 1}
   DetectSelectedIndex: 0
   AreaSelectedIndex: 0
-  VisibilityLayer:
-    serializedVersion: 2
-    m_Bits: 448
-  m_enemy: {fileID: 0}
-  m_enemyMovement: {fileID: 0}
+  m_enemy: {fileID: 2004610514}
   targetVisable: 0
   chaseModeDelay: 1
   target: {fileID: 0}
-  OnTargetDected:
+  OnTargetDetectEnter:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 768345199}
+        m_TargetAssemblyTypeName: Movement_HorizontalOscillation, Assembly-CSharp
+        m_MethodName: UpdateTurnPosForHorizontalPath
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnTargetDetectExit:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1 &891438929
@@ -30780,7 +30859,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 690728028}
-  - {fileID: 348767110}
+  - {fileID: 881829888}
   - {fileID: 1817396185}
   m_Father: {fileID: 762633545}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -30881,10 +30960,9 @@ MonoBehaviour:
   m_currHeight: 0
   m_lastHeight: 0
   m_currBaseStateName: 0
-  m_enemyMovement: {fileID: 768345199}
+  m_enemyPatrolMovement: {fileID: 768345199}
+  m_enemyPursuingMovement: {fileID: 545960846}
   m_currEnemyStateName: 0
-  isPatroling: 0
-  isChasing: 0
 --- !u!1 &2022527473
 GameObject:
   m_ObjectHideFlags: 0

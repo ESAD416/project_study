@@ -11,19 +11,23 @@ public class Movement_Player<T> : Movement_Base, IMovementPlayer where T : Colli
 {
     #region 物件
 
-    [Header("Movement_Player 物件")]
-    [SerializeField] protected Player<T> m_player;
-    protected Rigidbody2D m_playerRdbd;
-    protected SpriteRenderer m_playerSprtRenderer;
-    protected Animator m_playerAnimator;
+    protected new Player<T> movingTarget;
+    public new bool IsMoving {
+        get {
+            // Player移動由使用者控制，故以接收輸入的移動向量為判斷基準;
+            return this.m_movement != Vector2.zero;
+        }
+    }
 
     #endregion
 
-    protected virtual void Awake() 
+    protected override void Awake() 
     {
-        m_playerRdbd = m_player.Rigidbody;
-        m_playerSprtRenderer = m_player.SprtRenderer;
-        m_playerAnimator = m_player.Animator;
+        movingTarget = m_movingTarget as Player<T>;
+
+        m_targetRdbd = movingTarget.Rigidbody;
+        m_targetSprtRenderer = movingTarget.SprtRenderer;
+        m_targetAnimator = movingTarget.Animator;
     }
 
     protected virtual void OnEnable() {
@@ -46,9 +50,9 @@ public class Movement_Player<T> : Movement_Base, IMovementPlayer where T : Colli
         SetAnimateMovementPara();
     }
 
-    protected virtual void FixedUpdate() 
+    protected override void FixedUpdate() 
     {
-        m_playerRdbd.velocity = m_movement.normalized * MoveSpeed;
+        base.FixedUpdate();
     }
 
     protected void SetAnimateMovementPara() 
@@ -59,6 +63,6 @@ public class Movement_Player<T> : Movement_Base, IMovementPlayer where T : Colli
         dict.Add("facingDirX", m_facingDir.x);
         dict.Add("facingDirY", m_facingDir.y);
 
-        if(m_playerAnimator != null) AnimeUtils.SetAnimateFloatPara(m_playerAnimator, dict);
+        if(m_targetAnimator != null) AnimeUtils.SetAnimateFloatPara(m_targetAnimator, dict);
     }
 }
