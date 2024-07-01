@@ -2,8 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+public interface ICharactorStateMachine
+{
+    public Constant.CharactorState State { get; }
+    void OnEnter(ICharactor character);
+    void OnEnter();
+    void OnExit();
+    void OnUpdate();
+    void OnFixedUpdate();
+}
+
 // 角色基本狀態機
-public abstract class CharactorStateMachine<T1, T2>
+public abstract class CharactorStateMachine<T1, T2> : ICharactorStateMachine
     where T1 : Charactor<T2>
     where T2 : Collider2D
 {
@@ -12,6 +23,13 @@ public abstract class CharactorStateMachine<T1, T2>
     protected Constant.CharactorState m_cState;
     public Constant.CharactorState State => m_cState;
 
+    public virtual void OnEnter(ICharactor charactor)
+    {
+        if (charactor is T1 m_charactor)
+        {
+            OnEnter(m_charactor);
+        }
+    }
     public abstract void OnEnter(T1 character);
     public abstract void OnEnter();
     public abstract void OnUpdate();
@@ -22,37 +40,37 @@ public abstract class CharactorStateMachine<T1, T2>
 
 #region 角色基本狀態機 for Player
 
-public abstract class CharactorStateMachine_Player<T> : CharactorStateMachine<Player<T>, T> where T : Collider2D 
+public interface ICharactorStateMachine_Player : ICharactorStateMachine
 {
+}
+
+public abstract class CharactorStateMachine_Player<T> : CharactorStateMachine<Player<T>, T>, ICharactorStateMachine_Player where T : Collider2D 
+{
+    public override void OnEnter(ICharactor player)
+    {
+        if (player is Player<T> m_player)
+        {
+            OnEnter(m_player);
+        }
+    }
     public abstract override void OnEnter(Player<T> player);
     public abstract override void OnEnter();
     public abstract override void OnUpdate();
     public abstract override void OnFixedUpdate();
     public abstract override void OnExit();
+
 }
 
 #region 基本狀態機 for Lamniat
 
-public abstract class LamniatStateMachine : CharactorStateMachine_Player<BoxCollider2D>, ILamniatStateMachine 
+public abstract class LamniatStateMachine : CharactorStateMachine_Player<BoxCollider2D> 
 {
-    void ILamniatStateMachine.OnEnter(Lamniat lamniat)
-    {
-        this.m_currentCharactor = lamniat;
-        this.OnEnter();
-    }
-
     public abstract override void OnEnter(Player<BoxCollider2D> player);
     public abstract override void OnEnter();
     public abstract override void OnUpdate();
     public abstract override void OnFixedUpdate();
     public abstract override void OnExit();
 
-}
-
-// Lamniat 狀態機接口
-public interface ILamniatStateMachine
-{
-    void OnEnter(Lamniat lamniat);
 }
 
 public class IdleState_Lamniat : LamniatStateMachine
@@ -303,8 +321,19 @@ public class DeadState_Lamniat : LamniatStateMachine
 
 #region 基本狀態機 for Enemy
 
-public abstract class CharactorStateMachine_Enemy<T> : CharactorStateMachine<Enemy<T>, T> where T : Collider2D 
+public interface ICharactorStateMachine_Enemy : ICharactorStateMachine
 {
+}
+
+public abstract class CharactorStateMachine_Enemy<T> : CharactorStateMachine<Enemy<T>, T> , ICharactorStateMachine_Enemy where T : Collider2D 
+{
+    public override void OnEnter(ICharactor enemy)
+    {
+        if (enemy is Enemy<T> m_enemy)
+        {
+            OnEnter(m_enemy);
+        }
+    }
     public abstract override void OnEnter(Enemy<T> enemy);
     public abstract override void OnEnter();
     public abstract override void OnUpdate();
@@ -695,7 +724,6 @@ public class BeforeStartState<T> : BossStateMachine<T> where T : Collider2D
     public override void OnEnter()
     {
         // OnEnter
-        this.currentBoss.EnemyCurrentMovement.StopMovement();
         this.currentBoss.SetCurrentBaseState(this.currentBoss.Idle);
 
         var hitSystem = this.currentBoss.GetComponent<HitSystem_Enemy>();

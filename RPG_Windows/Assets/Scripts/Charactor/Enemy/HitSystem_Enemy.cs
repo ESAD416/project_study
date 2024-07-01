@@ -5,14 +5,16 @@ using UnityEngine;
 public class HitSystem_Enemy : HitSystem
 {
     [Header("Enemy基本物件")]
-    [SerializeField] protected Enemy<Collider2D> m_target;
+    [SerializeField] protected MonoBehaviour m_enemy;
+    protected IEnemy iEnemy;
     [SerializeField] protected Movement_Base m_targetMovement;
-
 
     private Animator m_targetAnimator;
 
     protected virtual void Awake() {
-        m_targetAnimator = m_target.Animator;
+        iEnemy = m_enemy as IEnemy;
+
+        m_targetAnimator = iEnemy.Animator;
     }
 
     protected override IEnumerator TakeHit(Attack attacker) {
@@ -30,7 +32,7 @@ public class HitSystem_Enemy : HitSystem
         }
 
         IsTakingHit = true;
-        if(m_target != null) {
+        if(iEnemy != null) {
             //根據有無Hurt_State決定是否新增
             //m_target.SetCurrentBaseState(m_target.Hurt);
 
@@ -84,7 +86,7 @@ public class HitSystem_Enemy : HitSystem
         
         IsTakingHit = true;
 
-        if(m_target != null) {
+        if(iEnemy != null) {
             //根據有無Hurt_State決定是否新增
             //m_target.SetCurrentBaseState(m_target.Hurt);
 
@@ -106,9 +108,9 @@ public class HitSystem_Enemy : HitSystem
     protected Vector3 SetAttackForceDir(Transform attackedLocation) {
         var dir = Vector3.zero;
 
-        if(attackedLocation.position.x > m_target.transform.position.x) dir = Vector3.left;
-        else if(attackedLocation.position.x < m_target.transform.position.x) dir = Vector3.right;
-        else if(attackedLocation.position.x == m_target.transform.position.x) {
+        if(attackedLocation.position.x > iEnemy.Transform.position.x) dir = Vector3.left;
+        else if(attackedLocation.position.x < iEnemy.Transform.position.x) dir = Vector3.right;
+        else if(attackedLocation.position.x == iEnemy.Transform.position.x) {
             if(m_targetMovement.FacingDir.x > 0 ) dir = Vector3.left;
             else if(m_targetMovement.FacingDir.x < 0) dir = Vector3.right;
         }
@@ -124,8 +126,8 @@ public class HitSystem_Enemy : HitSystem
         IsTakingHit = false;
         IsInvulnerable = false;
 
-        if(m_targetMovement != null && m_targetMovement.IsMoving) m_target.SetCurrentBaseState(m_target.Move);
-        else m_target.SetCurrentBaseState(m_target.Idle);
+        if(m_targetMovement != null && m_targetMovement.IsMoving) iEnemy.SetCurrentBaseState(iEnemy.Move);
+        else iEnemy.SetCurrentBaseState(iEnemy.Idle);
         
         Debug.Log("FinishTakeHit");
     }

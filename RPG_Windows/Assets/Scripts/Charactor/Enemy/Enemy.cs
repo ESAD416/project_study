@@ -4,8 +4,18 @@ using UnityEngine;
 
 public interface IEnemy : ICharactor 
 {
-    public Constant.EnemyState CurrentEnemyStateName { get; }
+    public new ICharactorStateMachine_Enemy CurrentBaseState { get; }
+    new void SetCurrentBaseState(ICharactorStateMachine state);
 
+    public new ICharactorStateMachine_Enemy Idle { get; }
+    public new ICharactorStateMachine_Enemy Move { get; }
+    public new ICharactorStateMachine_Enemy Attack { get; }
+    public new ICharactorStateMachine_Enemy Jump { get; }
+    public new ICharactorStateMachine_Enemy Hurt { get; }
+    public new ICharactorStateMachine_Enemy Dodge { get; }
+    public new ICharactorStateMachine_Enemy Dead { get; }
+
+    public Constant.EnemyState CurrentEnemyStateName { get; }
     public void SetPatrolingState();
     public void SetPursuingState();
 }
@@ -24,28 +34,28 @@ public class Enemy<T> : Charactor<T>, IEnemy where T : Collider2D
 
 
     #region 敵人狀態
-    protected new CharactorStateMachine<Enemy<T>, T> m_currentBaseState;
-    public new CharactorStateMachine<Enemy<T>, T> CurrentBaseState => m_currentBaseState;
-    public void SetCurrentBaseState(CharactorStateMachine<Enemy<T>, T> state) {
+    protected new ICharactorStateMachine_Enemy m_currentBaseState;
+    public new ICharactorStateMachine_Enemy CurrentBaseState => m_currentBaseState;
+    public void SetCurrentBaseState(ICharactorStateMachine_Enemy state) {
         this.m_currentBaseState?.OnExit();
         this.m_currentBaseState = state;
         this.m_currentBaseState.OnEnter(this);
     }
 
-    protected new CharactorStateMachine<Enemy<T>, T> m_idle;
-    public new CharactorStateMachine<Enemy<T>, T> Idle => m_idle;
-    protected new CharactorStateMachine<Enemy<T>, T> m_move;
-    public new CharactorStateMachine<Enemy<T>, T> Move => m_move;
-    protected new CharactorStateMachine<Enemy<T>, T> m_attack;
-    public new CharactorStateMachine<Enemy<T>, T> Attack => m_attack;
-    protected new CharactorStateMachine<Enemy<T>, T> m_jump;
-    public new CharactorStateMachine<Enemy<T>, T> Jump => m_jump;
-    protected new CharactorStateMachine<Enemy<T>, T> m_hurt;
-    public new CharactorStateMachine<Enemy<T>, T> Hurt => m_hurt;
-    protected new CharactorStateMachine<Enemy<T>, T> m_dodge;
-    public new CharactorStateMachine<Enemy<T>, T> Dodge => m_dodge;
-    protected new CharactorStateMachine<Enemy<T>, T> m_dead;
-    public new CharactorStateMachine<Enemy<T>, T> Dead => m_dead;
+    protected new ICharactorStateMachine_Enemy m_idle;
+    public new ICharactorStateMachine_Enemy Idle => m_idle;
+    protected new ICharactorStateMachine_Enemy m_move;
+    public new ICharactorStateMachine_Enemy Move => m_move;
+    protected new ICharactorStateMachine_Enemy m_attack;
+    public new ICharactorStateMachine_Enemy Attack => m_attack;
+    protected new ICharactorStateMachine_Enemy m_jump;
+    public new ICharactorStateMachine_Enemy Jump => m_jump;
+    protected new ICharactorStateMachine_Enemy m_hurt;
+    public new ICharactorStateMachine_Enemy Hurt => m_hurt;
+    protected new ICharactorStateMachine_Enemy m_dodge;
+    public new ICharactorStateMachine_Enemy Dodge => m_dodge;
+    protected new ICharactorStateMachine_Enemy m_dead;
+    public new ICharactorStateMachine_Enemy Dead => m_dead;
 
 
     protected EnemyStateMachine<T> m_currentEnemyState;
@@ -101,7 +111,7 @@ public class Enemy<T> : Charactor<T>, IEnemy where T : Collider2D
 
     protected virtual void OnEnable() {
         m_enemyPatrolMovement.gameObject.SetActive(true);
-        m_enemyPursuingMovement.gameObject.SetActive(false);
+        m_enemyPursuingMovement?.gameObject.SetActive(false);
         m_enemyCurrentMovement = this.m_enemyPatrolMovement;
 
         m_currentBaseState = m_idle;
@@ -157,10 +167,10 @@ public class Enemy<T> : Charactor<T>, IEnemy where T : Collider2D
     }
 
     public virtual void InitMovement() {
-        m_enemyCurrentMovement.StopMovement();
+        m_enemyCurrentMovement?.StopMovement();
 
         m_enemyPatrolMovement.gameObject.SetActive(true);
-        m_enemyPursuingMovement.gameObject.SetActive(false);
+        m_enemyPursuingMovement?.gameObject.SetActive(false);
         m_enemyCurrentMovement = this.m_enemyPatrolMovement;
 
         m_enemyCurrentMovement.StartMovement();
@@ -168,7 +178,7 @@ public class Enemy<T> : Charactor<T>, IEnemy where T : Collider2D
 
     public virtual void ChangeMovement(Movement_Base _movement) {
         m_enemyPatrolMovement.gameObject.SetActive(false);
-        m_enemyPursuingMovement.gameObject.SetActive(false);
+        m_enemyPursuingMovement?.gameObject.SetActive(false);
 
         _movement.gameObject.SetActive(true);
         m_enemyCurrentMovement = _movement;
@@ -176,14 +186,17 @@ public class Enemy<T> : Charactor<T>, IEnemy where T : Collider2D
 
     private IEnumerator UpdateBaseState() {
         yield return null;  // hardcasted casted time for debugged
-        
-        if(m_enemyCurrentMovement.IsMoving) {
-            m_currentBaseState = m_move;
-        } 
-        else {
-            m_currentBaseState = m_idle;
-        }
+        Debug.Log("UpdateBaseState m_enemyCurrentMovement: "+m_enemyCurrentMovement.IsMoving);
 
+        if(m_enemyCurrentMovement != null ) {
+            if(m_enemyCurrentMovement.IsMoving) {
+                m_currentBaseState = m_move;
+            } 
+            else {
+                m_currentBaseState = m_idle;
+            }
+        }
+        
         StartCoroutine(UpdateBaseState());
     }
 

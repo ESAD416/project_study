@@ -7,7 +7,6 @@ using Cinemachine;
 public class AOECtrl : MonoBehaviour
 {
     [Header("基本物件")]
-    [SerializeField] private Enemy<Collider2D> boss;
     [SerializeField] private GameObject areaIndicatorPrefab;
     private float areaIndicatorRadius = 2.048f;  // 根據areaIndicator Sprite Renderer的Bounds與Scale計算得出
 

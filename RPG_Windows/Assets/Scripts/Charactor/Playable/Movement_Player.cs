@@ -30,11 +30,11 @@ public class Movement_Player<T> : Movement_Base, IMovementPlayer where T : Colli
         m_targetAnimator = movingTarget.Animator;
     }
 
-    protected virtual void OnEnable() {
+    protected override void OnEnable() {
 
     }
 
-    protected virtual void OnDisable() {
+    protected override void OnDisable() {
 
     }
 

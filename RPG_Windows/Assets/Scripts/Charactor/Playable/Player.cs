@@ -27,29 +27,29 @@ public class Player<T> : Charactor<T>, IPlayer  where T : Collider2D
 
     #region 角色狀態
 
-    protected new CharactorStateMachine<Player<T>, T> m_currentBaseState;
-    public new CharactorStateMachine<Player<T>, T> CurrentBaseState => this.m_currentBaseState;
-    public void SetCurrentBaseState(CharactorStateMachine<Player<T>, T> state)
+    protected new ICharactorStateMachine_Player m_currentBaseState;
+    public new ICharactorStateMachine_Player CurrentBaseState => this.m_currentBaseState;
+    public void SetCurrentBaseState(ICharactorStateMachine_Player state)
     {
         this.m_currentBaseState?.OnExit();
         this.m_currentBaseState = state;
         this.m_currentBaseState.OnEnter(this);
     }
 
-    protected new CharactorStateMachine<Player<T>, T> m_idle;
-    public new CharactorStateMachine<Player<T>, T> Idle => m_idle;
-    protected new CharactorStateMachine<Player<T>, T> m_move;
-    public new CharactorStateMachine<Player<T>, T> Move => m_move;
-    protected new CharactorStateMachine<Player<T>, T> m_attack;
-    public new CharactorStateMachine<Player<T>, T> Attack => m_attack;
-    protected new CharactorStateMachine<Player<T>, T> m_jump;
-    public new CharactorStateMachine<Player<T>, T> Jump => m_jump;
-    protected new CharactorStateMachine<Player<T>, T> m_hurt;
-    public new CharactorStateMachine<Player<T>, T> Hurt => m_hurt;
-    protected new CharactorStateMachine<Player<T>, T> m_dodge;
-    public new CharactorStateMachine<Player<T>, T> Dodge => m_dodge;
-    protected new CharactorStateMachine<Player<T>, T> m_dead;
-    public new CharactorStateMachine<Player<T>, T> Dead => m_dead;
+    protected new ICharactorStateMachine_Player m_idle;
+    public new ICharactorStateMachine_Player Idle => m_idle;
+    protected new ICharactorStateMachine_Player m_move;
+    public new ICharactorStateMachine_Player Move => m_move;
+    protected new ICharactorStateMachine_Player m_attack;
+    public new ICharactorStateMachine_Player Attack => m_attack;
+    protected new ICharactorStateMachine_Player m_jump;
+    public new ICharactorStateMachine_Player Jump => m_jump;
+    protected new ICharactorStateMachine_Player m_hurt;
+    public new ICharactorStateMachine_Player Hurt => m_hurt;
+    protected new ICharactorStateMachine_Player m_dodge;
+    public new ICharactorStateMachine_Player Dodge => m_dodge;
+    protected new ICharactorStateMachine_Player m_dead;
+    public new ICharactorStateMachine_Player Dead => m_dead;
 
 
     #endregion

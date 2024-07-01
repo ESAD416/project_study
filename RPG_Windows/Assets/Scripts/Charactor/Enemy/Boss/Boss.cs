@@ -12,6 +12,7 @@ public class Boss : Enemy<CircleCollider2D>
         this.m_currentBossState.OnEnter(this);
     }
 
+
     protected BossStateMachine<CircleCollider2D> m_beforeStart;
     public BossStateMachine<CircleCollider2D> BeforeStart => this.m_beforeStart;
     protected BossStateMachine<CircleCollider2D> m_duringBattle;
@@ -34,6 +35,10 @@ public class Boss : Enemy<CircleCollider2D>
         m_battleFinish = new BattleFinishState<CircleCollider2D>(this);
     }
     protected override void OnEnable() {
+        m_enemyPatrolMovement.gameObject.SetActive(true);
+        m_enemyPursuingMovement?.gameObject.SetActive(false);
+        m_enemyCurrentMovement = this.m_enemyPatrolMovement;
+
         m_currentBaseState = m_idle;
         m_currentBaseState.OnEnter();
 
@@ -43,12 +48,15 @@ public class Boss : Enemy<CircleCollider2D>
     }
     protected override void Start() {
         base.Start();
+        
+        this.m_enemyCurrentMovement.StopMovement();
     }
 
     protected override void Update() {
         m_currentBossState.OnUpdate();
         m_currentBaseState.OnUpdate();
-
+        //Debug.Log("isMoving: "+this.m_enemyCurrentMovement.IsMoving);
+        
         m_Center = CenterObj?.position ?? Vector3.zero;
         m_Buttom = ButtomObj?.position ?? Vector3.zero;
     }

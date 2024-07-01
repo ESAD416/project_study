@@ -11,6 +11,7 @@ public interface ICharactor {
     SpriteRenderer SprtRenderer { get; }
     Animator Animator { get; }
 
+    Transform Transform { get; } 
     Transform CenterObj { get; }
 
     Vector3 Center { get; }
@@ -21,6 +22,17 @@ public interface ICharactor {
     int LastHeight { get; }
 
     public Constant.CharactorState CurrentBaseStateName { get; }
+
+    public ICharactorStateMachine CurrentBaseState { get; }
+    void SetCurrentBaseState(ICharactorStateMachine state);
+
+    public ICharactorStateMachine Idle { get; }
+    public ICharactorStateMachine Move { get; }
+    public ICharactorStateMachine Attack { get; }
+    public ICharactorStateMachine Jump { get; }
+    public ICharactorStateMachine Hurt { get; }
+    public ICharactorStateMachine Dodge { get; }
+    public ICharactorStateMachine Dead { get; }
 }
 
 public abstract class Charactor<T> : MonoBehaviour, ICharactor where T : Collider2D 
@@ -51,6 +63,8 @@ public abstract class Charactor<T> : MonoBehaviour, ICharactor where T : Collide
     /// 角色動畫控制器
     /// </summary>
     public Animator Animator => this.m_Animator;
+
+    public Transform Transform => this.transform;
     /// <summary>
     /// 角色中心Transform
     /// </summary>
@@ -64,6 +78,7 @@ public abstract class Charactor<T> : MonoBehaviour, ICharactor where T : Collide
     /// 角色相關資訊存取
     /// </summary>
     public CharactorData InfoStorage;
+
 
     #endregion
     
@@ -104,9 +119,11 @@ public abstract class Charactor<T> : MonoBehaviour, ICharactor where T : Collide
 
     #region 角色狀態
 
-    protected CharactorStateMachine<Charactor<T>, T> m_currentBaseState;
-    public CharactorStateMachine<Charactor<T>, T> CurrentBaseState => this.m_currentBaseState;
-    public void SetCurrentBaseState(CharactorStateMachine<Charactor<T>, T> state) {
+    protected ICharactorStateMachine m_currentBaseState;
+    public ICharactorStateMachine CurrentBaseState => this.m_currentBaseState;
+    public void SetCurrentBaseState(ICharactorStateMachine state) {
+        Debug.Log("state "+state.GetType());
+
         this.m_currentBaseState?.OnExit();
         this.m_currentBaseState = state;
         this.m_currentBaseState.OnEnter(this);
@@ -114,20 +131,20 @@ public abstract class Charactor<T> : MonoBehaviour, ICharactor where T : Collide
     [SerializeField] protected Constant.CharactorState m_currBaseStateName;
     public Constant.CharactorState CurrentBaseStateName => this.m_currBaseStateName;
 
-    protected CharactorStateMachine<Charactor<T>, T> m_idle;
-    public CharactorStateMachine<Charactor<T>, T> Idle => m_idle;
-    protected CharactorStateMachine<Charactor<T>, T> m_move;
-    public CharactorStateMachine<Charactor<T>, T> Move => m_move;
-    protected CharactorStateMachine<Charactor<T>, T> m_attack;
-    public CharactorStateMachine<Charactor<T>, T> Attack => m_attack;
-    protected CharactorStateMachine<Charactor<T>, T> m_jump;
-    public CharactorStateMachine<Charactor<T>, T> Jump => m_jump;
-    protected CharactorStateMachine<Charactor<T>, T> m_hurt;
-    public CharactorStateMachine<Charactor<T>, T> Hurt => m_hurt;
-    protected CharactorStateMachine<Charactor<T>, T> m_dodge;
-    public CharactorStateMachine<Charactor<T>, T> Dodge => m_dodge;
-    protected CharactorStateMachine<Charactor<T>, T> m_dead;
-    public CharactorStateMachine<Charactor<T>, T> Dead => m_dead;
+    protected ICharactorStateMachine m_idle;
+    public ICharactorStateMachine Idle => m_idle;
+    protected ICharactorStateMachine m_move;
+    public ICharactorStateMachine Move => m_move;
+    protected ICharactorStateMachine m_attack;
+    public ICharactorStateMachine Attack => m_attack;
+    protected ICharactorStateMachine m_jump;
+    public ICharactorStateMachine Jump => m_jump;
+    protected ICharactorStateMachine m_hurt;
+    public ICharactorStateMachine Hurt => m_hurt;
+    protected ICharactorStateMachine m_dodge;
+    public ICharactorStateMachine Dodge => m_dodge;
+    protected ICharactorStateMachine m_dead;
+    public ICharactorStateMachine Dead => m_dead;
 
     #endregion
 
