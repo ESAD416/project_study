@@ -227,7 +227,7 @@ public class Combat_Lamniat : Combat_Player<BoxCollider2D>
         GameObject bullet = Instantiate(m_bulletPrefab, m_player.Center, transform.rotation);
         bullet.GetComponent<Projectile_Bullet>().SetDirection(m_ShootDir);
         bullet.GetComponent<HitBox_Overlap2D>().SetAttacker(this);
-        bullet.GetComponent<HitBox_Overlap2D>().DetectTagName = "Enemies";
+        bullet.GetComponent<HitBox_Overlap2D>().DetectTagName = "Enemy";
 
         var angle = Vector3.Angle(m_ShootDir, bullet.GetComponent<Projectile_Bullet>().referenceAxis);
         bullet.GetComponent<HitBox_Overlap2D>().Angle = m_ShootDir.x > 0 ? -angle : angle;

@@ -20,9 +20,10 @@ public class DirectProjectile : MonoBehaviour
 
     protected virtual void OnTriggerEnter2D(Collider2D other) {
         int hittableLayerMask = 1 << LayerMask.NameToLayer("Hittable");
-        if (other.CompareTag("Enemies") && (hittableLayerMask & 1 << other.gameObject.layer) > 0)
+        //if (other.CompareTag("Enemies") && (hittableLayerMask & 1 << other.gameObject.layer) > 0)
+        if ((hittableLayerMask & 1 << other.gameObject.layer) > 0)
         {
-            Debug.Log("OnTriggerEnter2D Destory Projectile");
+            Debug.Log("OnTriggerEnter2D Destory Projectile Trigger name: "+other.name);
             //Destroy(gameObject);
             DestoryProjectile();
         }
