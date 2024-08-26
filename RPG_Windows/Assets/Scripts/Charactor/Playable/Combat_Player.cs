@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class Combat_Player<T> : Attack where T : Collider2D
+public class Combat_Player<T> : Attack_System where T : Collider2D
 {
     #region 基本物件
 

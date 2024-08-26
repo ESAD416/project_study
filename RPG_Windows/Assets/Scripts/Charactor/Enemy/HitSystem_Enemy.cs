@@ -17,7 +17,7 @@ public class HitSystem_Enemy : HitSystem
         m_targetAnimator = iEnemy.Animator;
     }
 
-    protected override IEnumerator TakeHit(Attack attacker) {
+    protected override IEnumerator TakeHit(Attack_System attacker) {
         Debug.Log("Enemy TakeHit start");
         
         if(IsIgnoreHit) yield break;

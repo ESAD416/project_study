@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class AreaExplosion : MonoBehaviour
 {
-    [SerializeField] private Attack byWhom;
-    public void SetByWhom(Attack attacker) => this.byWhom = attacker;
+    [SerializeField] private Attack_System byWhom;
+    public void SetByWhom(Attack_System attacker) => this.byWhom = attacker;
 
     [SerializeField] private float duration = 5;
     public void SetDuration(float duration) => this.duration = duration;

@@ -17312,7 +17312,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1089234520}
-  - component: {fileID: 1089234519}
+  - component: {fileID: 1089234521}
   m_Layer: 0
   m_Name: CameraFollowObject
   m_TagString: Untagged
@@ -17320,24 +17320,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1089234519
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1089234518}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 77ce5c3c9b0669446b95a67f1aacfe7f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_playerTarget: {fileID: 1259052231}
-  m_playerMovement: {fileID: 1610625302}
-  m_LamiatJump: {fileID: 1328932876}
-  followOffset: {x: 0, y: 0, z: -10}
-  smoothOffsetY: 500
-  smoothOffsetX: 500
 --- !u!4 &1089234520
 Transform:
   m_ObjectHideFlags: 0
@@ -17353,6 +17335,24 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1089234521
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1089234518}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f934ff4cb858df4a9c2b33775ca50cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Target: {fileID: 1259052231}
+  followOffset: {x: 0, y: 0, z: -10}
+  smoothOffsetY: 500
+  smoothOffsetX: 500
+  m_LamiatMovement: {fileID: 1610625302}
+  m_LamiatJump: {fileID: 1328932876}
 --- !u!1 &1104062925
 GameObject:
   m_ObjectHideFlags: 0
@@ -21989,7 +21989,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 7.734375
+  orthographic size: 5.953125
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2

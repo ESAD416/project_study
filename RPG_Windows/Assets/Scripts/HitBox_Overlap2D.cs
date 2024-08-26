@@ -5,9 +5,9 @@ using UnityEngine.Events;
 
 public class HitBox_Overlap2D : Detector_Overlap2D
 {
-    [SerializeField] protected Attack m_attacker;
-    public Attack Attacker => this.m_attacker;
-    public void SetAttacker(Attack attacker) => this.m_attacker = attacker;
+    [SerializeField] protected Attack_System m_attacker;
+    public Attack_System Attacker => this.m_attacker;
+    public void SetAttacker(Attack_System attacker) => this.m_attacker = attacker;
 
     [SerializeField] private int OnHitCheckCount = 1;
     public void SetOnHitCheckCount(int count) => this.OnHitCheckCount = count;

@@ -63,13 +63,25 @@ public abstract class CharactorStateMachine_Player<T> : CharactorStateMachine<Pl
 
 #region 基本狀態機 for Lamniat
 
-public abstract class LamniatStateMachine : CharactorStateMachine_Player<BoxCollider2D> 
+public class LamniatStateMachine
 {
-    public abstract override void OnEnter(Player<BoxCollider2D> player);
-    public abstract override void OnEnter();
-    public abstract override void OnUpdate();
-    public abstract override void OnFixedUpdate();
-    public abstract override void OnExit();
+    protected Lamniat m_lamniatPlayer;
+
+    protected Constant.CharactorState m_cState;
+    public Constant.CharactorState State => m_cState;
+
+    public virtual void OnEnter(Lamniat lamniatPlayer) {
+        this.m_lamniatPlayer = lamniatPlayer;
+        OnEnter();
+    }
+    public virtual void OnEnter() {
+    }
+    public virtual void OnUpdate() {
+    }
+    public virtual void OnFixedUpdate() {
+    }
+    public virtual void OnExit() {
+    }
 
 }
 
@@ -77,13 +89,13 @@ public class IdleState_Lamniat : LamniatStateMachine
 {
     public IdleState_Lamniat(Lamniat lamniat) 
     {
-        this.m_currentCharactor = lamniat;
+        this.m_lamniatPlayer = lamniat;
         this.m_cState = Constant.CharactorState.Idle;
     }
 
-    public override void OnEnter(Player<BoxCollider2D> lamniat)
+    public override void OnEnter(Lamniat lamniat)
     {
-        this.m_currentCharactor = lamniat as Lamniat;
+        this.m_lamniatPlayer = lamniat;
         OnEnter();
     }
     public override void OnEnter()
@@ -92,7 +104,7 @@ public class IdleState_Lamniat : LamniatStateMachine
     }
     public override void OnUpdate()
     {
-        AnimeUtils.ActivateAnimatorLayer(this.m_currentCharactor.Animator, "IdleLayer");
+        AnimeUtils.ActivateAnimatorLayer(this.m_lamniatPlayer.Animator, "IdleLayer");
     }
     public override void OnFixedUpdate()
     {
@@ -108,13 +120,13 @@ public class MoveState_Lamniat : LamniatStateMachine
 {
     public MoveState_Lamniat(Lamniat lamniat)
     {
-        this.m_currentCharactor = lamniat;
+        this.m_lamniatPlayer = lamniat;
         this.m_cState = Constant.CharactorState.Move;
     }
 
-    public override void OnEnter(Player<BoxCollider2D> lamniat)
+    public override void OnEnter(Lamniat lamniat)
     {
-        this.m_currentCharactor = lamniat as Lamniat;
+        this.m_lamniatPlayer = lamniat;
         OnEnter();
     }
     public override void OnEnter()
@@ -124,7 +136,7 @@ public class MoveState_Lamniat : LamniatStateMachine
 
     public override void OnUpdate()
     {
-        AnimeUtils.ActivateAnimatorLayer(this.m_currentCharactor.Animator, "MoveLayer");
+        AnimeUtils.ActivateAnimatorLayer(this.m_lamniatPlayer.Animator, "MoveLayer");
     }
 
     public override void OnFixedUpdate()
@@ -143,14 +155,14 @@ public class AttackState_Lamniat : LamniatStateMachine
 {
     public AttackState_Lamniat(Lamniat lamniat) 
     {
-        this.m_currentCharactor = lamniat;
+        this.m_lamniatPlayer = lamniat;
         this.m_cState = Constant.CharactorState.Attack;
     }
 
 
-    public override void OnEnter(Player<BoxCollider2D> lamniat)
+    public override void OnEnter(Lamniat lamniat)
     {
-        this.m_currentCharactor = lamniat as Lamniat;
+        this.m_lamniatPlayer = lamniat;
         OnEnter();
     }
     public override void OnEnter()
@@ -165,7 +177,7 @@ public class AttackState_Lamniat : LamniatStateMachine
         // var moveSpeed = this.currentAvatar.AvatarMovement.MoveSpeed;
         // this.currentAvatar.AvatarMovement.SetMoveVelocity(Vector2.ClampMagnitude(velocity*0f, moveSpeed*0f));
         
-        AnimeUtils.ActivateAnimatorLayer(this.m_currentCharactor.Animator, "AttackLayer");
+        AnimeUtils.ActivateAnimatorLayer(this.m_lamniatPlayer.Animator, "AttackLayer");
     }
 
     public override void OnFixedUpdate()
@@ -182,19 +194,19 @@ public class AttackState_Lamniat : LamniatStateMachine
 public class JumpState_Lamniat : LamniatStateMachine
 {
     public JumpState_Lamniat(Lamniat lamniat) {
-        this.m_currentCharactor = lamniat;
+        this.m_lamniatPlayer = lamniat;
         this.m_cState = Constant.CharactorState.Jump;
     }
 
-    public override void OnEnter(Player<BoxCollider2D> lamniat)
+    public override void OnEnter(Lamniat lamniat)
     {
-        this.m_currentCharactor = lamniat as Lamniat;
+        this.m_lamniatPlayer = lamniat;
         OnEnter();
     }
     public override void OnEnter()
     {
         // OnEnter
-        this.m_currentCharactor.Animator?.SetTrigger("jump");
+        this.m_lamniatPlayer.Animator?.SetTrigger("jump");
     }
 
     public override void OnExit()
@@ -203,7 +215,7 @@ public class JumpState_Lamniat : LamniatStateMachine
 
     public override void OnUpdate()
     {
-        AnimeUtils.ActivateAnimatorLayer(this.m_currentCharactor.Animator, "TriggerLayer");
+        AnimeUtils.ActivateAnimatorLayer(this.m_lamniatPlayer.Animator, "TriggerLayer");
     }
 
     public override void OnFixedUpdate()
@@ -216,19 +228,19 @@ public class DodgeState_Lamniat : LamniatStateMachine
 {
 
     public DodgeState_Lamniat(Lamniat lamniat) {
-        this.m_currentCharactor = lamniat;
+        this.m_lamniatPlayer = lamniat;
         this.m_cState = Constant.CharactorState.Dodge;
     }
 
-    public override void OnEnter(Player<BoxCollider2D> lamniat)
+    public override void OnEnter(Lamniat lamniat)
     {
-        this.m_currentCharactor = lamniat as Lamniat;
+        this.m_lamniatPlayer = lamniat as Lamniat;
         OnEnter();
     }
     public override void OnEnter()
     {
         // OnEnter
-        this.m_currentCharactor.Animator?.SetTrigger("dodge");
+        this.m_lamniatPlayer.Animator?.SetTrigger("dodge");
     }
 
     public override void OnUpdate()
@@ -238,7 +250,7 @@ public class DodgeState_Lamniat : LamniatStateMachine
 
     public override void OnFixedUpdate()
     {
-        this.m_currentCharactor.PlayerMovement.SetMovement(Vector3.zero);
+        this.m_lamniatPlayer.LamniatMovement.SetMovement(Vector3.zero);
     }
 
     public override void OnExit()
@@ -250,19 +262,19 @@ public class DodgeState_Lamniat : LamniatStateMachine
 public class HurtState_Lamniat : LamniatStateMachine
 {
     public HurtState_Lamniat(Lamniat lamniat) {
-        this.m_currentCharactor = lamniat;
+        this.m_lamniatPlayer = lamniat;
         this.m_cState = Constant.CharactorState.Hurt;
     }
 
-    public override void OnEnter(Player<BoxCollider2D> lamniat)
+    public override void OnEnter(Lamniat lamniat)
     {
-        this.m_currentCharactor = lamniat as Lamniat;
+        this.m_lamniatPlayer = lamniat;
         OnEnter();
     }
     public override void OnEnter()
     {
         // OnEnter
-        this.m_currentCharactor.Animator?.SetTrigger("hurt");
+        this.m_lamniatPlayer.Animator?.SetTrigger("hurt");
     }
 
     public override void OnUpdate()
@@ -285,13 +297,13 @@ public class DeadState_Lamniat : LamniatStateMachine
 {
     public DeadState_Lamniat(Lamniat lamniat)
     { 
-        this.m_currentCharactor = lamniat;
+        this.m_lamniatPlayer = lamniat;
         this.m_cState = Constant.CharactorState.Dead;
     }
 
-    public override void OnEnter(Player<BoxCollider2D> lamniat)
+    public override void OnEnter(Lamniat lamniat)
     {
-        this.m_currentCharactor = lamniat as Lamniat;
+        this.m_lamniatPlayer = lamniat;
         OnEnter();
     }
     public override void OnEnter()

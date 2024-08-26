@@ -5,7 +5,7 @@ using Cinemachine;
 using UniRx;
 using UnityEngine;
 
-public class BossStage_2 : Attack
+public class BossStage_2 : Attack_System
 {
     [Header("關卡物件")]
     [SerializeField] private ColliderTrigger m_bossVisableRange;

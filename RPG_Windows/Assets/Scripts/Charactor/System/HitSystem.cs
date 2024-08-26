@@ -40,10 +40,7 @@ public class HitSystem : MonoBehaviour
 
 
     protected DamageFlash damageFlash;
-    /// <summary>
-    /// 受擊動作為即時觸發，故宣告一協程進行處理獨立的動作
-    /// </summary>
-    protected Coroutine takeHitRoutine = null;
+    protected Coroutine takeHitRoutine = null;                  // 受擊動作為即時觸發，故宣告一協程進行處理獨立的動作
 
     #endregion
 
@@ -63,7 +60,7 @@ public class HitSystem : MonoBehaviour
     }
     
 
-    public virtual void TakeHiProcess(Attack attacker) {
+    public virtual void TakeHiProcess(Attack_System attacker) {
         Debug.Log("TakeHit attacker: "+attacker.name);
         takeHitRoutine = StartCoroutine(TakeHit(attacker));
         
@@ -74,7 +71,7 @@ public class HitSystem : MonoBehaviour
         takeHitRoutine = StartCoroutine(TakeHit(damageSystem, attackedLocation, damageCounter));
     }
 
-    protected virtual IEnumerator TakeHit(Attack attacker) 
+    protected virtual IEnumerator TakeHit(Attack_System attacker) 
     {
         IsTakingHit = true;
         

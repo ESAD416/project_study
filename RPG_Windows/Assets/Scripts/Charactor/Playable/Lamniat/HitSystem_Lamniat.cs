@@ -2,8 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HitSystem_Lamniat : HitSystem_Player<BoxCollider2D>
+public class HitSystem_Lamniat : HitSystem
 {
+    [SerializeField] protected Lamniat m_lamniatPlayer;
+
+    protected Animator m_lamniatAnimator;
+    protected BoxCollider2D m_lamniatHitBoxCollider;
+
+
     [Header("HitSystem_Lamniat 基本物件")]
     [SerializeField] protected Movement_Lamniat m_targetMovement;
     [SerializeField] protected Combat_Lamniat m_targetCombat;
@@ -16,25 +22,30 @@ public class HitSystem_Lamniat : HitSystem_Player<BoxCollider2D>
 
     protected override void Start() {
         base.Start();
-        m_targetHitBoxCollider.offset = m_defaultHitBoxOffset;
-        m_targetHitBoxCollider.size = m_defaultHitBoxSize;
+        m_lamniatHitBoxCollider = GetComponent<BoxCollider2D>();
+
+        m_lamniatHitBoxCollider.offset = m_defaultHitBoxOffset;
+        m_lamniatHitBoxCollider.size = m_defaultHitBoxSize;
     }
 
     // Update is called once per frame
     protected override void Update()
     {
         base.Update();
+
+        transform.position = m_lamniatPlayer.transform.position;
+
         if(m_targetCombat.IsShooting) {
-            m_targetHitBoxCollider.offset = m_crouchHitBoxOffset;
-            m_targetHitBoxCollider.size = m_crouchHitBoxSize;
+            m_lamniatHitBoxCollider.offset = m_crouchHitBoxOffset;
+            m_lamniatHitBoxCollider.size = m_crouchHitBoxSize;
         }
         else {
-            m_targetHitBoxCollider.offset = m_defaultHitBoxOffset;
-            m_targetHitBoxCollider.size = m_defaultHitBoxSize;
+            m_lamniatHitBoxCollider.offset = m_defaultHitBoxOffset;
+            m_lamniatHitBoxCollider.size = m_defaultHitBoxSize;
         }
     }
 
-    protected override IEnumerator TakeHit(Attack attacker) 
+    protected override IEnumerator TakeHit(Attack_System attacker) 
     {   
         Debug.Log("Lamniat TakeHit start"); 
 
@@ -52,18 +63,18 @@ public class HitSystem_Lamniat : HitSystem_Player<BoxCollider2D>
         IsTakingHit = true;
         m_targetMovement.CanMove = false;
 
-        if(m_targetPlayer != null) {
-            if(m_targetPlayer.CurrentBaseState.State.Equals(Constant.CharactorState.Move)) {
+        if(m_lamniatPlayer != null) {
+            if(m_lamniatPlayer.StateController.CurrentBaseStateName.Equals(Constant.CharactorState.Move)) {
                 Debug.Log("Lamniat TakeHit: SetMovementAfterTrigger "+m_targetMovement.Movement);
             }
 
             bool dodged = DodgedTheHit();
             if(dodged) {
-                m_targetPlayer.SetCurrentBaseState(m_targetPlayer.Dodge);
+                m_lamniatPlayer.StateController.SetCurrentBaseState(m_lamniatPlayer.StateController.Dodge);
 
                 yield return new WaitForSeconds(m_targetDodge.DodgeClipTime);
             } else {
-                m_targetPlayer.SetCurrentBaseState(m_targetPlayer.Hurt);
+                m_lamniatPlayer.StateController.SetCurrentBaseState(m_lamniatPlayer.StateController.Hurt);
 
                 if(!isHyperArmor && m_targetKnockbackFeedback != null) {
                     var dir = SetAttackForceDir(attacker.transform);
@@ -99,18 +110,18 @@ public class HitSystem_Lamniat : HitSystem_Player<BoxCollider2D>
         IsTakingHit = true;
         m_targetMovement.CanMove = false;
 
-        if(m_targetPlayer != null) {
-            if(m_targetPlayer.CurrentBaseState.State.Equals(Constant.CharactorState.Move)) {
+        if(m_lamniatPlayer != null) {
+            if(m_lamniatPlayer.StateController.CurrentBaseStateName.Equals(Constant.CharactorState.Move)) {
                 //m_avatar.SetFacingDir(m_avatar.Movement);
             }
 
             bool dodged = DodgedTheHit();
             if(dodged) {
-                m_targetPlayer.SetCurrentBaseState(m_targetPlayer.Dodge);
+                m_lamniatPlayer.StateController.SetCurrentBaseState(m_lamniatPlayer.StateController.Dodge);
 
                 yield return new WaitForSeconds(m_targetDodge.DodgeClipTime);
             } else {
-                m_targetPlayer.SetCurrentBaseState(m_targetPlayer.Hurt);
+                m_lamniatPlayer.StateController.SetCurrentBaseState(m_lamniatPlayer.StateController.Hurt);
 
                 if(!isHyperArmor && m_targetKnockbackFeedback != null) {
                     var dir = SetAttackForceDir(attackedLocation);
@@ -138,8 +149,8 @@ public class HitSystem_Lamniat : HitSystem_Player<BoxCollider2D>
         
         //m_targetMovement.SetMovement(m_targetMovement.MovementAfterTrigger);
 
-        if(m_targetMovement.IsMoving) m_targetPlayer.SetCurrentBaseState(m_targetPlayer.Move);
-        else m_targetPlayer.SetCurrentBaseState(m_targetPlayer.Idle);
+        if(m_targetMovement.IsMoving) m_lamniatPlayer.StateController.SetCurrentBaseState(m_lamniatPlayer.StateController.Move);
+        else m_lamniatPlayer.StateController.SetCurrentBaseState(m_lamniatPlayer.StateController.Idle);
         
         Debug.Log("Lamniat FinishTakeHit end");
     }
@@ -147,17 +158,15 @@ public class HitSystem_Lamniat : HitSystem_Player<BoxCollider2D>
     protected Vector3 SetAttackForceDir(Transform attackedLocation) {
         var dir = Vector3.zero;
 
-        if(attackedLocation.position.x > m_targetPlayer.transform.position.x) dir = Vector3.left;
-        else if(attackedLocation.position.x < m_targetPlayer.transform.position.x) dir = Vector3.right;
-        else if(attackedLocation.position.x == m_targetPlayer.transform.position.x) {
+        if(attackedLocation.position.x > m_lamniatPlayer.transform.position.x) dir = Vector3.left;
+        else if(attackedLocation.position.x < m_lamniatPlayer.transform.position.x) dir = Vector3.right;
+        else if(attackedLocation.position.x == m_lamniatPlayer.transform.position.x) {
             if(m_targetMovement.FacingDir.x > 0 ) dir = Vector3.left;
             else if(m_targetMovement.FacingDir.x < 0) dir = Vector3.right;
         }
 
         return dir;
     }
-
-
 
     protected bool DodgedTheHit() 
     {
@@ -173,6 +182,5 @@ public class HitSystem_Lamniat : HitSystem_Player<BoxCollider2D>
 
         return result;
     }
-
 
 }
