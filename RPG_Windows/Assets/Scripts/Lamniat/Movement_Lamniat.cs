@@ -42,8 +42,9 @@ public class Movement_Lamniat : MonoBehaviour
 
     [Header("")]
     [SerializeField] protected Lamniat m_movingTarget;
-    [SerializeField] protected DynamicJump_Lamniat m_LamiatJump;
-    [SerializeField] protected Combat_Lamniat m_LamiatCombat;
+    [SerializeField] protected LamniatState m_LamniatState;
+    [SerializeField] protected LamniatController m_LamniatController;
+
     protected Rigidbody2D m_targetRdbd;
     protected SpriteRenderer m_targetSprtRenderer;
     protected Animator m_targetAnimator;
@@ -75,7 +76,8 @@ public class Movement_Lamniat : MonoBehaviour
             //m_avatar.SetStatus(Charactor.CharactorStatus.Move);
             if(m_previousMovement == Vector2.zero) m_previousMovement = inputVecter2;
             //Debug.Log("m_LamiatJump.IsJumping :"+m_LamiatJump.IsJumping+", m_LamiatJump.IsAttacking :"+m_LamiatCombat.IsAttacking);
-            if(!m_LamiatJump.IsJumping && !m_LamiatCombat.IsAttacking) m_movingTarget.StateController.SetCurrentBaseState(m_movingTarget.StateController.Move);
+            if(!m_LamniatController.LamniatJump.IsJumping && !m_LamniatController.LamniatCombat.IsAttacking) 
+                m_LamniatState.SetCurrentBaseState(m_LamniatState.Move);
             if(m_targetSprtRenderer!= null) {
                 var faceLeft = m_targetSprtRenderer.flipX;
                 m_targetSprtRenderer.flipX = AnimeUtils.isLeftForHorizontalAnimation(Movement, faceLeft);
@@ -85,9 +87,9 @@ public class Movement_Lamniat : MonoBehaviour
         PlayerInputManager.instance.InputCtrl.Lamniat_Land.Move.canceled += content => {
             m_movement = Vector2.zero;
             if(m_previousMovement != Vector2.zero) m_previousMovement = Vector2.zero;
-            if(m_LamiatJump.IsJumping) m_movingTarget.StateController.SetCurrentBaseState(m_movingTarget.StateController.Jump);
-            else if(m_LamiatCombat.IsAttacking) m_movingTarget.StateController.SetCurrentBaseState(m_movingTarget.StateController.Attack);
-            else m_movingTarget.StateController.SetCurrentBaseState(m_movingTarget.StateController.Idle);
+            if(m_LamniatController.LamniatJump.IsJumping) m_LamniatState.SetCurrentBaseState(m_LamniatState.Jump);
+            else if(m_LamniatController.LamniatCombat.IsAttacking) m_LamniatState.SetCurrentBaseState(m_LamniatState.Attack);
+            else m_LamniatState.SetCurrentBaseState(m_LamniatState.Idle);
         };
 
     }
@@ -100,7 +102,7 @@ public class Movement_Lamniat : MonoBehaviour
         // --正在移動
         if(IsMoving)
         {
-            if (m_LamiatJump.IsJumping) 
+            if (m_LamniatController.LamniatJump.IsJumping) 
             {
                 if (!SetFirstMoveWhileJumping) {
                     Debug.Log("SetFirstMoveWhileJumping m_movement: "+m_movement);
@@ -139,7 +141,7 @@ public class Movement_Lamniat : MonoBehaviour
                 }
 
                 
-                if (m_LamiatJump.JumpCounter > m_LamiatJump.HeightIncreaseCount)
+                if (m_LamniatController.LamniatJump.JumpCounter > m_LamniatController.LamniatJump.HeightIncreaseCount)
                 {
                     // 實現減速(通常只有下往上跳會觸發)
                     Tilemap currentTilemap = ColliderManager.instance.GetCurrentTilemapByAvatarHeight(m_movingTarget.CurrentHeight);
@@ -166,14 +168,14 @@ public class Movement_Lamniat : MonoBehaviour
 
             // 監測移動時間，須在移動狀態下超過0.1秒才可跳躍
             m_moveingTimeElapsed += Time.deltaTime;
-            if (m_moveingTimeElapsed > 0.1f && !m_LamiatJump.IsJumping)
+            if (m_moveingTimeElapsed > 0.1f && !m_LamniatController.LamniatJump.IsJumping)
             {
-                m_LamiatJump.CanJump = true;
+                m_LamniatController.LamniatJump.CanJump = true;
             }
 
         } 
         // 正在跳躍
-        else if (m_LamiatJump.IsJumping)
+        else if (m_LamniatController.LamniatJump.IsJumping)
         {
             //Debug.Log("IsJumping not moving moveVelocity start: " + m_moveVelocity);
             m_moveingTimeElapsed = 0f;
@@ -188,7 +190,7 @@ public class Movement_Lamniat : MonoBehaviour
 
             // 移動時間以及跳躍判定重置
             m_moveingTimeElapsed = 0f;
-            m_LamiatJump.CanJump = false;
+            m_LamniatController.LamniatJump.CanJump = false;
 
             // 修正角色站的位置
             FixStandCorners(); 
@@ -196,7 +198,7 @@ public class Movement_Lamniat : MonoBehaviour
 
         //Debug.Log("m_moveVelocity before adjust: "+m_moveVelocity);
         //Debug.Log("ClampMagnitude OnHeightObjCollisionExit: "+m_LamiatJump.OnHeightObjCollisionExit+", canMove: "+CanMove);
-        if (CanMove && !m_LamiatJump.OnHeightObjCollisionExit) 
+        if (CanMove && !m_LamniatController.LamniatJump.OnHeightObjCollisionExit) 
         {
             // 設定剛體移動向量的上限
             //Debug.Log("Movement_Lamniat Update before ClampMagnitude moveVelocity: " + m_moveVelocity);
@@ -209,7 +211,7 @@ public class Movement_Lamniat : MonoBehaviour
             if(CanMove) m_moveVelocity = Vector2.ClampMagnitude(m_moveVelocity*0.1f, m_moveSpeed*0.1f);
             else m_moveVelocity = Vector2.zero;
 
-            if(m_LamiatJump.OnHeightObjCollisionExit) m_LamiatJump.OnHeightObjCollisionExit = false;
+            if(m_LamniatController.LamniatJump.OnHeightObjCollisionExit) m_LamniatController.LamniatJump.OnHeightObjCollisionExit = false;
         }
 
         //Debug.Log("m_moveVelocity after adjust: "+m_moveVelocity);

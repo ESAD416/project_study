@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Animations;
 using UnityEngine;
 
 public static class AnimeUtils
@@ -36,16 +35,15 @@ public static class AnimeUtils
     }
 
     public static void ActivateAnimatorLayer(Animator animator, string layerName) {
-        AnimatorController controller = animator.runtimeAnimatorController as AnimatorController;
-        AnimatorControllerLayer[] layers = controller.layers;
-        
-        for(int i = 0 ; i < animator.layerCount; i++) {
-            var blendingMode = layers[i].blendingMode;
-            if(!blendingMode.Equals(AnimatorLayerBlendingMode.Additive))
-                animator.SetLayerWeight(i, 0);
+        // 將所有層的權重設為 0
+        for (int i = 0; i < animator.layerCount; i++)
+        {
+            if(animator.GetLayerName(i).Equals("AdditiveLayer")) continue;
+            animator.SetLayerWeight(i, 0);
         }
 
-        animator.SetLayerWeight(animator.GetLayerIndex(layerName), 1);
+        // 啟用指定層
+        animator.SetLayerWeight(animator.GetLayerIndex(layerName), 1); 
     }
 
     public static void SetAnimateFloatPara(Animator animator, Dictionary<string, float> paraDict) {

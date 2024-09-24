@@ -59,11 +59,6 @@ public class DynamicJump_Lamniat : MonoBehaviour
     };
 
     void Awake() {
-        QualitySettings.vSyncCount = 0;
-        Application.targetFrameRate = 100; // FPS鎖幀
-        Debug.Log("targetFrameRate: "+Application.targetFrameRate);
-        Debug.Log("vSyncCount: "+QualitySettings.vSyncCount);
-
         m_LamniatMovement = m_Lamniat.LamniatMovement;
     }
 

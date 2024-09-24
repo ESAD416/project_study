@@ -28,6 +28,5 @@ public class InventoryHolder : MonoBehaviour
 
     protected virtual void Update() 
     {
-        transform.position = m_target.position;
     }
 }

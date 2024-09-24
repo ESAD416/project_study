@@ -42,8 +42,8 @@ public class Lamniat : MonoBehaviour
     public void SetLastHeight(int height) => this.m_lastHeight = height;
     
     [Header("")]
-    [SerializeField] protected LamniatStateController m_StateController;                    // 角色狀態控制器
-    public LamniatStateController StateController => this.m_StateController;    
+    [SerializeField] protected LamniatState m_lamniatStateController;                       // 角色狀態控制器
+    public LamniatState StateController => this.m_lamniatStateController;
     [SerializeField] protected Movement_Lamniat m_lamniatMovement;                          // 可操作角色的移動控制
     public Movement_Lamniat LamniatMovement =>this.m_lamniatMovement ;
 

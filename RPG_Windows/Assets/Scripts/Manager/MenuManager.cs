@@ -1,32 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class MenuManager : MonoBehaviour
 {
     public static MenuManager instance;
+    [SerializeField] protected List<GameObject> panelCanvas = new List<GameObject>();
     public bool GameIsPaused = false;
-    public UnityEvent OnPauseCallback, OnResumeCallback;
-
-    #region 暫停選單物件
-    
-    [SerializeField] protected GameObject m_pauseMenuPanel;
-    [SerializeField] protected GameObject m_pauseFirstOption;
-    public bool OnPausePanel = false;
-    
-    #endregion
+    public bool OnMenuPanel = false;
+    public UnityEvent OnMenuCallback, OnActionCallback;
 
     private void Awake() {
-        if(instance == null) 
+        if(instance == null)
         {
             instance = this;
         }
     }
 
     private void OnEnable() {
-        m_pauseMenuPanel.SetActive(false);
+        DeactivateAllCanvas();
     }
 
     private void OnDisable() {
@@ -43,34 +39,16 @@ public class MenuManager : MonoBehaviour
         
     }
     
-    #region Pause/Resume Method
-
-    public void Pause() {
-        OnPauseCallback.Invoke();
-
-        Time.timeScale = 0f;
-        GameIsPaused = true;
-        OnPausePanel = true;
-
-        ActivateCanvas(m_pauseMenuPanel);
-        EventSystem.current.SetSelectedGameObject(m_pauseFirstOption);
+    public void OnMenu() {
+        OnMenuCallback.Invoke();
+        
     }
 
-    public void Resume() {
-        OnResumeCallback.Invoke();
-
-        Time.timeScale = 1f;
-        GameIsPaused = false;
-        OnPausePanel = false;
-
-        DeactivateAllCanvas();
-        RemoveAllEventCallbacks();
-        EventSystem.current.SetSelectedGameObject(null);
+    public void OnAction() {
+        OnActionCallback.Invoke();
     }
 
-    #endregion
-
-    #region Canvas Activations/Deactivations
+    #region Canvas Actions 
 
     public void ActivateCanvas(GameObject canvas) {
         DeactivateAllCanvas();
@@ -78,8 +56,15 @@ public class MenuManager : MonoBehaviour
     }
 
     public void DeactivateAllCanvas() {
-        // TODO 預計還會有更多的選單
-        m_pauseMenuPanel.SetActive(false);
+        foreach(GameObject canvas in panelCanvas)
+            canvas.SetActive(false);
+
+        // cancel select button
+        EventSystem.current.SetSelectedGameObject(null);
+    }
+
+    public void SetSelectedGameObject(GameObject gameObject) {
+        EventSystem.current.SetSelectedGameObject(gameObject);
     }
 
     #endregion
@@ -88,8 +73,8 @@ public class MenuManager : MonoBehaviour
 
     public void RemoveAllEventCallbacks() {
         // TODO 預計還會有更多的事件
-        OnPauseCallback.RemoveAllListeners();
-        OnResumeCallback.RemoveAllListeners();
+        OnMenuCallback.RemoveAllListeners();
+        OnActionCallback.RemoveAllListeners();
     }
 
 

@@ -237,7 +237,7 @@ GameObject:
   - component: {fileID: 2746552256657325116}
   - component: {fileID: 1544835072995726476}
   m_Layer: 2
-  m_Name: _Lamniat
+  m_Name: _Body
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -358,9 +358,10 @@ MonoBehaviour:
   m_Coordinate: {x: 0, y: 0, z: 0}
   m_currHeight: 0
   m_lastHeight: 0
-  m_StateController: {fileID: 7096827006713646500}
+  m_lamniatStateController: {fileID: 7096827006713646500}
   m_lamniatMovement: {fileID: 6012428366774913337}
   m_raycastStart: {x: 0, y: 0, z: 0}
+  RaycastJumpTriggerLayerMask: 0
 --- !u!114 &2746552256657325116
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -529,7 +530,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 636743621684191042}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -546,7 +547,7 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!61 &6535917294588118982
 BoxCollider2D:
@@ -684,6 +685,7 @@ GameObject:
   - component: {fileID: 6338086690912416872}
   - component: {fileID: 1628603794216444374}
   - component: {fileID: 7096827006713646500}
+  - component: {fileID: 2577250999491458963}
   m_Layer: 0
   m_Name: Player_L
   m_TagString: Player
@@ -762,8 +764,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46f49a5a93f0d6645836ea82e4be1d3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_lamniatPlayer: {fileID: 4424307667916199580}
+  m_targetLamniat: {fileID: 4424307667916199580}
   m_currBaseStateName: 0
+--- !u!114 &2577250999491458963
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1215482197922565202}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1e36fa24bfa25d479bbae9752bb3c38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_lamniatMovement: {fileID: 6012428366774913337}
+  m_LamiatJump: {fileID: 2746552256657325116}
+  m_lamniatCombat: {fileID: 4295372707830558833}
+  m_lamniatDodge: {fileID: 1791548830530935969}
 --- !u!1 &2919053365341309881
 GameObject:
   m_ObjectHideFlags: 0
@@ -1042,7 +1060,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5664240251318769600}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -1059,7 +1077,7 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!61 &1200671992489147965
 BoxCollider2D:
@@ -1212,8 +1230,8 @@ MonoBehaviour:
   m_facingDir: {x: 1, y: 0}
   CanMove: 1
   m_movingTarget: {fileID: 4424307667916199580}
-  m_LamiatJump: {fileID: 2746552256657325116}
-  m_LamiatCombat: {fileID: 4295372707830558833}
+  m_LamniatState: {fileID: 7096827006713646500}
+  m_LamniatController: {fileID: 2577250999491458963}
   SetFirstMoveWhileJumping: 0
 --- !u!1 &6314479320242778158
 GameObject:

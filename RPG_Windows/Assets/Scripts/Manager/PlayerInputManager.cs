@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -27,6 +28,8 @@ public class PlayerInputManager : MonoBehaviour
 
         input = GetComponent<PlayerInput>();
         m_inputControls = new AvatarInputActionsControls();
+
+        StartCoroutine(ControlDeviceCheck());
     }
 
     private void OnEnable() {
@@ -43,38 +46,43 @@ public class PlayerInputManager : MonoBehaviour
         Debug.Log("actionMaps counts: "+m_inputControls.asset.actionMaps.Count);
 
         m_inputControls.Lamniat_Land.Menu.performed += content => {
-            MenuManager.instance.OnPauseCallback.AddListener(EnableUIAction);
-            MenuManager.instance.OnResumeCallback.AddListener(EnableLamniatLandAction);
-            MenuManager.instance.Pause();
+            MenuManager.instance.OnMenuCallback.AddListener(EnableUIAction);
+            MenuManager.instance.OnActionCallback.AddListener(EnableLamniatLandAction);
+            MenuManager.instance.OnMenu();
         };
 
         m_inputControls.UI.Menu.performed += content => {
-            if(MenuManager.instance.GameIsPaused) MenuManager.instance.Resume();
+            // if(MenuManager.instance.GameIsPaused) MenuManager.instance.OnAction();
+            if(MenuManager.instance.OnMenuPanel) MenuManager.instance.OnAction();
         };
         m_inputControls.UI.Cancel.performed += content => {
-            if(MenuManager.instance.GameIsPaused && MenuManager.instance.OnPausePanel) MenuManager.instance.Resume();
+            // if(MenuManager.instance.GameIsPaused && MenuManager.instance.OnMenuPanel) MenuManager.instance.OnAction();
+            if(MenuManager.instance.OnMenuPanel) MenuManager.instance.OnAction();
         };
     }
 
     // Update is called once per frame
     void Update()
     {
-        OnDeviceChange(input);
     }
 
-    public void OnDeviceChange(PlayerInput input) {
-        //Debug.Log("OnDeviceChange: "+input.currentControlScheme);
-        switch(input.currentControlScheme) {
-            case "Keyboard&Mouse":
-                controlDevice = Constant.ControlDevice.KeyboardMouse;
-                break;
-            // case "Mobile":
-            //     controlDevice = Constant.ControlDevice.Mobile;
-            //     break;
-            default:
-                controlDevice = Constant.ControlDevice.Gamepad;
-                break;
+    IEnumerator ControlDeviceCheck() {
+        while(true) {
+            switch(input.currentControlScheme) {
+                case "Keyboard&Mouse":
+                    controlDevice = Constant.ControlDevice.KeyboardMouse;
+                    break;
+                // case "Mobile":
+                //     controlDevice = Constant.ControlDevice.Mobile;
+                //     break;
+                default:
+                    controlDevice = Constant.ControlDevice.Gamepad;
+                    break;
+            }
+
+            yield return new WaitForSeconds(1.5f);
         }
+        //Debug.Log("OnDeviceChange: "+input.currentControlScheme);
     }
 
     public void EnableLamniatLandAction() {
