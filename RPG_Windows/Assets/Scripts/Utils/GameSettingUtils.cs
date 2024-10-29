@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -71,10 +72,14 @@ public static class GameSettingUtils
         }
     }
 
-    public static void AudioSet(SettingData settingData, float bgm, float se, float speech) {
+    public static void AudioSet(SettingData settingData, AudioMixer mixer, float bgm, float se, float speech) {
         if(settingData.audio_Volume_BGM != bgm) settingData.audio_Volume_BGM = bgm;
         if(settingData.audio_Volume_SE != se) settingData.audio_Volume_SE = se;
         if(settingData.audio_Volume_Speech != speech) settingData.audio_Volume_Speech = speech;
+
+        mixer.SetFloat("BGM", Mathf.Log10(settingData.audio_Volume_BGM)*20);
+        mixer.SetFloat("SE", Mathf.Log10(settingData.audio_Volume_SE)*20);
+        mixer.SetFloat("Speech", Mathf.Log10(settingData.audio_Volume_Speech)*20);
     }
 
     // public static int GetGameSetting(SettingData settingData, int type) {

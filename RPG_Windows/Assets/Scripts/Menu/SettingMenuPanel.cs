@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -13,10 +14,12 @@ public class SettingMenuPanel : MonoBehaviour
 
     [SerializeField] protected SettingData currSettingData;
     [SerializeField] protected TextMeshProUGUI containerTitleText;
+    [SerializeField] protected List<GameObject> sideBtns = new List<GameObject>();
     [SerializeField] protected Color selectedBtnColor;
     [SerializeField] protected int selectedContainerIndex = 0;
-    [SerializeField] protected List<GameObject> btns = new List<GameObject>();
     [SerializeField] protected List<GameObject> containerCanvas = new List<GameObject>();
+
+    public bool OnInit = true;
     public UnityEvent OnInitCallback;
 
     [Header("Screen Setting")]
@@ -26,6 +29,7 @@ public class SettingMenuPanel : MonoBehaviour
     [SerializeField] protected SwitchToggle verticalSyncToggle;
 
     [Header("Audio Setting")]
+    [SerializeField] protected AudioMixer m_Mixer;
     [SerializeField] protected Slider BgmVolumeSlider;
     [SerializeField] protected Slider SEVolumeSlider;
     [SerializeField] protected Slider SpeechVolumeSlider;
@@ -33,8 +37,18 @@ public class SettingMenuPanel : MonoBehaviour
     
     private void OnEnable() {
         Debug.Log("SettingMenuPanel");
+        OnSettingPanel = true;
+
         OnInitCallback.Invoke();
         InitSettingMenuPanel();
+
+        OnInit = false;
+    }
+
+    private void OnDisable() {
+        DeactivateAllContainer();
+        OnSettingPanel = false;
+        OnInit = true;
     }
 
     // Start is called before the first frame update
@@ -56,10 +70,10 @@ public class SettingMenuPanel : MonoBehaviour
         // set default container
         containerCanvas[0].SetActive(true);
         // set select button color
-        btns[0].GetComponent<Image>().color = selectedBtnColor;
+        sideBtns[0].GetComponent<Image>().color = selectedBtnColor;
         SetSelectedContainerIndex(0);
         // set default title text
-        var btnText = btns[0].GetComponentInChildren<TextMeshProUGUI>();
+        var btnText = sideBtns[0].GetComponentInChildren<TextMeshProUGUI>();
         containerTitleText.text = btnText.text;
         
         RefreshSettingShownValue();
@@ -84,13 +98,13 @@ public class SettingMenuPanel : MonoBehaviour
 
     public void SetSelectedContainerIndex(int selectedIndex) {
         selectedContainerIndex = selectedIndex;
-        btns.Where((btn, index) => index != selectedContainerIndex).ToList()
+        sideBtns.Where((btn, index) => index != selectedContainerIndex).ToList()
             .ForEach(item =>
             {
                 item.GetComponent<Image>().color = Color.white;
             });
 
-        btns[selectedIndex].GetComponent<Image>().color = selectedBtnColor;
+        sideBtns[selectedIndex].GetComponent<Image>().color = selectedBtnColor;
 
     }
 
@@ -131,20 +145,28 @@ public class SettingMenuPanel : MonoBehaviour
 
     
     public void ApplyScreenSetting() {
-         int resolutionType = resolutionDropdown.value;
-         int displayType = displayDropdown.value;
-         int fpsType = fpsToggle.IsOn ? 1 : 0;
-         int vsType = verticalSyncToggle.IsOn ? 1 : 0;
+        if(OnInit) return;
+
+        Debug.Log("ApplyScreenSetting");
+
+        int resolutionType = resolutionDropdown.value;
+        int displayType = displayDropdown.value;
+        int fpsType = fpsToggle.IsOn ? 1 : 0;
+        int vsType = verticalSyncToggle.IsOn ? 1 : 0;
 
         GameSettingUtils.ScreenSet(currSettingData, resolutionType, displayType, fpsType, vsType);
     }
 
     public void ApplyAudioSetting() {
+        if(OnInit) return;
+
+        Debug.Log("ApplyAudioSetting");
+
         float bgm = BgmVolumeSlider.value;
         float se = SEVolumeSlider.value;
         float speech = SpeechVolumeSlider.value;
 
-        GameSettingUtils.AudioSet(currSettingData, bgm, se, speech);
+        GameSettingUtils.AudioSet(currSettingData, m_Mixer, bgm, se, speech);
     }
 
     // TODo there will be more...

@@ -57,28 +57,11 @@ public class Combat_Lamniat : Attack_System
         #region InputSystem事件設定
 
         PlayerInputManager.instance.InputCtrl.Lamniat_Land.Melee.performed += content => {
-            Debug.Log("Lamniat_Land.Melee.started");
-            SetToAttackState();
-
-            if(m_getMeleeInput) m_lamniatAnimator.SetTrigger("melee");
+            PerformMelee();
         };
 
         PlayerInputManager.instance.InputCtrl.Lamniat_Land.Shoot.performed += content => {
-            Debug.Log("Lamniat_Land.Shoot.started");
-            SetToAttackState();
-            
-            if(PlayerInputManager.instance.ControlDevice == Constant.ControlDevice.KeyboardMouse) {
-                if(m_ShootDir.x < 0) {
-                    // Left
-                    m_lamniatPlayer.SprtRenderer.flipX = true;
-                } else if(m_ShootDir.x > 0) {
-                    // Right
-                    m_lamniatPlayer.SprtRenderer.flipX = false;
-                } 
-            }
-
-            m_lamniatAnimator.SetTrigger("shoot");
-            IsShooting = true;
+            PerformShoot();
         };
 
         PlayerInputManager.instance.InputCtrl.Lamniat_Land.Shoot_Hold.performed += content => {
@@ -145,10 +128,34 @@ public class Combat_Lamniat : Attack_System
         // m_avatarAnimator.SetBool("isTakingAim", IsAiming);
     }
 
+    public void PerformMelee() {
+        Debug.Log("Lamniat_Land.Melee.started");
+        SetToAttackState();
 
+        if(m_getMeleeInput) m_lamniatAnimator.SetTrigger("melee");
+    }
+
+    public void PerformShoot() {
+        Debug.Log("Lamniat_Land.Shoot.started");
+        SetToAttackState();
+        
+        if(PlayerInputManager.instance.ControlDevice == Constant.ControlDevice.KeyboardMouse) {
+            if(m_ShootDir.x < 0) {
+                // Left
+                m_lamniatPlayer.SprtRenderer.flipX = true;
+            } else if(m_ShootDir.x > 0) {
+                // Right
+                m_lamniatPlayer.SprtRenderer.flipX = false;
+            } 
+        }
+
+        m_lamniatAnimator.SetTrigger("shoot");
+        IsShooting = true;
+    }
 
     public void Melee() {
         //TODO Set Melee para
+        Debug.Log("UI Melee()");
     }
 
 
@@ -235,7 +242,6 @@ public class Combat_Lamniat : Attack_System
 
         }
     }
-
 
     public void Shoot() {
         IsShooting =  true;

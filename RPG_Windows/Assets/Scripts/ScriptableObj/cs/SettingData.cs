@@ -14,9 +14,9 @@ public class SettingData : ScriptableObject
     [Range(0f, 2f)] public int screen_VerticalSynchronization;                  // 畫面: 垂直同步   (0 = off, 1 = on, 2 = every second frame)
 
     [Header("")]
-    [Range(0f, 10f)] public float audio_Volume_BGM;                             // 聲音: 背景音樂
-    [Range(0f, 10f)] public float audio_Volume_SE;                              // 聲音: 音效
-    [Range(0f, 10f)] public float audio_Volume_Speech;                          // 聲音: 語音
+    [Range(0.0001f, 1f)] public float audio_Volume_BGM;                             // 聲音: 背景音樂
+    [Range(0.0001f, 1f)] public float audio_Volume_SE;                              // 聲音: 音效
+    [Range(0.0001f, 1f)] public float audio_Volume_Speech;                          // 聲音: 語音
 
 
 

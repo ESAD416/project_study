@@ -70,26 +70,12 @@ public class Movement_Lamniat : MonoBehaviour
     {
         PlayerInputManager.instance.InputCtrl.Lamniat_Land.Move.performed += content => {
             //Debug.Log("Lamniat_Land.Move.started");
-            var inputVecter2 = content.ReadValue<Vector2>();
-            m_facingDir = inputVecter2;
-            m_movement = inputVecter2;
-            //m_avatar.SetStatus(Charactor.CharactorStatus.Move);
-            if(m_previousMovement == Vector2.zero) m_previousMovement = inputVecter2;
-            //Debug.Log("m_LamiatJump.IsJumping :"+m_LamiatJump.IsJumping+", m_LamiatJump.IsAttacking :"+m_LamiatCombat.IsAttacking);
-            if(!m_LamniatController.LamniatJump.IsJumping && !m_LamniatController.LamniatCombat.IsAttacking) 
-                m_LamniatState.SetCurrentBaseState(m_LamniatState.Move);
-            if(m_targetSprtRenderer!= null) {
-                var faceLeft = m_targetSprtRenderer.flipX;
-                m_targetSprtRenderer.flipX = AnimeUtils.isLeftForHorizontalAnimation(Movement, faceLeft);
-            }
+            var inputVector2 = content.ReadValue<Vector2>();
+            PerformMovement(inputVector2);
         };
 
         PlayerInputManager.instance.InputCtrl.Lamniat_Land.Move.canceled += content => {
-            m_movement = Vector2.zero;
-            if(m_previousMovement != Vector2.zero) m_previousMovement = Vector2.zero;
-            if(m_LamniatController.LamniatJump.IsJumping) m_LamniatState.SetCurrentBaseState(m_LamniatState.Jump);
-            else if(m_LamniatController.LamniatCombat.IsAttacking) m_LamniatState.SetCurrentBaseState(m_LamniatState.Attack);
-            else m_LamniatState.SetCurrentBaseState(m_LamniatState.Idle);
+            CancelMovement();
         };
 
     }
@@ -217,14 +203,6 @@ public class Movement_Lamniat : MonoBehaviour
         //Debug.Log("m_moveVelocity after adjust: "+m_moveVelocity);
 
         SetAnimateMovementPara();
-
-        // m_movingTarget.SetRaycastStart((Vector2)transform.position + m_movingTarget.BodyCollider.offset) ;  // 射线的起点
-        // var m_raycastHitJumpTrigger = Physics2D.Raycast(m_movingTarget.RaycastStart, m_movement.normalized, 1f, m_movingTarget.RaycastJumpTriggerLayerMask);
-        // m_movingTarget.SetRaycastHitJumpTrigger(m_raycastHitJumpTrigger);
-
-        // Color color = m_raycastHitJumpTrigger.collider != null ? Color.red : Color.green;
-        // Debug.DrawLine(m_movingTarget.RaycastStart, (Vector2)m_movingTarget.RaycastStart + m_movement.normalized*1f, color);
-        // if(m_raycastHitJumpTrigger.collider != null ) Debug.Log("m_raycastHit: "+m_raycastHitJumpTrigger.collider.name);
     }
 
     protected void FixedUpdate() 
@@ -281,6 +259,28 @@ public class Movement_Lamniat : MonoBehaviour
 
             transform.position = fixCornersPosition;
         }
+    }
+
+    public void PerformMovement(Vector2 inputVector2) {
+        m_facingDir = inputVector2;
+        m_movement = inputVector2;
+
+        if(m_previousMovement == Vector2.zero) m_previousMovement = inputVector2;
+        //Debug.Log("m_LamiatJump.IsJumping :"+m_LamiatJump.IsJumping+", m_LamiatJump.IsAttacking :"+m_LamiatCombat.IsAttacking);
+        if(!m_LamniatController.LamniatJump.IsJumping && !m_LamniatController.LamniatCombat.IsAttacking) 
+            m_LamniatState.SetCurrentBaseState(m_LamniatState.Move);
+        if(m_targetSprtRenderer!= null) {
+            var faceLeft = m_targetSprtRenderer.flipX;
+            m_targetSprtRenderer.flipX = AnimeUtils.isLeftForHorizontalAnimation(Movement, faceLeft);
+        }
+    }
+
+    public void CancelMovement() {
+        m_movement = Vector2.zero;
+        if(m_previousMovement != Vector2.zero) m_previousMovement = Vector2.zero;
+        if(m_LamniatController.LamniatJump.IsJumping) m_LamniatState.SetCurrentBaseState(m_LamniatState.Jump);
+        else if(m_LamniatController.LamniatCombat.IsAttacking) m_LamniatState.SetCurrentBaseState(m_LamniatState.Attack);
+        else m_LamniatState.SetCurrentBaseState(m_LamniatState.Idle);
     }
 
     protected void SetAnimateMovementPara() 
